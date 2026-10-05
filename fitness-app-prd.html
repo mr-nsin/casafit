@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CasaFit — product requirements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1F2F0;
+    --surface:#FBFBFA;
+    --ink:#15191E;
+    --ink-soft:#5B6572;
+    --rule:#D6D9D4;
+    --accent:#1B45F0;
+    --accent-soft:#E2E7FF;
+    --keep:#1F7A4D;
+    --add:#1B45F0;
+    --watch:#A6231A;
+    --shell:#E8EAE6;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#101316; --surface:#171B1F; --ink:#E7E9E6; --ink-soft:#9AA3AD;
+      --rule:#2A3037; --accent:#8AA0FF; --accent-soft:#1D2540;
+      --keep:#5CC48E; --watch:#F0857A; --add:#8AA0FF; --shell:#1B1F24;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#101316; --surface:#171B1F; --ink:#E7E9E6; --ink-soft:#9AA3AD;
+    --rule:#2A3037; --accent:#8AA0FF; --accent-soft:#1D2540;
+    --keep:#5CC48E; --watch:#F0857A; --add:#8AA0FF; --shell:#1B1F24;
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 1.5rem)}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+    font-size:18px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.ui{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 clamp(1.1rem,4vw,2.5rem)}
+
+  /* reading-progress bar */
+  .progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:40;background:transparent}
+  .progress-fill{height:100%;width:0%;background:var(--accent)}
+  @media (prefers-reduced-motion: no-preference){ .progress-fill{transition:width .12s linear} }
+
+  /* hero */
+  header.hero{padding:clamp(3rem,9vw,6rem) 0 2.5rem;border-bottom:1px solid var(--rule)}
+  .kicker-row{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:0 0 1.2rem}
+  .kicker{font-family:Archivo,sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.01em;color:var(--accent);margin:0}
+  .namebadge{
+    font-family:Archivo,sans-serif;font-size:.74rem;font-weight:600;color:var(--ink-soft);
+    border:1px solid var(--rule);border-radius:999px;padding:.15rem .6rem .2rem;white-space:nowrap;
+  }
+  .namebadge b{color:var(--ink);font-weight:700}
+  h1{
+    font-size:clamp(2.1rem,6.4vw,4.1rem);line-height:1.04;font-weight:700;
+    letter-spacing:-.025em;margin:0;max-width:17ch;
+  }
+  .sub{margin:1.4rem 0 0;max-width:60ch;color:var(--ink-soft);font-size:1.05rem}
+  .meta{margin:1.1rem 0 0;font-family:Archivo,sans-serif;font-size:.8rem;color:var(--ink-soft)}
+
+  /* session strip */
+  .strip{margin:2.8rem 0 0}
+  .strip-label{font-family:Archivo,sans-serif;font-size:.8rem;color:var(--ink-soft);margin:0 0 .6rem}
+  .bar{display:flex;height:64px;border:1px solid var(--rule);background:var(--surface);overflow:hidden;border-radius:3px}
+  .seg{display:flex;flex-direction:column;justify-content:center;padding:0 .85rem;border-right:1px solid var(--rule);font-family:Archivo,sans-serif;min-width:0}
+  .seg:last-child{border-right:0}
+  .seg b{font-size:.84rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .seg span{font-size:.72rem;color:var(--ink-soft)}
+  .s-warm{flex:1.1;background:var(--accent-soft)}
+  .s-work{flex:3;background:var(--surface)}
+  .s-cool{flex:1.1;background:var(--accent-soft)}
+  .strip-note{margin:.75rem 0 0;font-size:.92rem;color:var(--ink-soft);max-width:62ch}
+
+  /* layout */
+  .cols{display:grid;grid-template-columns:210px minmax(0,1fr);gap:clamp(2rem,5vw,4rem);padding:3rem 0 4rem}
+  nav.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 1.5rem);align-self:start;font-family:Archivo,sans-serif;font-size:.85rem;max-height:calc(100vh - 3rem);overflow-y:auto}
+  nav.rail p.railhead{margin:0 0 .8rem;font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
+  nav.rail ol{list-style:none;margin:0;padding:0}
+  nav.rail li{margin:0 0 .5rem}
+  nav.rail a{color:var(--ink-soft);text-decoration:none;display:block;padding:.15rem 0}
+  nav.rail a:hover,nav.rail a:focus-visible{color:var(--accent)}
+  nav.rail a[aria-current="true"]{color:var(--ink);font-weight:600;box-shadow:inset 2px 0 0 var(--accent);padding-left:.6rem}
+  @media (max-width:860px){ .cols{grid-template-columns:1fr;padding-top:1rem} nav.rail{display:none} }
+
+  /* sticky section bar for narrow screens */
+  .jump{
+    display:none;position:sticky;top:3px;z-index:20;
+    background:var(--paper);border-bottom:1px solid var(--rule);
+  }
+  .jump-inner{display:flex;gap:.4rem;overflow-x:auto;padding:.55rem clamp(1.1rem,4vw,2.5rem);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .jump-inner::-webkit-scrollbar{display:none}
+  .jump a{
+    flex:0 0 auto;font-family:Archivo,sans-serif;font-size:.82rem;font-weight:500;
+    text-decoration:none;color:var(--ink-soft);background:var(--surface);
+    border:1px solid var(--rule);border-radius:999px;padding:.32rem .7rem;white-space:nowrap;
+  }
+  .jump a[aria-current="true"]{color:var(--paper);background:var(--accent);border-color:var(--accent)}
+  @media (max-width:860px){ .jump{display:block} html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 3.9rem)} }
+
+  .toplink{display:inline-block;margin:0 0 2rem;font-family:Archivo,sans-serif;font-size:.85rem;text-decoration:none}
+  .toplink:hover{text-decoration:underline}
+
+  section{padding:0 0 3.6rem;max-width:74ch;border-top:1px solid var(--rule)}
+  section:first-of-type{border-top:0}
+  section{padding-top:3rem}
+  section:first-of-type{padding-top:0}
+  .num{
+    font-family:Archivo,sans-serif;font-size:.8rem;font-weight:600;color:var(--accent);
+    display:block;margin:0 0 .35rem
+  }
+  h2{font-size:clamp(1.45rem,3.4vw,2rem);line-height:1.15;letter-spacing:-.02em;font-weight:700;margin:0 0 .5rem}
+  h3{font-size:1.02rem;font-weight:600;letter-spacing:-.005em;margin:2rem 0 .5rem}
+  p{margin:0 0 1rem}
+  .lede{color:var(--ink-soft)}
+
+  /* annotated items */
+  .item{
+    border:1px solid var(--rule);border-left:3px solid var(--rule);border-radius:7px;
+    padding:.95rem 1.1rem;margin:0 0 1rem;background:var(--surface);
+    box-shadow:0 1px 2px rgba(0,0,0,.03);transition:box-shadow .15s ease, transform .15s ease;
+  }
+  .item:hover{box-shadow:0 3px 10px rgba(0,0,0,.07);transform:translateY(-1px)}
+  @media (prefers-reduced-motion: reduce){ .item{transition:none} .item:hover{transform:none} }
+  .item.keep{border-left-color:var(--keep);background:color-mix(in srgb, var(--keep) 7%, var(--surface))}
+  .item.add{border-left-color:var(--add);background:color-mix(in srgb, var(--add) 6%, var(--surface))}
+  .item.watch{border-left-color:var(--watch);background:color-mix(in srgb, var(--watch) 7%, var(--surface))}
+  .tag{
+    font-family:Archivo,sans-serif;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+    display:inline-flex;align-items:center;gap:.35rem;margin:0 0 .5rem;padding:.14rem .55rem;border-radius:999px;border:1px solid currentColor;
+  }
+  .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 auto}
+  .keep .tag{color:var(--keep)}
+  .add .tag{color:var(--add)}
+  .watch .tag{color:var(--watch)}
+  .item p{margin:0;font-size:.98rem}
+  .item p + p{margin-top:.6rem}
+  .item ul{margin:0;padding:0 0 0 1.05rem}
+  .item ul li{font-size:.98rem;margin:0 0 .4rem}
+  .item ul li:last-child{margin-bottom:0}
+  .item ul li::marker{color:var(--ink-soft)}
+
+  /* legend */
+  .legend{display:flex;flex-wrap:wrap;gap:1.1rem;margin:1.4rem 0 0;font-family:Archivo,sans-serif;font-size:.78rem;color:var(--ink-soft)}
+  .legend span{display:inline-flex;align-items:center;gap:.4rem}
+  .legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .legend .k-keep i{background:var(--keep)}
+  .legend .k-add i{background:var(--add)}
+  .legend .k-watch i{background:var(--watch)}
+
+  ul.plain{margin:0 0 1.2rem;padding:0 0 0 1.1rem}
+  ul.plain li{margin:0 0 .45rem}
+
+  /* question / data tables */
+  .qs{width:100%;border-collapse:collapse;font-size:.94rem;margin:0 0 1.3rem;display:block;overflow-x:auto;border:1px solid var(--rule);border-radius:6px}
+  .qs table{width:100%;border-collapse:collapse;min-width:460px}
+  .qs th,.qs td{text-align:left;padding:.6rem .9rem;border-bottom:1px solid var(--rule);vertical-align:top}
+  .qs tr:last-child td{border-bottom:0}
+  .qs th{font-family:Archivo,sans-serif;font-size:.76rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);background:var(--shell)}
+  .qs td.num,.qs th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+  .callout{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--ink);border-radius:6px;padding:1.15rem 1.25rem;margin:0 0 1.3rem}
+  .callout p:last-child{margin:0}
+  .callout strong{font-family:Archivo,sans-serif;font-size:.95rem}
+
+  /* phases */
+  .phase{border-top:2px solid var(--ink);padding:1rem 0 1.4rem}
+  .phase h3{margin:0 0 .3rem;font-size:1.1rem}
+  .phase .when{font-family:Archivo,sans-serif;font-size:.78rem;color:var(--ink-soft);margin:0 0 .7rem}
+
+  .sources{font-size:.88rem;color:var(--ink-soft);padding:0 0 0 1.1rem;margin:0}
+  .sources li{margin:0 0 .4rem}
+  .sources a{word-break:break-word}
+
+  footer{border-top:1px solid var(--rule);padding:2rem 0 3.5rem;font-size:.92rem;color:var(--ink-soft)}
+  a{color:var(--accent)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  /* theme toggle */
+  .theme-toggle{
+    position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:16px;z-index:35;
+    width:38px;height:38px;border-radius:50%;border:1px solid var(--rule);background:var(--surface);
+    color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+  }
+  .theme-toggle:hover{border-color:var(--accent)}
+  .theme-toggle svg{width:17px;height:17px}
+  .theme-toggle .i-moon{display:none}
+  :root[data-theme="dark"] .theme-toggle .i-sun{display:none}
+  :root[data-theme="dark"] .theme-toggle .i-moon{display:block}
+
+  /* ---- PRD additions ---- */
+  section{max-width:82ch}
+  .item.req{border-left-color:var(--add);background:color-mix(in srgb, var(--add) 6%, var(--surface))}
+  .item.find{border-left-color:var(--keep);background:color-mix(in srgb, var(--keep) 7%, var(--surface))}
+  .item.risk{border-left-color:var(--watch);background:color-mix(in srgb, var(--watch) 7%, var(--surface))}
+  .req .tag{color:var(--add)}
+  .find .tag{color:var(--keep)}
+  .risk .tag{color:var(--watch)}
+  .legend .k-req i{background:var(--add)}
+  .legend .k-find i{background:var(--keep)}
+  .legend .k-risk i{background:var(--watch)}
+  .chip{
+    display:inline-block;font-family:Archivo,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.04em;
+    text-transform:uppercase;padding:.1rem .5rem;border-radius:999px;border:1px solid currentColor;white-space:nowrap;
+  }
+  .chip.p0{color:var(--watch)}
+  .chip.p1{color:var(--add)}
+  .chip.p2{color:var(--ink-soft)}
+  .fmeta{display:flex;flex-wrap:wrap;gap:.45rem;margin:.2rem 0 1.1rem}
+  .qs td ul,.qs td ol{margin:0;padding-left:1.1rem}
+  .qs td li{margin:0 0 .25rem}
+  .qs td:first-child{font-weight:600}
+  .qs.nobold td:first-child{font-weight:400}
+  .rank{counter-reset:rank;list-style:none;margin:0 0 1.4rem;padding:0}
+  .rank li{counter-increment:rank;position:relative;padding:.85rem 1rem .85rem 3.2rem;margin:0 0 .7rem;border:1px solid var(--rule);border-radius:8px;background:var(--surface)}
+  .rank li::before{
+    content:counter(rank);position:absolute;left:.9rem;top:.8rem;width:1.7rem;height:1.7rem;border-radius:50%;
+    background:var(--accent);color:var(--paper);font-family:Archivo,sans-serif;font-weight:700;font-size:.85rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .rank b{font-family:Archivo,sans-serif;display:block;margin:0 0 .15rem}
+  .rank span{font-size:.95rem;color:var(--ink-soft)}
+  .tl{display:flex;height:46px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;font-family:Archivo,sans-serif;font-size:.74rem;margin:.4rem 0 1.2rem}
+  .tl div{display:flex;align-items:center;justify-content:center;border-right:1px solid var(--rule);text-align:center;padding:0 .3rem}
+  .tl div:last-child{border-right:0}
+  .tl .w{flex:2;background:var(--accent-soft)}
+  .tl .x{flex:11;background:var(--surface)}
+  .tl .c{flex:2;background:var(--accent-soft)}
+
+  .grp td{background:var(--shell);font-family:Archivo,sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.02em;padding:.5rem .9rem}
+  .grp .chip{margin-left:.35rem;vertical-align:1px}
+  .backlink{font-family:Archivo,sans-serif;font-size:.78rem;font-weight:600;text-decoration:none;margin-left:.3rem;align-self:center}
+  .backlink:hover{text-decoration:underline}
+  h3[id]{scroll-margin-top:1.5rem}
+  @media (max-width:860px){ .cols{grid-template-columns:minmax(0,1fr)} }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle ui" id="themeToggle" type="button" aria-label="Toggle dark mode">
+  <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+</button>
+
+<div class="progress" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+<nav class="jump" aria-label="Jump to section">
+  <div class="jump-inner">
+    <a href="#top">Top</a>
+    <a href="#overview">All points</a>
+    <a href="#s1">1 What matters</a>
+    <a href="#s2">2 Goals</a>
+    <a href="#s3">3 Users</a>
+    <a href="#s4">4 Scope</a>
+    <a href="#s5">5 Onboarding</a>
+    <a href="#s6">6 Plan builder</a>
+    <a href="#s7">7 Home</a>
+    <a href="#s8">8 Session player</a>
+    <a href="#s9">9 Form camera</a>
+    <a href="#s10">10 Nutrition</a>
+    <a href="#s11">11 Steps</a>
+    <a href="#s12">12 Myths</a>
+    <a href="#s13">13 Privacy &amp; NFRs</a>
+    <a href="#s14">14 Release plan</a>
+    <a href="#s15">15 Risks</a>
+    <a href="#s16">16 Open questions</a>
+  </div>
+</nav>
+
+<div class="wrap" id="top">
+  <header class="hero">
+    <div class="kicker-row">
+      <p class="kicker">Product requirements document</p>
+      <span class="namebadge">Working name: <b>CasaFit</b></span>
+      <span class="namebadge">Status: <b>Draft v0.1</b></span>
+    </div>
+    <h1>A 15-minute home workout app with food and steps built in.</h1>
+    <p class="sub">Requirements for the first release, written from your nine asks and the research behind the earlier feature plan. The overview lists every point in one table, linked to its detail. Section 1 ranks what matters most; each feature section then gives the requirement, acceptance criteria, what the research found, and what could go wrong.</p>
+    <p class="meta">5 October 2026 · Owner: to be assigned · Builds on <a href="fitness-app-spec.html">fitness-app-spec.html</a></p>
+
+    <div class="strip">
+      <p class="strip-label">The session shape at 15 minutes — the time-box every feature below must respect</p>
+      <div class="tl" aria-label="Session timeline: 2 minute warm-up, 11 minute work, 2 minute cool-down">
+        <div class="w">Warm-up · 2 min</div>
+        <div class="x">Work · about 11 min (5 exercise slots, editable inside the 15:00 budget)</div>
+        <div class="c">Cool-down · 2 min</div>
+      </div>
+    </div>
+
+    <p class="legend" aria-label="How items in this document are marked">
+      <span class="k-req"><i></i>Requirement — what the product must do</span>
+      <span class="k-find"><i></i>Finding — what the research says</span>
+      <span class="k-risk"><i></i>Risk or decision — needs an owner</span>
+    </p>
+  </header>
+
+  <div class="cols">
+    <nav class="rail" aria-label="Sections">
+      <p class="railhead">Contents</p>
+      <ol>
+        <li><a href="#overview"><b>All points</b></a></li>
+        <li><a href="#s1">1 · What matters most</a></li>
+        <li><a href="#s2">2 · Goals &amp; metrics</a></li>
+        <li><a href="#s3">3 · Users &amp; assumptions</a></li>
+        <li><a href="#s4">4 · Scope at a glance</a></li>
+        <li><a href="#s5">5 · Onboarding</a></li>
+        <li><a href="#s6">6 · Plan builder</a></li>
+        <li><a href="#s7">7 · Home screen</a></li>
+        <li><a href="#s8">8 · Session player</a></li>
+        <li><a href="#s9">9 · Form camera</a></li>
+        <li><a href="#s10">10 · Nutrition</a></li>
+        <li><a href="#s11">11 · Daily steps</a></li>
+        <li><a href="#s12">12 · Myths &amp; concepts</a></li>
+        <li><a href="#s13">13 · Privacy &amp; NFRs</a></li>
+        <li><a href="#s14">14 · Release plan</a></li>
+        <li><a href="#s15">15 · Risks</a></li>
+        <li><a href="#s16">16 · Open questions</a></li>
+      </ol>
+    </nav>
+
+    <main>
+
+      <section id="overview">
+        <span class="num">Overview</span>
+        <h2>All points in one place</h2>
+        <p class="lede">Every point from your brief, grouped by feature, with what the app will do and a link to the detailed requirement. Nine features, 27 points. Use the links to jump to the acceptance criteria, research findings and risks for each one.</p>
+
+        <div class="qs">
+          <table>
+            <tr><th>Point from your brief</th><th>What the app will do</th><th>Detail</th></tr>
+
+            <tr class="grp"><td colspan="3">1 · Onboarding <span class="chip p0">P0</span> <span class="chip p2">M1</span></td></tr>
+            <tr><td>Two-page onboarding</td><td>Page 1: goal, body parts, style. Page 2: age, sex, height, weight, experience, days, pain and health flags. Then a week-one plan preview.</td><td><a href="#onb1">Page 1</a> · <a href="#onb2">Page 2</a></td></tr>
+            <tr><td>Basic questions only</td><td>Every field is a chip or a number and changes the plan. Name, notifications, diet and photos wait until after the first session.</td><td><a href="#s5">§5 Requirements</a></td></tr>
+            <tr><td>Nothing about gym</td><td>No gym or equipment question. The plan defaults to bodyweight; equipment becomes a later setting.</td><td><a href="#s5">§5 Findings</a></td></tr>
+
+            <tr class="grp"><td colspan="3">2 · Plan builder <span class="chip p0">P0</span> <span class="chip p2">M1</span></td></tr>
+            <tr><td>Plan from onboarding answers</td><td>Rule-based, built on the phone, works offline. Each plan has a "Why this plan" line.</td><td><a href="#plan-rules">§6 How the plan is built</a></td></tr>
+            <tr><td>Body part, or stay fit</td><td>Stay fit rotates full-body sessions. Body-part goals give about 60% of sessions to the chosen parts, the rest full-body or mobility.</td><td><a href="#plan-rules">§6 Plan rules</a></td></tr>
+
+            <tr class="grp"><td colspan="3">3 · While exercising <span class="chip p0">P0</span> <span class="chip p1">camera P1</span> <span class="chip p2">M1 · camera M4</span></td></tr>
+            <tr><td>Change intensity level</td><td>Three-step control: Easier, As planned, Harder. Takes effect from the next set and feeds next week's plan.</td><td><a href="#intensity">§8 Intensity</a></td></tr>
+            <tr><td>Pause timing</td><td>Pause stops the timer and cues, and can be resumed for 24 hours. Rest can be extended 15 or 30 seconds. Calls pause the session automatically.</td><td><a href="#intensity">§8 Pause</a></td></tr>
+            <tr><td>Camera analyses form</td><td>On-device only, nothing stored or uploaded. Squat, push-up, plank and lunge. Spoken cues, rep count and a set summary.</td><td><a href="#s9">§9 Form camera</a></td></tr>
+            <tr><td>Only 2 exercises a day analysed</td><td>A visible counter, "1 of 2 left today". A credit is used only after the first rep is analysed, and it resets at local midnight.</td><td><a href="#s9">§9 Daily limit</a></td></tr>
+            <tr><td>Add or remove exercises in the 15-minute session</td><td>A timeline against a live 15:00 budget. About 2 minutes per slot, 3 to 8 exercises. Over-budget fixes offered, and the cool-down rebuilds to match.</td><td><a href="#editor">§8 Editor</a></td></tr>
+
+            <tr class="grp"><td colspan="3">4 · Home screen <span class="chip p0">P0</span> <span class="chip p2">M1</span></td></tr>
+            <tr><td>Some pre-ready plans</td><td>A row of ready-made sessions: Full body 15, Abs and core, Beginner HIIT, Morning stretch, Yoga flow, Dance cardio.</td><td><a href="#home">§7 Home screen</a></td></tr>
+            <tr><td>Individual body-part exercises</td><td>A grid of body parts. Each opens its exercises and can build a 15-minute session on the spot.</td><td><a href="#home">§7 Home screen</a></td></tr>
+
+            <tr class="grp"><td colspan="3">5 · Nutrition <span class="chip p1">P1</span> <span class="chip p2">M2 log · M4 plan</span></td></tr>
+            <tr><td>Nutrition log</td><td>Search Indian foods with katori, roti and piece portions. Same as yesterday, saved meals, recent items.</td><td><a href="#food-log">§10 Food log</a></td></tr>
+            <tr><td>Shows calories</td><td>Daily summary of calories against target, with protein prominent. A setting hides the calorie number.</td><td><a href="#food-log">§10 Food log</a></td></tr>
+            <tr><td>Customised plan</td><td>A short profile, then a calorie and protein target and a 7-day sample Indian meal plan, with calorie floors and a loss-rate cap.</td><td><a href="#nutrition-plan">§10 Customised plan</a></td></tr>
+
+            <tr class="grp"><td colspan="3">6 · Interest: individual or mixed <span class="chip p1">P1</span> <span class="chip p2">M3</span></td></tr>
+            <tr><td>Individual or mixed</td><td>One style gives an individual plan. Two or three styles split the week in proportion.</td><td><a href="#plan-rules">§6 Plan rules</a></td></tr>
+            <tr><td>Normal</td><td>Bodyweight strength and HIIT-style circuits: dynamic warm-up, five exercise slots, static cool-down.</td><td><a href="#styles">§6 Styles</a></td></tr>
+            <tr><td>Dance</td><td>Follow-along routines with low- and high-impact versions. Needs licensed music.</td><td><a href="#styles">§6 Styles</a></td></tr>
+            <tr><td>Yoga</td><td>Flows of 8 to 10 poses with modified versions, ending with a rest pose.</td><td><a href="#styles">§6 Styles</a></td></tr>
+            <tr><td>Customise plan if interested in all three</td><td>A screen to set how many days each style gets in a week. Reachable later from the plan view. (Assumed reading of your note; see Q2.)</td><td><a href="#plan-rules">§6 Plan rules</a> · <a href="#s16">Q2</a></td></tr>
+
+            <tr class="grp"><td colspan="3">7 · Two sections <span class="chip p0">P0</span> <span class="chip p2">M1–M2</span></td></tr>
+            <tr><td>Workout + Nutrition as two sections</td><td>Two bottom-bar tabs. Steps and Learn sit under Workout. (Assumed; see Q5.)</td><td><a href="#nav">§7 Navigation</a> · <a href="#s16">Q5</a></td></tr>
+
+            <tr class="grp"><td colspan="3">8 · Daily steps <span class="chip p1">P1</span> <span class="chip p2">M2</span></td></tr>
+            <tr><td>Daily steps counting</td><td>Counted from the phone's step sensor or Health Connect, with no GPS. Default goal 7,000, ramped from the user's own average.</td><td><a href="#s11">§11 Requirements</a></td></tr>
+            <tr><td>Normal walk</td><td>Everyday walking, counted in the background all day.</td><td><a href="#walk-modes">§11 Walk modes</a></td></tr>
+            <tr><td>Brisk walk</td><td>"Brisk minutes" at roughly 100 steps a minute or more, as a smaller second goal.</td><td><a href="#walk-modes">§11 Walk modes</a></td></tr>
+            <tr><td>Reverse walk</td><td>An opt-in, timed bout behind a safety card. Maximum 15 minutes a day, and hidden for users with a health flag.</td><td><a href="#walk-modes">§11 Walk modes</a></td></tr>
+
+            <tr class="grp"><td colspan="3">9 · Myths and concepts <span class="chip p2">P2</span> <span class="chip p2">M2</span></td></tr>
+            <tr><td>Myths about exercise</td><td>Cards with the myth, a verdict, a short explanation, and what to do in the app. Each has a source and a review date.</td><td><a href="#myths-list">§12 Starter list</a></td></tr>
+            <tr><td>Concepts</td><td>60 to 90 second explainers, such as warm-up, intensity, rest and steps versus workouts, surfaced in context.</td><td><a href="#s12">§12 Requirements</a></td></tr>
+          </table>
+        </div>
+
+        <div class="callout">
+          <p><strong>How to use this table</strong></p>
+          <p>Each row names the point from your brief in your words, then says what the app will do in one line. The link on the right goes to the part of the PRD that holds the full requirement, acceptance criteria, research finding and risk. Every feature section also has a "back to all points" link at the top. For the ranking of what matters most, see <a href="#s1">Section 1</a>.</p>
+        </div>
+      </section>
+
+      <section id="s1">
+        <span class="num">Section 1</span>
+        <h2>What matters most</h2>
+        <p class="lede">Nine asks is a lot for a first release. These eight points decide whether it ships and whether people keep using it, in order of importance.</p>
+
+        <ol class="rank">
+          <li><b>The 15-minute time-box is the product.</b><span>Plan builder, intensity changes, and add/remove exercise all draw on one live 15:00 budget. If that budget is trustworthy, the app feels effortless; if it drifts, nothing else saves it. See <a href="#s8">§8</a>.</span></li>
+          <li><b>Two onboarding pages is achievable, but safety questions fight for space.</b><span>Pain, injury and health flags cannot be dropped just because they are not "basic". The fix is to make them one-tap chips on page two. See <a href="#s5">§5</a>.</span></li>
+          <li><b>Generate plans with rules, not AI, in the first release.</b><span>Rule-based plans are free to run, explainable ("why this plan"), and easy for a trainer to review. AI belongs in food-photo recognition later. See <a href="#s6">§6</a>.</span></li>
+          <li><b>Content is the biggest cost, and you have asked for three libraries.</b><span>Normal, yoga and dance each need their own video library, and dance adds music licensing. This drives the release plan more than any engineering item. See <a href="#s14">§14</a>.</span></li>
+          <li><b>The 2-exercises-a-day camera limit is a good constraint. Keep it, and keep the camera on-device.</b><span>It caps battery, heat and privacy exposure. It is also the riskiest schedule item, so it ships last behind a feature flag. See <a href="#s9">§9</a>.</span></li>
+          <li><b>Daily steps are the cheapest retention feature on the list.</b><span>The pedometer is free, the research gives a clear target (7,000 steps), and three walk modes give users a reason to open the app on non-workout days. Reverse walking needs safety gates. See <a href="#s11">§11</a>.</span></li>
+          <li><b>Showing calories is fine, but make it optional and bounded.</b><span>A hide-calories toggle, calorie floors, and an 18+ gate keep the nutrition section from becoming the part of the app that makes people quit. See <a href="#s10">§10</a>.</span></li>
+          <li><b>The myths section is low cost and builds trust, if every card has a source.</b><span>It is writing, not engineering. The risk is publishing a "debunk" that is itself wrong, so each card needs a citation and a trainer's review. See <a href="#s12">§12</a>.</span></li>
+        </ol>
+
+        <div class="callout">
+          <p><strong>Where this PRD departs from your brief</strong></p>
+          <ul class="plain">
+            <li><strong>Onboarding keeps three health questions</strong> (pain areas, health flags, experience) even though you asked for basics only. They are the minimum for a safe plan.</li>
+            <li><strong>The default step goal is 7,000, not 10,000.</strong> The latest meta-analysis shows most of the benefit is captured by 7,000 (§11).</li>
+            <li><strong>Reverse walking is opt-in behind a safety check</strong> and capped at 15 minutes a day, because the evidence is small and the fall risk is real.</li>
+            <li><strong>Calorie numbers can be hidden</strong> by the user, and calorie targets have a floor.</li>
+            <li><strong>Equipment is not asked in onboarding.</strong> The plan assumes bodyweight; equipment becomes a later setting. This follows your "nothing about gym" instruction.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s2">
+        <span class="num">Section 2</span>
+        <h2>Goals, non-goals and metrics</h2>
+
+        <h3>Goals for the first release</h3>
+        <ul class="plain">
+          <li>A new user finishes onboarding in under a minute and starts a 15-minute session the same day.</li>
+          <li>Users can change a session to suit them without leaving it: easier, harder, paused, longer or shorter.</li>
+          <li>Workout, food and steps live in one app, so the home screen has a reason to open every day.</li>
+          <li>Users learn something true about exercise from the myths section, and trust the app more for it.</li>
+        </ul>
+
+        <h3>Non-goals for the first release</h3>
+        <ul class="plain">
+          <li>Gym mode, machines and weight logging (your "nothing about gym" instruction; also deferred in the earlier plan).</li>
+          <li>Social feeds, leaderboards, avatars and photo-based body scans. They were in the earlier plan but not in this brief.</li>
+          <li>Server-side video analysis. All camera processing stays on the phone.</li>
+          <li>Live coaching, chat, or a general AI assistant.</li>
+        </ul>
+
+        <h3>Success metrics</h3>
+        <p>Targets below are starting hypotheses to calibrate after the first beta, not commitments. For context, the earlier plan cites roughly 80% of fitness app users gone within 30 days.</p>
+        <div class="qs">
+          <table>
+            <tr><th>Metric</th><th>How it is measured</th><th>Starting target</th></tr>
+            <tr><td>Onboarding completion</td><td>Users who finish page 2 ÷ users who open the app</td><td>80% or more</td></tr>
+            <tr><td>Activation</td><td>First 15-minute session started within 24 hours of install</td><td>50% or more</td></tr>
+            <tr><td>Session completion</td><td>Sessions finished ÷ sessions started</td><td>70% or more</td></tr>
+            <tr><td>Weekly habit</td><td>Users with 3 or more sessions in week 4</td><td>25% of week-1 starters</td></tr>
+            <tr><td>Editor use</td><td>Sessions where the user added, removed or swapped an exercise</td><td>Track only; low use means the defaults are good</td></tr>
+            <tr><td>Steps engagement</td><td>Days per week the step goal is viewed or met</td><td>Track in beta, then set</td></tr>
+            <tr><td>Food logging</td><td>Days per week with at least one food entry, among users who opened Nutrition</td><td>3 or more days</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="s3">
+        <span class="num">Section 3</span>
+        <h2>Users and assumptions</h2>
+        <h3>Who this is for</h3>
+        <ul class="plain">
+          <li><strong>Primary:</strong> adults who are new to exercise or returning after a long break, training at home with no equipment, and short on time. A 15-minute session is the right entry point for them.</li>
+          <li><strong>Secondary:</strong> already-active adults who want a quick maintenance session, or a yoga or dance routine on a lighter day.</li>
+        </ul>
+        <h3>Working assumptions</h3>
+        <ul class="plain">
+          <li>India-first launch on Android, then iOS. English at launch, Hindi soon after.</li>
+          <li>Phone only. No wearable is required, though step data can come from the phone's own sensors or Health Connect.</li>
+          <li>Users are 18 or older in the first release (see §10 and §13 for why).</li>
+          <li>Sessions and the exercise library work offline once downloaded.</li>
+        </ul>
+        <div class="item risk">
+          <span class="tag">Decision</span>
+          <ul><li>The earlier plan listed "who is the first user" as an open question. This PRD assumes the beginner-at-home profile because your 15-minute, no-gym brief points there. Confirm before the plan generator and video style are locked.</li></ul>
+        </div>
+      </section>
+
+      <section id="s4">
+        <span class="num">Section 4</span>
+        <h2>Scope at a glance</h2>
+        <p class="lede">Every ask in your brief, mapped to a feature, a priority and a release milestone. P0 means the app is not usable without it; P1 is expected at launch; P2 can follow.</p>
+        <div class="qs">
+          <table>
+            <tr><th>#</th><th>Your ask</th><th>Feature</th><th>Priority</th><th>Milestone</th></tr>
+            <tr><td>1</td><td>Two-page onboarding, basic questions, nothing about gym</td><td><a href="#s5">F1 Onboarding</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>2</td><td>Exercise plan from onboarding answers (body part or stay fit)</td><td><a href="#s6">F2 Plan builder</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>3a</td><td>Change intensity and pause during exercise</td><td><a href="#s8">F4 Session player</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>3b</td><td>Add or remove exercises within 15 minutes</td><td><a href="#s8">F4 Session editor</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>3c</td><td>Camera form analysis, 2 exercises a day</td><td><a href="#s9">F5 Form camera</a></td><td><span class="chip p1">P1</span></td><td>M4</td></tr>
+            <tr><td>4</td><td>Home: ready-made plans and body-part exercises</td><td><a href="#s7">F3 Home screen</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>5</td><td>Nutrition log with calories, and a customised plan</td><td><a href="#s10">F6 Nutrition</a></td><td><span class="chip p1">P1</span></td><td>M2 (log), M4 (plan)</td></tr>
+            <tr><td>6</td><td>Interest: normal, dance, yoga, individual or mixed; customise if all three</td><td><a href="#s6">F2 Plan builder</a></td><td><span class="chip p1">P1</span></td><td>M3</td></tr>
+            <tr><td>7</td><td>Workout and Nutrition as two sections</td><td><a href="#s7">F3 Navigation</a></td><td><span class="chip p0">P0</span></td><td>M1–M2</td></tr>
+            <tr><td>8</td><td>Daily steps: brisk, normal, reverse walk</td><td><a href="#s11">F7 Daily steps</a></td><td><span class="chip p1">P1</span></td><td>M2</td></tr>
+            <tr><td>9</td><td>Myths and concepts section</td><td><a href="#s12">F8 Learn</a></td><td><span class="chip p2">P2</span></td><td>M2</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="s5">
+        <span class="num">Section 5 · F1</span>
+        <h2>Onboarding: two pages, basics only</h2>
+        <div class="fmeta"><span class="chip p0">P0</span><span class="chip p2">Milestone 1</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: two pages, basic questions, nothing about gym. The design below fits every answer the plan builder needs into 8 taps and 3 number fields.</p>
+
+        <h3 id="onb1">Page 1 · What do you want?</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Question</th><th>Input</th><th>Used for</th></tr>
+            <tr><td>What is your goal?</td><td>Stay fit (full body) or Train specific body parts</td><td>Plan type (§6)</td></tr>
+            <tr><td>Which body parts? (shown only for "specific")</td><td>Multi-select, up to 2: arms, chest, back, shoulders, core, glutes, legs</td><td>60% of sessions target these parts</td></tr>
+            <tr><td>What do you enjoy?</td><td>Multi-select: Normal workouts, Dance, Yoga. Pick one, two or all three</td><td>Style mix (§6). All three opens the customise screen</td></tr>
+          </table>
+        </div>
+
+        <h3 id="onb2">Page 2 · About you</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Question</th><th>Input</th><th>Used for</th></tr>
+            <tr><td>Age and sex</td><td>Number field and 3 chips</td><td>Intensity defaults, step goal, calorie target</td></tr>
+            <tr><td>Height and weight</td><td>Two number fields, skippable</td><td>Calorie estimates. If skipped, asked again when the user opens Nutrition</td></tr>
+            <tr><td>Training experience</td><td>3 chips: new / on and off / regular</td><td>Starting intensity and exercise difficulty</td></tr>
+            <tr><td>Days per week</td><td>Chips 3 to 7</td><td>Plan length and rest days</td></tr>
+            <tr><td>Any pain or past injury?</td><td>Chips: none, knees, back, shoulders, wrists, other</td><td>Hard-excludes contraindicated moves</td></tr>
+            <tr><td>Anything we should know?</td><td>Chips: heart or blood pressure, pregnancy or postpartum, recent surgery, none</td><td>Routes to the gentler plan</td></tr>
+          </table>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Requirement</span>
+          <ul>
+            <li>Exactly two screens with a visible "1 of 2" indicator, then a plan preview. No account, email or phone number is requested before the first session.</li>
+            <li>The plan preview shows week one in full: session names, the 15-minute shape, and why each day was chosen. Its single button is "Start today's session".</li>
+            <li>Name, notification time, equipment, diet type and photos are not asked here. They are requested after the first session, when the user has felt something.</li>
+            <li>Default session length is 15 minutes. Length options (10, 20, 30) are a later setting, not an onboarding question.</li>
+            <li>Choosing "heart or blood pressure", "pregnancy or postpartum" or "recent surgery" switches to the gentler plan and shows one line recommending a doctor's clearance. It does not block the user.</li>
+            <li>Any pain chip removes the affected movements and records why, so the plan can say "skipping lunges because of your knee".</li>
+          </ul>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Acceptance criteria</span>
+          <ul>
+            <li>Median time from first screen to plan preview is under 60 seconds in usability tests.</li>
+            <li>Going back from page 2 to page 1 keeps every answer.</li>
+            <li>Every field on page 2 except age has a valid "skip" path, and the plan still generates.</li>
+            <li>Health answers are shown with a plain-language purpose line and a separate consent tick before being saved (see §13).</li>
+            <li>The whole flow works with no network connection.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>The earlier plan puts first-day drop-off down to onboarding length, and recommends asking only what the first plan needs. This design follows that: every field above changes the generated plan, and everything else is deferred.</li>
+            <li>Equipment normally sits on the "ask now" list. Dropping it is safe only because the plan defaults to bodyweight, which also matches the "nothing at all" case that the earlier plan flagged as a large share of home users.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Page 2 has six questions on one screen. If testing shows it feels long, move height and weight to the Nutrition section (they are only needed there), leaving four chips.</li>
+            <li>Health answers are sensitive personal data. Collecting them on screen two, before any trust is built, needs careful wording and a clear "why we ask".</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s6">
+        <span class="num">Section 6 · F2</span>
+        <h2>Plan builder: goal, body part and style</h2>
+        <div class="fmeta"><span class="chip p0">P0</span><span class="chip p2">M1 (normal) · M3 (yoga, dance, mixed)</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: build the plan from the onboarding answers, for either a body part or staying fit, in the style the user is interested in: normal, dance, yoga, or a mix.</p>
+
+        <h3 id="plan-rules">How the plan is built</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Input</th><th>Rule</th></tr>
+            <tr><td>Goal = stay fit</td><td>Rotate full-body sessions: push, pull, legs, core, plus one cardio-led session a week.</td></tr>
+            <tr><td>Goal = specific body parts</td><td>About 60% of sessions target the chosen parts. The other 40% are full-body or mobility, so the same muscles are not trained two days running.</td></tr>
+            <tr><td>Days per week</td><td>Sessions fill that many days. Remaining days are designed rest days with a walk or stretch suggestion.</td></tr>
+            <tr><td>Experience</td><td>Sets the starting rung on each exercise's difficulty ladder (§8).</td></tr>
+            <tr><td>Pain or health flags</td><td>Remove excluded movements, or switch to the gentler plan.</td></tr>
+            <tr><td>Style: one chosen</td><td>Every session uses that style (individual plan).</td></tr>
+            <tr><td>Style: two or three chosen</td><td>Days are split in proportion to the choices, equal by default (mixed plan). With all three chosen, show the customise screen.</td></tr>
+          </table>
+        </div>
+
+        <h3 id="styles">What a 15-minute session contains, by style</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Style</th><th>Warm-up (2 min)</th><th>Work (about 11 min)</th><th>Cool-down (2 min)</th></tr>
+            <tr><td>Normal</td><td>Dynamic: leg swings, arm circles, light versions of today's moves</td><td>5 exercise slots as a circuit or straight sets; HIIT-style variants allowed</td><td>Static holds of 20–30 seconds on the muscles worked</td></tr>
+            <tr><td>Yoga</td><td>Cat-cow and gentle sun-salutation rounds</td><td>A flow of 8–10 poses, 30–60 seconds each</td><td>Seated stretch and a one-minute rest pose</td></tr>
+            <tr><td>Dance</td><td>Easy-step groove to raise heart rate</td><td>One follow-along routine, low- or high-impact version</td><td>Standing stretch of legs, hips and shoulders</td></tr>
+          </table>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Requirement</span>
+          <ul>
+            <li>Plans are generated by rules on the device, so they work offline and cost nothing per user. Each plan carries a "Why this plan" line that names the answers it used.</li>
+            <li>The customise screen (shown when all three styles are chosen) lets the user set how many days each style gets in a week, for example 2 normal, 1 dance, 1 yoga. The same screen is reachable later from the plan view.</li>
+            <li>Every session is bookended with a warm-up and cool-down matched to the muscles worked, including yoga and dance sessions. This is the differentiator from the earlier plan.</li>
+            <li>After each session the app asks "how hard was that?" on three levels, and the answer drives next week's volume (more reps, then sets, then a harder variation).</li>
+            <li>Users can swap a day's session, change days per week, or rebuild the plan at any time.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li><strong>Short sessions work for habit-building.</strong> A meta-analysis found that "exercise snacks" (under 10 minutes a day in total) improved fitness in inactive adults, and 82.8% of participants across 11 trials (414 people) stuck with the programme. Low-volume HIIT of under 15 minutes of work is also reported to improve cardiometabolic health.</li>
+            <li><strong>Be honest about what 15 minutes can do.</strong> That evidence is about fitness in inactive adults. It does not show that 15 minutes a day will reshape a body, so launch copy should promise consistency and energy, not transformation.</li>
+            <li><strong>Dance has solid evidence and good adherence.</strong> An 8-week randomised trial of Zumba reported higher maximal oxygen uptake, lower body fat and better mood, and a meta-analysis exists on its effect on fat mass. Adherence is a repeated theme in the dance literature.</li>
+            <li><strong>Yoga helps, and keeping at it matters.</strong> A trial in adults aged 65–85 compared yoga with exercise classes, and a comparison study reported similar cardiovascular gains from yoga and Zumba.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li><strong>Dance is not like the other styles.</strong> It is routine-based, so the easier/harder substitution ladder from the earlier plan does not apply cleanly. Offer low-impact and high-impact versions of each routine instead.</li>
+            <li><strong>Music licensing.</strong> Dance needs music the app has the right to use. Budget for licensed or royalty-free tracks before filming; do not assume popular songs are available.</li>
+            <li><strong>Unclear brief:</strong> "customise plan if interested in 3" is read here as "all three styles chosen". See open question Q2.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s7">
+        <span class="num">Section 7 · F3</span>
+        <h2>Home screen and navigation</h2>
+        <div class="fmeta"><span class="chip p0">P0</span><span class="chip p2">Milestone 1</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: ready-made plans and individual body-part exercises on the home screen, and Workout and Nutrition as two sections.</p>
+
+        <h3 id="home">Home screen, top to bottom</h3>
+        <ul class="plain">
+          <li><strong>Today's session card.</strong> One decision made for the user: name, 15 minutes, muscles, style, and a single Start button.</li>
+          <li><strong>Ready-made plans.</strong> A horizontal row of pre-built sessions: Full body 15, Abs and core, Beginner HIIT, Morning stretch, Yoga flow, Dance cardio.</li>
+          <li><strong>Train a body part.</strong> A grid: arms, chest, back, shoulders, core, glutes, legs, full body, stretch. Tapping one opens that part's exercises, filterable by style.</li>
+          <li><strong>Steps ring.</strong> Today's steps against the goal (§11).</li>
+          <li><strong>Food row.</strong> Calories logged today (if shown), with one tap to add a meal (§10).</li>
+        </ul>
+
+        <h3 id="nav">Navigation: two sections</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Section</th><th>Contains</th></tr>
+            <tr><td>Workout</td><td>Home, plan view, body-part library, session editor, daily steps, and the Learn area (myths and concepts)</td></tr>
+            <tr><td>Nutrition</td><td>Food log, daily summary, customised plan</td></tr>
+          </table>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Requirement</span>
+          <ul>
+            <li>A bottom bar with two main tabs, Workout and Nutrition. Steps and Learn are reached from cards on the Workout home, not from extra tabs.</li>
+            <li>Each ready-made plan shows duration, muscles, style and difficulty, and offers "Start now" and "Add to my plan".</li>
+            <li>The body-part library lists exercises with a thumbnail demo, difficulty and style tag, and a "Start a 15-minute session on this" button that builds a session on the spot.</li>
+            <li>Rest days show a designed screen: a walk or stretch suggestion and one line on why rest matters.</li>
+            <li>Weight and any single-day number never appear on the home screen. Weekly trends belong in a progress view.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>The earlier plan found that a grid of choices on the home screen causes decision paralysis and abandonment. That is why the "Today" card comes first and the ready-made plans and body-part grid sit below it as optional paths.</li>
+            <li>Putting Steps and Learn under Workout keeps your two-section structure while still giving them a home.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Decision</span>
+          <ul><li>"Workout + Nutrition (two sections)" could also mean two tabs on one screen. This PRD treats them as two bottom-bar tabs. Confirm in Q5.</li></ul>
+        </div>
+      </section>
+
+      <section id="s8">
+        <span class="num">Section 8 · F4</span>
+        <h2>Session player and the 15-minute editor</h2>
+        <div class="fmeta"><span class="chip p0">P0</span><span class="chip p2">Milestone 1</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: during an exercise the user can change intensity, pause, open the camera for form analysis, and add or remove exercises in the 15-minute session. This is the screen people spend all their time on, so it carries the most detail.</p>
+
+        <h3 id="intensity">Intensity control</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Exercise type</th><th>Easier</th><th>As planned</th><th>Harder</th></tr>
+            <tr><td>Timed work (circuits, HIIT)</td><td>30 s work / 30 s rest</td><td>40 s work / 20 s rest</td><td>45 s work / 15 s rest</td></tr>
+            <tr><td>Rep-based</td><td>Fewer reps, or the easier variation</td><td>Planned reps</td><td>More reps, or the harder variation</td></tr>
+            <tr><td>Holds (planks, yoga poses)</td><td>10 seconds shorter, or a modified pose</td><td>Planned hold</td><td>10 seconds longer, or a deeper pose</td></tr>
+            <tr><td>Dance</td><td>Low-impact version</td><td>Planned version</td><td>High-impact version</td></tr>
+          </table>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Requirement · Intensity and pause</span>
+          <ul>
+            <li>A three-step control (Easier, As planned, Harder) is always one tap away, including while an exercise is running. It takes effect from the next set, never mid-rep.</li>
+            <li>Each change updates the remaining time and estimated calories on screen, and is saved as a signal for next week's plan.</li>
+            <li>Pause stops the timer and any audio cues at once. A paused session can be resumed for 24 hours; after that it is saved as unfinished.</li>
+            <li>Rest can be extended by 15 or 30 seconds with one tap. Incoming calls and app switches pause the session automatically.</li>
+            <li>All controls are large and reachable with one thumb. Voice cues keep working with the screen off and music playing, and a session can be finished with the phone face-down.</li>
+          </ul>
+        </div>
+
+        <h3 id="editor">Add or remove exercises inside 15 minutes</h3>
+        <p>The editor shows the session as a timeline with a live total against the 15:00 budget. Each work exercise takes about 2 minutes (two sets of 40 seconds on, 20 off), so the work block has five slots.</p>
+        <div class="item req">
+          <span class="tag">Requirement · Editor</span>
+          <ul>
+            <li><strong>Remove:</strong> removing an exercise frees about 2 minutes. The app offers one suggested replacement to refill the time, or the user can leave the session shorter. The minimum is 3 work exercises.</li>
+            <li><strong>Add:</strong> the picker is filtered by body part and style and shows the time each choice adds (for example "+2:00"). The maximum is 8 work exercises.</li>
+            <li><strong>Over budget:</strong> if the total passes 15:00, the app shows "Over by 1:00" and offers three fixes: shorten rest (never below 10 seconds), replace an exercise, or allow a longer session today. The 15-minute limit is a default the user can override, not a wall.</li>
+            <li><strong>Cool-down follows the edit:</strong> when exercises change, the cool-down is rebuilt to match the muscles now being worked. This is easy to miss and breaks the app's main promise if skipped.</li>
+            <li>The warm-up can be skipped, but only with a deliberate tap, and skips are counted so the team can see if warm-ups are too long.</li>
+            <li>After editing, the user chooses "Just today" or "Save to my plan".</li>
+            <li>Editing is available from the session overview and between exercises, not in the middle of a set.</li>
+          </ul>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Acceptance criteria</span>
+          <ul>
+            <li>The displayed total always equals the sum of warm-up, work, rest and cool-down, to the second.</li>
+            <li>Changing intensity three times in one session does not crash, reset the timer, or lose progress.</li>
+            <li>A phone call mid-set pauses the session, and resuming restores the same exercise and set.</li>
+            <li>Removing the last pushing exercise changes the cool-down to drop chest and shoulder stretches.</li>
+            <li>The full session completes offline with the screen off.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>The earlier plan recommends a simple "too hard / too easy" control over numeric settings: it delivers most of the benefit of adaptive training at a fraction of the cost, and it feeds tomorrow's plan.</li>
+            <li>Exercise-snack research suggests that a short session which can be shortened or reshaped is not a weaker product. It is what makes people keep doing it: adherence in those trials was high, and qualitative studies link that to sessions fitting into the day.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>"Pause timing" in your brief may also mean adjusting how long rests are. Both are covered above; tell me if you meant something else (Q4).</li>
+            <li>Free editing can produce lopsided sessions (all legs, no cool-down for the upper body). The editor warns when the same muscle group is chosen three times in a row.</li>
+            <li>The calorie figure shown during a session is an estimate from activity type and duration. Label it as an estimate.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s9">
+        <span class="num">Section 9 · F5</span>
+        <h2>Form camera: analysis for 2 exercises a day</h2>
+        <div class="fmeta"><span class="chip p1">P1</span><span class="chip p2">Milestone 4 · feature-flagged</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: the camera can open during an exercise and analyse the person's form, limited to 2 exercises per day. The limit is a good design choice and this section builds on it.</p>
+
+        <div class="item req">
+          <span class="tag">Requirement</span>
+          <ul>
+            <li><strong>Eligible exercises at launch:</strong> bodyweight squat, push-up, plank and lunge. These are the ones where depth, knee position and body line can be judged from a single camera. Others are added only after testing.</li>
+            <li><strong>Daily limit:</strong> 2 analysed exercises per local day. The counter ("1 of 2 left today") is shown before the camera opens. It resets at local midnight.</li>
+            <li><strong>When a credit is used:</strong> only after the first rep is successfully analysed. If framing or lighting fails, no credit is spent.</li>
+            <li><strong>Setup screen:</strong> asks for the phone to be propped about 2 metres away with the whole body in frame, and checks light and framing before starting.</li>
+            <li><strong>Feedback:</strong> a rep count, spoken cues limited to one per rep ("go a little lower", "knees out"), and a summary at the end of the set with the one or two most important corrections.</li>
+            <li><strong>When unsure, stay quiet.</strong> If the model's confidence is low, give no correction rather than a wrong one. Say "looks good" only when confident.</li>
+            <li><strong>Privacy:</strong> all analysis runs on the phone. No frame is stored or uploaded. Camera permission is requested at the moment of first use, with a separate consent line (§13).</li>
+          </ul>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Acceptance criteria</span>
+          <ul>
+            <li>The third analysis attempt in a day is blocked with a clear message and a non-camera alternative (audio cues only).</li>
+            <li>A network trace of a full camera session shows no video or image data leaving the device.</li>
+            <li>Force-closing the app mid-analysis leaves no saved frames on storage.</li>
+            <li>The session player still works end to end with the camera feature switched off.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li><strong>The daily cap does real work.</strong> Camera analysis drains battery and heats the phone. With on-device processing the cap also costs nothing in servers. If analysis were ever run in the cloud, every analysed set would become a recurring bill, which is why the earlier plan recommended on-device first.</li>
+            <li><strong>The law treats this as sensitive.</strong> The earlier plan found that analysing a person's body from a camera can fall under biometric and health data rules in both GDPR and India's DPDP Act, which call for specific, standalone consent and minimal data. On-device processing with no stored frames is the simplest way to stay inside them.</li>
+            <li><strong>Camera placement is the real problem.</strong> Usable correction needs the phone propped at the right height and angle, the full body in frame and decent light. Many home users have nowhere to prop a phone, so expect a meaningful share of attempts to fail at setup.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>This is the likeliest feature to slip the schedule. It is sequenced last (§14), behind a feature flag, so a delay does not hold up the release.</li>
+            <li>A wrong "good form" message is a liability. Keep the disclaimer on screen, and review the cue wording with a qualified trainer.</li>
+            <li>Whether the 2 free analyses a day are a free or paid benefit is undecided (Q8).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s10">
+        <span class="num">Section 10 · F6</span>
+        <h2>Nutrition: food log, calories and a customised plan</h2>
+        <div class="fmeta"><span class="chip p1">P1</span><span class="chip p2">M2 (log) · M4 (customised plan)</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: a nutrition log that shows calories, and a customised plan. This is the second main section of the app.</p>
+
+        <h3 id="food-log">Food log</h3>
+        <div class="item req">
+          <span class="tag">Requirement · Log</span>
+          <ul>
+            <li>Search a database of Indian home foods. Portions use katori, chamach, roti and piece counts, not grams, with grams available as an option.</li>
+            <li>One-tap helpers: "same as yesterday", saved meals, and recent items at the top of search.</li>
+            <li>The daily summary shows calories eaten against the target, with protein shown prominently. A setting hides the calorie number and shows a simple on-track indicator for protein and portions instead.</li>
+            <li>Meal reminders are off by default. There are no notifications about unlogged meals.</li>
+            <li>Photo recognition is not in the first release (§14).</li>
+          </ul>
+        </div>
+
+        <h3 id="nutrition-plan">Customised plan</h3>
+        <div class="item req">
+          <span class="tag">Requirement · Plan</span>
+          <ul>
+            <li>A short nutrition profile, asked when the user first opens Nutrition (not in onboarding): diet type (vegetarian, eggetarian, non-vegetarian, Jain), allergies, goal (maintain, lose gently, gain), meals per day.</li>
+            <li>The app calculates a daily calorie and protein target from age, sex, height, weight and the user's workout plan. The standard Mifflin-St Jeor equation with an activity factor is a reasonable starting point.</li>
+            <li>It then offers a 7-day sample Indian meal plan that meets the target, with each meal swappable for another of similar calories.</li>
+            <li>Every plan states that it is general guidance, not medical advice.</li>
+          </ul>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Safeguards</span>
+          <ul>
+            <li>A calorie floor below which the app will not set a target. The commonly cited floors are about 1,200 kcal for women and 1,500 kcal for men; a registered dietitian must confirm the numbers before launch.</li>
+            <li>A cap on planned weight loss, for example 0.5–0.75 kg a week, with no "rapid loss" goal.</li>
+            <li>No weight-loss or calorie-deficit plans for under-18s. The first release is 18+ (see §13).</li>
+            <li>If inputs suggest disordered eating (very low target, very rapid goal), the app declines the goal and shows supportive guidance instead.</li>
+            <li>Food is never labelled "bad". Suggestions add (a protein, a vegetable) rather than forbid.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li><strong>A good public seed database exists, but it is raw-ingredient data.</strong> The Indian Food Composition Tables 2017 (ICMR-NIN) cover 528 key foods across 151 components, measured and averaged across six regions. They list raw foods like uncooked rice and wheat flour, not a plate of dal and sabzi cooked with unknown oil.</li>
+            <li><strong>A recipe layer is needed.</strong> A newer Indian Nutrient Databank adds 1,095 individual foods and 1,014 commonly eaten recipes. Cooked dishes still need portion sizes and oil assumptions built on top. Confirm the licence terms before reusing either dataset in a commercial app.</li>
+            <li><strong>Photo logging is cheap per image but not precise.</strong> The earlier cost research found the cheapest strong vision model near $0.0006 an image, and photo apps about 82% accurate against 94% for manual entry. That is acceptable only with a confirm-and-correct step, which is why it follows in a later release.</li>
+            <li><strong>Calorie tracking can backfire.</strong> The earlier plan cites analysis of user posts finding that rigid calorie tracking and nagging produced shame and quitting. That is the reason for the hide-calories setting and the safeguards above.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Diet advice carries more liability than exercise advice. Have a registered dietitian review the calculation, the floors and every sample meal plan before launch.</li>
+            <li>Building the Indian cooked-food database is a content project in its own right, comparable to filming the exercise library.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s11">
+        <span class="num">Section 11 · F7</span>
+        <h2>Daily steps: normal, brisk and reverse walk</h2>
+        <div class="fmeta"><span class="chip p1">P1</span><span class="chip p2">Milestone 2</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: count daily steps, with three kinds of walking: brisk, normal and reverse. Steps give users something to do on non-workout days, and the phone already counts them.</p>
+
+        <div class="qs" id="walk-modes">
+          <table>
+            <tr><th>Mode</th><th>What it is</th><th>How it is counted</th><th>Safety and limits</th></tr>
+            <tr><td>Normal walk</td><td>Everyday walking</td><td>Phone step sensor or Health Connect, all day, in the background</td><td>None beyond standard advice</td></tr>
+            <tr><td>Brisk walk</td><td>Walking fast enough to raise breathing; roughly 100 steps a minute or more is a commonly used threshold</td><td>"Brisk minutes" are minutes in which the step rate reaches the threshold; shown as a second, smaller goal</td><td>Offer a "talk test" hint instead of a heart-rate target</td></tr>
+            <tr><td>Reverse walk</td><td>Walking backwards, slowly, on flat clear ground or a treadmill</td><td>A timed bout the user starts and stops. Steps inside the bout count toward the daily total</td><td>Opt-in behind a safety check. Maximum 15 minutes a day. Not offered with a health flag or balance concern</td></tr>
+          </table>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Requirement</span>
+          <ul>
+            <li><strong>Default goal 7,000 steps a day.</strong> Users can raise it. For people with a low starting level, the app ramps from their own 7-day average, adding about 1,000 steps at a time, until it reaches the target.</li>
+            <li>Counting uses the phone's step sensor or Health Connect. It does not use GPS, which protects battery and location privacy.</li>
+            <li>The home screen shows a ring (steps against goal), brisk minutes, and a weekly bar chart. The goal counts rest days, so a walk keeps the week active.</li>
+            <li>Reverse walk starts with a safety card: clear flat space, no obstacles, hold a rail or have a spotter, stop if dizzy. It runs as a short timed bout and is excluded from the "brisk" count.</li>
+            <li>Steps cannot be entered by hand. Data from other apps is imported through Health Connect only.</li>
+            <li>The daily count rolls over at local midnight and works offline.</li>
+          </ul>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Acceptance criteria</span>
+          <ul>
+            <li>The step count in the app matches the phone's own health app to within 5% over a day of mixed walking.</li>
+            <li>Steps keep counting when the app is closed, and the app catches up when reopened.</li>
+            <li>A reverse-walk bout stops automatically at 15 minutes, and a second bout the same day is blocked.</li>
+            <li>A user who ticked a health flag in onboarding never sees the reverse-walk option.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li><strong>7,000 is the sweet spot.</strong> A 2025 meta-analysis in The Lancet Public Health found 7,000 steps a day was linked to a 47% lower risk of death from any cause than 2,000 steps, and the benefit levelled off between 5,000 and 7,000 for most outcomes. 10,000 added little more.</li>
+            <li><strong>Age changes the target.</strong> An earlier meta-analysis found risk kept falling up to about 6,000–8,000 steps for adults 60 and over, and up to 8,000–10,000 for younger adults.</li>
+            <li><strong>Brisk walking is a smaller story than it looks.</strong> In that earlier analysis, time spent walking at 100 steps a minute or faster showed no clear extra link to lower mortality once total steps were counted (hazard ratio 0.86, range 0.58–1.28). Total steps is the primary goal; brisk minutes are secondary.</li>
+            <li><strong>Reverse walking has promising but thin evidence.</strong> Consumer health sources cite the American College of Sports Medicine as saying it burns about 40% more energy a minute than brisk forward walking (6.0 against 4.3 METs at 3.5 mph), and a 2019 study found 10–15 minute bouts, 3–4 times a week, improved balance more than forward walking. The underlying research is mostly small physical-therapy studies, often in knee pain or stroke recovery. The 40% figure is from secondary sources and should be checked at the original before it appears in the app.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li><strong>Falls.</strong> Walking backwards on a pavement or stairs is a real injury risk. That is why it is a short, opt-in, timed bout and not a general step mode.</li>
+            <li><strong>Counting accuracy.</strong> Phone step sensors generally count steps whatever the direction, so the app cannot detect reverse walking by itself. Verify this in a short technical test, because it determines whether the declared bout is the only reliable method.</li>
+            <li>A big visible number can turn into the "guilt engine" the earlier plan warned about. Show a weekly trend as well as today's count, and never show a broken-streak message.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s12">
+        <span class="num">Section 12 · F8</span>
+        <h2>Myths and concepts</h2>
+        <div class="fmeta"><span class="chip p2">P2</span><span class="chip p2">Milestone 2</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: a section on myths and concepts about exercise. It is mostly writing, it works offline, and it earns trust. The condition is that every card is correct and sourced.</p>
+
+        <div class="item req">
+          <span class="tag">Requirement</span>
+          <ul>
+            <li>A Learn area under Workout with two lists: <strong>Myths</strong> and <strong>Concepts</strong>.</li>
+            <li>A myth card has four parts: the myth, a one-word verdict (False, Partly true, True), a two- or three-sentence explanation, and "what to do in the app" with a link to the matching feature.</li>
+            <li>A concept card is a 60–90 second read with a simple illustration.</li>
+            <li>Launch with 10 myths and 8 concepts, all bundled in the app so they work offline.</li>
+            <li>Each card shows a source link and a "last reviewed" date. No card ships without a trainer or dietitian's sign-off.</li>
+            <li>Cards are surfaced in context, for example the warm-up concept before a first session, but not as extra notifications.</li>
+          </ul>
+        </div>
+
+        <h3 id="myths-list">Starter list</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Myth</th><th>Verdict</th><th>What research says</th><th>Source status</th></tr>
+            <tr><td>Crunches burn belly fat</td><td>False</td><td>Fat is lost across the whole body, not from the muscles being worked. A six-week abdominal training study found no change in abdominal fat.</td><td>Found; confirm the original paper</td></tr>
+            <tr><td>No pain, no gain</td><td>False</td><td>Muscle soreness after hard work is normal. Sharp pain during exercise is a warning sign of injury.</td><td>Found in general sources; needs a clinical citation</td></tr>
+            <tr><td>Lifting weights makes women bulky</td><td>False</td><td>Women have much lower testosterone, so large muscle gain is slow and hard. Strength training improves body composition without a bulky look.</td><td>Found; confirm the original paper</td></tr>
+            <tr><td>You need 10,000 steps a day</td><td>Partly true</td><td>Benefits level off around 7,000 for most people. 10,000 is fine for the more active.</td><td>Strong: Lancet Public Health meta-analysis</td></tr>
+            <tr><td>Stretching before exercise prevents injury</td><td>Partly true</td><td>Dynamic warm-ups help. Long static stretches before lifting can briefly reduce strength.</td><td>Needs a primary source</td></tr>
+            <tr><td>15 minutes is too short to matter</td><td>False</td><td>Short bouts improved fitness in inactive adults in several trials, with high adherence.</td><td>Found: exercise-snacks reviews</td></tr>
+            <tr><td>Sweating more means burning more fat</td><td>False</td><td>Sweat is cooling, not fat loss.</td><td>Needs a source</td></tr>
+            <tr><td>Cardio is the only way to lose weight</td><td>False</td><td>Strength training and diet matter alongside cardio.</td><td>Needs a source</td></tr>
+            <tr><td>Walking backwards is a miracle workout</td><td>Partly true</td><td>Promising for balance and knee pain, but the evidence is small. See §11.</td><td>Found; limited</td></tr>
+            <tr><td>Yoga and dance are not "real" exercise</td><td>False</td><td>Trials show cardiovascular and body-composition gains from both.</td><td>Found: Zumba and yoga trials</td></tr>
+          </table>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>Only part of this list is backed by sources I have actually found. The rows marked "Needs a source" must be sourced before they are published. I would rather ship 6 solid myths than 10 with 4 guesses.</li>
+            <li>Several of the sources I found for the lifting and spot-reduction myths are fitness-industry blogs that quote studies. Treat them as pointers to the original papers, not as citations.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul><li>A wrong myth-buster damages trust more than having no myths section. Assign an editor and a reviewer, and put a review date on every card.</li></ul>
+        </div>
+      </section>
+
+      <section id="s13">
+        <span class="num">Section 13</span>
+        <h2>Privacy, data and non-functional requirements</h2>
+
+        <h3>What data the app holds</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Data</th><th>Sensitivity</th><th>Where it lives</th><th>Rule</th></tr>
+            <tr><td>Goal, style, body parts, plan</td><td>Low</td><td>Device, synced to the account</td><td>Standard protection</td></tr>
+            <tr><td>Age, sex, height, weight</td><td>Personal and health-related</td><td>Device; synced only if the user opts in</td><td>Purpose line and a separate consent tick</td></tr>
+            <tr><td>Pain, injury and health flags</td><td>Sensitive health data</td><td>Device; not used for advertising</td><td>Collected only to make the plan safe; deleted with the account</td></tr>
+            <tr><td>Camera frames</td><td>Biometric-adjacent</td><td>Never stored, never uploaded</td><td>Processed in memory on the phone and discarded</td></tr>
+            <tr><td>Food log</td><td>Health-related</td><td>Device and account</td><td>Exportable and deletable in two taps</td></tr>
+            <tr><td>Step counts</td><td>Health-related</td><td>Phone sensor or Health Connect, copied to the app</td><td>No GPS or location is collected</td></tr>
+          </table>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Requirement</span>
+          <ul>
+            <li>Consent for health data and for camera use is specific and separate. It is never bundled into a general terms-of-service acceptance.</li>
+            <li>The first release is 18+. Show an age gate and block under-18 sign-up rather than collect their data.</li>
+            <li>"Export my data" and "Delete my account" are reachable in two taps from the profile.</li>
+            <li>Analytics events carry no health values, body measurements or free text.</li>
+            <li><strong>Performance:</strong> cold start under 2 seconds on a mid-range Android phone (target to validate). A downloaded session starts with no network call.</li>
+            <li><strong>Accessibility:</strong> supports larger text, high contrast and audio-first use. Every control in the player is reachable with one thumb.</li>
+            <li><strong>Battery:</strong> a 15-minute camera session must not use more than a set share of the battery; the exact limit is set during testing in M4.</li>
+            <li><strong>Localisation:</strong> strings are externalised from day one so Hindi can follow without rework.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>India's DPDP Act 2023 requires consent that is specific, informed and not bundled, and parental consent for anyone under 18. Biometric data needs a compelling purpose, data minimisation and strict retention. Penalties for mishandling run up to ₹250 crore.</li>
+            <li>GDPR treats health data as a special category needing explicit consent, which applies if the app is ever offered to users in the EU.</li>
+            <li>Keeping the first release at 18+ and on-device for camera data avoids the hardest parts of both laws. A lawyer should still confirm this before launch.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s14">
+        <span class="num">Section 14</span>
+        <h2>Release plan</h2>
+        <p class="lede">The milestones put the 15-minute core loop first, then the cheap daily-use features, then the content-heavy and risky pieces. M1 to M3 are one launch; M4 follows as a fast update.</p>
+
+        <div class="qs">
+          <table>
+            <tr><th>Milestone</th><th>What ships</th><th>Why in this order</th></tr>
+            <tr><td>M1 · Core loop</td><td>Two-page onboarding, rule-based plan (normal style), home screen with ready-made plans and body-part library, session player with intensity and pause, 15-minute editor</td><td>Everything else depends on a session people can finish and shape</td></tr>
+            <tr><td>M2 · Daily use</td><td>Daily steps (normal, brisk, reverse), food log with Indian portions and calories, myths and concepts</td><td>Cheap, mostly writing and data, and they give a reason to open the app on rest days</td></tr>
+            <tr><td>M3 · Styles</td><td>Yoga and dance libraries, mixed plans and the customise screen</td><td>Needs the most filming and music licensing, so it starts in parallel from day one</td></tr>
+            <tr><td>M4 · Intelligence</td><td>Camera form check (2 a day), customised nutrition plan, dietitian-reviewed meal plans</td><td>Highest risk and highest review burden; behind feature flags so it cannot delay the launch</td></tr>
+          </table>
+        </div>
+
+        <h3>Content to produce</h3>
+        <p>These are planning estimates for scoping, not measured figures. They are the largest cost in the project.</p>
+        <div class="qs">
+          <table>
+            <tr><th>Library</th><th>Estimate</th><th>Notes</th></tr>
+            <tr><td>Normal exercises</td><td>80–120 with easier and harder versions</td><td>Same range as the earlier plan</td></tr>
+            <tr><td>Yoga</td><td>30–40 poses and 8–10 flows</td><td>Static poses film quickly; add modified versions</td></tr>
+            <tr><td>Dance</td><td>10–12 routines of 3–5 minutes, each with low- and high-impact versions</td><td>Choreographer, filming, and licensed music</td></tr>
+            <tr><td>Indian food database</td><td>Seed from public tables, then cooked dishes and recipes</td><td>Needs a dietitian and a licence check</td></tr>
+            <tr><td>Myths and concepts</td><td>10 myths, 8 concepts</td><td>Writing plus trainer review</td></tr>
+          </table>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Decision</span>
+          <ul>
+            <li>If filming all three styles before launch is too much, the fallback is to launch with normal and yoga, and show dance as "coming soon". That departs from your onboarding choice of three styles, so it is your call (Q1).</li>
+            <li>Start filming and music licensing now. Video is the longest lead-time item in the earlier plan, and nothing in M1–M3 can be tested properly without it.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s15">
+        <span class="num">Section 15</span>
+        <h2>Risks</h2>
+        <div class="qs">
+          <table>
+            <tr><th>Risk</th><th>Impact</th><th>Mitigation</th></tr>
+            <tr><td>Video and music production overruns</td><td>High: delays M1 to M3</td><td>Start now; cap the first library; phase dance if needed</td></tr>
+            <tr><td>Camera analysis is inaccurate or fails at setup</td><td>Medium: bad cues harm trust, and are a liability</td><td>Feature flag; stay silent when unsure; trainer-reviewed cues; four exercises only</td></tr>
+            <tr><td>Privacy or consent mistakes with health or camera data</td><td>High: legal and trust damage</td><td>On-device camera; separate consent; 18+ only; legal review before launch</td></tr>
+            <tr><td>Calorie or diet guidance causes harm</td><td>High</td><td>Floors, loss-rate cap, hide-calories setting, dietitian review</td></tr>
+            <tr><td>Reverse-walking injury</td><td>Medium</td><td>Opt-in, safety card, 15-minute cap, excluded for health flags</td></tr>
+            <tr><td>Two-page onboarding feels too long or too thin</td><td>Medium: drop-off or a poor first plan</td><td>Test with 5–10 users; move height and weight to Nutrition if needed</td></tr>
+            <tr><td>Too much for a first release</td><td>High: nine asks across three content types</td><td>Four milestones; M4 behind flags; cut P2 first</td></tr>
+            <tr><td>Myths section publishes an error</td><td>Medium: trust damage</td><td>A source and a reviewer on every card</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="s16">
+        <span class="num">Section 16</span>
+        <h2>Open questions and assumptions</h2>
+
+        <h3>Questions that need your answer</h3>
+        <ul class="plain">
+          <li><strong>Q1.</strong> Must all three styles (normal, yoga, dance) be ready at launch, or can dance follow?</li>
+          <li><strong>Q2.</strong> "Customise plan if interested in 3": does this mean the customise screen appears when the user picks all three styles? Or is it an ongoing option for everyone?</li>
+          <li><strong>Q3.</strong> Is 15 minutes the only session length, or should users later pick 10, 20 or 30?</li>
+          <li><strong>Q4.</strong> "Pause timing": do you mean pausing the whole session, adjusting rest time between exercises, or both? This PRD covers both.</li>
+          <li><strong>Q5.</strong> "Workout + Nutrition (two sections)": two bottom-bar tabs, or two tabs on one screen? This PRD assumes bottom-bar tabs.</li>
+          <li><strong>Q6.</strong> Are users 18 or older only? Under-18s need parental consent in India and a different nutrition approach.</li>
+          <li><strong>Q7.</strong> Who owns clinical review: a trainer for exercise and myths, a registered dietitian for nutrition?</li>
+          <li><strong>Q8.</strong> Is camera form analysis (2 a day) free, or part of a paid tier? Is any of the app paid?</li>
+          <li><strong>Q9.</strong> Is CasaFit the final name? A casual search found no existing fitness app or trademark with that name, but that is not a clearance search.</li>
+        </ul>
+
+        <h3>Assumptions I made</h3>
+        <ul class="plain">
+          <li>The default plan is bodyweight-only; equipment is a later setting.</li>
+          <li>Rule-based plan generation in the first release, with no AI cost.</li>
+          <li>Steps and Learn live under the Workout section, not in extra tabs.</li>
+          <li>Camera analysis runs entirely on the device.</li>
+          <li>Metrics targets in §2 are hypotheses to calibrate after the first beta.</li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="wrap" style="padding-left:0;padding-right:0">
+    <a class="toplink" href="#top">Back to top</a>
+    <p>Draft v0.1, 5 October 2026. Research figures are cited below; check them against the original papers before they appear in the app or in marketing. Nothing here is medical, nutritional or legal advice. A qualified trainer and a registered dietitian should review the exercise and nutrition content, and counsel should review the consent and age-gate design, before launch.</p>
+    <h3 style="margin-top:1.6rem">Sources for this PRD</h3>
+    <ol class="sources">
+      <li><a href="https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(25)00164-1/fulltext" target="_blank" rel="noopener">Daily steps and health outcomes in adults: a systematic review and dose-response meta-analysis — The Lancet Public Health, 2025</a></li>
+      <li><a href="https://www.sciencedaily.com/releases/2025/07/250726234359.htm" target="_blank" rel="noopener">7,000 steps a day cuts death risk by 47% — ScienceDaily summary</a></li>
+      <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9289978/" target="_blank" rel="noopener">Daily steps and all-cause mortality: a meta-analysis of 15 international cohorts — Lancet Public Health, 2022</a></li>
+      <li><a href="https://www.researchgate.net/publication/355462362_Exercise_Snacks_A_Novel_Strategy_to_Improve_Cardiometabolic_Health" target="_blank" rel="noopener">Exercise snacks: a novel strategy to improve cardiometabolic health</a></li>
+      <li><a href="https://www.medscape.com/viewarticle/exercise-snacks-may-be-stronger-medicine-than-we-thought-2026a1000zg4" target="_blank" rel="noopener">Exercise snacks may be stronger medicine than we thought — Medscape</a></li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8294064/" target="_blank" rel="noopener">Evidence-based effects of high-intensity interval training on exercise capacity and health — review</a></li>
+      <li><a href="https://www.nationalgeographic.com/science/article/benefits-of-walking-backwards" target="_blank" rel="noopener">Walking is great for your health. Walking backward? Even better. — National Geographic</a></li>
+      <li><a href="https://clinicaltrials.gov/study/NCT06802107" target="_blank" rel="noopener">Effects of different walking exercises on pain, physical performance and balance in knee osteoarthritis — trial record</a></li>
+      <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7794937/" target="_blank" rel="noopener">Zumba, fat mass and maximum oxygen consumption: a systematic review and meta-analysis</a></li>
+      <li><a href="https://research-portal.uws.ac.uk/en/publications/the-health-enhancing-efficacy-of-zumba-fitness-an-8-wk-randomized/" target="_blank" rel="noopener">The health-enhancing efficacy of Zumba fitness: an 8-week randomised controlled study</a></li>
+      <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2194735/" target="_blank" rel="noopener">Adherence to yoga and exercise interventions in a 6-month clinical trial</a></li>
+      <li><a href="https://zenodo.org/records/7088653" target="_blank" rel="noopener">Indian Food Composition Tables 2017 (ICMR-NIN) — dataset record</a></li>
+      <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11277795/" target="_blank" rel="noopener">Development of an Indian Food Composition Database (Indian Nutrient Databank)</a></li>
+      <li><a href="https://sunnyhealthfitness.com/blogs/health-wellness/women-weightlifting-fitness-myths" target="_blank" rel="noopener">Debunking fitness myths: women and weightlifting — secondary source, confirm original studies</a></li>
+      <li><a href="https://www.dpdpa.com/dpdpa2023/chapter-2/section4.html" target="_blank" rel="noopener">India's DPDP Act 2023, Section 4</a> and <a href="https://blog.mantratec.com/DPDP-Biometrics-Compliance" target="_blank" rel="noopener">DPDP compliance for biometrics</a></li>
+      <li><a href="https://pubmed.ncbi.nlm.nih.gov/42619751/" target="_blank" rel="noopener">Vision-language models for image-based dietary assessment: accuracy and cost — PubMed</a></li>
+    </ol>
+  </footer>
+</div>
+
+
+<script>
+(function(){
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.rail a[href^="#"], nav.jump a[href^="#"]'));
+
+  if(sections.length && links.length && ('IntersectionObserver' in window)){
+    function setActive(id){
+      links.forEach(function(a){
+        if(a.getAttribute('href') === '#' + id){
+          a.setAttribute('aria-current','true');
+          if(a.closest('.jump-inner')){
+            var bar = a.parentNode;
+            var left = a.offsetLeft - bar.clientWidth/2 + a.clientWidth/2;
+            bar.scrollTo({left: Math.max(0,left), behavior:'smooth'});
+          }
+        } else {
+          a.removeAttribute('aria-current');
+        }
+      });
+    }
+
+    var visible = {};
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ visible[e.target.id] = e.isIntersecting; });
+      for(var i=0;i<sections.length;i++){
+        if(visible[sections[i].id]){ setActive(sections[i].id); break; }
+      }
+    }, {rootMargin: '-15% 0px -70% 0px', threshold: 0});
+
+    sections.forEach(function(s){ io.observe(s); });
+  }
+
+  var fill = document.getElementById('progressFill');
+  if(fill){
+    function updateProgress(){
+      var doc = document.documentElement;
+      var scrollTop = window.pageYOffset || doc.scrollTop;
+      var height = doc.scrollHeight - doc.clientHeight;
+      var pct = height > 0 ? (scrollTop / height) * 100 : 0;
+      fill.style.width = Math.min(100, Math.max(0, pct)) + '%';
+    }
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+  }
+
+  var toggle = document.getElementById('themeToggle');
+  if(toggle){
+    var STORE_KEY = 'casafit-theme';
+    try{
+      var saved = localStorage.getItem(STORE_KEY);
+      if(saved === 'light' || saved === 'dark'){ document.documentElement.setAttribute('data-theme', saved); }
+    }catch(e){}
+    toggle.addEventListener('click', function(){
+      var current = document.documentElement.getAttribute('data-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var isDark = current ? current === 'dark' : prefersDark;
+      var next = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem(STORE_KEY, next); }catch(e){}
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
