@@ -277,8 +277,12 @@
     <a href="#s15">15 Privacy &amp; NFRs</a>
     <a href="#s16">16 Release plan</a>
     <a href="#s17">17 Risks</a>
-    <a href="#s18">18 Ideas</a>
-    <a href="#s19">19 Open questions</a>
+    <a href="#s18">18 Ideas overview</a>
+    <a href="#s19">19 Ideas A: Retention</a>
+    <a href="#s20">20 Ideas B: India</a>
+    <a href="#s21">21 Ideas C: Pro</a>
+    <a href="#s22">22 Ideas D: Everyone</a>
+    <a href="#s23">23 Open questions</a>
   </div>
 </nav>
 
@@ -287,7 +291,7 @@
     <div class="kicker-row">
       <p class="kicker">Product requirements document</p>
       <span class="namebadge">Working name: <b>CasaFit</b></span>
-      <span class="namebadge">Status: <b>Draft v0.2</b></span>
+      <span class="namebadge">Status: <b>Draft v0.3</b></span>
     </div>
     <h1>A 15-minute home workout app with food and steps built in.</h1>
     <p class="sub">Requirements for the first release, written from your nine asks and the research behind the earlier feature plan. The overview lists every point in one table, linked to its detail. Section 1 ranks what matters most; each feature section then gives the requirement, acceptance criteria, what the research found, and what could go wrong.</p>
@@ -331,8 +335,12 @@
         <li><a href="#s15">15 · Privacy &amp; NFRs</a></li>
         <li><a href="#s16">16 · Release plan</a></li>
         <li><a href="#s17">17 · Risks</a></li>
-        <li><a href="#s18">18 · Ideas</a></li>
-        <li><a href="#s19">19 · Open questions</a></li>
+        <li><a href="#s18">18 · Ideas overview</a></li>
+        <li><a href="#s19">19 · Ideas A: Retention</a></li>
+        <li><a href="#s20">20 · Ideas B: Fit India</a></li>
+        <li><a href="#s21">21 · Ideas C: Pro</a></li>
+        <li><a href="#s22">22 · Ideas D: Everyone</a></li>
+        <li><a href="#s23">23 · Open questions</a></li>
       </ol>
     </nav>
 
@@ -377,10 +385,10 @@
             <tr><td>Normal</td><td>Bodyweight strength and HIIT-style circuits: dynamic warm-up, five exercise slots, static cool-down.</td><td><a href="#styles">§7 Styles</a></td></tr>
             <tr><td>Dance</td><td>Follow-along routines with low- and high-impact versions. Needs licensed music.</td><td><a href="#styles">§7 Styles</a></td></tr>
             <tr><td>Yoga</td><td>Flows of 8 to 10 poses with modified versions, ending with a rest pose.</td><td><a href="#styles">§7 Styles</a></td></tr>
-            <tr><td>Customise plan if interested in all three</td><td>A screen to set how many days each style gets in a week. Reachable later from the plan view. (Assumed reading of your note; see Q2.)</td><td><a href="#plan-rules">§7 Plan rules</a> · <a href="#s19">Q2</a></td></tr>
+            <tr><td>Customise plan if interested in all three</td><td>A screen to set how many days each style gets in a week. Reachable later from the plan view. (Assumed reading of your note; see Q2.)</td><td><a href="#plan-rules">§7 Plan rules</a> · <a href="#s23">Q2</a></td></tr>
 
             <tr class="grp"><td colspan="3">7 · Two sections <span class="chip p0">P0</span> <span class="chip p2">M1–M2</span></td></tr>
-            <tr><td>Workout + Nutrition as two sections</td><td>Two bottom-bar tabs. Steps and Learn sit under Workout. (Assumed; see Q5.)</td><td><a href="#nav">§8 Navigation</a> · <a href="#s19">Q5</a></td></tr>
+            <tr><td>Workout + Nutrition as two sections</td><td>Two bottom-bar tabs. Steps and Learn sit under Workout. (Assumed; see Q5.)</td><td><a href="#nav">§8 Navigation</a> · <a href="#s23">Q5</a></td></tr>
 
             <tr class="grp"><td colspan="3">8 · Daily steps <span class="chip p1">P1</span> <span class="chip p2">M2</span></td></tr>
             <tr><td>Daily steps counting</td><td>Counted from the phone's step sensor or Health Connect, with no GPS. Default goal 7,000, ramped from the user's own average.</td><td><a href="#s12">§12 Requirements</a></td></tr>
@@ -400,7 +408,7 @@
             <tr><td>Only 2 analyses in a normal account</td><td>A lifetime balance of 2 form-check credits, spent after a confirmed run of at least 3 reps.</td><td><a href="#s14">§14 Free allowance</a></td></tr>
             <tr><td>Not reset on days</td><td>No daily or monthly reset of any kind.</td><td><a href="#s14">§14 Free allowance</a></td></tr>
             <tr><td>Not reset on reinstall</td><td>The balance lives on the server against the verified account, with normalised identifiers and device signals as extra checks.</td><td><a href="#s14">§14 Enforcement</a></td></tr>
-            <tr><td>Available in Pro</td><td>Unlimited form analysis. Pro analyses do not spend or restore the free credits. Price and extra Pro features are open.</td><td><a href="#free-vs-pro">§14 Free vs Pro</a> · <a href="#s19">Q13</a></td></tr>
+            <tr><td>Available in Pro</td><td>Unlimited form analysis. Pro analyses do not spend or restore the free credits. Price and extra Pro features are open.</td><td><a href="#free-vs-pro">§14 Free vs Pro</a> · <a href="#s23">Q13</a></td></tr>
           </table>
         </div>
 
@@ -1250,64 +1258,463 @@
 
       <section id="s18">
         <span class="num">Section 18</span>
-        <h2>Ideas to make the product better</h2>
-        <p class="lede">These are suggestions, not requirements. They are grouped by the problem they solve, and the first five are the ones I would do first. None is validated with users yet.</p>
+        <h2>Ideas to make the product better: overview</h2>
+        <p class="lede">These are suggestions, not requirements. Sixteen ideas in four groups, each with its own detailed section after this one. The first five are the ones I would do first. None is validated with users yet.</p>
 
-        <h3>Get people through the door and keep them</h3>
         <div class="qs">
           <table>
-            <tr><th>Idea</th><th>Why</th><th>Effort</th></tr>
-            <tr><td>1 · Test verifying after the plan preview</td><td>Same quota and legal benefits as a first-screen check, with the user having seen value first. Run as an A/B test in the beta.</td><td>Low</td></tr>
-            <tr><td>2 · Comeback path and weekly recap</td><td>Both come from the earlier plan. A user who vanishes for 10 days sees "welcome back, let's do an easy one", not a broken streak. The recap is the cheapest retention feature in the category.</td><td>Low</td></tr>
-            <tr><td>3 · Desk-break micro-sessions (2–5 minutes)</td><td>"Exercise snack" trials show short bouts improve fitness, with high adherence. Built from exercises already in the library. One opt-in nudge a day, never more.</td><td>Low</td></tr>
-            <tr><td>4 · One-tap "how do you feel?" after each session</td><td>Gives progress that is not on the scale, and costs one tap. Dance trials reported better mood, so it also supports the dance pitch.</td><td>Low</td></tr>
-            <tr><td>5 · Start the Pro trial after the first completed week</td><td>A user who has finished a week has proof the app works for them, which is when a trial offer converts best. Compare with a trial at install in the beta.</td><td>Low</td></tr>
-          </table>
-        </div>
-
-        <h3>Make it fit India</h3>
-        <div class="qs">
-          <table>
-            <tr><th>Idea</th><th>Why</th><th>Effort</th></tr>
-            <tr><td>6 · Air-quality-aware suggestions</td><td>On a poor-air day, swap an outdoor walk for an indoor session or an indoor walk. Needs an air-quality data source. Few competitors do this.</td><td>Medium</td></tr>
-            <tr><td>7 · Fasting-day and festival nutrition modes</td><td>Navratri, Ekadashi and Ramadan change what people eat and when. A plan that ignores them gets abandoned for those weeks.</td><td>Medium, needs a dietitian</td></tr>
-            <tr><td>8 · Hindi voice coach, then regional languages</td><td>The player is audio-first, so a coach voice in the user's language matters more than translated text.</td><td>Medium</td></tr>
-            <tr><td>9 · Family plan for up to 4 people</td><td>Training and walking is often a household decision, and a parent's step goal is a natural fit. Unvalidated, so test price and demand first.</td><td>Medium</td></tr>
-            <tr><td>10 · Apartment-friendly mode as a first-class switch</td><td>Quiet, no-jump versions of every session for flats with neighbours below. Already implied by the onboarding space flag in the earlier plan.</td><td>Low</td></tr>
-          </table>
-        </div>
-
-        <h3>Make Pro worth paying for</h3>
-        <div class="qs">
-          <table>
-            <tr><th>Idea</th><th>Why</th><th>Effort</th></tr>
-            <tr><td>11 · Weekly form report</td><td>Unlimited analysis becomes a coach: "your squat depth improved on 3 of 4 sessions". It reuses the on-device analysis.</td><td>Medium</td></tr>
-            <tr><td>12 · Dance and yoga as Pro libraries, with a free taster</td><td>These are the most expensive content to make, so they are the natural place to charge. Keep the free tier as normal workouts plus a few free routines.</td><td>Low (a rule, not a build)</td></tr>
-            <tr><td>13 · Monthly check-in with a trainer or dietitian (higher tier)</td><td>A human layer is hard for a pure app to copy, and it covers the review the nutrition plan needs anyway.</td><td>High, later</td></tr>
-          </table>
-        </div>
-
-        <h3>Make it better for everyone</h3>
-        <div class="qs">
-          <table>
-            <tr><th>Idea</th><th>Why</th><th>Effort</th></tr>
-            <tr><td>14 · Chair-based and senior mode</td><td>The people who need a gentle start most are often not the ones apps are built for.</td><td>Medium</td></tr>
-            <tr><td>15 · Private "walk together" challenges</td><td>Light accountability with 1–3 friends or family for steps, with no public leaderboard. The earlier plan found users prefer private comparison.</td><td>Medium</td></tr>
-            <tr><td>16 · Creator partnerships for yoga and dance</td><td>Local instructors and choreographers shoot the content for a revenue share. It cuts the biggest cost in the plan and adds regional variety.</td><td>Medium, mostly business</td></tr>
+            <tr><th>#</th><th>Idea</th><th>Solves</th><th>Effort</th><th>Detail</th></tr>
+            <tr class="grp"><td colspan="5">A · Get people through the door and keep them (§19)</td></tr>
+            <tr><td>1</td><td>Test verifying after the plan preview</td><td>Sign-up drop-off</td><td>Low</td><td><a href="#idea-1">Idea 1</a></td></tr>
+            <tr><td>2</td><td>Comeback path and weekly recap</td><td>Lapsed users</td><td>Low</td><td><a href="#idea-2">Idea 2</a></td></tr>
+            <tr><td>3</td><td>Desk-break micro-sessions (2–5 minutes)</td><td>Daily reason to open the app</td><td>Low</td><td><a href="#idea-3">Idea 3</a></td></tr>
+            <tr><td>4</td><td>In-session feel signal, plus a one-tap check at the end</td><td>Personal plan, non-scale progress</td><td>Low</td><td><a href="#idea-4">Idea 4</a></td></tr>
+            <tr><td>5</td><td>Start the Pro trial after the first completed week</td><td>Pro conversion</td><td>Low</td><td><a href="#idea-5">Idea 5</a></td></tr>
+            <tr class="grp"><td colspan="5">B · Make it fit India (§20)</td></tr>
+            <tr><td>6</td><td>Air-quality-aware suggestions</td><td>Unsafe outdoor walks</td><td>Medium</td><td><a href="#idea-6">Idea 6</a></td></tr>
+            <tr><td>7</td><td>Fasting-day and festival modes</td><td>Plans abandoned in fasting weeks</td><td>Medium</td><td><a href="#idea-7">Idea 7</a></td></tr>
+            <tr><td>8</td><td>Hindi voice coach, then regional languages</td><td>Audio-first reach</td><td>Medium</td><td><a href="#idea-8">Idea 8</a></td></tr>
+            <tr><td>9</td><td>Family plan for up to 4 people</td><td>Household use, price</td><td>Medium</td><td><a href="#idea-9">Idea 9</a></td></tr>
+            <tr><td>10</td><td>Quiet mode for apartments</td><td>Neighbours and shared rooms</td><td>Low</td><td><a href="#idea-10">Idea 10</a></td></tr>
+            <tr class="grp"><td colspan="5">C · Make Pro worth paying for (§21)</td></tr>
+            <tr><td>11</td><td>Weekly form report</td><td>Pro value beyond the camera</td><td>Medium</td><td><a href="#idea-11">Idea 11</a></td></tr>
+            <tr><td>12</td><td>Dance and yoga as Pro libraries, with a free taster</td><td>Paying for costly content</td><td>Low</td><td><a href="#idea-12">Idea 12</a></td></tr>
+            <tr><td>13</td><td>Monthly trainer or dietitian check-in</td><td>A human layer</td><td>High</td><td><a href="#idea-13">Idea 13</a></td></tr>
+            <tr class="grp"><td colspan="5">D · Make it better for everyone (§22)</td></tr>
+            <tr><td>14</td><td>Chair-based and senior mode</td><td>Older and beginner users</td><td>Medium</td><td><a href="#idea-14">Idea 14</a></td></tr>
+            <tr><td>15</td><td>Private "walk together" challenges</td><td>Accountability without exposure</td><td>Medium</td><td><a href="#idea-15">Idea 15</a></td></tr>
+            <tr><td>16</td><td>Creator partnerships for yoga and dance</td><td>The biggest content cost</td><td>Medium, mostly business</td><td><a href="#idea-16">Idea 16</a></td></tr>
           </table>
         </div>
 
         <div class="item find">
           <span class="tag">My recommendation</span>
           <ul>
-            <li>Do ideas 1, 2, 3, 4 and 5 first. They are cheap and they act on the two biggest risks in this PRD: drop-off at verification, and weak Pro conversion.</li>
+            <li>Do ideas 1 to 5 first. They are cheap and they act on the two biggest risks in this PRD: drop-off at verification, and weak Pro conversion.</li>
             <li>Pick one India-specific idea from 6 to 8 as a launch differentiator, and decide Pro contents (ideas 11 and 12) before M4 so the camera is not carrying the whole paywall.</li>
+            <li>Leave ideas 9, 13 and 16 until the core loop is retaining users. They add cost, staff or contracts before there is evidence they are needed.</li>
           </ul>
         </div>
       </section>
 
       <section id="s19">
-        <span class="num">Section 19</span>
+        <span class="num">Section 19 · Ideas A</span>
+        <h2>Get people through the door and keep them</h2>
+        <p class="lede">Five ideas aimed at the two weakest points: the first-screen verification, and the days after a user stops. <a href="#s18">← Back to the overview</a></p>
+
+        <h3 id="idea-1">Idea 1 · Test verifying after the plan preview</h3>
+        <div class="fmeta"><span class="chip p2">Effort: low</span><span class="chip p1">Fixes: sign-up drop-off</span><span class="chip p2">When: M1 beta</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>Build two versions of the first run. <strong>Version A</strong> is the first-screen verification in §5. <strong>Version B</strong> shows the two onboarding pages and the plan preview first, then asks to verify at "Save your plan and start".</li>
+            <li>In version B, the plan is built on the phone and nothing is saved to the server until the code is verified. The camera and free credits stay locked until then.</li>
+            <li>Split new beta users evenly. Compare onboarding completion, verification completion, first session within 24 hours, day-7 retention, SMS cost per activated user, and the number of accounts per device.</li>
+            <li>Agree the decision rule before the test starts: choose B if activation improves and duplicate accounts do not rise; otherwise keep A.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul><li>A 2026 vendor benchmark says browse-first flows beat mandatory registration when users can see value first, and reports 25–45% drop-off at account creation. That is not a controlled study, which is the reason to run our own test (§5).</li></ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Page 2 asks for health answers before identity is known. The privacy notice must still appear on that page, and the answers must stay on the phone until verification.</li>
+            <li>A user could complete both pages on several devices before verifying. The device count in the test will show whether this matters.</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-2">Idea 2 · Comeback path and weekly recap</h3>
+        <div class="fmeta"><span class="chip p2">Effort: low</span><span class="chip p1">Fixes: lapsed users</span><span class="chip p2">When: M2</span></div>
+        <div class="item req">
+          <span class="tag">Proposal · Comeback path</span>
+          <ul>
+            <li>After 7 days with no session (threshold to tune), the next open shows "Welcome back". It offers one easy 10-minute session, and quietly rebuilds the plan.</li>
+            <li>There is no missed-day count and no "streak broken" message. Intensity restarts one level lower, and the step goal restarts from the user's recent average.</li>
+          </ul>
+        </div>
+        <div class="item req">
+          <span class="tag">Proposal · Weekly recap</span>
+          <ul>
+            <li>Every Sunday, in the app and in the day's single notification: sessions done, active minutes, average steps, one thing that improved, and next week's plan.</li>
+            <li>Wording is only ever additive. A week with nothing says "a fresh start", not "you missed".</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>A scoping review of 18 studies found a median of 70% of users stopped using lifestyle and mental-health apps within 100 days. Lapses are the normal case, so the app should plan for return, not punish absence.</li>
+            <li>The earlier plan calls a weekly recap the cheapest retention feature in the category and recommends the comeback path.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul><li>Tone is the whole feature. A cheerful message to someone who has quit can feel like nagging. Keep it to one message, in the same single daily notification slot, and stop after two unanswered ones.</li></ul>
+        </div>
+
+        <h3 id="idea-3">Idea 3 · Desk-break micro-sessions</h3>
+        <div class="fmeta"><span class="chip p2">Effort: low</span><span class="chip p1">Fixes: a daily reason to open the app</span><span class="chip p2">When: M2</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>A "Desk reset" card offers 2 to 5 minute sessions: neck and shoulder mobility, chair squats, wall push-ups, standing marches. All are built from exercises already in the library.</li>
+            <li>The user picks work hours in settings. The app sends at most one opt-in nudge a day in that window.</li>
+            <li>Micro-sessions count toward weekly active minutes and active days. They do not replace the 15-minute session, so they cannot be used to game the plan.</li>
+            <li>Every move is quiet and sweat-free, so it works in a shared office or a call-heavy day.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>A meta-analysis found that "exercise snacks" (under 10 minutes a day in total) improved fitness in inactive adults. Three bouts of 15 to 30 seconds a day were enough in some trials.</li>
+            <li>Adherence was high: 82.8% of participants across 11 trials (414 people) completed the programmes.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>That evidence is about fitness in inactive adults. Do not claim weight loss or body change from desk breaks.</li>
+            <li>It must not become a second notification stream. One nudge a day is the cap, shared with the recap and everything else.</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-4">Idea 4 · In-session feel signal, plus a one-tap check at the end</h3>
+        <div class="fmeta"><span class="chip p2">Effort: low</span><span class="chip p1">Fixes: personal plan, non-scale progress</span><span class="chip p2">When: M1–M2</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li><strong>During the session:</strong> after the middle exercise, an optional prompt "How does this feel?" with three faces: easier, good, harder. It is the same control as the Easier / As planned / Harder buttons in §9, so one tap changes the next set too.</li>
+            <li><strong>At the end:</strong> one tap, "Energised, OK or Drained". Repeated "Drained" answers lower the next session by a level.</li>
+            <li>The profile shows non-scale progress: "You felt energised in 5 of your last 7 sessions."</li>
+            <li>The prompt is skipped on sessions under 8 minutes and never appears during timed intervals.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>A systematic review of 24 studies found that a positive shift in how people feel <em>during</em> moderate-intensity exercise predicted later activity. How they felt <em>after</em> exercise showed no relationship.</li>
+            <li>Separate research found that feeling energetic during activity predicted more moderate-to-vigorous activity at 6 and 12 months.</li>
+            <li>So the in-session signal is the valuable one. The end-of-session tap is still useful for progress and personalisation, but it should not be sold as predicting who will stick with it. The effects are modest and mostly observational.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul><li>A prompt in the middle of a workout is an interruption. It must be dismissable with a swipe and never block the timer. Do not present the answers as a health measurement.</li></ul>
+        </div>
+
+        <h3 id="idea-5">Idea 5 · Start the Pro trial after the first completed week</h3>
+        <div class="fmeta"><span class="chip p2">Effort: low</span><span class="chip p1">Fixes: Pro conversion</span><span class="chip p2">When: M4, needs §14 billing</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>Offer a free Pro trial at the end of week 1, for users who completed at least 2 sessions, or right after the second free form check is spent (§14).</li>
+            <li>The trial includes unlimited form checks. Test lengths of 7 and 14 days against each other, and against a trial offered at install.</li>
+            <li>Send a reminder before the trial ends, and keep cancellation to two taps.</li>
+            <li>Measure trial starts, trial-to-paid, and day-30 retention of users who do not convert.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>RevenueCat's 2026 data, read from summaries, puts the Health &amp; Fitness median trial-to-paid rate at 37.7%. One summary says trials of 17 to 32 days converted at about 42.5%, against 25.5% for trials under 4 days.</li>
+            <li>The same data says freemium apps convert later, with about 1.5 times more late-stage conversions than hard paywalls. A user who has already used the app for a week fits that pattern.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Trial abuse with new accounts is the same problem as the free-credit loophole, and uses the same identity rules (§5, §14).</li>
+            <li>An unclear trial-to-paid charge damages trust. Show the price and the date plainly before the trial starts.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s20">
+        <span class="num">Section 20 · Ideas B</span>
+        <h2>Make it fit India</h2>
+        <p class="lede">Five ideas that a global competitor is unlikely to build well: air quality, fasting, language, households, and thin-walled flats. <a href="#s18">← Back to the overview</a></p>
+
+        <h3 id="idea-6">Idea 6 · Air-quality-aware suggestions</h3>
+        <div class="fmeta"><span class="chip p2">Effort: medium</span><span class="chip p1">Fixes: unsafe outdoor walks</span><span class="chip p2">When: after M2</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>The user picks a city, or allows coarse location. The app checks the day's air quality index.</li>
+            <li>When air is poor, the walk suggestion on the home screen becomes an indoor session or an indoor walk, with a plain line: "Air is poor in your city today, so we moved your walk indoors."</li>
+            <li>Users with a pain or health flag, or with asthma if the app ever asks, get the earlier threshold.</li>
+            <li>Steps keep counting as normal. The thresholds are remote-configurable so a medical adviser can change them without an app release.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>India's index bands, per a secondary explainer: 0–50 good, 51–100 satisfactory, 101–200 moderate, 201–300 poor, 301–400 very poor, 401–500 severe. One source advises the general population to avoid outdoor exertion in "poor" air, and vulnerable people to stay indoors.</li>
+            <li>US-style guidance is stricter at low values. One source says the benefits of outdoor exercise outweigh the risks for the general public up to about 150, and that sensitive groups should start modifying activity around 50.</li>
+            <li>The sources conflict, and I found no official CPCB exercise advisory. Thresholds need a medical adviser, not a blog.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>It needs a licensed, reliable air-quality feed. Source and licence are undecided (Q19). Stale data would give wrong advice.</li>
+            <li>Location is personal data. Use city-level only, never continuous tracking, and make manual city entry possible.</li>
+            <li>Indoor air can be poor as well. The advice stays general and says so.</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-7">Idea 7 · Fasting-day and festival modes</h3>
+        <div class="fmeta"><span class="chip p2">Effort: medium</span><span class="chip p1">Fixes: plans dropped in fasting weeks</span><span class="chip p2">When: after M4, needs a dietitian</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>In the nutrition profile, the user can switch on a fasting mode and choose the kind: no food or water, fruit and milk only, or time-restricted (for example sunrise to sunset). They enter the dates or pick from a list. The app does not guess.</li>
+            <li>The calorie and protein target is spread over the eating window. Vrat-friendly meal swaps are offered. A low-calorie fasting day is never scored as a failure, and no weight-loss goal runs during a fast.</li>
+            <li>Workouts become lighter and shorter, and the app suggests training after the meal that breaks the fast. Hydration reminders appear inside eating windows only.</li>
+            <li>Anyone with diabetes, pregnancy or medication is told to ask their doctor first.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>The evidence is thin, and most advice comes from coaching sources. For Ramadan the guidance is consistent: train after the evening meal, keep intensity moderate, and treat the month as maintenance. ACE says the focus should not be on fitness gains.</li>
+            <li>One study of female handball players found short high-intensity performance fell more after an early pre-dawn meal, and suggested a later one. Hydration and sleep are the practical issues.</li>
+            <li>Indian fasts vary widely. Many allow fruit, milk or specific grains, so the app must ask which kind, not assume a dry fast.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>The app must never encourage fasting, and never infer a religion from a name, a place or a date. The setting is user-controlled and neutrally worded.</li>
+            <li>Every rule, number and meal swap needs a registered dietitian's review (Q20). The calorie floors in §11 still apply.</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-8">Idea 8 · Hindi voice coach, then regional languages</h3>
+        <div class="fmeta"><span class="chip p2">Effort: medium</span><span class="chip p1">Fixes: reach for an audio-first app</span><span class="chip p2">When: after M3</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>Voice cues and countdowns in Hindi first, then two or three more languages such as Tamil, Telugu, Marathi or Bengali. Text follows the same languages.</li>
+            <li>The language is set from the phone's own setting, so onboarding gains no extra question. It can be changed in the profile.</li>
+            <li>Exercise names stay in English with a local-language explanation, because the same move often has several local names.</li>
+            <li>Choose between a recorded human voice and a high-quality synthetic voice by testing both with about 10 users per language (Q21).</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>The IAMAI–Kantar report for 2024, as reported in the press, says about 98% of internet users accessed content in Indian languages, and that 57% of urban users prefer regional languages. The 2025 edition puts users above 950 million.</li>
+            <li>Among people still offline, 13% cited a lack of local-language content as a reason. These are second-hand figures, so check the original report before quoting them.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>A mistranslated safety cue is a real risk. A native-speaking trainer must review every cue.</li>
+            <li>A recorded voice costs a studio session per language and needs re-recording on every change. A synthetic voice is cheaper but can sound flat. Strings are already externalised (§15).</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-9">Idea 9 · Family plan for up to 4 people</h3>
+        <div class="fmeta"><span class="chip p2">Effort: medium</span><span class="chip p1">Fixes: household use, price</span><span class="chip p2">When: only after retention is proven</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>One Pro purchase covers up to 4 adults. Each person keeps their own verified account, plan and privacy. The owner only manages seats.</li>
+            <li>Health data is never visible to other members. An optional shared steps challenge (idea 15) is the only thing members see of each other.</li>
+            <li>Before building, test demand with a "Family plan" line on the Pro screen and a short survey (Q25).</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul><li>I found no data on family plans in fitness apps. This idea rests on the household nature of training and walking in India, which is a hypothesis. Check the store rules for family subscription sharing before designing it.</li></ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Under-18 family members conflict with the 18+ rule (Q6, Q18). The first version would be adults only.</li>
+            <li>Seat resale, billing complexity, and each member's own consent under the DPDP Act all need design.</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-10">Idea 10 · Quiet mode for apartments</h3>
+        <div class="fmeta"><span class="chip p2">Effort: low</span><span class="chip p1">Fixes: neighbours and shared rooms</span><span class="chip p2">When: M1–M2</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>A switch on the session overview. In quiet mode, jumps, stomps and plyometric moves are swapped for low-impact versions, and beeps give way to vibration and soft tones.</li>
+            <li>It works for flats with neighbours below, night sessions, and shared rooms. The plan builder uses it as the default if the user turns it on once.</li>
+            <li>Content needs a "low-impact" tag on each exercise, so the swap is automatic. This is one more field in the substitution system in §7.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul><li>The earlier plan points out that a first-floor flat with neighbours below rules out jumping jacks and burpees, and that one tap on this brings a large gain in trust. Onboarding no longer asks about space (§6), so a session-level switch fills the gap.</li></ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul><li>Each exercise needs a quiet alternative. That adds to the filming list in §16, though most low-impact versions already exist as the "easier" rung of a ladder.</li></ul>
+        </div>
+      </section>
+
+      <section id="s21">
+        <span class="num">Section 21 · Ideas C</span>
+        <h2>Make Pro worth paying for</h2>
+        <p class="lede">Today Pro is only unlimited form analysis, and that ships last (§14). These three ideas give Pro more to offer, earlier. <a href="#s18">← Back to the overview</a></p>
+
+        <h3 id="idea-11">Idea 11 · Weekly form report</h3>
+        <div class="fmeta"><span class="chip p2">Effort: medium</span><span class="chip p1">Fixes: Pro value beyond the camera</span><span class="chip p2">When: after M4</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>Pro users get a weekly report built from their camera sessions: for each analysed exercise, a trend of a few simple measures (for example squat depth consistency and rep tempo), and one focus cue for the next week.</li>
+            <li>The report uses only numbers derived on the phone. No frame or image is stored or shown.</li>
+            <li>Wording is descriptive, never diagnostic: "your squat depth was steadier this week", not "your form is correct".</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>It reuses the on-device analysis already planned in §10, so the extra cost is design and a small amount of storage, not new machine learning.</li>
+            <li>The rule from §10 carries over: when the model is unsure, it says nothing. Only confident measurements may appear in a report.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Derived movement data is still health-related. Keep it on the device by default, and sync only with consent (§15).</li>
+            <li>A report that says "improved" can read as a safety guarantee. Keep the disclaimer and have the wording reviewed by a trainer.</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-12">Idea 12 · Dance and yoga as Pro libraries, with a free taster</h3>
+        <div class="fmeta"><span class="chip p2">Effort: low (a rule, not a build)</span><span class="chip p1">Fixes: paying for costly content</span><span class="chip p2">When: M3</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>Free accounts get all normal workouts, plus a taster: 3 yoga flows and 2 dance routines. Pro unlocks the full yoga and dance libraries, mixed plans, and the customise screen.</li>
+            <li>The plan preview at the end of onboarding states plainly what a free account gets for the styles chosen, so nobody is surprised.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>Dance and yoga are the costliest content to make (§16), so they are the natural thing to charge for.</li>
+            <li>RevenueCat's data, as summarised second-hand, shows hard paywalls convert better at first (median 10.7% against 2.1% for freemium), but freemium converts later and retention is similar after a year. A taster-plus-paywall sits between the two.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>It cuts against your ask for individual or mixed styles. A free user who picks dance only gets 2 routines, which may feel thin. Decide in Q13 and Q22.</li>
+            <li>If the taster is too small, people leave. If it is too large, nobody pays.</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-13">Idea 13 · Monthly trainer or dietitian check-in</h3>
+        <div class="fmeta"><span class="chip p2">Effort: high</span><span class="chip p1">Fixes: a human layer</span><span class="chip p2">When: later</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>A higher tier with a monthly 15 to 20 minute check-in with a certified trainer or registered dietitian, by message or video, including a review of the plan.</li>
+            <li>The same people can sign off the nutrition plan and the myths content that this PRD already needs reviewed (§11, §13).</li>
+            <li>Model the cost per check-in, from professional time, before setting a price.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul><li>I found no external data on this. The case is reasoning: a human layer is hard for a pure app to copy, and the review work is needed anyway. Treat it as unproven.</li></ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Cost grows with every subscriber, unlike the rest of the app. Capacity, scheduling and quality control are real operations.</li>
+            <li>It crosses into medical advice. The scope, the disclaimers, and who is liable need legal review (Q23).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s22">
+        <span class="num">Section 22 · Ideas D</span>
+        <h2>Make it better for everyone</h2>
+        <p class="lede">Three ideas for the people most apps are not built for: older users, people who need company, and everyone waiting on content. <a href="#s18">← Back to the overview</a></p>
+
+        <h3 id="idea-14">Idea 14 · Chair-based and senior mode</h3>
+        <div class="fmeta"><span class="chip p2">Effort: medium</span><span class="chip p1">Fixes: older and beginner users</span><span class="chip p2">When: after M3</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>A "seated and gentle" option, and a senior-friendly profile: larger text, slower pace, longer rests, and no floor work if the user prefers.</li>
+            <li>For users aged 60 or over, the plan ramps more slowly, the step goal starts at 6,000, and reverse walking is not offered (§12).</li>
+            <li>Every exercise needs a seated version. This is the same substitution ladder as §7, with one more rung.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>The step meta-analysis found risk kept falling up to about 6,000 to 8,000 steps for adults aged 60 and over, against 8,000 to 10,000 for younger adults (§12).</li>
+            <li>A trial of yoga against exercise classes recruited adults aged 65 to 85, so there is research on this age group's adherence.</li>
+            <li>The earlier plan notes that most apps are built for people who are already fit.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Falls and undiagnosed heart conditions are more likely in older users. Keep the doctor's-clearance line and the health flags from §6.</li>
+            <li>The first release is 18+, which does not exclude seniors. Content and clearance wording need a trainer's review.</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-15">Idea 15 · Private "walk together" challenges</h3>
+        <div class="fmeta"><span class="chip p2">Effort: medium</span><span class="chip p1">Fixes: accountability without exposure</span><span class="chip p2">When: after M2</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>A user invites 1 to 3 people by a share link to a 7-day steps challenge. Each sees only everyone's daily total against their own goal, and there is no ranking.</li>
+            <li>One-tap cheers, and a shared recap at the end. Everything is opt-in, and nothing is public.</li>
+            <li>No contact import is needed. The invite is a link the user shares themselves.</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li>The earlier research found that users prefer private self-comparison to public competition, and that training alone at home has no witness. A small private group answers both.</li>
+          </ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Sharing step counts is sharing health data. Each person must consent, and can leave and delete at any time.</li>
+            <li>A friend who is far ahead can feel like pressure. Show progress against each person's own goal, never raw rankings.</li>
+          </ul>
+        </div>
+
+        <h3 id="idea-16">Idea 16 · Creator partnerships for yoga and dance</h3>
+        <div class="fmeta"><span class="chip p2">Effort: medium, mostly business</span><span class="chip p1">Fixes: the biggest content cost</span><span class="chip p2">When: with M3</span></div>
+        <div class="item req">
+          <span class="tag">Proposal</span>
+          <ul>
+            <li>License routines from local instructors and choreographers instead of filming everything in-house. Pay a revenue share based on Pro minutes watched.</li>
+            <li>The team keeps quality control: a trainer reviews every routine before it ships, and the music is cleared per routine.</li>
+            <li>Creators get a short brief with the length, the warm-up and cool-down slots, and the low- and high-impact versions the plan needs (§7).</li>
+          </ul>
+        </div>
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul><li>The content estimates in §16 (yoga 30 to 40 poses and 8 to 10 flows, dance 10 to 12 routines) are the largest cost in the plan. Partnerships could cut that cost and add regional variety, but I found no data on how well this works. It is a business hypothesis.</li></ul>
+        </div>
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li>Quality and style can vary between creators. Contracts must cover ownership of the video, music rights, and releases from anyone who appears on screen.</li>
+            <li>It needs a clear decision between in-house and licensed content (Q24). The longest lead-time item in the plan should not be left undecided.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s23">
+        <span class="num">Section 23</span>
         <h2>Open questions and assumptions</h2>
 
         <h3>Questions that need your answer</h3>
@@ -1330,6 +1737,13 @@
           <li><strong>Q16.</strong> Is 2 the final number? Could extra credits be earned or gifted, for example by finishing a week or referring a friend?</li>
           <li><strong>Q17.</strong> Which code channels: SMS only, or WhatsApp as well? Who is the SMS provider, and what is the monthly budget cap?</li>
           <li><strong>Q18.</strong> Phone verification does not prove age. Is a self-declared age of 18 or more enough for the first release?</li>
+          <li><strong>Q19.</strong> Air quality (idea 6): which data source and licence, and who sets the thresholds at which the app moves a walk indoors?</li>
+          <li><strong>Q20.</strong> Fasting modes (idea 7): which kinds of fast are supported at launch, and which registered dietitian signs off the rules and meal swaps?</li>
+          <li><strong>Q21.</strong> Voice coach (idea 8): recorded human voice or synthetic voice for Hindi, and which languages come next?</li>
+          <li><strong>Q22.</strong> Free taster (idea 12): which parts of yoga and dance stay free, and how many routines make a fair taster?</li>
+          <li><strong>Q23.</strong> Human tier (idea 13): is a trainer or dietitian check-in in scope, and who staffs it and carries the liability?</li>
+          <li><strong>Q24.</strong> Content (idea 16): is yoga and dance content made in-house or licensed from creators?</li>
+          <li><strong>Q25.</strong> Family plan (idea 9): is it wanted at all, and adults only? I suggest testing demand before building it.</li>
         </ul>
 
         <h3>Assumptions I made</h3>
@@ -1349,7 +1763,7 @@
 
   <footer class="wrap" style="padding-left:0;padding-right:0">
     <a class="toplink" href="#top">Back to top</a>
-    <p>Draft v0.2, 9 October 2026. Research figures are cited below; check them against the original papers before they appear in the app or in marketing. Nothing here is medical, nutritional or legal advice. A qualified trainer and a registered dietitian should review the exercise and nutrition content, and counsel should review the consent and age-gate design, before launch.</p>
+    <p>Draft v0.3, 9 October 2026. Research figures are cited below; check them against the original papers before they appear in the app or in marketing. Nothing here is medical, nutritional or legal advice. A qualified trainer and a registered dietitian should review the exercise and nutrition content, and counsel should review the consent and age-gate design, before launch.</p>
     <h3 style="margin-top:1.6rem">Sources for this PRD</h3>
     <ol class="sources">
       <li><a href="https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(25)00164-1/fulltext" target="_blank" rel="noopener">Daily steps and health outcomes in adults: a systematic review and dose-response meta-analysis — The Lancet Public Health, 2025</a></li>
@@ -1379,6 +1793,16 @@
       <li><a href="https://www.seqrite.com/blog/dpdp-rules-are-here-what-changed-from-the-draft/" target="_blank" rel="noopener">DPDP Rules are here: what changed from the draft — phasing summary (secondary)</a></li>
       <li><a href="https://www.revenuecat.com/state-of-subscription-apps" target="_blank" rel="noopener">State of Subscription Apps 2026 — RevenueCat (figures here were read from summaries)</a></li>
       <li><a href="https://adapty.io/blog/health-fitness-app-subscription-benchmarks/" target="_blank" rel="noopener">In-app subscription benchmarks for Health and Fitness apps — Adapty</a></li>
+      <li><a href="https://www.sciencedirect.com/science/article/pii/S001236922600872X" target="_blank" rel="noopener">Counseling patients about outdoor exercise during air pollution events — ScienceDirect</a></li>
+      <li><a href="https://evs.institute/environmental-legislations/india-national-aqi-pollution-health-impacts/" target="_blank" rel="noopener">India's National Air Quality Index: pollution levels and health impacts — explainer (secondary; check CPCB)</a></li>
+      <li><a href="https://www.smogreport.com/guides/aqi-and-exercise" target="_blank" rel="noopener">AQI and exercise: when to move workouts indoors — Smog Report (secondary)</a></li>
+      <li><a href="https://www.acefitness.org/resources/pros/expert-articles/8606/staying-active-during-ramadan-and-other-fasting-holidays/" target="_blank" rel="noopener">Staying active during Ramadan and other fasting holidays — ACE Fitness</a></li>
+      <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10606875/" target="_blank" rel="noopener">Ramadan fasting and short-term maximal performance: timing of the last meal in female handball players</a></li>
+      <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8490664/" target="_blank" rel="noopener">Time-restricted feeding and aerobic performance in elite runners: Ramadan fasting as a model</a></li>
+      <li><a href="https://www.businesstoday.in/technology/news/story/indias-internet-revolution-key-insights-from-kantar-and-iamai-report-461043-2025-01-16" target="_blank" rel="noopener">India's internet revolution: key insights from the Kantar and IAMAI report — Business Today (secondary)</a></li>
+      <li><a href="https://indianstartupnews.com/news/india-crosses-95-crore-internet-users-in-2025-says-iamai-report-11055388" target="_blank" rel="noopener">India crosses 95 crore internet users in 2025 — IAMAI report coverage</a></li>
+      <li><a href="https://link.springer.com/article/10.1007/s12160-015-9704-5" target="_blank" rel="noopener">Can the affective response to exercise predict future motives and physical activity behavior? A systematic review</a></li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7822574/" target="_blank" rel="noopener">Affective responses during free-living physical activity and future activity levels — ecological momentary assessment study</a></li>
     </ol>
   </footer>
 </div>
