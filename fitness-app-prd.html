@@ -264,18 +264,21 @@
     <a href="#s2">2 Goals</a>
     <a href="#s3">3 Users</a>
     <a href="#s4">4 Scope</a>
-    <a href="#s5">5 Onboarding</a>
-    <a href="#s6">6 Plan builder</a>
-    <a href="#s7">7 Home</a>
-    <a href="#s8">8 Session player</a>
-    <a href="#s9">9 Form camera</a>
-    <a href="#s10">10 Nutrition</a>
-    <a href="#s11">11 Steps</a>
-    <a href="#s12">12 Myths</a>
-    <a href="#s13">13 Privacy &amp; NFRs</a>
-    <a href="#s14">14 Release plan</a>
-    <a href="#s15">15 Risks</a>
-    <a href="#s16">16 Open questions</a>
+    <a href="#s5">5 Verification</a>
+    <a href="#s6">6 Onboarding</a>
+    <a href="#s7">7 Plan builder</a>
+    <a href="#s8">8 Home</a>
+    <a href="#s9">9 Session player</a>
+    <a href="#s10">10 Form camera</a>
+    <a href="#s11">11 Nutrition</a>
+    <a href="#s12">12 Steps</a>
+    <a href="#s13">13 Myths</a>
+    <a href="#s14">14 Free &amp; Pro</a>
+    <a href="#s15">15 Privacy &amp; NFRs</a>
+    <a href="#s16">16 Release plan</a>
+    <a href="#s17">17 Risks</a>
+    <a href="#s18">18 Ideas</a>
+    <a href="#s19">19 Open questions</a>
   </div>
 </nav>
 
@@ -284,11 +287,11 @@
     <div class="kicker-row">
       <p class="kicker">Product requirements document</p>
       <span class="namebadge">Working name: <b>CasaFit</b></span>
-      <span class="namebadge">Status: <b>Draft v0.1</b></span>
+      <span class="namebadge">Status: <b>Draft v0.2</b></span>
     </div>
     <h1>A 15-minute home workout app with food and steps built in.</h1>
     <p class="sub">Requirements for the first release, written from your nine asks and the research behind the earlier feature plan. The overview lists every point in one table, linked to its detail. Section 1 ranks what matters most; each feature section then gives the requirement, acceptance criteria, what the research found, and what could go wrong.</p>
-    <p class="meta">5 October 2026 · Owner: to be assigned · Builds on <a href="fitness-app-spec.html">fitness-app-spec.html</a></p>
+    <p class="meta">9 October 2026 · Owner: to be assigned · Builds on <a href="fitness-app-spec.html">fitness-app-spec.html</a></p>
 
     <div class="strip">
       <p class="strip-label">The session shape at 15 minutes — the time-box every feature below must respect</p>
@@ -315,18 +318,21 @@
         <li><a href="#s2">2 · Goals &amp; metrics</a></li>
         <li><a href="#s3">3 · Users &amp; assumptions</a></li>
         <li><a href="#s4">4 · Scope at a glance</a></li>
-        <li><a href="#s5">5 · Onboarding</a></li>
-        <li><a href="#s6">6 · Plan builder</a></li>
-        <li><a href="#s7">7 · Home screen</a></li>
-        <li><a href="#s8">8 · Session player</a></li>
-        <li><a href="#s9">9 · Form camera</a></li>
-        <li><a href="#s10">10 · Nutrition</a></li>
-        <li><a href="#s11">11 · Daily steps</a></li>
-        <li><a href="#s12">12 · Myths &amp; concepts</a></li>
-        <li><a href="#s13">13 · Privacy &amp; NFRs</a></li>
-        <li><a href="#s14">14 · Release plan</a></li>
-        <li><a href="#s15">15 · Risks</a></li>
-        <li><a href="#s16">16 · Open questions</a></li>
+        <li><a href="#s5">5 · Account &amp; verification</a></li>
+        <li><a href="#s6">6 · Onboarding</a></li>
+        <li><a href="#s7">7 · Plan builder</a></li>
+        <li><a href="#s8">8 · Home screen</a></li>
+        <li><a href="#s9">9 · Session player</a></li>
+        <li><a href="#s10">10 · Form camera</a></li>
+        <li><a href="#s11">11 · Nutrition</a></li>
+        <li><a href="#s12">12 · Daily steps</a></li>
+        <li><a href="#s13">13 · Myths &amp; concepts</a></li>
+        <li><a href="#s14">14 · Free &amp; Pro</a></li>
+        <li><a href="#s15">15 · Privacy &amp; NFRs</a></li>
+        <li><a href="#s16">16 · Release plan</a></li>
+        <li><a href="#s17">17 · Risks</a></li>
+        <li><a href="#s18">18 · Ideas</a></li>
+        <li><a href="#s19">19 · Open questions</a></li>
       </ol>
     </nav>
 
@@ -335,7 +341,7 @@
       <section id="overview">
         <span class="num">Overview</span>
         <h2>All points in one place</h2>
-        <p class="lede">Every point from your brief, grouped by feature, with what the app will do and a link to the detailed requirement. Nine features, 27 points. Use the links to jump to the acceptance criteria, research findings and risks for each one.</p>
+        <p class="lede">Every point from your brief, grouped by feature, with what the app will do and a link to the detailed requirement. Eleven features, 33 points. Use the links to jump to the acceptance criteria, research findings and risks for each one.</p>
 
         <div class="qs">
           <table>
@@ -343,48 +349,58 @@
 
             <tr class="grp"><td colspan="3">1 · Onboarding <span class="chip p0">P0</span> <span class="chip p2">M1</span></td></tr>
             <tr><td>Two-page onboarding</td><td>Page 1: goal, body parts, style. Page 2: age, sex, height, weight, experience, days, pain and health flags. Then a week-one plan preview.</td><td><a href="#onb1">Page 1</a> · <a href="#onb2">Page 2</a></td></tr>
-            <tr><td>Basic questions only</td><td>Every field is a chip or a number and changes the plan. Name, notifications, diet and photos wait until after the first session.</td><td><a href="#s5">§5 Requirements</a></td></tr>
-            <tr><td>Nothing about gym</td><td>No gym or equipment question. The plan defaults to bodyweight; equipment becomes a later setting.</td><td><a href="#s5">§5 Findings</a></td></tr>
+            <tr><td>Basic questions only</td><td>Every field is a chip or a number and changes the plan. Name, notifications, diet and photos wait until after the first session.</td><td><a href="#s6">§6 Requirements</a></td></tr>
+            <tr><td>Nothing about gym</td><td>No gym or equipment question. The plan defaults to bodyweight; equipment becomes a later setting.</td><td><a href="#s6">§6 Findings</a></td></tr>
 
             <tr class="grp"><td colspan="3">2 · Plan builder <span class="chip p0">P0</span> <span class="chip p2">M1</span></td></tr>
-            <tr><td>Plan from onboarding answers</td><td>Rule-based, built on the phone, works offline. Each plan has a "Why this plan" line.</td><td><a href="#plan-rules">§6 How the plan is built</a></td></tr>
-            <tr><td>Body part, or stay fit</td><td>Stay fit rotates full-body sessions. Body-part goals give about 60% of sessions to the chosen parts, the rest full-body or mobility.</td><td><a href="#plan-rules">§6 Plan rules</a></td></tr>
+            <tr><td>Plan from onboarding answers</td><td>Rule-based, built on the phone, works offline. Each plan has a "Why this plan" line.</td><td><a href="#plan-rules">§7 How the plan is built</a></td></tr>
+            <tr><td>Body part, or stay fit</td><td>Stay fit rotates full-body sessions. Body-part goals give about 60% of sessions to the chosen parts, the rest full-body or mobility.</td><td><a href="#plan-rules">§7 Plan rules</a></td></tr>
 
             <tr class="grp"><td colspan="3">3 · While exercising <span class="chip p0">P0</span> <span class="chip p1">camera P1</span> <span class="chip p2">M1 · camera M4</span></td></tr>
-            <tr><td>Change intensity level</td><td>Three-step control: Easier, As planned, Harder. Takes effect from the next set and feeds next week's plan.</td><td><a href="#intensity">§8 Intensity</a></td></tr>
-            <tr><td>Pause timing</td><td>Pause stops the timer and cues, and can be resumed for 24 hours. Rest can be extended 15 or 30 seconds. Calls pause the session automatically.</td><td><a href="#intensity">§8 Pause</a></td></tr>
-            <tr><td>Camera analyses form</td><td>On-device only, nothing stored or uploaded. Squat, push-up, plank and lunge. Spoken cues, rep count and a set summary.</td><td><a href="#s9">§9 Form camera</a></td></tr>
-            <tr><td>Only 2 exercises a day analysed</td><td>A visible counter, "1 of 2 left today". A credit is used only after the first rep is analysed, and it resets at local midnight.</td><td><a href="#s9">§9 Daily limit</a></td></tr>
-            <tr><td>Add or remove exercises in the 15-minute session</td><td>A timeline against a live 15:00 budget. About 2 minutes per slot, 3 to 8 exercises. Over-budget fixes offered, and the cool-down rebuilds to match.</td><td><a href="#editor">§8 Editor</a></td></tr>
+            <tr><td>Change intensity level</td><td>Three-step control: Easier, As planned, Harder. Takes effect from the next set and feeds next week's plan.</td><td><a href="#intensity">§9 Intensity</a></td></tr>
+            <tr><td>Pause timing</td><td>Pause stops the timer and cues, and can be resumed for 24 hours. Rest can be extended 15 or 30 seconds. Calls pause the session automatically.</td><td><a href="#intensity">§9 Pause</a></td></tr>
+            <tr><td>Camera analyses form</td><td>On-device only, nothing stored or uploaded. Squat, push-up, plank and lunge. Spoken cues, rep count and a set summary.</td><td><a href="#s10">§10 Form camera</a></td></tr>
+            <tr><td>Only 2 exercises analysed on a normal account</td><td>A visible counter, "2 free checks left". A credit is spent only after a confirmed run of at least 3 reps. See group 11 for the no-reset rules and Pro.</td><td><a href="#s10">§10 Free limit</a> · <a href="#s14">§14</a></td></tr>
+            <tr><td>Add or remove exercises in the 15-minute session</td><td>A timeline against a live 15:00 budget. About 2 minutes per slot, 3 to 8 exercises. Over-budget fixes offered, and the cool-down rebuilds to match.</td><td><a href="#editor">§9 Editor</a></td></tr>
 
             <tr class="grp"><td colspan="3">4 · Home screen <span class="chip p0">P0</span> <span class="chip p2">M1</span></td></tr>
-            <tr><td>Some pre-ready plans</td><td>A row of ready-made sessions: Full body 15, Abs and core, Beginner HIIT, Morning stretch, Yoga flow, Dance cardio.</td><td><a href="#home">§7 Home screen</a></td></tr>
-            <tr><td>Individual body-part exercises</td><td>A grid of body parts. Each opens its exercises and can build a 15-minute session on the spot.</td><td><a href="#home">§7 Home screen</a></td></tr>
+            <tr><td>Some pre-ready plans</td><td>A row of ready-made sessions: Full body 15, Abs and core, Beginner HIIT, Morning stretch, Yoga flow, Dance cardio.</td><td><a href="#home">§8 Home screen</a></td></tr>
+            <tr><td>Individual body-part exercises</td><td>A grid of body parts. Each opens its exercises and can build a 15-minute session on the spot.</td><td><a href="#home">§8 Home screen</a></td></tr>
 
             <tr class="grp"><td colspan="3">5 · Nutrition <span class="chip p1">P1</span> <span class="chip p2">M2 log · M4 plan</span></td></tr>
-            <tr><td>Nutrition log</td><td>Search Indian foods with katori, roti and piece portions. Same as yesterday, saved meals, recent items.</td><td><a href="#food-log">§10 Food log</a></td></tr>
-            <tr><td>Shows calories</td><td>Daily summary of calories against target, with protein prominent. A setting hides the calorie number.</td><td><a href="#food-log">§10 Food log</a></td></tr>
-            <tr><td>Customised plan</td><td>A short profile, then a calorie and protein target and a 7-day sample Indian meal plan, with calorie floors and a loss-rate cap.</td><td><a href="#nutrition-plan">§10 Customised plan</a></td></tr>
+            <tr><td>Nutrition log</td><td>Search Indian foods with katori, roti and piece portions. Same as yesterday, saved meals, recent items.</td><td><a href="#food-log">§11 Food log</a></td></tr>
+            <tr><td>Shows calories</td><td>Daily summary of calories against target, with protein prominent. A setting hides the calorie number.</td><td><a href="#food-log">§11 Food log</a></td></tr>
+            <tr><td>Customised plan</td><td>A short profile, then a calorie and protein target and a 7-day sample Indian meal plan, with calorie floors and a loss-rate cap.</td><td><a href="#nutrition-plan">§11 Customised plan</a></td></tr>
 
             <tr class="grp"><td colspan="3">6 · Interest: individual or mixed <span class="chip p1">P1</span> <span class="chip p2">M3</span></td></tr>
-            <tr><td>Individual or mixed</td><td>One style gives an individual plan. Two or three styles split the week in proportion.</td><td><a href="#plan-rules">§6 Plan rules</a></td></tr>
-            <tr><td>Normal</td><td>Bodyweight strength and HIIT-style circuits: dynamic warm-up, five exercise slots, static cool-down.</td><td><a href="#styles">§6 Styles</a></td></tr>
-            <tr><td>Dance</td><td>Follow-along routines with low- and high-impact versions. Needs licensed music.</td><td><a href="#styles">§6 Styles</a></td></tr>
-            <tr><td>Yoga</td><td>Flows of 8 to 10 poses with modified versions, ending with a rest pose.</td><td><a href="#styles">§6 Styles</a></td></tr>
-            <tr><td>Customise plan if interested in all three</td><td>A screen to set how many days each style gets in a week. Reachable later from the plan view. (Assumed reading of your note; see Q2.)</td><td><a href="#plan-rules">§6 Plan rules</a> · <a href="#s16">Q2</a></td></tr>
+            <tr><td>Individual or mixed</td><td>One style gives an individual plan. Two or three styles split the week in proportion.</td><td><a href="#plan-rules">§7 Plan rules</a></td></tr>
+            <tr><td>Normal</td><td>Bodyweight strength and HIIT-style circuits: dynamic warm-up, five exercise slots, static cool-down.</td><td><a href="#styles">§7 Styles</a></td></tr>
+            <tr><td>Dance</td><td>Follow-along routines with low- and high-impact versions. Needs licensed music.</td><td><a href="#styles">§7 Styles</a></td></tr>
+            <tr><td>Yoga</td><td>Flows of 8 to 10 poses with modified versions, ending with a rest pose.</td><td><a href="#styles">§7 Styles</a></td></tr>
+            <tr><td>Customise plan if interested in all three</td><td>A screen to set how many days each style gets in a week. Reachable later from the plan view. (Assumed reading of your note; see Q2.)</td><td><a href="#plan-rules">§7 Plan rules</a> · <a href="#s19">Q2</a></td></tr>
 
             <tr class="grp"><td colspan="3">7 · Two sections <span class="chip p0">P0</span> <span class="chip p2">M1–M2</span></td></tr>
-            <tr><td>Workout + Nutrition as two sections</td><td>Two bottom-bar tabs. Steps and Learn sit under Workout. (Assumed; see Q5.)</td><td><a href="#nav">§7 Navigation</a> · <a href="#s16">Q5</a></td></tr>
+            <tr><td>Workout + Nutrition as two sections</td><td>Two bottom-bar tabs. Steps and Learn sit under Workout. (Assumed; see Q5.)</td><td><a href="#nav">§8 Navigation</a> · <a href="#s19">Q5</a></td></tr>
 
             <tr class="grp"><td colspan="3">8 · Daily steps <span class="chip p1">P1</span> <span class="chip p2">M2</span></td></tr>
-            <tr><td>Daily steps counting</td><td>Counted from the phone's step sensor or Health Connect, with no GPS. Default goal 7,000, ramped from the user's own average.</td><td><a href="#s11">§11 Requirements</a></td></tr>
-            <tr><td>Normal walk</td><td>Everyday walking, counted in the background all day.</td><td><a href="#walk-modes">§11 Walk modes</a></td></tr>
-            <tr><td>Brisk walk</td><td>"Brisk minutes" at roughly 100 steps a minute or more, as a smaller second goal.</td><td><a href="#walk-modes">§11 Walk modes</a></td></tr>
-            <tr><td>Reverse walk</td><td>An opt-in, timed bout behind a safety card. Maximum 15 minutes a day, and hidden for users with a health flag.</td><td><a href="#walk-modes">§11 Walk modes</a></td></tr>
+            <tr><td>Daily steps counting</td><td>Counted from the phone's step sensor or Health Connect, with no GPS. Default goal 7,000, ramped from the user's own average.</td><td><a href="#s12">§12 Requirements</a></td></tr>
+            <tr><td>Normal walk</td><td>Everyday walking, counted in the background all day.</td><td><a href="#walk-modes">§12 Walk modes</a></td></tr>
+            <tr><td>Brisk walk</td><td>"Brisk minutes" at roughly 100 steps a minute or more, as a smaller second goal.</td><td><a href="#walk-modes">§12 Walk modes</a></td></tr>
+            <tr><td>Reverse walk</td><td>An opt-in, timed bout behind a safety card. Maximum 15 minutes a day, and hidden for users with a health flag.</td><td><a href="#walk-modes">§12 Walk modes</a></td></tr>
 
             <tr class="grp"><td colspan="3">9 · Myths and concepts <span class="chip p2">P2</span> <span class="chip p2">M2</span></td></tr>
-            <tr><td>Myths about exercise</td><td>Cards with the myth, a verdict, a short explanation, and what to do in the app. Each has a source and a review date.</td><td><a href="#myths-list">§12 Starter list</a></td></tr>
-            <tr><td>Concepts</td><td>60 to 90 second explainers, such as warm-up, intensity, rest and steps versus workouts, surfaced in context.</td><td><a href="#s12">§12 Requirements</a></td></tr>
+            <tr><td>Myths about exercise</td><td>Cards with the myth, a verdict, a short explanation, and what to do in the app. Each has a source and a review date.</td><td><a href="#myths-list">§13 Starter list</a></td></tr>
+            <tr><td>Concepts</td><td>60 to 90 second explainers, such as warm-up, intensity, rest and steps versus workouts, surfaced in context.</td><td><a href="#s13">§13 Requirements</a></td></tr>
+
+            <tr class="grp"><td colspan="3">10 · Account and verification <span class="chip p0">P0</span> <span class="chip p2">M1</span></td></tr>
+            <tr><td>Phone number or email verified on the first screen</td><td>A 6-digit code, with Google as a shortcut. A short privacy notice appears before anything is collected. Abuse limits protect against SMS fraud.</td><td><a href="#s5">§5 Requirements</a></td></tr>
+            <tr><td>The same account comes back after reinstall</td><td>Verifying the same number or email restores the plan, logs, free credits and Pro status, and skips onboarding.</td><td><a href="#first-run">§5 First-run flow</a></td></tr>
+
+            <tr class="grp"><td colspan="3">11 · Free and Pro <span class="chip p1">P1</span> <span class="chip p2">M4</span></td></tr>
+            <tr><td>Only 2 analyses in a normal account</td><td>A lifetime balance of 2 form-check credits, spent after a confirmed run of at least 3 reps.</td><td><a href="#s14">§14 Free allowance</a></td></tr>
+            <tr><td>Not reset on days</td><td>No daily or monthly reset of any kind.</td><td><a href="#s14">§14 Free allowance</a></td></tr>
+            <tr><td>Not reset on reinstall</td><td>The balance lives on the server against the verified account, with normalised identifiers and device signals as extra checks.</td><td><a href="#s14">§14 Enforcement</a></td></tr>
+            <tr><td>Available in Pro</td><td>Unlimited form analysis. Pro analyses do not spend or restore the free credits. Price and extra Pro features are open.</td><td><a href="#free-vs-pro">§14 Free vs Pro</a> · <a href="#s19">Q13</a></td></tr>
           </table>
         </div>
 
@@ -397,27 +413,31 @@
       <section id="s1">
         <span class="num">Section 1</span>
         <h2>What matters most</h2>
-        <p class="lede">Nine asks is a lot for a first release. These eight points decide whether it ships and whether people keep using it, in order of importance.</p>
+        <p class="lede">Nine asks, plus account verification and a Free and Pro split, is a lot for a first release. These ten points decide whether it ships and whether people keep using it, in order of importance.</p>
 
         <ol class="rank">
-          <li><b>The 15-minute time-box is the product.</b><span>Plan builder, intensity changes, and add/remove exercise all draw on one live 15:00 budget. If that budget is trustworthy, the app feels effortless; if it drifts, nothing else saves it. See <a href="#s8">§8</a>.</span></li>
-          <li><b>Two onboarding pages is achievable, but safety questions fight for space.</b><span>Pain, injury and health flags cannot be dropped just because they are not "basic". The fix is to make them one-tap chips on page two. See <a href="#s5">§5</a>.</span></li>
-          <li><b>Generate plans with rules, not AI, in the first release.</b><span>Rule-based plans are free to run, explainable ("why this plan"), and easy for a trainer to review. AI belongs in food-photo recognition later. See <a href="#s6">§6</a>.</span></li>
-          <li><b>Content is the biggest cost, and you have asked for three libraries.</b><span>Normal, yoga and dance each need their own video library, and dance adds music licensing. This drives the release plan more than any engineering item. See <a href="#s14">§14</a>.</span></li>
-          <li><b>The 2-exercises-a-day camera limit is a good constraint. Keep it, and keep the camera on-device.</b><span>It caps battery, heat and privacy exposure. It is also the riskiest schedule item, so it ships last behind a feature flag. See <a href="#s9">§9</a>.</span></li>
-          <li><b>Daily steps are the cheapest retention feature on the list.</b><span>The pedometer is free, the research gives a clear target (7,000 steps), and three walk modes give users a reason to open the app on non-workout days. Reverse walking needs safety gates. See <a href="#s11">§11</a>.</span></li>
-          <li><b>Showing calories is fine, but make it optional and bounded.</b><span>A hide-calories toggle, calorie floors, and an 18+ gate keep the nutrition section from becoming the part of the app that makes people quit. See <a href="#s10">§10</a>.</span></li>
-          <li><b>The myths section is low cost and builds trust, if every card has a source.</b><span>It is writing, not engineering. The risk is publishing a "debunk" that is itself wrong, so each card needs a citation and a trainer's review. See <a href="#s12">§12</a>.</span></li>
+          <li><b>The 15-minute time-box is the product.</b><span>Plan builder, intensity changes, and add/remove exercise all draw on one live 15:00 budget. If that budget is trustworthy, the app feels effortless; if it drifts, nothing else saves it. See <a href="#s9">§9</a>.</span></li>
+          <li><b>Verifying a phone number or email on the first screen is the biggest conversion risk.</b><span>It is also what makes a lifetime free quota and a Pro restore possible. Build it, measure the drop-off, and test verifying after the plan preview instead. See <a href="#s5">§5</a>.</span></li>
+          <li><b>Two onboarding pages is achievable, but safety questions fight for space.</b><span>Pain, injury and health flags cannot be dropped just because they are not "basic". The fix is to make them one-tap chips on page two. See <a href="#s6">§6</a>.</span></li>
+          <li><b>Generate plans with rules, not AI, in the first release.</b><span>Rule-based plans are free to run, explainable ("why this plan"), and easy for a trainer to review. AI belongs in food-photo recognition later. See <a href="#s7">§7</a>.</span></li>
+          <li><b>Content is the biggest cost, and you have asked for three libraries.</b><span>Normal, yoga and dance each need their own video library, and dance adds music licensing. This drives the release plan more than any engineering item. See <a href="#s16">§16</a>.</span></li>
+          <li><b>Two free form checks for life, unlimited in Pro, only works if the balance is tied to a verified account.</b><span>Local counters reset on reinstall, so the server holds the balance. Keep the camera on-device so Pro costs almost nothing to serve. It is also the riskiest schedule item, so it ships last behind a feature flag. See <a href="#s10">§10</a> and <a href="#s14">§14</a>.</span></li>
+          <li><b>Pro needs more in it than the camera, and the camera ships last.</b><span>If form analysis is the only Pro feature, conversion waits for the riskiest feature. Decide what else Pro includes. See <a href="#s14">§14</a> and the ideas in <a href="#s18">§18</a>.</span></li>
+          <li><b>Daily steps are the cheapest retention feature on the list.</b><span>The pedometer is free, the research gives a clear target (7,000 steps), and three walk modes give users a reason to open the app on non-workout days. Reverse walking needs safety gates. See <a href="#s12">§12</a>.</span></li>
+          <li><b>Showing calories is fine, but make it optional and bounded.</b><span>A hide-calories toggle, calorie floors, and an 18+ gate keep the nutrition section from becoming the part of the app that makes people quit. See <a href="#s11">§11</a>.</span></li>
+          <li><b>The myths section is low cost and builds trust, if every card has a source.</b><span>It is writing, not engineering. The risk is publishing a "debunk" that is itself wrong, so each card needs a citation and a trainer's review. See <a href="#s13">§13</a>.</span></li>
         </ol>
 
         <div class="callout">
           <p><strong>Where this PRD departs from your brief</strong></p>
           <ul class="plain">
             <li><strong>Onboarding keeps three health questions</strong> (pain areas, health flags, experience) even though you asked for basics only. They are the minimum for a safe plan.</li>
-            <li><strong>The default step goal is 7,000, not 10,000.</strong> The latest meta-analysis shows most of the benefit is captured by 7,000 (§11).</li>
+            <li><strong>The default step goal is 7,000, not 10,000.</strong> The latest meta-analysis shows most of the benefit is captured by 7,000 (§12).</li>
             <li><strong>Reverse walking is opt-in behind a safety check</strong> and capped at 15 minutes a day, because the evidence is small and the fall risk is real.</li>
             <li><strong>Calorie numbers can be hidden</strong> by the user, and calorie targets have a floor.</li>
             <li><strong>Equipment is not asked in onboarding.</strong> The plan assumes bodyweight; equipment becomes a later setting. This follows your "nothing about gym" instruction.</li>
+            <li><strong>Verification moves to the first screen,</strong> reversing the earlier plan's advice to delay sign-up until after the first session. The conversion risk is covered in §5.</li>
+            <li><strong>The camera limit changed from 2 a day to 2 for life on free accounts,</strong> with unlimited analysis in Pro (§14).</li>
           </ul>
         </div>
       </section>
@@ -447,10 +467,13 @@
         <div class="qs">
           <table>
             <tr><th>Metric</th><th>How it is measured</th><th>Starting target</th></tr>
-            <tr><td>Onboarding completion</td><td>Users who finish page 2 ÷ users who open the app</td><td>80% or more</td></tr>
+            <tr><td>Onboarding completion</td><td>Users who finish page 2 ÷ users who pass verification</td><td>80% or more</td></tr>
             <tr><td>Activation</td><td>First 15-minute session started within 24 hours of install</td><td>50% or more</td></tr>
             <tr><td>Session completion</td><td>Sessions finished ÷ sessions started</td><td>70% or more</td></tr>
             <tr><td>Weekly habit</td><td>Users with 3 or more sessions in week 4</td><td>25% of week-1 starters</td></tr>
+            <tr><td>Verification completion</td><td>Users who enter a valid code ÷ users who reach the first screen</td><td>Track in beta; expect a lower number than before (see §5)</td></tr>
+            <tr><td>Free form checks used</td><td>Users who spend at least 1 of their 2 credits within 14 days</td><td>Track in beta</td></tr>
+            <tr><td>Pro conversion</td><td>Users who start Pro ÷ users who spent their 2nd credit</td><td>Track in beta, then set</td></tr>
             <tr><td>Editor use</td><td>Sessions where the user added, removed or swapped an exercise</td><td>Track only; low use means the defaults are good</td></tr>
             <tr><td>Steps engagement</td><td>Days per week the step goal is viewed or met</td><td>Track in beta, then set</td></tr>
             <tr><td>Food logging</td><td>Days per week with at least one food entry, among users who opened Nutrition</td><td>3 or more days</td></tr>
@@ -470,8 +493,10 @@
         <ul class="plain">
           <li>India-first launch on Android, then iOS. English at launch, Hindi soon after.</li>
           <li>Phone only. No wearable is required, though step data can come from the phone's own sensors or Health Connect.</li>
-          <li>Users are 18 or older in the first release (see §10 and §13 for why).</li>
+          <li>Users are 18 or older in the first release (see §11 and §15 for why).</li>
           <li>Sessions and the exercise library work offline once downloaded.</li>
+          <li>The first launch needs a network connection, because a phone number or email is verified on the first screen.</li>
+          <li>There is a paid Pro tier. Free accounts get 2 form-camera analyses in total; Pro is unlimited.</li>
         </ul>
         <div class="item risk">
           <span class="tag">Decision</span>
@@ -486,23 +511,95 @@
         <div class="qs">
           <table>
             <tr><th>#</th><th>Your ask</th><th>Feature</th><th>Priority</th><th>Milestone</th></tr>
-            <tr><td>1</td><td>Two-page onboarding, basic questions, nothing about gym</td><td><a href="#s5">F1 Onboarding</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
-            <tr><td>2</td><td>Exercise plan from onboarding answers (body part or stay fit)</td><td><a href="#s6">F2 Plan builder</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
-            <tr><td>3a</td><td>Change intensity and pause during exercise</td><td><a href="#s8">F4 Session player</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
-            <tr><td>3b</td><td>Add or remove exercises within 15 minutes</td><td><a href="#s8">F4 Session editor</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
-            <tr><td>3c</td><td>Camera form analysis, 2 exercises a day</td><td><a href="#s9">F5 Form camera</a></td><td><span class="chip p1">P1</span></td><td>M4</td></tr>
-            <tr><td>4</td><td>Home: ready-made plans and body-part exercises</td><td><a href="#s7">F3 Home screen</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
-            <tr><td>5</td><td>Nutrition log with calories, and a customised plan</td><td><a href="#s10">F6 Nutrition</a></td><td><span class="chip p1">P1</span></td><td>M2 (log), M4 (plan)</td></tr>
-            <tr><td>6</td><td>Interest: normal, dance, yoga, individual or mixed; customise if all three</td><td><a href="#s6">F2 Plan builder</a></td><td><span class="chip p1">P1</span></td><td>M3</td></tr>
-            <tr><td>7</td><td>Workout and Nutrition as two sections</td><td><a href="#s7">F3 Navigation</a></td><td><span class="chip p0">P0</span></td><td>M1–M2</td></tr>
-            <tr><td>8</td><td>Daily steps: brisk, normal, reverse walk</td><td><a href="#s11">F7 Daily steps</a></td><td><span class="chip p1">P1</span></td><td>M2</td></tr>
-            <tr><td>9</td><td>Myths and concepts section</td><td><a href="#s12">F8 Learn</a></td><td><span class="chip p2">P2</span></td><td>M2</td></tr>
+            <tr><td>1</td><td>Two-page onboarding, basic questions, nothing about gym</td><td><a href="#s6">F1 Onboarding</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>2</td><td>Exercise plan from onboarding answers (body part or stay fit)</td><td><a href="#s7">F2 Plan builder</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>3a</td><td>Change intensity and pause during exercise</td><td><a href="#s9">F4 Session player</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>3b</td><td>Add or remove exercises within 15 minutes</td><td><a href="#s9">F4 Session editor</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>3c</td><td>Camera form analysis: 2 in total on a free account, unlimited in Pro</td><td><a href="#s10">F5 Form camera</a> · <a href="#s14">F9 Free and Pro</a></td><td><span class="chip p1">P1</span></td><td>M4</td></tr>
+            <tr><td>4</td><td>Home: ready-made plans and body-part exercises</td><td><a href="#s8">F3 Home screen</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>5</td><td>Nutrition log with calories, and a customised plan</td><td><a href="#s11">F6 Nutrition</a></td><td><span class="chip p1">P1</span></td><td>M2 (log), M4 (plan)</td></tr>
+            <tr><td>6</td><td>Interest: normal, dance, yoga, individual or mixed; customise if all three</td><td><a href="#s7">F2 Plan builder</a></td><td><span class="chip p1">P1</span></td><td>M3</td></tr>
+            <tr><td>7</td><td>Workout and Nutrition as two sections</td><td><a href="#s8">F3 Navigation</a></td><td><span class="chip p0">P0</span></td><td>M1–M2</td></tr>
+            <tr><td>8</td><td>Daily steps: brisk, normal, reverse walk</td><td><a href="#s12">F7 Daily steps</a></td><td><span class="chip p1">P1</span></td><td>M2</td></tr>
+            <tr><td>9</td><td>Myths and concepts section</td><td><a href="#s13">F8 Learn</a></td><td><span class="chip p2">P2</span></td><td>M2</td></tr>
+            <tr><td>10</td><td>Phone number or email verified on the first screen</td><td><a href="#s5">F0 Account and verification</a></td><td><span class="chip p0">P0</span></td><td>M1</td></tr>
+            <tr><td>11</td><td>Free account limited to 2 form analyses for life; unlimited in Pro</td><td><a href="#s14">F9 Free and Pro</a></td><td><span class="chip p1">P1</span></td><td>M4</td></tr>
           </table>
         </div>
       </section>
 
       <section id="s5">
-        <span class="num">Section 5 · F1</span>
+        <span class="num">Section 5 · F0</span>
+        <h2>Account and verification on the first screen</h2>
+        <div class="fmeta"><span class="chip p0">P0</span><span class="chip p2">Milestone 1</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: the phone number or email is verified on the first screen. Every user becomes a known account from the first tap. That is also what makes a lifetime free quota possible (§14). It reverses the earlier plan's advice to delay sign-up, so this section also covers what to protect.</p>
+
+        <h3 id="first-run">First-run flow</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Step</th><th>Screen</th><th>What happens</th></tr>
+            <tr><td>1</td><td>Verify your number or email</td><td>Phone is the default tab, email the other. A short privacy notice sits above the button. "Continue with Google" is offered as a one-tap way to supply a verified email.</td></tr>
+            <tr><td>2</td><td>Enter the code</td><td>Six digits. On Android the code is read automatically, so no SMS permission prompt.</td></tr>
+            <tr><td>3</td><td>Onboarding page 1</td><td>Goal, body parts, style (§6).</td></tr>
+            <tr><td>4</td><td>Onboarding page 2</td><td>About you, pain and health flags (§6).</td></tr>
+            <tr><td>5</td><td>Week-one plan preview</td><td>One button: "Start today's session".</td></tr>
+          </table>
+        </div>
+        <p>A returning user whose number or email already has an account skips steps 3 to 5 and lands on the home screen with their plan, logs, free credits and Pro status restored.</p>
+
+        <div class="item req">
+          <span class="tag">Requirement</span>
+          <ul>
+            <li>The first screen asks for a mobile number or an email address, with phone as the default for an India-first launch. Nothing else is asked before the code is verified.</li>
+            <li>A short notice appears on that screen before the number or email is collected: what is collected, why (to secure the account and keep the plan and free credits), and a link to the full privacy notice. Health consent is separate and comes later (§6).</li>
+            <li>One-time code: 6 digits, valid for 5 minutes, 3 attempts, resend after 30 seconds, at most 5 sends per number or email per hour. These are starting values to tune.</li>
+            <li>The verified phone number or email is the account key. It holds the plan, food log, step history, free form-check balance and Pro status (§14).</li>
+            <li>Identifiers are normalised before duplicate checks: phone numbers in international format; emails lower-cased with plus-tags and Gmail dots removed; known disposable email domains rejected. This stops free credits being reclaimed with a trivial alias.</li>
+            <li>Abuse controls run before any code is sent: device attestation (Play Integrity on Android, App Attest on iOS), per-device and per-network send limits, and a daily spend alarm on SMS cost.</li>
+            <li>The first launch needs a network connection. If there is none, the screen explains why and offers a retry.</li>
+            <li>After verification the app works offline. A signed session and a cached Pro status stay valid offline for a grace period (assumed 7 days).</li>
+          </ul>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Acceptance criteria</span>
+          <ul>
+            <li>At least 90% of codes arrive within 30 seconds, monitored per carrier.</li>
+            <li>Median time from the first screen to the plan preview, including both onboarding pages, is under 90 seconds in usability tests. This replaces the earlier 60-second target, which covered the two pages alone.</li>
+            <li>The sixth code request in an hour for the same number is refused with a clear message.</li>
+            <li>Reinstalling and verifying the same number restores the plan, logs and credits, and shows no onboarding.</li>
+            <li>"name+1@gmail.com" and "n.a.me@gmail.com" resolve to the same account as "name@gmail.com".</li>
+            <li>With the network off, a new user sees the explanation, and an already-verified user can still start a downloaded session.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li><strong>Upfront registration costs sign-ups.</strong> No peer-reviewed study isolates this for mobile apps. A 2026 vendor benchmark reports typical drop-off of 25–45% at account creation in app onboarding, and says browse-first flows beat mandatory registration when users can see value first. Baymard's e-commerce figure, quoted second-hand, is roughly 19–26% abandoning because of forced account creation. These are directions, not forecasts. Measure our own.</li>
+            <li><strong>Health apps lose people anyway.</strong> A scoping review of 18 studies found a median of 70% of users stopped using lifestyle and mental-health apps within 100 days. It is about later drop-off, not sign-up, but it shows why every early step counts.</li>
+            <li><strong>Why the cost may be worth it.</strong> A lifetime quota and Pro restore only work if identity is known before the first credit is spent. A verified account also gives a recovery path and a channel for the single daily notification.</li>
+            <li><strong>SMS in India has paperwork.</strong> Sending OTPs to Indian numbers requires registering the sender, header and each message template on the telecom DLT portals. OTPs count as transactional. Vendors report approval in 1–3 working days, and when scrubbing was first enforced many OTPs failed until templates were registered. Start early.</li>
+            <li><strong>Cost and fraud.</strong> I found no reliable per-OTP price, so get quotes from two or three providers. Any open OTP endpoint can be abused to trigger many paid messages (often called SMS pumping), which is why attestation and send limits are requirements here. I found no India-specific data on how common this is.</li>
+            <li><strong>The law is arriving before launch.</strong> India's DPDP Rules were notified on 13 November 2025. Most notice, consent, erasure and retention duties apply from about 13 May 2027, with consent-manager provisions after 12 months. A launch in 2027 should assume the full rules apply. Sources disagree by a day on the dates, so confirm against the gazette.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li><strong>This is the biggest conversion risk in the PRD.</strong> The 80% onboarding-completion target in §2 is now harder. Expect a lower number and measure it from the first beta.</li>
+            <li><strong>An alternative to test, not assume:</strong> show the two onboarding pages and the plan preview first, then verify at "Save your plan and start". The user has already seen value, and identity is still captured before the first session and before any camera credit. The legal and quota benefits are the same. Run it as an A/B test in the beta (Q10).</li>
+            <li><strong>Phone or email.</strong> A phone number is harder to create in bulk than an email address and fits India, but costs an SMS each time. Email is cheaper but easy to alias. Offering both is a compromise (Q11).</li>
+            <li>Once a number or email is attached, health answers become identifiable data. Treat the account as sensitive from the start (§15).</li>
+            <li>Phone verification does not prove a user is 18. The age field is self-declared (Q18).</li>
+            <li>Users with poor signal or no SMS reach will fail at the first screen. The email path is the fallback.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s6">
+        <span class="num">Section 6 · F1</span>
         <h2>Onboarding: two pages, basics only</h2>
         <div class="fmeta"><span class="chip p0">P0</span><span class="chip p2">Milestone 1</span><a class="backlink" href="#overview">← All points</a></div>
         <p class="lede">Your ask: two pages, basic questions, nothing about gym. The design below fits every answer the plan builder needs into 8 taps and 3 number fields.</p>
@@ -511,9 +608,9 @@
         <div class="qs">
           <table>
             <tr><th>Question</th><th>Input</th><th>Used for</th></tr>
-            <tr><td>What is your goal?</td><td>Stay fit (full body) or Train specific body parts</td><td>Plan type (§6)</td></tr>
+            <tr><td>What is your goal?</td><td>Stay fit (full body) or Train specific body parts</td><td>Plan type (§7)</td></tr>
             <tr><td>Which body parts? (shown only for "specific")</td><td>Multi-select, up to 2: arms, chest, back, shoulders, core, glutes, legs</td><td>60% of sessions target these parts</td></tr>
-            <tr><td>What do you enjoy?</td><td>Multi-select: Normal workouts, Dance, Yoga. Pick one, two or all three</td><td>Style mix (§6). All three opens the customise screen</td></tr>
+            <tr><td>What do you enjoy?</td><td>Multi-select: Normal workouts, Dance, Yoga. Pick one, two or all three</td><td>Style mix (§7). All three opens the customise screen</td></tr>
           </table>
         </div>
 
@@ -533,7 +630,7 @@
         <div class="item req">
           <span class="tag">Requirement</span>
           <ul>
-            <li>Exactly two screens with a visible "1 of 2" indicator, then a plan preview. No account, email or phone number is requested before the first session.</li>
+            <li>Exactly two onboarding screens with a visible "1 of 2" indicator, then a plan preview. They come after the verification screen (§5), which is not counted as one of the two. A returning verified user skips both.</li>
             <li>The plan preview shows week one in full: session names, the 15-minute shape, and why each day was chosen. Its single button is "Start today's session".</li>
             <li>Name, notification time, equipment, diet type and photos are not asked here. They are requested after the first session, when the user has felt something.</li>
             <li>Default session length is 15 minutes. Length options (10, 20, 30) are a later setting, not an onboarding question.</li>
@@ -545,11 +642,11 @@
         <div class="item req">
           <span class="tag">Acceptance criteria</span>
           <ul>
-            <li>Median time from first screen to plan preview is under 60 seconds in usability tests.</li>
+            <li>Median time across the two onboarding screens is under 60 seconds in usability tests. Verification has its own target in §5.</li>
             <li>Going back from page 2 to page 1 keeps every answer.</li>
             <li>Every field on page 2 except age has a valid "skip" path, and the plan still generates.</li>
-            <li>Health answers are shown with a plain-language purpose line and a separate consent tick before being saved (see §13).</li>
-            <li>The whole flow works with no network connection.</li>
+            <li>Health answers are shown with a plain-language purpose line and a separate consent tick before being saved (see §15).</li>
+            <li>After verification, the whole flow works with no network connection. Verification itself needs one.</li>
           </ul>
         </div>
 
@@ -557,6 +654,7 @@
           <span class="tag">Finding</span>
           <ul>
             <li>The earlier plan puts first-day drop-off down to onboarding length, and recommends asking only what the first plan needs. This design follows that: every field above changes the generated plan, and everything else is deferred.</li>
+            <li>This design now sits behind a verification screen, which the earlier plan advised against. Expect more drop-off before page 1 than before; the evidence is in §5.</li>
             <li>Equipment normally sits on the "ask now" list. Dropping it is safe only because the plan defaults to bodyweight, which also matches the "nothing at all" case that the earlier plan flagged as a large share of home users.</li>
           </ul>
         </div>
@@ -566,12 +664,13 @@
           <ul>
             <li>Page 2 has six questions on one screen. If testing shows it feels long, move height and weight to the Nutrition section (they are only needed there), leaving four chips.</li>
             <li>Health answers are sensitive personal data. Collecting them on screen two, before any trust is built, needs careful wording and a clear "why we ask".</li>
+            <li>Once a phone number or email is attached, health answers are identifiable data. Treat the account as sensitive from the start (§15).</li>
           </ul>
         </div>
       </section>
 
-      <section id="s6">
-        <span class="num">Section 6 · F2</span>
+      <section id="s7">
+        <span class="num">Section 7 · F2</span>
         <h2>Plan builder: goal, body part and style</h2>
         <div class="fmeta"><span class="chip p0">P0</span><span class="chip p2">M1 (normal) · M3 (yoga, dance, mixed)</span><a class="backlink" href="#overview">← All points</a></div>
         <p class="lede">Your ask: build the plan from the onboarding answers, for either a body part or staying fit, in the style the user is interested in: normal, dance, yoga, or a mix.</p>
@@ -583,7 +682,7 @@
             <tr><td>Goal = stay fit</td><td>Rotate full-body sessions: push, pull, legs, core, plus one cardio-led session a week.</td></tr>
             <tr><td>Goal = specific body parts</td><td>About 60% of sessions target the chosen parts. The other 40% are full-body or mobility, so the same muscles are not trained two days running.</td></tr>
             <tr><td>Days per week</td><td>Sessions fill that many days. Remaining days are designed rest days with a walk or stretch suggestion.</td></tr>
-            <tr><td>Experience</td><td>Sets the starting rung on each exercise's difficulty ladder (§8).</td></tr>
+            <tr><td>Experience</td><td>Sets the starting rung on each exercise's difficulty ladder (§9).</td></tr>
             <tr><td>Pain or health flags</td><td>Remove excluded movements, or switch to the gentler plan.</td></tr>
             <tr><td>Style: one chosen</td><td>Every session uses that style (individual plan).</td></tr>
             <tr><td>Style: two or three chosen</td><td>Days are split in proportion to the choices, equal by default (mixed plan). With all three chosen, show the customise screen.</td></tr>
@@ -631,8 +730,8 @@
         </div>
       </section>
 
-      <section id="s7">
-        <span class="num">Section 7 · F3</span>
+      <section id="s8">
+        <span class="num">Section 8 · F3</span>
         <h2>Home screen and navigation</h2>
         <div class="fmeta"><span class="chip p0">P0</span><span class="chip p2">Milestone 1</span><a class="backlink" href="#overview">← All points</a></div>
         <p class="lede">Your ask: ready-made plans and individual body-part exercises on the home screen, and Workout and Nutrition as two sections.</p>
@@ -642,8 +741,8 @@
           <li><strong>Today's session card.</strong> One decision made for the user: name, 15 minutes, muscles, style, and a single Start button.</li>
           <li><strong>Ready-made plans.</strong> A horizontal row of pre-built sessions: Full body 15, Abs and core, Beginner HIIT, Morning stretch, Yoga flow, Dance cardio.</li>
           <li><strong>Train a body part.</strong> A grid: arms, chest, back, shoulders, core, glutes, legs, full body, stretch. Tapping one opens that part's exercises, filterable by style.</li>
-          <li><strong>Steps ring.</strong> Today's steps against the goal (§11).</li>
-          <li><strong>Food row.</strong> Calories logged today (if shown), with one tap to add a meal (§10).</li>
+          <li><strong>Steps ring.</strong> Today's steps against the goal (§12).</li>
+          <li><strong>Food row.</strong> Calories logged today (if shown), with one tap to add a meal (§11).</li>
         </ul>
 
         <h3 id="nav">Navigation: two sections</h3>
@@ -680,8 +779,8 @@
         </div>
       </section>
 
-      <section id="s8">
-        <span class="num">Section 8 · F4</span>
+      <section id="s9">
+        <span class="num">Section 9 · F4</span>
         <h2>Session player and the 15-minute editor</h2>
         <div class="fmeta"><span class="chip p0">P0</span><span class="chip p2">Milestone 1</span><a class="backlink" href="#overview">← All points</a></div>
         <p class="lede">Your ask: during an exercise the user can change intensity, pause, open the camera for form analysis, and add or remove exercises in the 15-minute session. This is the screen people spend all their time on, so it carries the most detail.</p>
@@ -752,29 +851,29 @@
         </div>
       </section>
 
-      <section id="s9">
-        <span class="num">Section 9 · F5</span>
-        <h2>Form camera: analysis for 2 exercises a day</h2>
-        <div class="fmeta"><span class="chip p1">P1</span><span class="chip p2">Milestone 4 · feature-flagged</span><a class="backlink" href="#overview">← All points</a></div>
-        <p class="lede">Your ask: the camera can open during an exercise and analyse the person's form, limited to 2 exercises per day. The limit is a good design choice and this section builds on it.</p>
+      <section id="s10">
+        <span class="num">Section 10 · F5</span>
+        <h2>Form camera: on-device form analysis</h2>
+        <div class="fmeta"><span class="chip p1">P1</span><span class="chip p2">Milestone 4 · feature-flagged</span><span class="chip p1">Free: 2 · Pro: unlimited</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: the camera can open during an exercise and analyse the person's form. A free account gets 2 analyses in total, never reset by time or by reinstalling. Unlimited analysis is part of Pro. The quota rules are in §14; this section covers the analysis itself.</p>
 
         <div class="item req">
           <span class="tag">Requirement</span>
           <ul>
             <li><strong>Eligible exercises at launch:</strong> bodyweight squat, push-up, plank and lunge. These are the ones where depth, knee position and body line can be judged from a single camera. Others are added only after testing.</li>
-            <li><strong>Daily limit:</strong> 2 analysed exercises per local day. The counter ("1 of 2 left today") is shown before the camera opens. It resets at local midnight.</li>
-            <li><strong>When a credit is used:</strong> only after the first rep is successfully analysed. If framing or lighting fails, no credit is spent.</li>
+            <li><strong>Free limit:</strong> 2 analyses in total for the life of the account. There is no daily reset and no reset on reinstall. The counter ("2 free checks left") is shown before the camera opens. Pro accounts have no limit. Full rules are in §14.</li>
+            <li><strong>When a credit is used:</strong> only after a run completes with at least 3 analysed reps (10 seconds for a hold such as the plank), and after the user confirms. If framing or lighting fails, or the run is cancelled early, no credit is spent.</li>
             <li><strong>Setup screen:</strong> asks for the phone to be propped about 2 metres away with the whole body in frame, and checks light and framing before starting.</li>
             <li><strong>Feedback:</strong> a rep count, spoken cues limited to one per rep ("go a little lower", "knees out"), and a summary at the end of the set with the one or two most important corrections.</li>
             <li><strong>When unsure, stay quiet.</strong> If the model's confidence is low, give no correction rather than a wrong one. Say "looks good" only when confident.</li>
-            <li><strong>Privacy:</strong> all analysis runs on the phone. No frame is stored or uploaded. Camera permission is requested at the moment of first use, with a separate consent line (§13).</li>
+            <li><strong>Privacy:</strong> all analysis runs on the phone. No frame is stored or uploaded. Camera permission is requested at the moment of first use, with a separate consent line (§15).</li>
           </ul>
         </div>
 
         <div class="item req">
           <span class="tag">Acceptance criteria</span>
           <ul>
-            <li>The third analysis attempt in a day is blocked with a clear message and a non-camera alternative (audio cues only).</li>
+            <li>After both free credits are spent, the next attempt is blocked with a clear Pro offer and a non-camera alternative (audio cues only).</li>
             <li>A network trace of a full camera session shows no video or image data leaving the device.</li>
             <li>Force-closing the app mid-analysis leaves no saved frames on storage.</li>
             <li>The session player still works end to end with the camera feature switched off.</li>
@@ -784,7 +883,7 @@
         <div class="item find">
           <span class="tag">Finding</span>
           <ul>
-            <li><strong>The daily cap does real work.</strong> Camera analysis drains battery and heats the phone. With on-device processing the cap also costs nothing in servers. If analysis were ever run in the cloud, every analysed set would become a recurring bill, which is why the earlier plan recommended on-device first.</li>
+            <li><strong>The cap is now a business rule, not a technical one.</strong> On-device analysis costs almost nothing to serve, so limiting free users is a pricing choice. If analysis were ever run in the cloud, every analysed set would become a recurring bill, which is why the earlier plan recommended on-device first. Camera use still drains battery, so keep a gentle rest prompt for long Pro sessions.</li>
             <li><strong>The law treats this as sensitive.</strong> The earlier plan found that analysing a person's body from a camera can fall under biometric and health data rules in both GDPR and India's DPDP Act, which call for specific, standalone consent and minimal data. On-device processing with no stored frames is the simplest way to stay inside them.</li>
             <li><strong>Camera placement is the real problem.</strong> Usable correction needs the phone propped at the right height and angle, the full body in frame and decent light. Many home users have nowhere to prop a phone, so expect a meaningful share of attempts to fail at setup.</li>
           </ul>
@@ -793,15 +892,15 @@
         <div class="item risk">
           <span class="tag">Risk</span>
           <ul>
-            <li>This is the likeliest feature to slip the schedule. It is sequenced last (§14), behind a feature flag, so a delay does not hold up the release.</li>
+            <li>This is the likeliest feature to slip the schedule. It is sequenced last (§16), behind a feature flag, so a delay does not hold up the release.</li>
             <li>A wrong "good form" message is a liability. Keep the disclaimer on screen, and review the cue wording with a qualified trainer.</li>
-            <li>Whether the 2 free analyses a day are a free or paid benefit is undecided (Q8).</li>
+            <li>Which other features Pro includes, and its price, are undecided (Q13). If the camera is the only Pro feature, conversion waits for the riskiest feature to ship.</li>
           </ul>
         </div>
       </section>
 
-      <section id="s10">
-        <span class="num">Section 10 · F6</span>
+      <section id="s11">
+        <span class="num">Section 11 · F6</span>
         <h2>Nutrition: food log, calories and a customised plan</h2>
         <div class="fmeta"><span class="chip p1">P1</span><span class="chip p2">M2 (log) · M4 (customised plan)</span><a class="backlink" href="#overview">← All points</a></div>
         <p class="lede">Your ask: a nutrition log that shows calories, and a customised plan. This is the second main section of the app.</p>
@@ -814,7 +913,7 @@
             <li>One-tap helpers: "same as yesterday", saved meals, and recent items at the top of search.</li>
             <li>The daily summary shows calories eaten against the target, with protein shown prominently. A setting hides the calorie number and shows a simple on-track indicator for protein and portions instead.</li>
             <li>Meal reminders are off by default. There are no notifications about unlogged meals.</li>
-            <li>Photo recognition is not in the first release (§14).</li>
+            <li>Photo recognition is not in the first release (§16).</li>
           </ul>
         </div>
 
@@ -834,7 +933,7 @@
           <ul>
             <li>A calorie floor below which the app will not set a target. The commonly cited floors are about 1,200 kcal for women and 1,500 kcal for men; a registered dietitian must confirm the numbers before launch.</li>
             <li>A cap on planned weight loss, for example 0.5–0.75 kg a week, with no "rapid loss" goal.</li>
-            <li>No weight-loss or calorie-deficit plans for under-18s. The first release is 18+ (see §13).</li>
+            <li>No weight-loss or calorie-deficit plans for under-18s. The first release is 18+ (see §15).</li>
             <li>If inputs suggest disordered eating (very low target, very rapid goal), the app declines the goal and shows supportive guidance instead.</li>
             <li>Food is never labelled "bad". Suggestions add (a protein, a vegetable) rather than forbid.</li>
           </ul>
@@ -859,8 +958,8 @@
         </div>
       </section>
 
-      <section id="s11">
-        <span class="num">Section 11 · F7</span>
+      <section id="s12">
+        <span class="num">Section 12 · F7</span>
         <h2>Daily steps: normal, brisk and reverse walk</h2>
         <div class="fmeta"><span class="chip p1">P1</span><span class="chip p2">Milestone 2</span><a class="backlink" href="#overview">← All points</a></div>
         <p class="lede">Your ask: count daily steps, with three kinds of walking: brisk, normal and reverse. Steps give users something to do on non-workout days, and the phone already counts them.</p>
@@ -916,8 +1015,8 @@
         </div>
       </section>
 
-      <section id="s12">
-        <span class="num">Section 12 · F8</span>
+      <section id="s13">
+        <span class="num">Section 13 · F8</span>
         <h2>Myths and concepts</h2>
         <div class="fmeta"><span class="chip p2">P2</span><span class="chip p2">Milestone 2</span><a class="backlink" href="#overview">← All points</a></div>
         <p class="lede">Your ask: a section on myths and concepts about exercise. It is mostly writing, it works offline, and it earns trust. The condition is that every card is correct and sourced.</p>
@@ -946,7 +1045,7 @@
             <tr><td>15 minutes is too short to matter</td><td>False</td><td>Short bouts improved fitness in inactive adults in several trials, with high adherence.</td><td>Found: exercise-snacks reviews</td></tr>
             <tr><td>Sweating more means burning more fat</td><td>False</td><td>Sweat is cooling, not fat loss.</td><td>Needs a source</td></tr>
             <tr><td>Cardio is the only way to lose weight</td><td>False</td><td>Strength training and diet matter alongside cardio.</td><td>Needs a source</td></tr>
-            <tr><td>Walking backwards is a miracle workout</td><td>Partly true</td><td>Promising for balance and knee pain, but the evidence is small. See §11.</td><td>Found; limited</td></tr>
+            <tr><td>Walking backwards is a miracle workout</td><td>Partly true</td><td>Promising for balance and knee pain, but the evidence is small. See §12.</td><td>Found; limited</td></tr>
             <tr><td>Yoga and dance are not "real" exercise</td><td>False</td><td>Trials show cardiovascular and body-composition gains from both.</td><td>Found: Zumba and yoga trials</td></tr>
           </table>
         </div>
@@ -965,8 +1064,85 @@
         </div>
       </section>
 
-      <section id="s13">
-        <span class="num">Section 13</span>
+      <section id="s14">
+        <span class="num">Section 14 · F9</span>
+        <h2>Free and Pro: the form-check allowance</h2>
+        <div class="fmeta"><span class="chip p1">P1</span><span class="chip p2">Milestone 4</span><a class="backlink" href="#overview">← All points</a></div>
+        <p class="lede">Your ask: a normal account gets 2 form analyses in total. The balance does not reset with days, and does not reset if the app is uninstalled and installed again. Unlimited form analysis is available in Pro.</p>
+
+        <h3 id="free-vs-pro">What is decided so far</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Feature</th><th>Free account</th><th>Pro</th></tr>
+            <tr><td>Plans, home screen, session player, editor</td><td>Included</td><td>Included</td></tr>
+            <tr><td>Steps, food log, myths and concepts</td><td>Included</td><td>Included</td></tr>
+            <tr><td>Form camera analysis</td><td>2 in total, for life</td><td>Unlimited</td></tr>
+            <tr><td>Customised nutrition plan</td><td>Not decided</td><td>Not decided</td></tr>
+            <tr><td>Yoga and dance libraries</td><td>Not decided</td><td>Not decided</td></tr>
+            <tr><td>Price, trial, billing</td><td>Not applicable</td><td>Not decided (Q13)</td></tr>
+          </table>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Requirement · Free allowance</span>
+          <ul>
+            <li>Each free account has exactly 2 form-check credits for its whole life. There is no daily or monthly reset, and no reset on reinstall, a new phone or cleared data.</li>
+            <li>One credit pays for one analysis run: one exercise analysed through one set. (Assumed; see Q12.)</li>
+            <li>A credit is spent only after a run completes with at least 3 analysed reps (10 seconds for a hold such as the plank). Setup, framing checks and cancelled runs are free. This is stricter than "first rep" because the balance is now scarce.</li>
+            <li>Before the camera starts, the app confirms: "This will use 1 of your 2 free form checks." A free "check my framing" preview lets the user position the phone without spending anything.</li>
+            <li>The balance ("2 free checks left") is visible on the exercise, in the player and in the profile.</li>
+            <li>After the second credit is spent, the app first shows the set summary, and only then the Pro offer. The user has just seen the value.</li>
+          </ul>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Requirement · Enforcement</span>
+          <ul>
+            <li><strong>The server holds the balance,</strong> against the verified account from §5. Local storage is wiped by a reinstall, so it cannot be trusted. The phone keeps a cached copy and asks the server to spend a credit.</li>
+            <li>An offline analysis spends from the cached balance and syncs when the phone is back online. If the server balance is lower, the balance is set to zero and the result is kept.</li>
+            <li>Because every fresh install must verify online first, signing in again always shows the true balance.</li>
+            <li>Extra signals, used as flags and not as hard blocks: Apple DeviceCheck on iOS and a Play Integrity verdict on Android. If a new account appears on a device that has already spent its credits, show "This device has used its free form checks" and offer sign-in to the original account.</li>
+            <li>Pro analyses neither spend nor restore free credits. If Pro lapses, the user returns to the free balance they had before (assumed; see Q15).</li>
+            <li>Pro is bought through the store billing system, with restore after reinstall. UPI autopay is offered for India. Cancelling takes two taps.</li>
+          </ul>
+        </div>
+
+        <div class="item req">
+          <span class="tag">Acceptance criteria</span>
+          <ul>
+            <li>Spend the second credit, reinstall, verify the same number: the app shows 0 free checks left.</li>
+            <li>A second account created with an alias of the same email grants no new credits.</li>
+            <li>Cancelling a run before 3 reps leaves the balance unchanged.</li>
+            <li>Losing the connection mid-run neither loses nor double-spends a credit after sync.</li>
+            <li>A Pro user can run 10 analyses with no counter shown, and the free balance is unchanged after Pro ends.</li>
+          </ul>
+        </div>
+
+        <div class="item find">
+          <span class="tag">Finding</span>
+          <ul>
+            <li><strong>A device flag can survive reinstall on iOS.</strong> Apple's DeviceCheck stores two bits per device on Apple's servers, so deleting the app does not clear them. Sources disagree on whether the bits are shared across all apps from one developer team, and factory-reset behaviour is unconfirmed. I could not read Apple's own documentation in this search, so check it.</li>
+            <li><strong>Android has no equivalent.</strong> Block Store can keep data across an uninstall, but only when the user has Google backup turned on, so it is a poor place for a quota. The sound approach is to keep the balance on the backend, tied to the verified account, and treat a Play Integrity verdict as one signal. Google itself says the API should be one of several anti-abuse signals.</li>
+            <li><strong>No identity-based limit stops a determined user.</strong> Someone with a second phone number gets a second balance. The goal is to make casual resets inconvenient, not impossible.</li>
+            <li><strong>Pro costs almost nothing to serve</strong> because analysis runs on the phone. Pricing it is a value decision, not cost recovery. The running costs are the account service, SMS codes and the store fees.</li>
+            <li><strong>Hybrid models are common.</strong> RevenueCat's 2026 data, as summarised second-hand, gives a median download-to-paid rate of 10.7% for hard paywalls against 2.1% for freemium, but freemium converts later and retention is similar after a year. The Health &amp; Fitness median trial-to-paid rate is 37.7%. Two free credits is a taste of the paid feature inside a free app.</li>
+            <li><strong>Trial length matters.</strong> One summary of the same data says trials of 17–32 days convert at about 42.5% against 25.5% for trials under 4 days. Treat as indicative.</li>
+          </ul>
+        </div>
+
+        <div class="item risk">
+          <span class="tag">Risk</span>
+          <ul>
+            <li><strong>Account deletion versus a lifetime quota.</strong> Users can ask for their data to be erased. If deleting the account also resets the balance, anyone can reclaim credits by deleting and registering again. Options: accept the loophole, or keep a salted hash of the identifier and the balance for a stated period, disclosed in the privacy notice. The second needs legal sign-off (Q14).</li>
+            <li><strong>Two credits is a very small trial.</strong> Users can burn both on setup problems and never see the value. The confirm step, the 3-rep rule and the free framing preview reduce this. Consider a third credit, or earning credits (Q16).</li>
+            <li><strong>Shared, gifted or resold phones</strong> can be flagged wrongly. That is why device signals only flag, and why there is a path back to the original account.</li>
+            <li><strong>Pro may hold too little.</strong> If the camera is the only Pro feature, conversion waits for the riskiest feature, which ships last (§16). Decide what else Pro includes early (Q13). Ideas are in §18.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s15">
+        <span class="num">Section 15</span>
         <h2>Privacy, data and non-functional requirements</h2>
 
         <h3>What data the app holds</h3>
@@ -977,6 +1153,8 @@
             <tr><td>Age, sex, height, weight</td><td>Personal and health-related</td><td>Device; synced only if the user opts in</td><td>Purpose line and a separate consent tick</td></tr>
             <tr><td>Pain, injury and health flags</td><td>Sensitive health data</td><td>Device; not used for advertising</td><td>Collected only to make the plan safe; deleted with the account</td></tr>
             <tr><td>Camera frames</td><td>Biometric-adjacent</td><td>Never stored, never uploaded</td><td>Processed in memory on the phone and discarded</td></tr>
+            <tr><td>Phone number or email</td><td>Personal identifier</td><td>Server, as the account key</td><td>Verified on the first screen. Used for sign-in, restore and the free-credit balance. Retention after deletion is decided in Q14</td></tr>
+            <tr><td>Free-credit balance and device-abuse flag</td><td>Personal, low sensitivity</td><td>Server</td><td>Needed to enforce the lifetime limit; disclosed in the privacy notice</td></tr>
             <tr><td>Food log</td><td>Health-related</td><td>Device and account</td><td>Exportable and deletable in two taps</td></tr>
             <tr><td>Step counts</td><td>Health-related</td><td>Phone sensor or Health Connect, copied to the app</td><td>No GPS or location is collected</td></tr>
           </table>
@@ -986,6 +1164,7 @@
           <span class="tag">Requirement</span>
           <ul>
             <li>Consent for health data and for camera use is specific and separate. It is never bundled into a general terms-of-service acceptance.</li>
+            <li>A short privacy notice appears on the verification screen, before the number or email is collected, saying what is collected, why, and how to delete it.</li>
             <li>The first release is 18+. Show an age gate and block under-18 sign-up rather than collect their data.</li>
             <li>"Export my data" and "Delete my account" are reachable in two taps from the profile.</li>
             <li>Analytics events carry no health values, body measurements or free text.</li>
@@ -1000,24 +1179,25 @@
           <span class="tag">Finding</span>
           <ul>
             <li>India's DPDP Act 2023 requires consent that is specific, informed and not bundled, and parental consent for anyone under 18. Biometric data needs a compelling purpose, data minimisation and strict retention. Penalties for mishandling run up to ₹250 crore.</li>
+            <li>The DPDP Rules were notified on 13 November 2025. Most notice, consent, erasure and retention duties apply from about 13 May 2027. A launch in 2027 should assume the full rules apply. Sources differ by a day on the dates, so confirm against the gazette notification.</li>
             <li>GDPR treats health data as a special category needing explicit consent, which applies if the app is ever offered to users in the EU.</li>
             <li>Keeping the first release at 18+ and on-device for camera data avoids the hardest parts of both laws. A lawyer should still confirm this before launch.</li>
           </ul>
         </div>
       </section>
 
-      <section id="s14">
-        <span class="num">Section 14</span>
+      <section id="s16">
+        <span class="num">Section 16</span>
         <h2>Release plan</h2>
         <p class="lede">The milestones put the 15-minute core loop first, then the cheap daily-use features, then the content-heavy and risky pieces. M1 to M3 are one launch; M4 follows as a fast update.</p>
 
         <div class="qs">
           <table>
             <tr><th>Milestone</th><th>What ships</th><th>Why in this order</th></tr>
-            <tr><td>M1 · Core loop</td><td>Two-page onboarding, rule-based plan (normal style), home screen with ready-made plans and body-part library, session player with intensity and pause, 15-minute editor</td><td>Everything else depends on a session people can finish and shape</td></tr>
+            <tr><td>M1 · Core loop</td><td>Phone and email verification with accounts and restore, two-page onboarding, rule-based plan (normal style), home screen with ready-made plans and body-part library, session player with intensity and pause, 15-minute editor</td><td>Everything else depends on a session people can finish and shape</td></tr>
             <tr><td>M2 · Daily use</td><td>Daily steps (normal, brisk, reverse), food log with Indian portions and calories, myths and concepts</td><td>Cheap, mostly writing and data, and they give a reason to open the app on rest days</td></tr>
             <tr><td>M3 · Styles</td><td>Yoga and dance libraries, mixed plans and the customise screen</td><td>Needs the most filming and music licensing, so it starts in parallel from day one</td></tr>
-            <tr><td>M4 · Intelligence</td><td>Camera form check (2 a day), customised nutrition plan, dietitian-reviewed meal plans</td><td>Highest risk and highest review burden; behind feature flags so it cannot delay the launch</td></tr>
+            <tr><td>M4 · Intelligence</td><td>Camera form check (2 free for life, unlimited in Pro), Pro subscription and entitlement, customised nutrition plan, dietitian-reviewed meal plans</td><td>Highest risk and highest review burden; behind feature flags so it cannot delay the launch</td></tr>
           </table>
         </div>
 
@@ -1039,12 +1219,13 @@
           <ul>
             <li>If filming all three styles before launch is too much, the fallback is to launch with normal and yoga, and show dance as "coming soon". That departs from your onboarding choice of three styles, so it is your call (Q1).</li>
             <li>Start filming and music licensing now. Video is the longest lead-time item in the earlier plan, and nothing in M1–M3 can be tested properly without it.</li>
+            <li>Start registering the OTP sender and message template on the telecom DLT portals now. Vendors report 1–3 working days for approval, but delivery problems are common when it is left late.</li>
           </ul>
         </div>
       </section>
 
-      <section id="s15">
-        <span class="num">Section 15</span>
+      <section id="s17">
+        <span class="num">Section 17</span>
         <h2>Risks</h2>
         <div class="qs">
           <table>
@@ -1057,12 +1238,76 @@
             <tr><td>Two-page onboarding feels too long or too thin</td><td>Medium: drop-off or a poor first plan</td><td>Test with 5–10 users; move height and weight to Nutrition if needed</td></tr>
             <tr><td>Too much for a first release</td><td>High: nine asks across three content types</td><td>Four milestones; M4 behind flags; cut P2 first</td></tr>
             <tr><td>Myths section publishes an error</td><td>Medium: trust damage</td><td>A source and a reviewer on every card</td></tr>
+            <tr><td>Forced verification on the first screen cuts sign-ups</td><td>High</td><td>Measure drop-off; offer phone, email and Google; A/B test verifying after the plan preview (§5)</td></tr>
+            <tr><td>SMS cost, or fraud that triggers many paid codes</td><td>Medium</td><td>Attestation, send limits, a daily spend alarm, quotes from several providers</td></tr>
+            <tr><td>Free credits reclaimed with new accounts or aliases</td><td>Medium</td><td>Normalised identifiers, DeviceCheck on iOS, Play Integrity on Android; accept that a determined user can bypass it</td></tr>
+            <tr><td>Deleting the account resets the lifetime balance</td><td>Medium</td><td>Decide in Q14: accept it, or keep a disclosed hash after deletion with legal sign-off</td></tr>
+            <tr><td>Free users spend both credits by accident</td><td>Medium: wasted trial, complaints</td><td>Confirm before spending, the 3-rep rule, a free framing preview</td></tr>
+            <tr><td>Pro holds too little value</td><td>High: low conversion</td><td>Decide Pro contents early (Q13); see §18</td></tr>
           </table>
         </div>
       </section>
 
-      <section id="s16">
-        <span class="num">Section 16</span>
+      <section id="s18">
+        <span class="num">Section 18</span>
+        <h2>Ideas to make the product better</h2>
+        <p class="lede">These are suggestions, not requirements. They are grouped by the problem they solve, and the first five are the ones I would do first. None is validated with users yet.</p>
+
+        <h3>Get people through the door and keep them</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Idea</th><th>Why</th><th>Effort</th></tr>
+            <tr><td>1 · Test verifying after the plan preview</td><td>Same quota and legal benefits as a first-screen check, with the user having seen value first. Run as an A/B test in the beta.</td><td>Low</td></tr>
+            <tr><td>2 · Comeback path and weekly recap</td><td>Both come from the earlier plan. A user who vanishes for 10 days sees "welcome back, let's do an easy one", not a broken streak. The recap is the cheapest retention feature in the category.</td><td>Low</td></tr>
+            <tr><td>3 · Desk-break micro-sessions (2–5 minutes)</td><td>"Exercise snack" trials show short bouts improve fitness, with high adherence. Built from exercises already in the library. One opt-in nudge a day, never more.</td><td>Low</td></tr>
+            <tr><td>4 · One-tap "how do you feel?" after each session</td><td>Gives progress that is not on the scale, and costs one tap. Dance trials reported better mood, so it also supports the dance pitch.</td><td>Low</td></tr>
+            <tr><td>5 · Start the Pro trial after the first completed week</td><td>A user who has finished a week has proof the app works for them, which is when a trial offer converts best. Compare with a trial at install in the beta.</td><td>Low</td></tr>
+          </table>
+        </div>
+
+        <h3>Make it fit India</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Idea</th><th>Why</th><th>Effort</th></tr>
+            <tr><td>6 · Air-quality-aware suggestions</td><td>On a poor-air day, swap an outdoor walk for an indoor session or an indoor walk. Needs an air-quality data source. Few competitors do this.</td><td>Medium</td></tr>
+            <tr><td>7 · Fasting-day and festival nutrition modes</td><td>Navratri, Ekadashi and Ramadan change what people eat and when. A plan that ignores them gets abandoned for those weeks.</td><td>Medium, needs a dietitian</td></tr>
+            <tr><td>8 · Hindi voice coach, then regional languages</td><td>The player is audio-first, so a coach voice in the user's language matters more than translated text.</td><td>Medium</td></tr>
+            <tr><td>9 · Family plan for up to 4 people</td><td>Training and walking is often a household decision, and a parent's step goal is a natural fit. Unvalidated, so test price and demand first.</td><td>Medium</td></tr>
+            <tr><td>10 · Apartment-friendly mode as a first-class switch</td><td>Quiet, no-jump versions of every session for flats with neighbours below. Already implied by the onboarding space flag in the earlier plan.</td><td>Low</td></tr>
+          </table>
+        </div>
+
+        <h3>Make Pro worth paying for</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Idea</th><th>Why</th><th>Effort</th></tr>
+            <tr><td>11 · Weekly form report</td><td>Unlimited analysis becomes a coach: "your squat depth improved on 3 of 4 sessions". It reuses the on-device analysis.</td><td>Medium</td></tr>
+            <tr><td>12 · Dance and yoga as Pro libraries, with a free taster</td><td>These are the most expensive content to make, so they are the natural place to charge. Keep the free tier as normal workouts plus a few free routines.</td><td>Low (a rule, not a build)</td></tr>
+            <tr><td>13 · Monthly check-in with a trainer or dietitian (higher tier)</td><td>A human layer is hard for a pure app to copy, and it covers the review the nutrition plan needs anyway.</td><td>High, later</td></tr>
+          </table>
+        </div>
+
+        <h3>Make it better for everyone</h3>
+        <div class="qs">
+          <table>
+            <tr><th>Idea</th><th>Why</th><th>Effort</th></tr>
+            <tr><td>14 · Chair-based and senior mode</td><td>The people who need a gentle start most are often not the ones apps are built for.</td><td>Medium</td></tr>
+            <tr><td>15 · Private "walk together" challenges</td><td>Light accountability with 1–3 friends or family for steps, with no public leaderboard. The earlier plan found users prefer private comparison.</td><td>Medium</td></tr>
+            <tr><td>16 · Creator partnerships for yoga and dance</td><td>Local instructors and choreographers shoot the content for a revenue share. It cuts the biggest cost in the plan and adds regional variety.</td><td>Medium, mostly business</td></tr>
+          </table>
+        </div>
+
+        <div class="item find">
+          <span class="tag">My recommendation</span>
+          <ul>
+            <li>Do ideas 1, 2, 3, 4 and 5 first. They are cheap and they act on the two biggest risks in this PRD: drop-off at verification, and weak Pro conversion.</li>
+            <li>Pick one India-specific idea from 6 to 8 as a launch differentiator, and decide Pro contents (ideas 11 and 12) before M4 so the camera is not carrying the whole paywall.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="s19">
+        <span class="num">Section 19</span>
         <h2>Open questions and assumptions</h2>
 
         <h3>Questions that need your answer</h3>
@@ -1074,8 +1319,17 @@
           <li><strong>Q5.</strong> "Workout + Nutrition (two sections)": two bottom-bar tabs, or two tabs on one screen? This PRD assumes bottom-bar tabs.</li>
           <li><strong>Q6.</strong> Are users 18 or older only? Under-18s need parental consent in India and a different nutrition approach.</li>
           <li><strong>Q7.</strong> Who owns clinical review: a trainer for exercise and myths, a registered dietitian for nutrition?</li>
-          <li><strong>Q8.</strong> Is camera form analysis (2 a day) free, or part of a paid tier? Is any of the app paid?</li>
+          <li><strong>Q8.</strong> Answered in part: free accounts get 2 form analyses for life, and Pro is unlimited. Still open: the price, the trial, and what else Pro includes (Q13).</li>
           <li><strong>Q9.</strong> Is CasaFit the final name? A casual search found no existing fitness app or trademark with that name, but that is not a clearance search.</li>
+          <li><strong>Q10.</strong> Must verification really be the very first screen, or can users see the plan preview first and verify at "Save your plan"? I recommend an A/B test in the beta.</li>
+          <li><strong>Q11.</strong> Which is the primary identifier, phone or email? Is "Continue with Google" acceptable as a way to verify an email? If a user adds both, which one counts for the free balance?</li>
+          <li><strong>Q12.</strong> What counts as one of the 2 analyses: one analysed set of one exercise, or one exercise (so the same exercise cannot be analysed twice)? This PRD assumes one analysed set with a 3-rep minimum.</li>
+          <li><strong>Q13.</strong> What is in Pro besides unlimited form analysis? Price, monthly or annual, free-trial length, UPI autopay, a family plan?</li>
+          <li><strong>Q14.</strong> If a user deletes their account, does the free balance reset? Or do we keep a hashed identifier for a stated period, which needs legal sign-off under the DPDP Act?</li>
+          <li><strong>Q15.</strong> If Pro lapses, does the user go back to the free balance they had before (assumed) or to zero?</li>
+          <li><strong>Q16.</strong> Is 2 the final number? Could extra credits be earned or gifted, for example by finishing a week or referring a friend?</li>
+          <li><strong>Q17.</strong> Which code channels: SMS only, or WhatsApp as well? Who is the SMS provider, and what is the monthly budget cap?</li>
+          <li><strong>Q18.</strong> Phone verification does not prove age. Is a self-declared age of 18 or more enough for the first release?</li>
         </ul>
 
         <h3>Assumptions I made</h3>
@@ -1084,6 +1338,8 @@
           <li>Rule-based plan generation in the first release, with no AI cost.</li>
           <li>Steps and Learn live under the Workout section, not in extra tabs.</li>
           <li>Camera analysis runs entirely on the device.</li>
+          <li>One free credit equals one analysed set, and is spent only after 3 analysed reps and a confirmation.</li>
+          <li>Verification uses a 6-digit one-time code; Google sign-in is an optional shortcut, not a requirement.</li>
           <li>Metrics targets in §2 are hypotheses to calibrate after the first beta.</li>
         </ul>
       </section>
@@ -1093,7 +1349,7 @@
 
   <footer class="wrap" style="padding-left:0;padding-right:0">
     <a class="toplink" href="#top">Back to top</a>
-    <p>Draft v0.1, 5 October 2026. Research figures are cited below; check them against the original papers before they appear in the app or in marketing. Nothing here is medical, nutritional or legal advice. A qualified trainer and a registered dietitian should review the exercise and nutrition content, and counsel should review the consent and age-gate design, before launch.</p>
+    <p>Draft v0.2, 9 October 2026. Research figures are cited below; check them against the original papers before they appear in the app or in marketing. Nothing here is medical, nutritional or legal advice. A qualified trainer and a registered dietitian should review the exercise and nutrition content, and counsel should review the consent and age-gate design, before launch.</p>
     <h3 style="margin-top:1.6rem">Sources for this PRD</h3>
     <ol class="sources">
       <li><a href="https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(25)00164-1/fulltext" target="_blank" rel="noopener">Daily steps and health outcomes in adults: a systematic review and dose-response meta-analysis — The Lancet Public Health, 2025</a></li>
@@ -1112,6 +1368,17 @@
       <li><a href="https://sunnyhealthfitness.com/blogs/health-wellness/women-weightlifting-fitness-myths" target="_blank" rel="noopener">Debunking fitness myths: women and weightlifting — secondary source, confirm original studies</a></li>
       <li><a href="https://www.dpdpa.com/dpdpa2023/chapter-2/section4.html" target="_blank" rel="noopener">India's DPDP Act 2023, Section 4</a> and <a href="https://blog.mantratec.com/DPDP-Biometrics-Compliance" target="_blank" rel="noopener">DPDP compliance for biometrics</a></li>
       <li><a href="https://pubmed.ncbi.nlm.nih.gov/42619751/" target="_blank" rel="noopener">Vision-language models for image-based dietary assessment: accuracy and cost — PubMed</a></li>
+      <li><a href="https://adjoe.io/company/engineer-blog/prevent-fraud-on-ios-with-apple-devicecheck-and-app-attest/" target="_blank" rel="noopener">Apple DeviceCheck and App Attest: preventing fraud on iOS — adjoe engineering blog (secondary; check Apple's documentation)</a></li>
+      <li><a href="https://developer.android.com/identity/block-store" target="_blank" rel="noopener">Block Store — Android developers</a></li>
+      <li><a href="https://developer.android.com/google/play/integrity/overview" target="_blank" rel="noopener">Overview of the Play Integrity API — Android developers</a></li>
+      <li><a href="https://semnexus.com/app-onboarding-flow-benchmarks-where-users-drop-off-2026" target="_blank" rel="noopener">App onboarding flow benchmarks, 2026 — vendor analysis, not a controlled study</a></li>
+      <li><a href="https://www.corbado.com/blog/guest-checkout-vs-forced-login" target="_blank" rel="noopener">Guest checkout vs forced login — secondary source quoting Baymard figures</a></li>
+      <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11694054/" target="_blank" rel="noopener">When and why adults abandon lifestyle behavior and mental health mobile apps — scoping review</a></li>
+      <li><a href="https://docs.webengage.com/docs/trai-sms-dlt-regulations-india" target="_blank" rel="noopener">TRAI DLT regulations for SMS in India — WebEngage documentation (vendor)</a></li>
+      <li><a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2190014&reg=3&lang=2" target="_blank" rel="noopener">Government notifies DPDP Rules — Press Information Bureau</a></li>
+      <li><a href="https://www.seqrite.com/blog/dpdp-rules-are-here-what-changed-from-the-draft/" target="_blank" rel="noopener">DPDP Rules are here: what changed from the draft — phasing summary (secondary)</a></li>
+      <li><a href="https://www.revenuecat.com/state-of-subscription-apps" target="_blank" rel="noopener">State of Subscription Apps 2026 — RevenueCat (figures here were read from summaries)</a></li>
+      <li><a href="https://adapty.io/blog/health-fitness-app-subscription-benchmarks/" target="_blank" rel="noopener">In-app subscription benchmarks for Health and Fitness apps — Adapty</a></li>
     </ol>
   </footer>
 </div>
