@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Verify your number</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&amp;family=Baloo+2:wght@700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.d{font-family:'Anton',Impact,sans-serif;font-weight:400}
+.h{font-family:'Baloo 2',sans-serif;font-weight:800}
+a{color:#C6F432}a:hover{color:#FFB627}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background: #15121F; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 14px); font-family: 'Bricolage Grotesque', sans-serif; color: #FFF">
+
+  <div aria-hidden="true" style="position: absolute; width: 260px; height: 260px; border-radius: 50%; background: #3046FF; right: -110px; top: -90px; border: 3px solid #FFF"></div>
+  <div aria-hidden="true" style="position: absolute; width: 90px; height: 90px; background: #FFB627; right: 40px; top: 120px; border: 3px solid #FFF; transform: rotate(14deg); border-radius: 18px"></div>
+
+  <div style="position: relative; height: 100%; box-sizing: border-box; padding: 28px 24px 28px; display: flex; flex-direction: column">
+    <a href="Main.dc.html" aria-label="Back" style="width: 46px; height: 46px; border-radius: 50%; border: 2px solid #FFF; display: flex; align-items: center; justify-content: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+    </a>
+
+    <h1 class="d" style="margin: 26px 0 0; font-size: 60px; line-height: 0.92; text-transform: uppercase; letter-spacing: -0.5px">Keep your<br><span style="color: #FF4F9A">plan</span> safe.</h1>
+    <p style="margin: 12px 0 0; font-size: 17px; line-height: 1.35; color: #D9D3E8; max-width: 300px">Verify once. Reinstall, switch phones, your plan and free form checks come back.</p>
+
+    <div role="tablist" aria-label="Sign-in method" style="margin-top: 22px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border: 2px solid #FFF; border-radius: 999px; padding: 4px">
+      <button role="tab" aria-selected="true" style="height: 44px; border: 0; border-radius: 999px; background: #C6F432; color: #15121F; font: 800 16px 'Bricolage Grotesque', sans-serif">Phone</button>
+      <button role="tab" aria-selected="false" style="height: 44px; border: 0; border-radius: 999px; background: transparent; color: #FFF; font: 600 16px 'Bricolage Grotesque', sans-serif">Email</button>
+    </div>
+
+    <label for="phone" style="margin-top: 18px; font-size: 13px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #C6F432">Mobile number</label>
+    <div style="margin-top: 8px; display: flex; height: 64px; background: #FFF; border: 3px solid #FFF; box-shadow: 5px 5px 0 #FF4F9A; border-radius: 16px; overflow: hidden">
+      <div style="width: 78px; background: #FFB627; color: #15121F; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; border-right: 3px solid #15121F">+91</div>
+      <input id="phone" type="tel" value="98765 43210" style="flex: 1; min-width: 0; border: 0; padding: 0 16px; font: 800 24px 'Bricolage Grotesque', sans-serif; color: #15121F; letter-spacing: 1px; background: #FFF">
+    </div>
+
+    <div style="margin-top: 18px; background: #2A2340; border: 2px solid #4A3F6B; border-radius: 18px; padding: 14px 16px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <span style="font-weight: 800; font-size: 15px">Code sent to +91 98765 43210</span>
+        <span style="font-size: 13px; color: #D9D3E8">0:24</span>
+      </div>
+      <div style="margin-top: 12px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">
+        <div class="d" style="height: 50px; border-radius: 12px; background: #FFF; color: #15121F; display: flex; align-items: center; justify-content: center; font-size: 28px">4</div>
+        <div class="d" style="height: 50px; border-radius: 12px; background: #FFF; color: #15121F; display: flex; align-items: center; justify-content: center; font-size: 28px">8</div>
+        <div class="d" style="height: 50px; border-radius: 12px; background: #FFF; color: #15121F; display: flex; align-items: center; justify-content: center; font-size: 28px">2</div>
+        <div class="d" style="height: 50px; border-radius: 12px; background: #FFF; color: #15121F; display: flex; align-items: center; justify-content: center; font-size: 28px">0</div>
+        <div style="height: 50px; border-radius: 12px; border: 2px dashed #C6F432; box-sizing: border-box"></div>
+        <div style="height: 50px; border-radius: 12px; border: 2px dashed #C6F432; box-sizing: border-box"></div>
+      </div>
+      <div style="margin-top: 10px; font-size: 13px; color: #C6F432; font-weight: 600">Reading the code automatically…</div>
+    </div>
+
+    <div style="margin-top: 16px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.4; color: #D9D3E8">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 1px"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
+      <span>We use your number only to secure your account and keep your plan and free form checks. Health questions come later, with their own consent. <a href="#privacy">Privacy notice</a></span>
+    </div>
+
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+      <a href="Goals.dc.html" style="height: 62px; display: flex; align-items: center; justify-content: center; background: #FF4F9A; color: #15121F; text-decoration: none; border-radius: 999px; font-weight: 800; font-size: 19px; border: 3px solid #FFF; box-shadow: 4px 4px 0 #FFF">Verify and continue</a>
+      <a href="Goals.dc.html" style="height: 54px; display: flex; align-items: center; justify-content: center; gap: 10px; background: transparent; color: #FFF; text-decoration: none; border-radius: 999px; font-weight: 600; font-size: 16px; border: 2px solid #FFF">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 12h8"></path></svg>
+        Continue with Google
+      </a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

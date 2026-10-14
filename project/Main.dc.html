@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CasaFit welcome</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&amp;family=Baloo+2:wght@700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.d{font-family:'Anton',Impact,sans-serif;font-weight:400}
+.h{font-family:'Baloo 2',sans-serif;font-weight:800}
+a{color:#15121F}a:hover{color:#3046FF}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background-color: {{ground}}; background-image: radial-gradient(#15121F 1.4px, transparent 1.6px); background-size: 18px 18px; font-family: 'Bricolage Grotesque', sans-serif; color: #15121F">
+
+  <div aria-hidden="true" style="position: absolute; width: 360px; height: 360px; border-radius: 50%; background: #FF4F9A; border: 3px solid #15121F; right: -150px; top: 120px"></div>
+  <div aria-hidden="true" style="position: absolute; width: 230px; height: 230px; background: #3046FF; border: 3px solid #15121F; left: -90px; bottom: 170px; transform: rotate(18deg)"></div>
+  <div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 452px; height: 34px; background: #15121F; transform: rotate(-6deg); display: flex; align-items: center; gap: 18px; white-space: nowrap; color: #C6F432; font-weight: 800; font-size: 14px; letter-spacing: 2px; padding-left: 10px">
+    <span>NO GYM</span><span>✦</span><span>NO EQUIPMENT</span><span>✦</span><span>WARM-UP + COOL-DOWN EVERY TIME</span><span>✦</span><span>NO GYM</span>
+  </div>
+
+  <div style="position: relative; height: 100%; box-sizing: border-box; padding: 28px 24px 30px; display: flex; flex-direction: column">
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M4 16 L17 4 L30 16 V30 H4 Z" fill="#15121F"></path><path d="M12 30 V21 H22 V30" fill="#FFB627"></path><circle cx="25" cy="9" r="3" fill="#C6F432" stroke="#15121F" stroke-width="2"></circle></svg>
+        <span style="font-weight: 800; font-size: 20px; letter-spacing: -0.5px">casafit</span>
+      </div>
+      <a href="Verify.dc.html" style="font-weight: 600; font-size: 15px; text-decoration: underline; text-underline-offset: 3px; padding: 10px 0">Log in</a>
+    </div>
+
+    <div style="margin-top: 26px; position: relative">
+      <div class="d" style="font-size: 268px; line-height: 0.82; letter-spacing: -6px; color: #15121F">15</div>
+      <div class="d" style="font-size: 64px; line-height: 0.9; margin-top: 4px; text-transform: uppercase">minutes.</div>
+      <div class="h" style="position: absolute; right: 6px; top: 34px; background: #C6F432; border: 3px solid #15121F; border-radius: 999px; padding: 6px 16px 2px; font-size: 26px; transform: rotate(10deg); box-shadow: 4px 4px 0 #15121F">चलो!</div>
+    </div>
+
+    <p style="margin: 52px 0 0; font-size: 25px; line-height: 1.15; font-weight: 800; max-width: 300px; background: #FFF; border: 3px solid #15121F; padding: 14px 16px; box-shadow: 6px 6px 0 #15121F; transform: rotate(-1.5deg)">That's the whole workout. At home, with nothing but you.</p>
+
+    <div style="margin-top: auto">
+      <div style="display: flex; height: 54px; border: 3px solid #15121F; box-shadow: 4px 4px 0 #15121F; background: #FFF; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px">
+        <div style="flex: 2; background: #C6F432; border-right: 3px solid #15121F; display: flex; flex-direction: column; justify-content: center; padding-left: 8px"><span>Warm</span><span class="d" style="font-size: 18px">2</span></div>
+        <div style="flex: 11; background: #FF4F9A; border-right: 3px solid #15121F; display: flex; flex-direction: column; justify-content: center; padding-left: 10px"><span>Work</span><span class="d" style="font-size: 18px">11 min</span></div>
+        <div style="flex: 2; background: #8FE3FF; display: flex; flex-direction: column; justify-content: center; padding-left: 8px"><span>Cool</span><span class="d" style="font-size: 18px">2</span></div>
+      </div>
+      <a href="Verify.dc.html" style="margin-top: 18px; display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 22px; background: #15121F; color: #FFF; text-decoration: none; border-radius: 999px; font-weight: 800; font-size: 20px; box-shadow: 4px 4px 0 #FF4F9A">
+        <span>Get my 15-minute plan</span>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ground":{"editor":"color","default":"#FFB627","options":["#FFB627","#C6F432","#FF4F9A","#8FE3FF"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { ground: this.props.ground ?? '#FFB627' };
+  }
+}
+</script>
+</body>
+</html>

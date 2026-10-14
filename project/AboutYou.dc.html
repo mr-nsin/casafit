@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Onboarding: about you</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&amp;family=Baloo+2:wght@700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.d{font-family:'Anton',Impact,sans-serif;font-weight:400}
+.h{font-family:'Baloo 2',sans-serif;font-weight:800}
+a{color:#15121F}a:hover{color:#3046FF}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background: #E4FBA6; font-family: 'Bricolage Grotesque', sans-serif; color: #15121F">
+
+  <div aria-hidden="true" style="position: absolute; width: 300px; height: 300px; border-radius: 50%; background: #FF4F9A; border: 3px solid #15121F; right: -170px; top: -150px"></div>
+  <div aria-hidden="true" style="position: absolute; width: 120px; height: 120px; left: -40px; bottom: 120px; border-radius: 50%; background-image: repeating-radial-gradient(circle, #15121F 0 2px, transparent 2px 10px); opacity: 0.25"></div>
+
+  <div style="position: relative; height: 100%; box-sizing: border-box; padding: 24px 20px 22px; display: flex; flex-direction: column">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <a href="Goals.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 50%; background: #FFF; border: 2px solid #15121F; display: flex; align-items: center; justify-content: center; flex: none">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15121F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+      </a>
+      <div style="flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
+        <div style="height: 12px; border-radius: 6px; background: #3046FF; border: 2px solid #15121F"></div>
+        <div style="height: 12px; border-radius: 6px; background: #3046FF; border: 2px solid #15121F"></div>
+      </div>
+      <span style="font-weight: 800; font-size: 15px">2 of 2</span>
+    </div>
+
+    <h1 class="d" style="margin: 14px 0 0; font-size: 46px; line-height: 1; text-transform: uppercase">About you</h1>
+
+    <div style="margin-top: 12px; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 10px">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <label for="age" style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase">Age</label>
+        <input id="age" type="number" value="28" style="height: 48px; box-sizing: border-box; border: 2px solid #15121F; border-radius: 14px; padding: 0 12px; font: 800 22px 'Bricolage Grotesque', sans-serif; color: #15121F; background: #FFF; width: 100%">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase">Sex</span>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+          <button aria-pressed="true" style="height: 48px; border-radius: 14px; border: 2px solid #15121F; background: #15121F; color: #C6F432; font: 800 15px 'Bricolage Grotesque', sans-serif">Woman</button>
+          <button style="height: 48px; border-radius: 14px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Man</button>
+          <button style="height: 48px; border-radius: 14px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Other</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 10px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <label for="height" style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase">Height · cm</label>
+        <input id="height" type="number" value="162" style="height: 48px; box-sizing: border-box; border: 2px solid #15121F; border-radius: 14px; padding: 0 12px; font: 800 22px 'Bricolage Grotesque', sans-serif; color: #15121F; background: #FFF; width: 100%">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <label for="weight" style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase">Weight · kg <span style="font-weight: 600; letter-spacing: 0; text-transform: none">(skippable)</span></label>
+        <input id="weight" type="number" placeholder="Skip for now" style="height: 48px; box-sizing: border-box; border: 2px dashed #15121F; border-radius: 14px; padding: 0 12px; font: 600 17px 'Bricolage Grotesque', sans-serif; color: #15121F; background: #F4FFD6; width: 100%">
+      </div>
+    </div>
+
+    <span style="margin-top: 12px; font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase">Training experience</span>
+    <div style="margin-top: 4px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+      <button style="height: 44px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">New</button>
+      <button aria-pressed="true" style="height: 44px; border-radius: 999px; border: 2px solid #15121F; background: #FFB627; color: #15121F; font: 800 15px 'Bricolage Grotesque', sans-serif; box-shadow: 3px 3px 0 #15121F">On and off</button>
+      <button style="height: 44px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Regular</button>
+    </div>
+
+    <span style="margin-top: 12px; font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase">Days a week</span>
+    <div style="margin-top: 4px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px">
+      <button class="d" style="height: 44px; border-radius: 14px; border: 2px solid #15121F; background: #FFF; color: #15121F; font-size: 22px">3</button>
+      <button class="d" aria-pressed="true" style="height: 44px; border-radius: 14px; border: 2px solid #15121F; background: #3046FF; color: #FFF; font-size: 22px; box-shadow: 3px 3px 0 #15121F">4</button>
+      <button class="d" style="height: 44px; border-radius: 14px; border: 2px solid #15121F; background: #FFF; color: #15121F; font-size: 22px">5</button>
+      <button class="d" style="height: 44px; border-radius: 14px; border: 2px solid #15121F; background: #FFF; color: #15121F; font-size: 22px">6</button>
+      <button class="d" style="height: 44px; border-radius: 14px; border: 2px solid #15121F; background: #FFF; color: #15121F; font-size: 22px">7</button>
+    </div>
+
+    <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center">
+      <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase">Any pain or past injury?</span>
+      <span style="font-size: 12px; font-weight: 800; background: #FF4F9A; border: 2px solid #15121F; border-radius: 999px; padding: 2px 10px; transform: rotate(-3deg)">We'll skip lunges</span>
+    </div>
+    <div style="margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px">
+      <button style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">None</button>
+      <button aria-pressed="true" style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #15121F; color: #C6F432; font: 800 15px 'Bricolage Grotesque', sans-serif">Knees ✓</button>
+      <button style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Back</button>
+      <button style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Shoulders</button>
+      <button style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Wrists</button>
+      <button style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Other</button>
+    </div>
+
+    <span style="margin-top: 12px; font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase">Anything we should know?</span>
+    <div style="margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px">
+      <button style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Heart or BP</button>
+      <button style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Pregnancy or postpartum</button>
+      <button style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #FFF; color: #15121F; font: 600 15px 'Bricolage Grotesque', sans-serif">Recent surgery</button>
+      <button aria-pressed="true" style="height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #15121F; background: #15121F; color: #C6F432; font: 800 15px 'Bricolage Grotesque', sans-serif">None ✓</button>
+    </div>
+
+    <label style="margin-top: 12px; display: flex; gap: 10px; align-items: center; font-size: 13px; font-weight: 600; line-height: 1.3">
+      <input type="checkbox" checked style="width: 24px; height: 24px; accent-color: #3046FF; flex: none; margin: 0">
+      Use my health answers only to keep my plan safe.
+    </label>
+
+    <a href="Building.dc.html" style="margin-top: auto; height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; background: #15121F; color: #FFF; text-decoration: none; border-radius: 999px; font-weight: 800; font-size: 19px; box-shadow: 4px 4px 0 #FF4F9A">
+      <span>Build my plan</span>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"></path></svg>
+    </a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

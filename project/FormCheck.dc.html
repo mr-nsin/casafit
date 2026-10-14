@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Form camera setup</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&amp;family=Baloo+2:wght@700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.d{font-family:'Anton',Impact,sans-serif;font-weight:400}
+.h{font-family:'Baloo 2',sans-serif;font-weight:800}
+a{color:#FFF}a:hover{color:#C6F432}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background: #15121F; font-family: 'Bricolage Grotesque', sans-serif; color: #FFF">
+  <div style="position: relative; height: 100%; box-sizing: border-box; padding: 20px 18px 0; display: flex; flex-direction: column">
+
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <a href="Player.dc.html" aria-label="Back to session" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #FFF; display: flex; align-items: center; justify-content: center">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+      </a>
+      <div style="display: flex; align-items: center; gap: 8px; background: #FFB627; color: #15121F; border: 2px solid #FFF; border-radius: 999px; padding: 6px 12px 6px 6px">
+        <span style="width: 26px; height: 26px; border-radius: 50%; background: #15121F; border: 2px solid #15121F; display: flex; align-items: center; justify-content: center; color: #FFB627; font-weight: 800; font-size: 13px">2</span>
+        <span style="font-weight: 800; font-size: 14px">free checks left</span>
+      </div>
+    </div>
+
+    <h1 class="d" style="margin: 14px 0 0; font-size: 44px; line-height: 0.95; text-transform: uppercase">Form check<br><span style="color: #C6F432">Squat</span></h1>
+
+    <div style="margin-top: 10px; display: flex; gap: 6px">
+      <button aria-pressed="true" style="height: 40px; padding: 0 14px; border-radius: 999px; background: #C6F432; border: 2px solid #C6F432; font: 800 14px 'Bricolage Grotesque', sans-serif; color: #15121F">Squat</button>
+      <button style="height: 40px; padding: 0 14px; border-radius: 999px; background: transparent; border: 2px solid #FFF; font: 600 14px 'Bricolage Grotesque', sans-serif; color: #FFF">Push-up</button>
+      <button style="height: 40px; padding: 0 14px; border-radius: 999px; background: transparent; border: 2px solid #FFF; font: 600 14px 'Bricolage Grotesque', sans-serif; color: #FFF">Plank</button>
+      <button disabled style="height: 40px; padding: 0 14px; border-radius: 999px; background: transparent; border: 2px dashed #6E6688; font: 600 14px 'Bricolage Grotesque', sans-serif; color: #A49CBD; text-decoration: line-through">Lunge</button>
+    </div>
+
+    <div style="margin-top: 14px; position: relative; height: 300px; border-radius: 28px; background: #2A2340; overflow: hidden; border: 3px solid #3046FF">
+      <div aria-hidden="true" style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 30px 30px"></div>
+      <div aria-hidden="true" style="position: absolute; left: 18px; top: 18px; width: 34px; height: 34px; border-left: 5px solid #C6F432; border-top: 5px solid #C6F432; border-radius: 10px 0 0 0"></div>
+      <div aria-hidden="true" style="position: absolute; right: 18px; top: 18px; width: 34px; height: 34px; border-right: 5px solid #C6F432; border-top: 5px solid #C6F432; border-radius: 0 10px 0 0"></div>
+      <div aria-hidden="true" style="position: absolute; left: 18px; bottom: 18px; width: 34px; height: 34px; border-left: 5px solid #C6F432; border-bottom: 5px solid #C6F432; border-radius: 0 0 0 10px"></div>
+      <div aria-hidden="true" style="position: absolute; right: 18px; bottom: 18px; width: 34px; height: 34px; border-right: 5px solid #C6F432; border-bottom: 5px solid #C6F432; border-radius: 0 0 10px 0"></div>
+      <svg style="position: absolute; left: 50%; top: 30px; transform: translateX(-50%)" width="150" height="240" viewBox="0 0 150 240" role="img" aria-label="Full body in frame, outlined">
+        <g fill="none" stroke="#FFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 10">
+          <circle cx="75" cy="30" r="20"></circle>
+          <path d="M75 52v80M75 70l-45 20M75 70l45 20M75 132l-30 48 6 50M75 132l30 48-6 50"></path>
+        </g>
+        <g fill="#FF4F9A" stroke="#15121F" stroke-width="2">
+          <circle cx="75" cy="70" r="6"></circle><circle cx="75" cy="132" r="6"></circle><circle cx="45" cy="180" r="6"></circle><circle cx="105" cy="180" r="6"></circle><circle cx="51" cy="230" r="6"></circle><circle cx="99" cy="230" r="6"></circle>
+        </g>
+      </svg>
+      <div style="position: absolute; left: 14px; right: 14px; bottom: 14px; display: flex; flex-wrap: wrap; gap: 6px; justify-content: center">
+        <span style="background: #C6F432; color: #15121F; border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 800">Whole body in frame</span>
+        <span style="background: #C6F432; color: #15121F; border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 800">Light OK</span>
+        <span style="background: #FFB627; color: #15121F; border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 800">Step back a little</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 12px; display: flex; gap: 10px; align-items: center; background: #3046FF; border-radius: 16px; padding: 10px 12px; font-size: 13px; font-weight: 600; line-height: 1.35">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+      <span>Runs on this phone only. Nothing is recorded, saved or uploaded.</span>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFF; color: #15121F; border-radius: 30px 30px 0 0; border-top: 3px solid #FF4F9A; padding: 18px 18px 24px; box-sizing: border-box">
+    <div style="font-weight: 800; font-size: 17px; line-height: 1.25">This will use 1 of your 2 free form checks.</div>
+    <div style="margin-top: 4px; font-size: 13px; line-height: 1.35; color: #4A4458">It's only spent after 3 analysed reps. Stop before that and it's free.</div>
+    <div style="margin-top: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <button style="height: 54px; border-radius: 999px; background: #FFF; border: 2px solid #15121F; font: 800 15px 'Bricolage Grotesque', sans-serif; color: #15121F">Check framing (free)</button>
+      <a href="Player.dc.html" style="height: 54px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: #15121F; color: #C6F432; text-decoration: none; font-weight: 800; font-size: 15px; box-shadow: 3px 3px 0 #FF4F9A">Start analysis</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
