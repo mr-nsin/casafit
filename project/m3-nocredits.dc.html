@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CasaFit M3 free form checks used</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m3{--p:#9C4400;--op:#FFFFFF;--pc:#FFDBC8;--opc:#331200;--s:#765849;--os:#FFFFFF;--sc:#FFDBCA;--osc:#2B1609;--t:#5F6219;--ot:#FFFFFF;--tc:#E4E790;--otc:#1B1D00;--bg:#FFF8F5;--on:#221A15;--sv:#F4DED3;--osv:#52443B;--ol:#85736A;--olv:#D7C2B8;--c1:#FFF1EA;--c2:#FCEBE1;--c3:#F6E5DB;--c4:#F0DFD5;--er:#BA1A1A;--erc:#FFDAD6;--eoc:#410002}
+.m3.dark{--p:#FFB68E;--op:#552100;--pc:#793100;--opc:#FFDBC8;--s:#E6BEAB;--os:#432B1D;--sc:#5C4130;--osc:#FFDBCA;--t:#C8CB77;--ot:#303300;--tc:#464900;--otc:#E4E790;--bg:#1A120D;--on:#F0DFD5;--sv:#52443B;--osv:#D7C2B8;--ol:#9F8D83;--olv:#52443B;--c1:#221A15;--c2:#271E19;--c3:#322823;--c4:#3D332D;--er:#FFB4AB;--erc:#93000A;--eoc:#FFDAD6}
+.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:24px;line-height:1;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;letter-spacing:normal;text-transform:none;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.ms.f{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+a{color:var(--p)}
+.m3{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.m3 a,.m3 button{transition:transform .2s cubic-bezier(.2,0,0,1),filter .2s,background-color .25s,box-shadow .2s}
+.m3 a:hover,.m3 button:hover{filter:brightness(.96)}
+.m3.dark a:hover,.m3.dark button:hover{filter:brightness(1.12)}
+.m3 a:active,.m3 button:active{transform:scale(.97)}
+.m3 a:focus-visible,.m3 button:focus-visible{outline:3px solid var(--p);outline-offset:3px}
+@keyframes pop{from{opacity:0;transform:scale(.6)}}
+@media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="m3 {{themeClass}}" style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background: var(--bg); color: var(--on); font-family: 'Roboto Flex', sans-serif">
+  <div style="height: 100%; box-sizing: border-box; padding: 8px 16px 24px; display: flex; flex-direction: column">
+    <div style="height: 56px; display: flex; align-items: center"><a href="m3-player.dc.html" aria-label="Close" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--on); text-decoration: none"><span class="ms" aria-hidden="true">close</span></a></div>
+
+    <div style="margin-top: 16px; display: flex; justify-content: center; gap: 12px" aria-label="0 of 2 free form checks left">
+      <span style="width: 64px; height: 64px; border-radius: 20px; background: var(--c4); color: var(--osv); display: flex; align-items: center; justify-content: center; animation: pop .4s cubic-bezier(.2,0,0,1) .1s both"><span class="ms" aria-hidden="true" style="font-size: 32px; width: 32px; height: 32px">photo_camera</span></span>
+      <span style="width: 64px; height: 64px; border-radius: 20px; background: var(--c4); color: var(--osv); display: flex; align-items: center; justify-content: center; animation: pop .4s cubic-bezier(.2,0,0,1) .2s both"><span class="ms" aria-hidden="true" style="font-size: 32px; width: 32px; height: 32px">photo_camera</span></span>
+    </div>
+    <h1 style="margin: 24px 8px 0; font-size: 32px; line-height: 40px; font-weight: 700; letter-spacing: -0.3px; text-align: center">You have used both free form checks</h1>
+    <p style="margin: 12px 8px 0; font-size: 16px; line-height: 24px; color: var(--osv); text-align: center">Free checks are for the whole life of your account. They do not come back on a new day or after a reinstall.</p>
+
+    <div style="margin-top: 24px; background: var(--pc); color: var(--opc); border-radius: 28px; padding: 20px">
+      <div style="font-size: 12px; font-weight: 500">CasaFit Pro</div>
+      <div style="margin-top: 4px; font-size: 24px; line-height: 30px; font-weight: 700">Check your form as often as you like</div>
+      <ul style="list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+        <li style="display: flex; gap: 10px; align-items: center"><span class="ms f" aria-hidden="true" style="font-size: 20px; width: 20px; height: 20px">check_circle</span>Squat, push-up, plank and lunge</li>
+        <li style="display: flex; gap: 10px; align-items: center"><span class="ms f" aria-hidden="true" style="font-size: 20px; width: 20px; height: 20px">check_circle</span>Still on this phone. Nothing is recorded.</li>
+        <li style="display: flex; gap: 10px; align-items: center"><span class="ms f" aria-hidden="true" style="font-size: 20px; width: 20px; height: 20px">check_circle</span>Restores on any phone once you verify</li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 12px; display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--olv); border-radius: 18px; padding: 12px 16px; font-size: 13px; line-height: 18px; color: var(--osv)"><span class="ms" aria-hidden="true" style="font-size: 20px; width: 20px; height: 20px">info</span>Using a new phone? Verify the same number or email and your account, plan and Pro come back.</div>
+
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px">
+      <a href="m3-paywall.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 28px; background: var(--p); color: var(--op); text-decoration: none; font-size: 16px; font-weight: 500">See Pro</a>
+      <a href="m3-player.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 28px; color: var(--p); text-decoration: none; font-size: 16px; font-weight: 500">Keep training with voice cues</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { themeClass: this.props.dark ? 'dark' : '' };
+  }
+}
+</script>
+</body>
+</html>

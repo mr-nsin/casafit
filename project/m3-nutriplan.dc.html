@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CasaFit M3 customised food plan</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m3{--p:#9C4400;--op:#FFFFFF;--pc:#FFDBC8;--opc:#331200;--s:#765849;--os:#FFFFFF;--sc:#FFDBCA;--osc:#2B1609;--t:#5F6219;--ot:#FFFFFF;--tc:#E4E790;--otc:#1B1D00;--bg:#FFF8F5;--on:#221A15;--sv:#F4DED3;--osv:#52443B;--ol:#85736A;--olv:#D7C2B8;--c1:#FFF1EA;--c2:#FCEBE1;--c3:#F6E5DB;--c4:#F0DFD5;--er:#BA1A1A;--erc:#FFDAD6;--eoc:#410002}
+.m3.dark{--p:#FFB68E;--op:#552100;--pc:#793100;--opc:#FFDBC8;--s:#E6BEAB;--os:#432B1D;--sc:#5C4130;--osc:#FFDBCA;--t:#C8CB77;--ot:#303300;--tc:#464900;--otc:#E4E790;--bg:#1A120D;--on:#F0DFD5;--sv:#52443B;--osv:#D7C2B8;--ol:#9F8D83;--olv:#52443B;--c1:#221A15;--c2:#271E19;--c3:#322823;--c4:#3D332D;--er:#FFB4AB;--erc:#93000A;--eoc:#FFDAD6}
+.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:24px;line-height:1;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;letter-spacing:normal;text-transform:none;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.ms.f{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+a{color:var(--p)}
+.m3{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.m3 a,.m3 button{transition:transform .2s cubic-bezier(.2,0,0,1),filter .2s,background-color .25s,box-shadow .2s}
+.m3 a:hover,.m3 button:hover{filter:brightness(.96)}
+.m3.dark a:hover,.m3.dark button:hover{filter:brightness(1.12)}
+.m3 a:active,.m3 button:active{transform:scale(.97)}
+.m3 a:focus-visible,.m3 button:focus-visible{outline:3px solid var(--p);outline-offset:3px}
+@keyframes fillbar{from{width:0}}
+@media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="m3 {{themeClass}}" style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background: var(--bg); color: var(--on); font-family: 'Roboto Flex', sans-serif">
+  <div style="box-sizing: border-box; padding: 8px 16px 0; display: flex; flex-direction: column">
+    <div style="height: 56px; display: flex; align-items: center; justify-content: space-between"><div style="display: flex; align-items: center; gap: 4px"><a href="m3-nutrition.dc.html" aria-label="Back" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--on); text-decoration: none"><span class="ms" aria-hidden="true">arrow_back</span></a><h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 600">Your food plan</h1></div><a href="m3-nutriprofile.dc.html" aria-label="Edit food profile" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--on); text-decoration: none"><span class="ms" aria-hidden="true">tune</span></a></div>
+
+    <div style="margin-top: 4px; background: var(--tc); color: var(--otc); border-radius: 28px; padding: 18px 20px">
+      <div style="font-size: 12px; font-weight: 500">Every day, for steady weight</div>
+      <div style="margin-top: 4px; display: flex; justify-content: space-between; align-items: flex-end">
+        <div><span style="font-size: 44px; line-height: 48px; font-weight: 800">1,800</span><span style="font-size: 16px; font-weight: 500"> kcal</span></div>
+        <div style="text-align: right"><span style="font-size: 28px; line-height: 32px; font-weight: 700">70</span><span style="font-size: 14px"> g protein</span></div>
+      </div>
+      <div style="margin-top: 12px; height: 8px; border-radius: 4px; background: rgba(27,29,0,0.16); overflow: hidden"><div style="width: 100%; height: 100%; background: var(--t); animation: fillbar 1s cubic-bezier(.2,0,0,1) both"></div></div>
+      <div style="margin-top: 8px; font-size: 13px; line-height: 18px">Vegetarian · 4 meals · no allergies. Worked out from your age, size and 4 workouts a week.</div>
+    </div>
+
+    <div role="tablist" aria-label="Day" style="margin-top: 12px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; text-align: center; font-size: 12px; font-weight: 500">
+      <span role="tab" aria-selected="true" style="height: 44px; border-radius: 12px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center; font-weight: 700">Mon</span>
+      <span role="tab" aria-selected="false" style="height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--osv)">Tue</span>
+      <span role="tab" aria-selected="false" style="height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--osv)">Wed</span>
+      <span role="tab" aria-selected="false" style="height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--osv)">Thu</span>
+      <span role="tab" aria-selected="false" style="height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--osv)">Fri</span>
+      <span role="tab" aria-selected="false" style="height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--osv)">Sat</span>
+      <span role="tab" aria-selected="false" style="height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--osv)">Sun</span>
+    </div>
+
+    <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px">
+      <div style="min-height: 68px; box-sizing: border-box; display: flex; gap: 14px; align-items: center; background: var(--c3); border-radius: 18px; padding: 10px 8px 10px 16px"><div style="flex: 1; min-width: 0"><div style="font-size: 12px; color: var(--osv)">Breakfast · 8 am</div><div style="font-size: 16px; font-weight: 500">Moong dal cheela × 2, curd 1 katori</div><div style="font-size: 13px; color: var(--osv)">380 kcal · 18 g protein</div></div><a href="m3-foodsearch.dc.html" aria-label="Swap breakfast" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: var(--p); text-decoration: none"><span class="ms" aria-hidden="true">swap_horiz</span></a></div>
+      <div style="min-height: 68px; box-sizing: border-box; display: flex; gap: 14px; align-items: center; background: var(--c3); border-radius: 18px; padding: 10px 8px 10px 16px"><div style="flex: 1; min-width: 0"><div style="font-size: 12px; color: var(--osv)">Lunch · 1 pm</div><div style="font-size: 16px; font-weight: 500">Dal 1 katori, roti × 2, bhindi, salad</div><div style="font-size: 13px; color: var(--osv)">560 kcal · 22 g protein</div></div><a href="m3-foodsearch.dc.html" aria-label="Swap lunch" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: var(--p); text-decoration: none"><span class="ms" aria-hidden="true">swap_horiz</span></a></div>
+      <div style="min-height: 68px; box-sizing: border-box; display: flex; gap: 14px; align-items: center; background: var(--c3); border-radius: 18px; padding: 10px 8px 10px 16px"><div style="flex: 1; min-width: 0"><div style="font-size: 12px; color: var(--osv)">Snack · 5 pm</div><div style="font-size: 16px; font-weight: 500">Roasted chana 1 katori, chai</div><div style="font-size: 13px; color: var(--osv)">240 kcal · 11 g protein</div></div><a href="m3-foodsearch.dc.html" aria-label="Swap snack" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: var(--p); text-decoration: none"><span class="ms" aria-hidden="true">swap_horiz</span></a></div>
+      <div style="min-height: 68px; box-sizing: border-box; display: flex; gap: 14px; align-items: center; background: var(--c3); border-radius: 18px; padding: 10px 8px 10px 16px"><div style="flex: 1; min-width: 0"><div style="font-size: 12px; color: var(--osv)">Dinner · 8 pm</div><div style="font-size: 16px; font-weight: 500">Paneer bhurji 1 katori, roti × 2</div><div style="font-size: 13px; color: var(--osv)">520 kcal · 24 g protein</div></div><a href="m3-foodsearch.dc.html" aria-label="Swap dinner" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: var(--p); text-decoration: none"><span class="ms" aria-hidden="true">swap_horiz</span></a></div>
+    </div>
+    <div style="margin: 10px 8px 0; font-size: 12px; line-height: 16px; color: var(--osv)">General guidance, not medical advice. Swapped meals keep your target. Calories are estimates; you can hide them in Nutrition.</div>
+  </div>
+  <div style="position: absolute; left: 16px; right: 16px; bottom: 24px"><a href="m3-nutrition.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 28px; background: var(--p); color: var(--op); text-decoration: none; font-size: 16px; font-weight: 500">Use this plan</a></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { themeClass: this.props.dark ? 'dark' : '' };
+  }
+}
+</script>
+</body>
+</html>

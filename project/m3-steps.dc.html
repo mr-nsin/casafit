@@ -16,6 +16,22 @@ body{margin:0}
 .ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:24px;line-height:1;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;letter-spacing:normal;text-transform:none;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 .ms.f{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
 a{color:var(--p)}
+.m3{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.m3 a,.m3 button{transition:transform .2s cubic-bezier(.2,0,0,1),filter .2s,background-color .25s,box-shadow .2s}
+.m3 a:hover,.m3 button:hover{filter:brightness(.96)}
+.m3.dark a:hover,.m3.dark button:hover{filter:brightness(1.12)}
+.m3 a:active,.m3 button:active{transform:scale(.97)}
+.m3 a:focus-visible,.m3 button:focus-visible{outline:3px solid var(--p);outline-offset:3px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes pop{from{opacity:0;transform:scale(.6)}}
+@keyframes grow{from{stroke-dasharray:0 1000}}
+@keyframes reveal{from{clip-path:inset(0 100% 0 0 round 16px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{50%{transform:scale(1.045)}}
+@keyframes nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@keyframes fillbar{from{width:0}}
+.m3 label:focus-within{outline:3px solid var(--p);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
 </style>
 </helmet>
 <div class="m3 {{themeClass}}" style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background: var(--bg); color: var(--on); font-family: 'Roboto Flex', sans-serif">
@@ -30,7 +46,7 @@ a{color:var(--p)}
       <div style="position: relative; width: 192px; height: 192px; flex: none">
         <svg width="192" height="192" viewBox="0 0 192 192" role="img" aria-label="4,820 of 7,000 steps today">
           <circle cx="96" cy="96" r="80" fill="none" stroke="var(--sv)" stroke-width="20"></circle>
-          <circle cx="96" cy="96" r="80" fill="none" stroke="var(--p)" stroke-width="20" stroke-linecap="round" stroke-dasharray="346 503" transform="rotate(-90 96 96)"></circle>
+          <circle cx="96" cy="96" r="80" fill="none" stroke="var(--p)" stroke-width="20" stroke-linecap="round" stroke-dasharray="346 503" transform="rotate(-90 96 96)" style="animation: grow 1.3s cubic-bezier(.2,0,0,1) both"></circle>
         </svg>
         <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center">
           <span style="font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -1px">4,820</span>
@@ -39,7 +55,7 @@ a{color:var(--p)}
       </div>
       <div style="flex: 1; display: flex; flex-direction: column; gap: 8px">
         <div style="background: var(--tc); color: var(--otc); border-radius: 20px; padding: 12px 14px">
-          <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.5px">BRISK MINUTES</div>
+          <div style="font-size: 12px; font-weight: 600; ">Brisk minutes</div>
           <div><span style="font-size: 32px; line-height: 36px; font-weight: 700">12</span><span style="font-size: 14px"> / 20</span></div>
         </div>
         <div style="height: 32px; padding: 0 12px; display: inline-flex; align-self: flex-start; align-items: center; gap: 6px; border-radius: 8px; background: var(--pc); color: var(--opc); font-size: 13px; font-weight: 600"><span class="ms f" aria-hidden="true" style="font-size: 18px; width: 18px; height: 18px">flag</span>2,180 to go</div>
@@ -58,7 +74,7 @@ a{color:var(--p)}
         <div style="height: 68px; background: var(--p); border-radius: 8px 8px 2px 2px"></div>
         <div style="height: 46px; background: var(--s); border-radius: 8px 8px 2px 2px"></div>
       </div>
-      <div style="margin-top: 4px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; text-align: center; font-size: 11px; color: var(--osv)"><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span><span style="font-weight: 700; color: var(--on)">Today</span></div>
+      <div style="margin-top: 4px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; text-align: center; font-size: 12px; color: var(--osv)"><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span><span style="font-weight: 700; color: var(--on)">Today</span></div>
     </div>
 
     <div style="margin: 14px 4px 0; font-size: 14px; font-weight: 600">Walk modes</div>
@@ -76,15 +92,16 @@ a{color:var(--p)}
       <div style="min-height: 64px; box-sizing: border-box; display: flex; gap: 14px; align-items: center; border: 1px solid var(--olv); border-radius: 18px; padding: 10px 16px">
         <span style="width: 40px; height: 40px; border-radius: 20px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center; flex: none"><span class="ms f" aria-hidden="true">undo</span></span>
         <div style="flex: 1"><div style="font-size: 16px; font-weight: 500">Reverse walk</div><div style="font-size: 13px; color: var(--osv)">Opt-in. Safety check first, 15 min a day max</div></div>
-        <button style="height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid var(--ol); background: transparent; color: var(--p); font: 500 14px 'Roboto Flex', sans-serif">Try</button>
+        <a href="m3-reverse.dc.html" style="text-decoration: none; display: flex; align-items: center; height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid var(--ol); background: transparent; color: var(--p); font: 500 14px 'Roboto Flex', sans-serif">Try</a>
       </div>
     </div>
     <div style="margin: 10px 4px 0; display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--osv)"><span class="ms" aria-hidden="true" style="font-size: 16px; width: 16px; height: 16px">location_off</span>No GPS. Counted by your phone's step sensor or Health Connect.</div>
   </div>
 
-  <nav aria-label="Sections" style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: var(--c2); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 12px; box-sizing: border-box">
-    <a href="m3-home.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--on); font-size: 12px; font-weight: 600"><span style="width: 64px; height: 32px; border-radius: 16px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center"><span class="ms f" aria-hidden="true">fitness_center</span></span>Workout</a>
+  <nav aria-label="Sections" style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: var(--c2); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding-top: 12px; box-sizing: border-box">
+    <a href="m3-home.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--on); font-size: 12px; font-weight: 600"><span style="width: 64px; height: 32px; border-radius: 16px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center"><span class="ms f" aria-hidden="true">sports_gymnastics</span></span>Workout</a>
     <a href="m3-nutrition.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span style="width: 64px; height: 32px; display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">restaurant</span></span>Nutrition</a>
+    <a href="m3-progress.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span style="width: 64px; height: 32px; display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">bar_chart</span></span>Progress</a>
   </nav>
 </div>
 </x-dc>

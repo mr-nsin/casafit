@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CasaFit M3 rest day home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m3{--p:#9C4400;--op:#FFFFFF;--pc:#FFDBC8;--opc:#331200;--s:#765849;--os:#FFFFFF;--sc:#FFDBCA;--osc:#2B1609;--t:#5F6219;--ot:#FFFFFF;--tc:#E4E790;--otc:#1B1D00;--bg:#FFF8F5;--on:#221A15;--sv:#F4DED3;--osv:#52443B;--ol:#85736A;--olv:#D7C2B8;--c1:#FFF1EA;--c2:#FCEBE1;--c3:#F6E5DB;--c4:#F0DFD5;--er:#BA1A1A;--erc:#FFDAD6;--eoc:#410002}
+.m3.dark{--p:#FFB68E;--op:#552100;--pc:#793100;--opc:#FFDBC8;--s:#E6BEAB;--os:#432B1D;--sc:#5C4130;--osc:#FFDBCA;--t:#C8CB77;--ot:#303300;--tc:#464900;--otc:#E4E790;--bg:#1A120D;--on:#F0DFD5;--sv:#52443B;--osv:#D7C2B8;--ol:#9F8D83;--olv:#52443B;--c1:#221A15;--c2:#271E19;--c3:#322823;--c4:#3D332D;--er:#FFB4AB;--erc:#93000A;--eoc:#FFDAD6}
+.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:24px;line-height:1;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;letter-spacing:normal;text-transform:none;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.ms.f{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+a{color:var(--p)}
+.m3{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.m3 a,.m3 button{transition:transform .2s cubic-bezier(.2,0,0,1),filter .2s,background-color .25s,box-shadow .2s}
+.m3 a:hover,.m3 button:hover{filter:brightness(.96)}
+.m3.dark a:hover,.m3.dark button:hover{filter:brightness(1.12)}
+.m3 a:active,.m3 button:active{transform:scale(.97)}
+.m3 a:focus-visible,.m3 button:focus-visible{outline:3px solid var(--p);outline-offset:3px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes pop{from{opacity:0;transform:scale(.6)}}
+@keyframes grow{from{stroke-dasharray:0 1000}}
+@keyframes fillbar{from{width:0}}
+@keyframes breathe{50%{transform:scale(1.045)}}
+@media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="m3 {{themeClass}}" style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background: var(--bg); color: var(--on); font-family: 'Roboto Flex', sans-serif">
+  <div style="box-sizing: border-box; padding: 8px 16px 0; display: flex; flex-direction: column">
+
+    <div style="height: 56px; display: flex; align-items: center; justify-content: space-between">
+      <div style="padding-left: 4px">
+        <div style="font-size: 12px; line-height: 16px; font-weight: 500; color: var(--osv)">Sunday · Week 1</div>
+        <h1 style="margin: 0; font-size: 24px; line-height: 30px; font-weight: 700">Rest well, Priya</h1>
+      </div>
+      <a href="m3-settings.dc.html" aria-label="Profile and settings" style="width: 48px; height: 48px; border-radius: 24px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center; text-decoration: none"><span class="ms f" aria-hidden="true">person</span></a>
+    </div>
+
+    <nav aria-label="This week" style="margin-top: 8px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+      <a href="m3-weekplan.dc.html" aria-label="Monday: done" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span>Mon</span><span style="width: 40px; height: 40px; border-radius: 20px; background: var(--t); color: var(--ot); display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">check</span></span></a>
+      <a href="m3-weekplan.dc.html" aria-label="Tuesday: done" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span>Tue</span><span style="width: 40px; height: 40px; border-radius: 20px; background: var(--t); color: var(--ot); display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">check</span></span></a>
+      <a href="m3-weekplan.dc.html" aria-label="Wednesday: done" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span>Wed</span><span style="width: 40px; height: 40px; border-radius: 20px; background: var(--t); color: var(--ot); display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">check</span></span></a>
+      <a href="m3-weekplan.dc.html" aria-label="Thursday: done" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span>Thu</span><span style="width: 40px; height: 40px; border-radius: 20px; background: var(--t); color: var(--ot); display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">check</span></span></a>
+      <a href="m3-weekplan.dc.html" aria-label="Friday: done" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span>Fri</span><span style="width: 40px; height: 40px; border-radius: 20px; background: var(--t); color: var(--ot); display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">check</span></span></a>
+      <a href="m3-weekplan.dc.html" aria-label="Saturday: done" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span>Sat</span><span style="width: 40px; height: 40px; border-radius: 20px; background: var(--t); color: var(--ot); display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">check</span></span></a>
+      <a href="m3-homerest.dc.html" aria-label="Sunday, today: rest day" aria-current="date" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--on); font-size: 12px; font-weight: 700"><span>Sun</span><span style="width: 40px; height: 40px; border-radius: 20px; background: var(--s); color: var(--os); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--s)"><span class="ms f" aria-hidden="true">bedtime</span></span></a>
+    </nav>
+    <div style="margin: 10px 4px 0; font-size: 12px; color: var(--osv)">4 of 4 workouts done this week. Nicely paced.</div>
+
+    <section aria-label="Rest day" style="margin-top: 8px; position: relative; overflow: hidden; background: var(--tc); color: var(--otc); border-radius: 28px; padding: 20px">
+      <div aria-hidden="true" style="position: absolute; right: -36px; top: -36px; width: 170px; height: 170px; border-radius: 50%; background: var(--c4); opacity: .6"></div>
+      <span class="ms f" aria-hidden="true" style="position: absolute; right: 24px; top: 22px; font-size: 48px; width: 48px; height: 48px; animation: breathe 4s ease-in-out infinite">bedtime</span>
+      <div style="position: relative; font-size: 14px; font-weight: 600">Today</div>
+      <div style="position: relative; margin-top: 36px; font-size: 40px; line-height: 44px; font-weight: 800; letter-spacing: -0.8px">Rest day</div>
+      <p style="position: relative; margin: 8px 0 0; font-size: 16px; line-height: 24px">Your muscles get stronger while you rest. Keep it easy today.</p>
+      <div style="position: relative; margin-top: 16px; display: grid; gap: 8px">
+        <a href="m3-steps.dc.html" style="min-height: 64px; box-sizing: border-box; border-radius: 18px; background: var(--bg); color: var(--on); text-decoration: none; display: flex; align-items: center; gap: 14px; padding: 10px 16px"><span style="width: 40px; height: 40px; border-radius: 20px; background: var(--t); color: var(--ot); display: flex; align-items: center; justify-content: center; flex: none"><span class="ms" aria-hidden="true">directions_walk</span></span><span style="flex: 1"><span style="display: block; font-size: 16px; font-weight: 500">10-minute easy walk</span><span style="display: block; font-size: 13px; color: var(--osv)">About 1,200 steps toward 7,000</span></span><span class="ms" aria-hidden="true">chevron_right</span></a>
+        <a href="m3-plan.dc.html" style="min-height: 64px; box-sizing: border-box; border-radius: 18px; background: var(--bg); color: var(--on); text-decoration: none; display: flex; align-items: center; gap: 14px; padding: 10px 16px"><span style="width: 40px; height: 40px; border-radius: 20px; background: var(--t); color: var(--ot); display: flex; align-items: center; justify-content: center; flex: none"><span class="ms" aria-hidden="true">spa</span></span><span style="flex: 1"><span style="display: block; font-size: 16px; font-weight: 500">Gentle stretch</span><span style="display: block; font-size: 13px; color: var(--osv)">8 min · Easy · optional</span></span><span class="ms" aria-hidden="true">chevron_right</span></a>
+      </div>
+    </section>
+
+    <a href="m3-recap.dc.html" style="margin-top: 12px; min-height: 84px; box-sizing: border-box; border-radius: 24px; background: var(--pc); color: var(--opc); text-decoration: none; display: flex; align-items: center; gap: 14px; padding: 14px 16px"><span style="width: 48px; height: 48px; border-radius: 24px; background: var(--p); color: var(--op); display: flex; align-items: center; justify-content: center; flex: none"><span class="ms f" aria-hidden="true">auto_awesome</span></span><span style="flex: 1"><span style="display: block; font-size: 12px; font-weight: 500">Week 1 recap</span><span style="display: block; font-size: 16px; line-height: 22px; font-weight: 600">4 sessions, 60 minutes, 6,240 steps a day</span></span><span class="ms" aria-hidden="true">chevron_right</span></a>
+
+    <h2 style="margin: 20px 4px 8px; font-size: 16px; line-height: 24px; font-weight: 600">Tomorrow</h2>
+    <a href="m3-plan.dc.html" style="min-height: 72px; box-sizing: border-box; border-radius: 24px; background: var(--c3); color: var(--on); text-decoration: none; display: flex; align-items: center; gap: 14px; padding: 12px 16px"><span style="width: 48px; height: 48px; border-radius: 16px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center; flex: none"><span class="ms f" aria-hidden="true">sports_gymnastics</span></span><span style="flex: 1"><span style="display: block; font-size: 16px; font-weight: 600">Legs + Core 15</span><span style="display: block; font-size: 13px; color: var(--osv)">Monday · 15 min · knee-friendly</span></span><span class="ms" aria-hidden="true">chevron_right</span></a>
+  </div>
+
+  <nav aria-label="Sections" style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: var(--c2); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding-top: 12px; box-sizing: border-box">
+    <a href="m3-home.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--on); font-size: 12px; font-weight: 600"><span style="width: 64px; height: 32px; border-radius: 16px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center"><span class="ms f" aria-hidden="true">sports_gymnastics</span></span>Workout</a>
+    <a href="m3-nutrition.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span style="width: 64px; height: 32px; display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">restaurant</span></span>Nutrition</a>
+    <a href="m3-progress.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span style="width: 64px; height: 32px; display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">bar_chart</span></span>Progress</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { themeClass: this.props.dark ? 'dark' : '' };
+  }
+}
+</script>
+</body>
+</html>
