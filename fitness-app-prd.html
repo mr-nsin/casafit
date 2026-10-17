@@ -245,6 +245,13 @@
   .backlink:hover{text-decoration:underline}
   h3[id]{scroll-margin-top:1.5rem}
   @media (max-width:860px){ .cols{grid-template-columns:minmax(0,1fr)} }
+
+  /* full-width layout: use the whole window, keep paragraph lines readable */
+  .wrap{max-width:none;padding:0 clamp(1.1rem,3.5vw,3.5rem)}
+  section{max-width:none}
+  h1{max-width:26ch}
+  .sub,.strip-note,.lede,section>p{max-width:112ch}
+  @media (min-width:861px){ .cols{grid-template-columns:230px minmax(0,1fr)} }
 </style>
 </head>
 <body>
