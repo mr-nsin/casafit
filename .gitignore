@@ -1,0 +1,7 @@
+# Parallel-agent worktrees (see CLAUDE.md). Preferred location is ../casafit-wt/,
+# but ignore the in-repo option too.
+.agents/
+
+# Local scratch
+*.tmp
+__pycache__/

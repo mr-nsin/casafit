@@ -1,0 +1,7 @@
+# Keep line endings identical in every worktree and on every machine.
+* text=auto eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.zip binary
