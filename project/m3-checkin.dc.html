@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CasaFit M3 weekly check-in</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m3{--p:#9C4400;--op:#FFFFFF;--pc:#FFDBC8;--opc:#331200;--s:#765849;--os:#FFFFFF;--sc:#FFDBCA;--osc:#2B1609;--t:#5F6219;--ot:#FFFFFF;--tc:#E4E790;--otc:#1B1D00;--bg:#FFF8F5;--on:#221A15;--sv:#F4DED3;--osv:#52443B;--ol:#85736A;--olv:#D7C2B8;--c1:#FFF1EA;--c2:#FCEBE1;--c3:#F6E5DB;--c4:#F0DFD5;--er:#BA1A1A;--erc:#FFDAD6;--eoc:#410002}
+.m3.dark{--p:#FFB68E;--op:#552100;--pc:#793100;--opc:#FFDBC8;--s:#E6BEAB;--os:#432B1D;--sc:#5C4130;--osc:#FFDBCA;--t:#C8CB77;--ot:#303300;--tc:#464900;--otc:#E4E790;--bg:#1A120D;--on:#F0DFD5;--sv:#52443B;--osv:#D7C2B8;--ol:#9F8D83;--olv:#52443B;--c1:#221A15;--c2:#271E19;--c3:#322823;--c4:#3D332D;--er:#FFB4AB;--erc:#93000A;--eoc:#FFDAD6}
+.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:24px;line-height:1;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;letter-spacing:normal;text-transform:none;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.ms.f{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+a{color:var(--p)}
+.m3{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.m3 a,.m3 button{transition:transform .2s cubic-bezier(.2,0,0,1),filter .2s,background-color .25s,box-shadow .2s}
+.m3 a:hover,.m3 button:hover{filter:brightness(.96)}
+.m3.dark a:hover,.m3.dark button:hover{filter:brightness(1.12)}
+.m3 a:active,.m3 button:active{transform:scale(.97)}
+.m3 a:focus-visible,.m3 button:focus-visible{outline:3px solid var(--p);outline-offset:3px}
+@keyframes grow{from{stroke-dashoffset:300}}
+@media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="m3 {{themeClass}}" style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background: var(--bg); color: var(--on); font-family: 'Roboto Flex', sans-serif">
+  <div style="box-sizing: border-box; padding: 8px 16px 0; display: flex; flex-direction: column">
+    <div style="height: 56px; display: flex; align-items: center; gap: 4px"><a href="m3-profile.dc.html" aria-label="Close" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--on); text-decoration: none"><span class="ms" aria-hidden="true">close</span></a><h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 600">Weekly check-in</h1></div>
+    <p style="margin: 0 8px; font-size: 14px; line-height: 20px; color: var(--osv)">Two minutes, once a week. Every question is optional, and only you see the answers.</p>
+
+    <h2 style="margin: 16px 8px 8px; font-size: 14px; line-height: 20px; font-weight: 600">How did this week feel?</h2>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+      <button style="height: 76px; border-radius: 20px; border: 1px solid var(--ol); background: transparent; color: var(--on); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font: 500 13px 'Roboto Flex', sans-serif"><span class="ms" aria-hidden="true" style="font-size: 28px; width: 28px; height: 28px">sentiment_dissatisfied</span>Tough</button>
+      <button aria-pressed="true" style="height: 76px; border-radius: 20px; border: 0; background: var(--sc); color: var(--osc); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font: 600 13px 'Roboto Flex', sans-serif"><span class="ms f" aria-hidden="true" style="font-size: 28px; width: 28px; height: 28px">sentiment_satisfied</span>Good</button>
+      <button style="height: 76px; border-radius: 20px; border: 1px solid var(--ol); background: transparent; color: var(--on); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font: 500 13px 'Roboto Flex', sans-serif"><span class="ms" aria-hidden="true" style="font-size: 28px; width: 28px; height: 28px">sentiment_very_satisfied</span>Great</button>
+    </div>
+
+    <h2 style="margin: 18px 8px 8px; font-size: 14px; line-height: 20px; font-weight: 600">Weight <span style="font-weight: 400; color: var(--osv)">· optional</span></h2>
+    <div style="display: flex; align-items: center; justify-content: space-between; background: var(--c3); border-radius: 20px; padding: 10px 12px">
+      <button aria-label="Decrease by 0.1 kilograms" style="width: 48px; height: 48px; border-radius: 24px; border: 0; background: var(--bg); color: var(--on); display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">remove</span></button>
+      <div style="text-align: center"><span style="font-size: 40px; line-height: 44px; font-weight: 700">61.2</span><span style="font-size: 16px; color: var(--osv)"> kg</span></div>
+      <button aria-label="Increase by 0.1 kilograms" style="width: 48px; height: 48px; border-radius: 24px; border: 0; background: var(--bg); color: var(--on); display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">add</span></button>
+    </div>
+
+    <div style="margin-top: 12px; background: var(--tc); color: var(--otc); border-radius: 20px; padding: 14px 16px">
+      <div style="font-size: 13px; font-weight: 600">Your 4-week trend</div>
+      <svg width="100%" height="64" viewBox="0 0 320 64" role="img" aria-label="Weight trend over 4 weeks, gently down" style="margin-top: 6px"><path d="M8 20 C 80 18, 120 30, 170 34 S 260 42, 312 46" fill="none" stroke="var(--t)" stroke-width="4" stroke-linecap="round" stroke-dasharray="300" style="animation: grow 1.2s cubic-bezier(.2,0,0,1) both"></path><circle cx="312" cy="46" r="6" fill="var(--t)"></circle></svg>
+      <div style="font-size: 13px; line-height: 18px">We show a trend, never one day's number. Weight moves 1 to 2 kg a day with water alone.</div>
+    </div>
+
+    <h2 style="margin: 18px 8px 8px; font-size: 14px; line-height: 20px; font-weight: 600">Waist <span style="font-weight: 400; color: var(--osv)">· optional, monthly</span></h2>
+    <button style="height: 56px; border-radius: 16px; border: 1px dashed var(--ol); background: transparent; color: var(--p); display: flex; align-items: center; justify-content: center; gap: 8px; font: 500 14px 'Roboto Flex', sans-serif"><span class="ms" aria-hidden="true">straighten</span>Add a waist measurement</button>
+  </div>
+  <div style="position: absolute; left: 16px; right: 16px; bottom: 24px; display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px">
+    <a href="m3-profile.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 28px; color: var(--p); text-decoration: none; font-size: 16px; font-weight: 500">Skip this week</a>
+    <a href="m3-recap.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 28px; background: var(--p); color: var(--op); text-decoration: none; font-size: 16px; font-weight: 500">Save</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { themeClass: this.props.dark ? 'dark' : '' };
+  }
+}
+</script>
+</body>
+</html>

@@ -31,6 +31,12 @@ a{color:var(--p)}
 @keyframes nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 @keyframes fillbar{from{width:0}}
 .m3 label:focus-within{outline:3px solid var(--p);outline-offset:2px}
+@keyframes fa{0%,49.9%{opacity:1}50%,100%{opacity:0}}
+@keyframes fb{0%,49.9%{opacity:0}50%,100%{opacity:1}}
+@keyframes hold{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes tilt{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+.fa{animation:fa 1.8s infinite}
+.fb{opacity:0;animation:fb 1.8s infinite}
 @media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
 </style>
 </helmet>
@@ -45,10 +51,10 @@ a{color:var(--p)}
 <button style="height: 52px; border-radius: 16px; border: 1px solid var(--ol); background: transparent; color: var(--on); font: 500 15px 'Roboto Flex', sans-serif">+30s</button></div>
 <div style="margin-top: 20px; font-size: 12px; font-weight: 600; color: var(--osv); padding-left: 4px">Up next</div>
 <div style="margin-top: 6px; display: flex; gap: 14px; align-items: center; background: var(--tc); color: var(--otc); border-radius: 24px; padding: 14px 16px">
-<svg width="72" height="48" viewBox="0 0 72 48" aria-hidden="true"><g fill="none" stroke="var(--otc)" stroke-width="6" stroke-linecap="round"><path d="M12 36h48M22 36V16M50 36V16M22 16l-10-6M50 16l10-6"></path></g></svg>
+<svg width="84" height="50" viewBox="0 0 200 120" aria-hidden="true"><path d="M50 100L110 100" stroke="var(--p)" stroke-width="22" stroke-linecap="round"></path><path d="M62 96L66 48" stroke="#D49A6A" stroke-opacity=".6" stroke-width="9" stroke-linecap="round"></path><path d="M56 96L60 46" stroke="#D49A6A" stroke-width="9" stroke-linecap="round"></path><path d="M112 98L116 62L150 62" fill="none" stroke="var(--osc)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="34" cy="96" r="11" fill="#D49A6A"></circle><circle cx="23" cy="91" r="6" fill="#2A1A12"></circle></svg>
 <div style="flex: 1"><div style="font-size: 22px; line-height: 26px; font-weight: 700">Dead bug</div><div style="font-size: 13px">Set 1 of 2 · 30 sec</div></div></div>
 </div>
-<div style="position: absolute; left: 16px; right: 16px; bottom: 24px"><a href="m3-player.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 28px; background: var(--p); color: var(--op); text-decoration: none; font-size: 16px; font-weight: 500"><span class="ms" aria-hidden="true" style=" font-size: 20px; width: 20px; height: 20px;">skip_next</span> Skip rest</a></div>
+<div style="position: absolute; left: 16px; right: 16px; bottom: 24px"><a href="m3-feel.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 28px; background: var(--p); color: var(--op); text-decoration: none; font-size: 16px; font-weight: 500"><span class="ms" aria-hidden="true" style=" font-size: 20px; width: 20px; height: 20px;">skip_next</span> Skip rest</a></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>

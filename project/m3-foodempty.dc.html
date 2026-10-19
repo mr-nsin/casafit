@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CasaFit M3 nutrition empty day</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m3{--p:#9C4400;--op:#FFFFFF;--pc:#FFDBC8;--opc:#331200;--s:#765849;--os:#FFFFFF;--sc:#FFDBCA;--osc:#2B1609;--t:#5F6219;--ot:#FFFFFF;--tc:#E4E790;--otc:#1B1D00;--bg:#FFF8F5;--on:#221A15;--sv:#F4DED3;--osv:#52443B;--ol:#85736A;--olv:#D7C2B8;--c1:#FFF1EA;--c2:#FCEBE1;--c3:#F6E5DB;--c4:#F0DFD5;--er:#BA1A1A;--erc:#FFDAD6;--eoc:#410002}
+.m3.dark{--p:#FFB68E;--op:#552100;--pc:#793100;--opc:#FFDBC8;--s:#E6BEAB;--os:#432B1D;--sc:#5C4130;--osc:#FFDBCA;--t:#C8CB77;--ot:#303300;--tc:#464900;--otc:#E4E790;--bg:#1A120D;--on:#F0DFD5;--sv:#52443B;--osv:#D7C2B8;--ol:#9F8D83;--olv:#52443B;--c1:#221A15;--c2:#271E19;--c3:#322823;--c4:#3D332D;--er:#FFB4AB;--erc:#93000A;--eoc:#FFDAD6}
+.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:24px;line-height:1;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;letter-spacing:normal;text-transform:none;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.ms.f{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+a{color:var(--p)}
+.m3{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.m3 a,.m3 button{transition:transform .2s cubic-bezier(.2,0,0,1),filter .2s,background-color .25s,box-shadow .2s}
+.m3 a:hover,.m3 button:hover{filter:brightness(.96)}
+.m3.dark a:hover,.m3.dark button:hover{filter:brightness(1.12)}
+.m3 a:active,.m3 button:active{transform:scale(.97)}
+.m3 a:focus-visible,.m3 button:focus-visible{outline:3px solid var(--p);outline-offset:3px}
+@keyframes steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.8}100%{opacity:0;transform:translateY(-14px)}}
+@media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="m3 {{themeClass}}" style="width: 390px; height: 844px; position: relative; overflow: hidden; box-sizing: border-box; background: var(--bg); color: var(--on); font-family: 'Roboto Flex', sans-serif">
+  <div style="box-sizing: border-box; padding: 8px 16px 0; display: flex; flex-direction: column">
+    <div style="height: 56px; display: flex; align-items: center"><div style="padding-left: 4px"><div style="font-size: 12px; font-weight: 500; color: var(--osv)">Monday, 7:40 am</div><h1 style="margin: 0; font-size: 28px; line-height: 32px; font-weight: 700">Nutrition</h1></div></div>
+
+    <div style="margin-top: 40px; align-self: center; position: relative; width: 200px; height: 170px">
+      <svg width="200" height="170" viewBox="0 0 200 170" role="img" aria-label="An empty steel katori with steam">
+        <ellipse cx="100" cy="150" rx="78" ry="8" fill="var(--on)" opacity=".08"></ellipse>
+        <path d="M30 90 h140 a70 56 0 0 1 -140 0z" fill="var(--sc)"></path>
+        <path d="M30 90 h140" stroke="var(--s)" stroke-width="8" stroke-linecap="round"></path>
+        <path d="M60 104 a42 26 0 0 0 80 0" fill="none" stroke="var(--c1)" stroke-width="6" stroke-linecap="round" opacity=".7"></path>
+        <g fill="none" stroke="var(--s)" stroke-width="5" stroke-linecap="round"><path d="M78 70c-8-10 8-16 0-28" style="animation: steam 2.4s ease-out infinite"></path><path d="M100 66c-8-10 8-16 0-28" style="animation: steam 2.4s ease-out .8s infinite"></path><path d="M122 70c-8-10 8-16 0-28" style="animation: steam 2.4s ease-out 1.6s infinite"></path></g>
+      </svg>
+    </div>
+    <h2 style="margin: 16px 8px 0; font-size: 28px; line-height: 34px; font-weight: 700; text-align: center">Nothing logged yet today</h2>
+    <p style="margin: 8px 16px 0; font-size: 16px; line-height: 24px; color: var(--osv); text-align: center">Start with breakfast. Most people eat the same few things, so it gets faster every day.</p>
+
+    <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 8px">
+      <a href="m3-foodsearch.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 28px; background: var(--p); color: var(--op); text-decoration: none; font-size: 16px; font-weight: 500"><span class="ms" aria-hidden="true">add</span>Log breakfast</a>
+      <a href="m3-nutrition.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 28px; border: 1px solid var(--ol); color: var(--p); text-decoration: none; font-size: 16px; font-weight: 500"><span class="ms" aria-hidden="true">history</span>Same as yesterday</a>
+    </div>
+    <a href="m3-nutriplan.dc.html" style="margin-top: 16px; min-height: 64px; box-sizing: border-box; display: flex; gap: 14px; align-items: center; background: var(--tc); color: var(--otc); border-radius: 20px; padding: 10px 16px; text-decoration: none"><span class="ms f" aria-hidden="true">lightbulb</span><span style="flex: 1; font-size: 14px; line-height: 20px">Today's suggestion: moong dal cheela with curd, 18 g protein.</span><span class="ms" aria-hidden="true">chevron_right</span></a>
+  </div>
+
+  <nav aria-label="Sections" style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: var(--c2); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding-top: 12px; box-sizing: border-box">
+    <a href="m3-home.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span style="width: 64px; height: 32px; display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">sports_gymnastics</span></span>Workout</a>
+    <a href="m3-nutrition.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--on); font-size: 12px; font-weight: 600"><span style="width: 64px; height: 32px; border-radius: 16px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center"><span class="ms f" aria-hidden="true">restaurant</span></span>Nutrition</a>
+    <a href="m3-progress.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--osv); font-size: 12px; font-weight: 500"><span style="width: 64px; height: 32px; display: flex; align-items: center; justify-content: center"><span class="ms" aria-hidden="true">bar_chart</span></span>Progress</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { themeClass: this.props.dark ? 'dark' : '' };
+  }
+}
+</script>
+</body>
+</html>

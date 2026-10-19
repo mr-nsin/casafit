@@ -24,6 +24,12 @@ a{color:var(--p)}
 .m3 a:focus-visible,.m3 button:focus-visible{outline:3px solid var(--p);outline-offset:3px}
 @keyframes grow{from{stroke-dasharray:0 1000}}
 @keyframes sway{0%,100%{transform:translateX(-6px)}50%{transform:translateX(6px)}}
+@keyframes fa{0%,49.9%{opacity:1}50%,100%{opacity:0}}
+@keyframes fb{0%,49.9%{opacity:0}50%,100%{opacity:1}}
+@keyframes hold{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes tilt{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+.fa{animation:fa 1.8s infinite}
+.fb{opacity:0;animation:fb 1.8s infinite}
 @media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
 </style>
 </helmet>
@@ -36,11 +42,7 @@ a{color:var(--p)}
     </div>
 
     <div style="margin-top: 8px; position: relative; height: 230px; border-radius: 28px; background: var(--tc); color: var(--otc); overflow: hidden; display: flex; align-items: center; justify-content: center">
-      <svg width="230" height="180" viewBox="0 0 230 180" role="img" aria-label="Seated neck stretch: head tilting gently to one side">
-        <path d="M30 170h170" stroke="currentColor" stroke-opacity=".25" stroke-width="8" stroke-linecap="round"></path>
-        <g fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="M110 76v52M110 128l-34 12v28M110 128l40 8v32M110 92L72 112M110 92l36 16"></path></g>
-        <g style="transform-origin: 110px 70px; animation: sway 3s ease-in-out infinite"><circle cx="110" cy="52" r="17" fill="currentColor"></circle></g>
-      </svg>
+      <svg width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Seated neck release: sitting on a chair, head tilting gently side to side"><path d="M66 132h72M72 136v44M132 136v44" stroke="var(--olv)" stroke-width="8" stroke-linecap="round"></path><path d="M100 130L138 132L138 176" fill="none" stroke="var(--osc)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M137 178h12" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M100 86V126" stroke="var(--p)" stroke-width="30" stroke-linecap="round"></path><path d="M100 92L116 116L132 124" fill="none" stroke="#8D5524" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><g style="transform-origin: 100px 78px; animation: tilt 3s ease-in-out infinite"><circle cx="100" cy="60" r="14" fill="#8D5524"></circle><path d="M86 60a14 14 0 0 1 28 -3c-6-8-19-9-28 3z" fill="#2A1A12"></path><circle cx="100" cy="42" r="7" fill="#2A1A12"></circle></g></svg>
       <span style="position: absolute; left: 12px; top: 12px; height: 32px; padding: 0 12px; display: flex; align-items: center; gap: 6px; border-radius: 8px; background: var(--bg); color: var(--on); font-size: 13px; font-weight: 500"><span class="ms" aria-hidden="true" style="font-size: 18px; width: 18px; height: 18px">volume_off</span>Quiet · no sweat</span>
     </div>
 

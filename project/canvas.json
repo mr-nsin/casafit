@@ -2,15 +2,15 @@
  "v": 3,
  "createdOnFiles": {
   "v": 1,
-  "at": "2026-10-11T13:45:00Z"
+  "at": "2026-10-15T10:00:00Z"
  },
- "title": "CasaFit App Screens",
+ "title": "CasaFit — Material 3 screens",
  "launch": {
   "view": "canvas"
  },
  "pages": [],
  "boards": {
-  "Main.dc.html": {
+  "m3-welcome.dc.html": {
    "x": 0,
    "y": 0,
    "w": 390,
@@ -19,341 +19,816 @@
    "is_interactive": true,
    "radius": 44
   },
-  "Verify.dc.html": {
+  "m3-age.dc.html": {
    "x": 470,
    "y": 0,
    "w": 390,
    "h": 844,
-   "title": "02 Verify number",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "Goals.dc.html": {
-   "x": 940,
-   "y": 0,
-   "w": 390,
-   "h": 844,
-   "title": "03 Onboarding 1 of 2",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "AboutYou.dc.html": {
-   "x": 1410,
-   "y": 0,
-   "w": 390,
-   "h": 844,
-   "title": "04 Onboarding 2 of 2",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "Building.dc.html": {
-   "x": 1880,
-   "y": 0,
-   "w": 390,
-   "h": 844,
-   "title": "05 Building your plan",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "WeekOne.dc.html": {
-   "x": 2350,
-   "y": 0,
-   "w": 390,
-   "h": 844,
-   "title": "06 Week-one plan",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "Home.dc.html": {
-   "x": 0,
-   "y": 1264,
-   "w": 390,
-   "h": 844,
-   "title": "07 Home \u00b7 Workout",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "Player.dc.html": {
-   "x": 470,
-   "y": 1264,
-   "w": 390,
-   "h": 844,
-   "title": "08 Session player",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "Editor.dc.html": {
-   "x": 940,
-   "y": 1264,
-   "w": 390,
-   "h": 844,
-   "title": "09 15-minute editor",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "FormCheck.dc.html": {
-   "x": 1410,
-   "y": 1264,
-   "w": 390,
-   "h": 844,
-   "title": "10 Form camera",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "Nutrition.dc.html": {
-   "x": 1880,
-   "y": 1264,
-   "w": 390,
-   "h": 844,
-   "title": "11 Nutrition",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "Steps.dc.html": {
-   "x": 2350,
-   "y": 1264,
-   "w": 390,
-   "h": 844,
-   "title": "12 Daily steps",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "m3-welcome.dc.html": {
-   "x": 0,
-   "y": 2528,
-   "w": 390,
-   "h": 844,
-   "title": "M3 01 Welcome",
+   "title": "02 Age check",
    "is_interactive": true,
    "radius": 44
   },
   "m3-verify.dc.html": {
-   "x": 470,
-   "y": 2528,
+   "x": 940,
+   "y": 0,
    "w": 390,
    "h": 844,
-   "title": "M3 02 Verify number",
+   "title": "03 Verify number",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-otperror.dc.html": {
+   "x": 1410,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "04 State · Wrong code",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-offline.dc.html": {
+   "x": 1880,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "05 State · Offline",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-welcomeback.dc.html": {
+   "x": 2350,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "06 Welcome back",
    "is_interactive": true,
    "radius": 44
   },
   "m3-goals.dc.html": {
-   "x": 940,
-   "y": 2528,
+   "x": 0,
+   "y": 1264,
    "w": 390,
    "h": 844,
-   "title": "M3 03 Onboarding 1 of 2",
+   "title": "07 Onboarding 1 of 2",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-mix.dc.html": {
+   "x": 470,
+   "y": 1264,
+   "w": 390,
+   "h": 844,
+   "title": "08 Choose your mix",
    "is_interactive": true,
    "radius": 44
   },
   "m3-about.dc.html": {
-   "x": 1410,
-   "y": 2528,
+   "x": 940,
+   "y": 1264,
    "w": 390,
    "h": 844,
-   "title": "M3 04 Onboarding 2 of 2",
+   "title": "09 Onboarding 2 of 2",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-health.dc.html": {
+   "x": 1410,
+   "y": 1264,
+   "w": 390,
+   "h": 844,
+   "title": "10 Gentler plan and consent",
    "is_interactive": true,
    "radius": 44
   },
   "m3-building.dc.html": {
    "x": 1880,
-   "y": 2528,
+   "y": 1264,
    "w": 390,
    "h": 844,
-   "title": "M3 05 Building your plan",
+   "title": "11 Building your plan",
    "is_interactive": true,
    "radius": 44
   },
   "m3-weekone.dc.html": {
    "x": 2350,
-   "y": 2528,
+   "y": 1264,
    "w": 390,
    "h": 844,
-   "title": "M3 06 Week-one plan",
+   "title": "12 Week-one plan",
    "is_interactive": true,
    "radius": 44
   },
   "m3-home.dc.html": {
    "x": 0,
-   "y": 3792,
+   "y": 2528,
+   "w": 390,
+   "h": 1380,
+   "title": "13 Home · Workout (full length)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-homerest.dc.html": {
+   "x": 470,
+   "y": 2528,
    "w": 390,
    "h": 844,
-   "title": "M3 07 Home \u00b7 Workout",
+   "title": "14 Home · Rest day",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-weekplan.dc.html": {
+   "x": 940,
+   "y": 2528,
+   "w": 390,
+   "h": 844,
+   "title": "15 My plan",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-why.dc.html": {
+   "x": 1410,
+   "y": 2528,
+   "w": 390,
+   "h": 844,
+   "title": "16 Why this plan",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-library.dc.html": {
+   "x": 1880,
+   "y": 2528,
+   "w": 390,
+   "h": 844,
+   "title": "17 Ready-made plans",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-bodypart.dc.html": {
+   "x": 2350,
+   "y": 2528,
+   "w": 390,
+   "h": 844,
+   "title": "18 Body part · Core",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-plan.dc.html": {
+   "x": 2820,
+   "y": 2528,
+   "w": 390,
+   "h": 844,
+   "title": "19 Plan detail",
    "is_interactive": true,
    "radius": 44
   },
   "m3-player.dc.html": {
-   "x": 470,
-   "y": 3792,
-   "w": 390,
-   "h": 844,
-   "title": "M3 08 Session player",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "m3-editor.dc.html": {
-   "x": 940,
-   "y": 3792,
-   "w": 390,
-   "h": 844,
-   "title": "M3 09 15-minute editor",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "m3-form.dc.html": {
-   "x": 1410,
-   "y": 3792,
-   "w": 390,
-   "h": 844,
-   "title": "M3 10 Form camera",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "m3-nutrition.dc.html": {
-   "x": 1880,
-   "y": 3792,
-   "w": 390,
-   "h": 844,
-   "title": "M3 11 Nutrition",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "m3-steps.dc.html": {
-   "x": 2350,
-   "y": 3792,
-   "w": 390,
-   "h": 844,
-   "title": "M3 12 Daily steps",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "m3-complete.dc.html": {
    "x": 0,
-   "y": 5056,
+   "y": 4328,
    "w": 390,
    "h": 844,
-   "title": "M3 13 Session complete",
+   "title": "20 Session player",
    "is_interactive": true,
    "radius": 44
   },
   "m3-rest.dc.html": {
    "x": 470,
-   "y": 5056,
+   "y": 4328,
    "w": 390,
    "h": 844,
-   "title": "M3 14 Rest",
+   "title": "21 Rest",
    "is_interactive": true,
    "radius": 44
   },
-  "m3-formresult.dc.html": {
+  "m3-paused.dc.html": {
    "x": 940,
-   "y": 5056,
+   "y": 4328,
    "w": 390,
    "h": 844,
-   "title": "M3 15 Form result",
+   "title": "22 State · Paused",
    "is_interactive": true,
    "radius": 44
   },
-  "m3-camera.dc.html": {
+  "m3-endsession.dc.html": {
    "x": 1410,
-   "y": 5056,
+   "y": 4328,
    "w": 390,
    "h": 844,
-   "title": "M3 16 Camera privacy",
+   "title": "23 End session",
    "is_interactive": true,
    "radius": 44
   },
-  "m3-paywall.dc.html": {
+  "m3-editor.dc.html": {
    "x": 1880,
-   "y": 5056,
+   "y": 4328,
    "w": 390,
    "h": 844,
-   "title": "M3 17 Pro",
+   "title": "24 15-minute editor",
    "is_interactive": true,
    "radius": 44
   },
-  "m3-plan.dc.html": {
+  "m3-picker.dc.html": {
    "x": 2350,
-   "y": 5056,
+   "y": 4328,
    "w": 390,
    "h": 844,
-   "title": "M3 18 Plan detail",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "m3-lunge.dc.html": {
-   "x": 2820,
-   "y": 5056,
-   "w": 390,
-   "h": 844,
-   "title": "M3 19 Lunge swapped",
-   "is_interactive": true,
-   "radius": 44
-  },
-  "m3-meal.dc.html": {
-   "x": 0,
-   "y": 6320,
-   "w": 390,
-   "h": 844,
-   "title": "M3 20 Add a meal",
+   "title": "25 Add an exercise",
    "is_interactive": true,
    "radius": 44
   },
   "m3-parts.dc.html": {
-   "x": 470,
-   "y": 6320,
+   "x": 2820,
+   "y": 4328,
    "w": 390,
    "h": 844,
-   "title": "M3 21 Warm-up and cool-down",
+   "title": "26 Warm-up and cool-down",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-lunge.dc.html": {
+   "x": 0,
+   "y": 5592,
+   "w": 390,
+   "h": 844,
+   "title": "27 Lunge swapped",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-complete.dc.html": {
+   "x": 470,
+   "y": 5592,
+   "w": 390,
+   "h": 844,
+   "title": "28 Session complete",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-yoga.dc.html": {
+   "x": 940,
+   "y": 5592,
+   "w": 390,
+   "h": 844,
+   "title": "29 Yoga player",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-dance.dc.html": {
+   "x": 1410,
+   "y": 5592,
+   "w": 390,
+   "h": 844,
+   "title": "30 Dance player",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-desk.dc.html": {
+   "x": 1880,
+   "y": 5592,
+   "w": 390,
+   "h": 844,
+   "title": "31 Desk reset",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-camera.dc.html": {
+   "x": 0,
+   "y": 6856,
+   "w": 390,
+   "h": 844,
+   "title": "32 Camera privacy",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-form.dc.html": {
+   "x": 470,
+   "y": 6856,
+   "w": 390,
+   "h": 844,
+   "title": "33 Form check setup",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-live.dc.html": {
+   "x": 940,
+   "y": 6856,
+   "w": 390,
+   "h": 844,
+   "title": "34 Live analysis",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-formresult.dc.html": {
+   "x": 1410,
+   "y": 6856,
+   "w": 390,
+   "h": 844,
+   "title": "35 Form result",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-camdenied.dc.html": {
+   "x": 1880,
+   "y": 6856,
+   "w": 390,
+   "h": 844,
+   "title": "36 State · Camera off",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-nocredits.dc.html": {
+   "x": 2350,
+   "y": 6856,
+   "w": 390,
+   "h": 844,
+   "title": "37 State · Free checks used",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-paywall.dc.html": {
+   "x": 2820,
+   "y": 6856,
+   "w": 390,
+   "h": 844,
+   "title": "38 Pro",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-managepro.dc.html": {
+   "x": 0,
+   "y": 8120,
+   "w": 390,
+   "h": 844,
+   "title": "39 Manage Pro",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-nutrition.dc.html": {
+   "x": 470,
+   "y": 8120,
+   "w": 390,
+   "h": 844,
+   "title": "40 Nutrition",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-nutriprofile.dc.html": {
+   "x": 940,
+   "y": 8120,
+   "w": 390,
+   "h": 844,
+   "title": "41 Food profile",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-nutriplan.dc.html": {
+   "x": 1410,
+   "y": 8120,
+   "w": 390,
+   "h": 844,
+   "title": "42 Food plan",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-foodsearch.dc.html": {
+   "x": 1880,
+   "y": 8120,
+   "w": 390,
+   "h": 844,
+   "title": "43 Food search",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-meal.dc.html": {
+   "x": 2350,
+   "y": 8120,
+   "w": 390,
+   "h": 844,
+   "title": "44 Add a meal",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-steps.dc.html": {
+   "x": 0,
+   "y": 9384,
+   "w": 390,
+   "h": 844,
+   "title": "45 Daily steps",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-reverse.dc.html": {
+   "x": 470,
+   "y": 9384,
+   "w": 390,
+   "h": 844,
+   "title": "46 Reverse walk safety",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-reversetimer.dc.html": {
+   "x": 940,
+   "y": 9384,
+   "w": 390,
+   "h": 844,
+   "title": "47 Reverse walk timer",
    "is_interactive": true,
    "radius": 44
   },
   "m3-learn.dc.html": {
-   "x": 940,
-   "y": 6320,
+   "x": 1410,
+   "y": 9384,
    "w": 390,
    "h": 844,
-   "title": "M3 22 Learn",
+   "title": "48 Learn · Myths",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-myth.dc.html": {
+   "x": 1880,
+   "y": 9384,
+   "w": 390,
+   "h": 844,
+   "title": "49 Myth detail",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-concepts.dc.html": {
+   "x": 2350,
+   "y": 9384,
+   "w": 390,
+   "h": 844,
+   "title": "50 Learn · Concepts",
    "is_interactive": true,
    "radius": 44
   },
   "m3-progress.dc.html": {
-   "x": 1410,
-   "y": 6320,
+   "x": 2820,
+   "y": 9384,
    "w": 390,
    "h": 844,
-   "title": "M3 23 Progress",
+   "title": "51 Progress",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-recap.dc.html": {
+   "x": 0,
+   "y": 10648,
+   "w": 390,
+   "h": 844,
+   "title": "52 Weekly recap",
    "is_interactive": true,
    "radius": 44
   },
   "m3-settings.dc.html": {
+   "x": 470,
+   "y": 10648,
+   "w": 390,
+   "h": 844,
+   "title": "53 Settings",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-notify.dc.html": {
+   "x": 940,
+   "y": 10648,
+   "w": 390,
+   "h": 844,
+   "title": "54 Daily reminder",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-deleteacct.dc.html": {
+   "x": 1410,
+   "y": 10648,
+   "w": 390,
+   "h": 844,
+   "title": "55 Delete account",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-people.dc.html": {
+   "x": 0,
+   "y": 11912,
+   "w": 1280,
+   "h": 1060,
+   "title": "56 People and motion system",
+   "radius": 28
+  },
+  "m3-profile.dc.html": {
+   "x": 0,
+   "y": 13392,
+   "w": 390,
+   "h": 844,
+   "title": "57 Profile",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-editprofile.dc.html": {
+   "x": 470,
+   "y": 13392,
+   "w": 390,
+   "h": 844,
+   "title": "58 Edit profile",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-privacy.dc.html": {
+   "x": 940,
+   "y": 13392,
+   "w": 390,
+   "h": 844,
+   "title": "59 Privacy and data",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-language.dc.html": {
+   "x": 1410,
+   "y": 13392,
+   "w": 390,
+   "h": 844,
+   "title": "60 Language and voice",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-help.dc.html": {
    "x": 1880,
-   "y": 6320,
+   "y": 13392,
    "w": 390,
    "h": 844,
-   "title": "M3 24 Settings",
+   "title": "61 Help and support",
    "is_interactive": true,
    "radius": 44
   },
-  "m3-age.dc.html": {
+  "m3-checkin.dc.html": {
    "x": 2350,
-   "y": 6320,
+   "y": 13392,
    "w": 390,
    "h": 844,
-   "title": "M3 25 Age check",
+   "title": "62 Weekly check-in",
    "is_interactive": true,
    "radius": 44
   },
-  "m3-otperror.dc.html": {
+  "m3-stepsperm.dc.html": {
    "x": 2820,
-   "y": 6320,
+   "y": 13392,
    "w": 390,
    "h": 844,
-   "title": "M3 26 Wrong code",
+   "title": "63 Step counting permission",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-splash.dc.html": {
+   "x": 0,
+   "y": 14656,
+   "w": 390,
+   "h": 844,
+   "title": "64 Splash",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-exercise.dc.html": {
+   "x": 470,
+   "y": 14656,
+   "w": 390,
+   "h": 844,
+   "title": "65 Exercise detail",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-feel.dc.html": {
+   "x": 940,
+   "y": 14656,
+   "w": 390,
+   "h": 844,
+   "title": "66 In-session feel check",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-sessionsettings.dc.html": {
+   "x": 1410,
+   "y": 14656,
+   "w": 390,
+   "h": 844,
+   "title": "67 Sound and voice",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-lapsed.dc.html": {
+   "x": 1880,
+   "y": 14656,
+   "w": 390,
+   "h": 844,
+   "title": "68 Home · After a break",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-foodempty.dc.html": {
+   "x": 2350,
+   "y": 14656,
+   "w": 390,
+   "h": 844,
+   "title": "69 State · Nothing logged",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-progressempty.dc.html": {
+   "x": 2820,
+   "y": 14656,
+   "w": 390,
+   "h": 844,
+   "title": "70 State · New user progress",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "m3-prowelcome.dc.html": {
+   "x": 3290,
+   "y": 14656,
+   "w": 390,
+   "h": 844,
+   "title": "71 Welcome to Pro",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Main.dc.html": {
+   "x": 0,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 01 Welcome",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Verify.dc.html": {
+   "x": 470,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 02 Verify number",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Goals.dc.html": {
+   "x": 940,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 03 Onboarding 1 of 2",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "AboutYou.dc.html": {
+   "x": 1410,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 04 Onboarding 2 of 2",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Building.dc.html": {
+   "x": 1880,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 05 Building your plan",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "WeekOne.dc.html": {
+   "x": 2350,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 06 Week-one plan",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Home.dc.html": {
+   "x": 2820,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 07 Home · Workout",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Player.dc.html": {
+   "x": 3290,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 08 Session player",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Editor.dc.html": {
+   "x": 3760,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 09 15-minute editor",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "FormCheck.dc.html": {
+   "x": 4230,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 10 Form camera",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Nutrition.dc.html": {
+   "x": 4700,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 11 Nutrition",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Steps.dc.html": {
+   "x": 5170,
+   "y": 15920,
+   "w": 390,
+   "h": 844,
+   "title": "Earlier · 12 Daily steps",
    "is_interactive": true,
    "radius": 44
   }
  },
  "order": [
+  "m3-welcome.dc.html",
+  "m3-age.dc.html",
+  "m3-verify.dc.html",
+  "m3-otperror.dc.html",
+  "m3-offline.dc.html",
+  "m3-welcomeback.dc.html",
+  "m3-goals.dc.html",
+  "m3-mix.dc.html",
+  "m3-about.dc.html",
+  "m3-health.dc.html",
+  "m3-building.dc.html",
+  "m3-weekone.dc.html",
+  "m3-home.dc.html",
+  "m3-homerest.dc.html",
+  "m3-weekplan.dc.html",
+  "m3-why.dc.html",
+  "m3-library.dc.html",
+  "m3-bodypart.dc.html",
+  "m3-plan.dc.html",
+  "m3-player.dc.html",
+  "m3-rest.dc.html",
+  "m3-paused.dc.html",
+  "m3-endsession.dc.html",
+  "m3-editor.dc.html",
+  "m3-picker.dc.html",
+  "m3-parts.dc.html",
+  "m3-lunge.dc.html",
+  "m3-complete.dc.html",
+  "m3-yoga.dc.html",
+  "m3-dance.dc.html",
+  "m3-desk.dc.html",
+  "m3-camera.dc.html",
+  "m3-form.dc.html",
+  "m3-live.dc.html",
+  "m3-formresult.dc.html",
+  "m3-camdenied.dc.html",
+  "m3-nocredits.dc.html",
+  "m3-paywall.dc.html",
+  "m3-managepro.dc.html",
+  "m3-nutrition.dc.html",
+  "m3-nutriprofile.dc.html",
+  "m3-nutriplan.dc.html",
+  "m3-foodsearch.dc.html",
+  "m3-meal.dc.html",
+  "m3-steps.dc.html",
+  "m3-reverse.dc.html",
+  "m3-reversetimer.dc.html",
+  "m3-learn.dc.html",
+  "m3-myth.dc.html",
+  "m3-concepts.dc.html",
+  "m3-progress.dc.html",
+  "m3-recap.dc.html",
+  "m3-settings.dc.html",
+  "m3-notify.dc.html",
+  "m3-deleteacct.dc.html",
+  "m3-people.dc.html",
+  "m3-profile.dc.html",
+  "m3-editprofile.dc.html",
+  "m3-privacy.dc.html",
+  "m3-language.dc.html",
+  "m3-help.dc.html",
+  "m3-checkin.dc.html",
+  "m3-stepsperm.dc.html",
+  "m3-splash.dc.html",
+  "m3-exercise.dc.html",
+  "m3-feel.dc.html",
+  "m3-sessionsettings.dc.html",
+  "m3-lapsed.dc.html",
+  "m3-foodempty.dc.html",
+  "m3-progressempty.dc.html",
+  "m3-prowelcome.dc.html",
   "Main.dc.html",
   "Verify.dc.html",
   "Goals.dc.html",
@@ -365,76 +840,99 @@
   "Editor.dc.html",
   "FormCheck.dc.html",
   "Nutrition.dc.html",
-  "Steps.dc.html",
-  "m3-welcome.dc.html",
-  "m3-verify.dc.html",
-  "m3-goals.dc.html",
-  "m3-about.dc.html",
-  "m3-building.dc.html",
-  "m3-weekone.dc.html",
-  "m3-home.dc.html",
-  "m3-player.dc.html",
-  "m3-editor.dc.html",
-  "m3-form.dc.html",
-  "m3-nutrition.dc.html",
-  "m3-steps.dc.html",
-  "m3-complete.dc.html",
-  "m3-rest.dc.html",
-  "m3-formresult.dc.html",
-  "m3-camera.dc.html",
-  "m3-paywall.dc.html",
-  "m3-plan.dc.html",
-  "m3-lunge.dc.html",
-  "m3-meal.dc.html",
-  "m3-parts.dc.html",
-  "m3-learn.dc.html",
-  "m3-progress.dc.html",
-  "m3-settings.dc.html",
-  "m3-age.dc.html",
-  "m3-otperror.dc.html"
+  "Steps.dc.html"
  ],
  "notes": {
-  "onboarding": {
+  "t1": {
    "x": 0,
-   "y": -300,
-   "text": "Maximalist \u00b7 Onboarding: verify, two pages, plan reveal",
+   "y": -260,
+   "text": "Start and account",
    "kind": "title1",
    "maxW": 2740
   },
-  "app": {
+  "t2": {
    "x": 0,
-   "y": 964,
-   "text": "Maximalist \u00b7 The app: Workout and Nutrition",
+   "y": 1004,
+   "text": "Onboarding",
    "kind": "title1",
    "maxW": 2740
   },
-  "m3onboarding": {
+  "t3": {
    "x": 0,
-   "y": 2228,
-   "text": "Material 3 \u00b7 Onboarding: verify, two pages, plan reveal",
+   "y": 2268,
+   "text": "Home and plan",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "t4": {
+   "x": 0,
+   "y": 4068,
+   "text": "Session",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "t5": {
+   "x": 0,
+   "y": 5332,
+   "text": "Styles and extras",
+   "kind": "title1",
+   "maxW": 2270
+  },
+  "t6": {
+   "x": 0,
+   "y": 6596,
+   "text": "Form camera and Pro",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "t7": {
+   "x": 0,
+   "y": 7860,
+   "text": "Nutrition",
    "kind": "title1",
    "maxW": 2740
   },
-  "m3app": {
+  "t8": {
    "x": 0,
-   "y": 3492,
-   "text": "Material 3 \u00b7 The app: Workout and Nutrition",
+   "y": 9124,
+   "text": "Steps, Learn and Progress",
    "kind": "title1",
-   "maxW": 2740
+   "maxW": 3210
   },
-  "m3flow": {
+  "t9": {
    "x": 0,
-   "y": 4756,
-   "text": "Material 3 \u00b7 Completing the flow: session end, form result, Pro",
+   "y": 10388,
+   "text": "Recap and account settings",
    "kind": "title1",
-   "maxW": 2740
+   "maxW": 1800
   },
-  "m3edge": {
+  "t10": {
    "x": 0,
-   "y": 6020,
-   "text": "Material 3 \u00b7 Content, account and edge states",
+   "y": 11652,
+   "text": "People and motion",
    "kind": "title1",
-   "maxW": 2740
+   "maxW": 1280
+  },
+  "t11": {
+   "x": 0,
+   "y": 13132,
+   "text": "Profile and account",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "t12": {
+   "x": 0,
+   "y": 14396,
+   "text": "Moments and empty states",
+   "kind": "title1",
+   "maxW": 3680
+  },
+  "t13": {
+   "x": 0,
+   "y": 15660,
+   "text": "Earlier neo-brutalist set (reference)",
+   "kind": "title1",
+   "maxW": 5640
   }
  },
  "designSystems": []

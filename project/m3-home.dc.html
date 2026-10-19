@@ -34,6 +34,12 @@ a{color:var(--p)}
 .hs{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -16px;padding:0 16px 2px}
 .hs::-webkit-scrollbar{display:none}
 .hs>a{scroll-snap-align:start}
+@keyframes fa{0%,49.9%{opacity:1}50%,100%{opacity:0}}
+@keyframes fb{0%,49.9%{opacity:0}50%,100%{opacity:1}}
+@keyframes hold{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes tilt{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+.fa{animation:fa 1.8s infinite}
+.fb{opacity:0;animation:fb 1.8s infinite}
 @media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
 </style>
 </helmet>
@@ -47,7 +53,7 @@ a{color:var(--p)}
       </div>
       <div style="display: flex; align-items: center; gap: 6px">
         <a href="m3-paywall.dc.html" aria-label="2 free form checks left. See Pro" style="height: 32px; padding: 0 12px 0 8px; display: flex; align-items: center; gap: 6px; border-radius: 8px; background: var(--c4); color: var(--on); text-decoration: none; font-size: 12px; font-weight: 500"><span class="ms f" aria-hidden="true" style="font-size: 18px; width: 18px; height: 18px">photo_camera</span>2 left</a>
-        <a href="m3-settings.dc.html" aria-label="Profile and settings" style="width: 48px; height: 48px; border-radius: 24px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center; text-decoration: none"><span class="ms f" aria-hidden="true">person</span></a>
+        <a href="m3-profile.dc.html" aria-label="Profile" style="width: 48px; height: 48px; border-radius: 24px; background: var(--sc); color: var(--osc); display: flex; align-items: center; justify-content: center; text-decoration: none"><span class="ms f" aria-hidden="true">person</span></a>
       </div>
     </div>
 
@@ -64,7 +70,7 @@ a{color:var(--p)}
 
     <section aria-label="Today's session" style="margin-top: 8px; position: relative; overflow: hidden; background: var(--pc); color: var(--opc); border-radius: 28px; padding: 20px">
       <div aria-hidden="true" style="position: absolute; right: -40px; top: -40px; width: 190px; height: 190px; border-radius: 50%; background: var(--sc)"></div>
-      <svg aria-hidden="true" width="110" height="84" viewBox="0 0 110 84" style="position: absolute; right: 18px; top: 22px"><g fill="none" stroke="var(--opc)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 68h90" stroke-opacity=".25"></path><path d="M18 64l36-20 22 8"></path><path d="M54 44l14 20 6 0"></path><path d="M76 52l16 12"></path></g><circle cx="14" cy="50" r="9" fill="var(--opc)"></circle></svg>
+      <svg aria-hidden="true" width="150" height="90" viewBox="0 0 200 120" style="position: absolute; right: 8px; top: 16px"><g class="fa"><path d="M44 100L96 102" stroke="var(--p)" stroke-width="22" stroke-linecap="round"></path><path d="M98 102L128 74L140 104" fill="none" stroke="var(--osc)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path><path d="M139 105h12" stroke="var(--t)" stroke-width="8" stroke-linecap="round"></path><path d="M48 106L90 108" stroke="#D49A6A" stroke-width="8" stroke-linecap="round"></path><circle cx="28" cy="96" r="11" fill="#D49A6A"></circle><circle cx="17" cy="91" r="6" fill="#2A1A12"></circle></g><g class="fb"><path d="M44 100L96 72" stroke="var(--p)" stroke-width="22" stroke-linecap="round"></path><path d="M98 72L132 66L140 104" fill="none" stroke="var(--osc)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path><path d="M139 105h12" stroke="var(--t)" stroke-width="8" stroke-linecap="round"></path><path d="M48 106L90 108" stroke="#D49A6A" stroke-width="8" stroke-linecap="round"></path><circle cx="28" cy="96" r="11" fill="#D49A6A"></circle><circle cx="17" cy="91" r="6" fill="#2A1A12"></circle></g></svg>
       <div style="position: relative; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 4px; background: var(--p)"></span>Today</div>
       <div style="position: relative; margin-top: 56px; font-size: 40px; line-height: 44px; font-weight: 800; letter-spacing: -0.8px">Core + Glutes</div>
       <div style="position: relative; margin-top: 4px; font-size: 14px; line-height: 20px">Normal · 5 moves · no equipment · knee-friendly</div>

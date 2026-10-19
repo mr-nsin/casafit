@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CasaFit people and motion system</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m3{--p:#9C4400;--op:#FFFFFF;--pc:#FFDBC8;--opc:#331200;--s:#765849;--os:#FFFFFF;--sc:#FFDBCA;--osc:#2B1609;--t:#5F6219;--ot:#FFFFFF;--tc:#E4E790;--otc:#1B1D00;--bg:#FFF8F5;--on:#221A15;--sv:#F4DED3;--osv:#52443B;--ol:#85736A;--olv:#D7C2B8;--c1:#FFF1EA;--c2:#FCEBE1;--c3:#F6E5DB;--c4:#F0DFD5;--er:#BA1A1A;--erc:#FFDAD6;--eoc:#410002}
+.m3.dark{--p:#FFB68E;--op:#552100;--pc:#793100;--opc:#FFDBC8;--s:#E6BEAB;--os:#432B1D;--sc:#5C4130;--osc:#FFDBCA;--t:#C8CB77;--ot:#303300;--tc:#464900;--otc:#E4E790;--bg:#1A120D;--on:#F0DFD5;--sv:#52443B;--osv:#D7C2B8;--ol:#9F8D83;--olv:#52443B;--c1:#221A15;--c2:#271E19;--c3:#322823;--c4:#3D332D;--er:#FFB4AB;--erc:#93000A;--eoc:#FFDAD6}
+.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:24px;line-height:1;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;letter-spacing:normal;text-transform:none;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.ms.f{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+.m3{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+@keyframes fa{0%,49.9%{opacity:1}50%,100%{opacity:0}}
+@keyframes fb{0%,49.9%{opacity:0}50%,100%{opacity:1}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes tilt{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+.fa{animation:fa 1.8s infinite}
+.fb{opacity:0;animation:fb 1.8s infinite}
+@media (prefers-reduced-motion:reduce){.m3 *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="m3 {{themeClass}}" style="width: 1280px; height: 1060px; box-sizing: border-box; background: var(--bg); color: var(--on); font-family: 'Roboto Flex', sans-serif; padding: 48px 56px">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 40px">
+    <div>
+      <h1 style="margin: 0; font-size: 44px; line-height: 52px; font-weight: 800; letter-spacing: -0.8px">CasaFit people and motion</h1>
+      <p style="margin: 8px 0 0; max-width: 720px; font-size: 16px; line-height: 24px; color: var(--osv)">One illustration style for every exercise demo. Faceless, rounded, Indian skin tones, dressed in the app's own colours. Each demo is two frames that flip, so it reads like a coach showing the move. With reduced motion on, only the first frame shows.</p>
+    </div>
+    <div style="display: flex; gap: 16px">
+      <div style="text-align: center"><span style="display: block; width: 56px; height: 56px; border-radius: 28px; background: #8D5524"></span><span style="display: block; margin-top: 6px; font-size: 12px; color: var(--osv)">Deep #8D5524</span></div>
+      <div style="text-align: center"><span style="display: block; width: 56px; height: 56px; border-radius: 28px; background: #B07445"></span><span style="display: block; margin-top: 6px; font-size: 12px; color: var(--osv)">Medium #B07445</span></div>
+      <div style="text-align: center"><span style="display: block; width: 56px; height: 56px; border-radius: 28px; background: #D49A6A"></span><span style="display: block; margin-top: 6px; font-size: 12px; color: var(--osv)">Light #D49A6A</span></div>
+      <div style="text-align: center"><span style="display: block; width: 56px; height: 56px; border-radius: 28px; background: #2A1A12"></span><span style="display: block; margin-top: 6px; font-size: 12px; color: var(--osv)">Hair #2A1A12</span></div>
+      <div style="text-align: center"><span style="display: block; width: 56px; height: 56px; border-radius: 28px; background: var(--p)"></span><span style="display: block; margin-top: 6px; font-size: 12px; color: var(--osv)">Top: primary</span></div>
+      <div style="text-align: center"><span style="display: block; width: 56px; height: 56px; border-radius: 28px; background: var(--osc)"></span><span style="display: block; margin-top: 6px; font-size: 12px; color: var(--osv)">Legs: on-sec.</span></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 36px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+
+    <figure style="margin: 0; background: var(--c3); border-radius: 28px; padding: 16px 16px 18px">
+      <svg viewBox="0 0 200 200" width="100%" height="200" role="img" aria-label="Squat demo: standing, then hips back and down with arms forward">
+        <ellipse cx="100" cy="186" rx="64" ry="6" fill="var(--on)" opacity=".08"></ellipse>
+        <g class="fa"><path d="M98 114L96 148L95 180" fill="none" stroke="var(--osc)" stroke-opacity=".55" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M102 114L104 148L103 180" fill="none" stroke="var(--osc)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M101 181h13" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M100 78V112" stroke="var(--p)" stroke-width="30" stroke-linecap="round"></path><path d="M101 82L105 104L107 124" fill="none" stroke="#B07445" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="100" cy="52" r="14" fill="#B07445"></circle><path d="M86 52a14 14 0 0 1 28 -3c-6-8-19-9-28 3z" fill="#2A1A12"></path><path d="M87 49c-10 3-11 14-6 21" fill="none" stroke="#2A1A12" stroke-width="7" stroke-linecap="round"></path></g>
+        <g class="fb"><path d="M86 136L114 142L106 180" fill="none" stroke="var(--osc)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M104 181h13" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M88 132L106 98" stroke="var(--p)" stroke-width="30" stroke-linecap="round"></path><path d="M107 102L146 106" fill="none" stroke="#B07445" stroke-width="10" stroke-linecap="round"></path><circle cx="116" cy="74" r="14" fill="#B07445"></circle><path d="M102 74a14 14 0 0 1 28 -3c-6-8-19-9-28 3z" fill="#2A1A12"></path><path d="M103 71c-10 3-11 14-6 21" fill="none" stroke="#2A1A12" stroke-width="7" stroke-linecap="round"></path></g>
+      </svg>
+      <figcaption><div style="font-size: 18px; font-weight: 600">Squat</div><div style="font-size: 13px; line-height: 18px; color: var(--osv)">Two-frame flip, 1.8 s. Exercise detail, form check.</div></figcaption>
+    </figure>
+
+    <figure style="margin: 0; background: var(--c3); border-radius: 28px; padding: 16px 16px 18px">
+      <svg viewBox="0 0 220 160" width="100%" height="200" role="img" aria-label="Bird dog demo: on hands and knees, then one arm and the opposite leg reaching long">
+        <ellipse cx="110" cy="148" rx="90" ry="5" fill="var(--on)" opacity=".08"></ellipse>
+        <g class="fa"><path d="M64 100V140L30 142" fill="none" stroke="var(--osc)" stroke-opacity=".5" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path><path d="M132 98V142" stroke="#8D5524" stroke-opacity=".6" stroke-width="10" stroke-linecap="round"></path><path d="M70 100V140L36 142" fill="none" stroke="var(--osc)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"></path><path d="M70 98L138 94" stroke="var(--p)" stroke-width="26" stroke-linecap="round"></path><path d="M140 98V142" stroke="#8D5524" stroke-width="10" stroke-linecap="round"></path><circle cx="162" cy="84" r="12" fill="#8D5524"></circle><path d="M150 84a12 12 0 0 1 24 -2c-5-7-17-8-24 2z" fill="#2A1A12"></path></g>
+        <g class="fb"><path d="M70 96L16 86" stroke="var(--osc)" stroke-opacity=".8" stroke-width="15" stroke-linecap="round"></path><path d="M70 100V140L36 142" fill="none" stroke="var(--osc)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"></path><path d="M70 98L138 94" stroke="var(--p)" stroke-width="26" stroke-linecap="round"></path><path d="M136 98V142" stroke="#8D5524" stroke-width="10" stroke-linecap="round"></path><path d="M142 92L196 80" stroke="#8D5524" stroke-width="10" stroke-linecap="round"></path><circle cx="162" cy="84" r="12" fill="#8D5524"></circle><path d="M150 84a12 12 0 0 1 24 -2c-5-7-17-8-24 2z" fill="#2A1A12"></path></g>
+      </svg>
+      <figcaption><div style="font-size: 18px; font-weight: 600">Bird dog</div><div style="font-size: 13px; line-height: 18px; color: var(--osv)">Two-frame flip. Session player.</div></figcaption>
+    </figure>
+
+    <figure style="margin: 0; background: var(--c3); border-radius: 28px; padding: 16px 16px 18px">
+      <svg viewBox="0 0 200 120" width="100%" height="200" role="img" aria-label="Glute bridge demo: lying on the back with knees bent, then hips lifted">
+        <ellipse cx="96" cy="110" rx="84" ry="4" fill="var(--on)" opacity=".08"></ellipse>
+        <g class="fa"><path d="M44 100L96 102" stroke="var(--p)" stroke-width="22" stroke-linecap="round"></path><path d="M98 102L128 74L140 104" fill="none" stroke="var(--osc)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path><path d="M139 105h12" stroke="var(--t)" stroke-width="8" stroke-linecap="round"></path><path d="M48 106L90 108" stroke="#D49A6A" stroke-width="8" stroke-linecap="round"></path><circle cx="28" cy="96" r="11" fill="#D49A6A"></circle><circle cx="17" cy="91" r="6" fill="#2A1A12"></circle></g>
+        <g class="fb"><path d="M44 100L96 72" stroke="var(--p)" stroke-width="22" stroke-linecap="round"></path><path d="M98 72L132 66L140 104" fill="none" stroke="var(--osc)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path><path d="M139 105h12" stroke="var(--t)" stroke-width="8" stroke-linecap="round"></path><path d="M48 106L90 108" stroke="#D49A6A" stroke-width="8" stroke-linecap="round"></path><circle cx="28" cy="96" r="11" fill="#D49A6A"></circle><circle cx="17" cy="91" r="6" fill="#2A1A12"></circle></g>
+      </svg>
+      <figcaption><div style="font-size: 18px; font-weight: 600">Glute bridge</div><div style="font-size: 13px; line-height: 18px; color: var(--osv)">Two-frame flip. Home hero, exercise detail.</div></figcaption>
+    </figure>
+
+    <figure style="margin: 0; background: var(--c3); border-radius: 28px; padding: 16px 16px 18px">
+      <svg viewBox="0 0 200 200" width="100%" height="200" role="img" aria-label="Walking demo: alternating stride">
+        <ellipse cx="100" cy="186" rx="60" ry="6" fill="var(--on)" opacity=".08"></ellipse>
+        <g class="fa"><path d="M100 116L90 148L78 178" fill="none" stroke="var(--osc)" stroke-opacity=".55" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M100 82L112 100L120 114" fill="none" stroke="#D49A6A" stroke-opacity=".6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M100 116L114 146L122 178" fill="none" stroke="var(--osc)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M121 180h12" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M100 78V114" stroke="var(--p)" stroke-width="30" stroke-linecap="round"></path><path d="M100 84L90 104L88 122" fill="none" stroke="#D49A6A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="102" cy="52" r="14" fill="#D49A6A"></circle><path d="M88 52a14 14 0 0 1 28 -3c-6-7-20-8-28 3z" fill="#2A1A12"></path></g>
+        <g class="fb"><path d="M100 116L112 148L124 176" fill="none" stroke="var(--osc)" stroke-opacity=".55" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M100 82L90 102L86 118" fill="none" stroke="#D49A6A" stroke-opacity=".6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M100 116L88 146L80 178" fill="none" stroke="var(--osc)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M79 180h12" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M100 78V114" stroke="var(--p)" stroke-width="30" stroke-linecap="round"></path><path d="M100 84L112 102L120 116" fill="none" stroke="#D49A6A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="102" cy="52" r="14" fill="#D49A6A"></circle><path d="M88 52a14 14 0 0 1 28 -3c-6-7-20-8-28 3z" fill="#2A1A12"></path></g>
+      </svg>
+      <figcaption><div style="font-size: 18px; font-weight: 600">Walk</div><div style="font-size: 13px; line-height: 18px; color: var(--osv)">Two-frame flip. Steps, reverse walk, rest day.</div></figcaption>
+    </figure>
+
+    <figure style="margin: 0; background: var(--c3); border-radius: 28px; padding: 16px 16px 18px">
+      <svg viewBox="0 0 200 200" width="100%" height="200" role="img" aria-label="Warrior two pose: wide stance, front knee bent, arms long to both sides">
+        <ellipse cx="100" cy="186" rx="76" ry="6" fill="var(--on)" opacity=".08"></ellipse>
+        <g style="transform-origin: 100px 180px; animation: breathe 6s ease-in-out infinite"><path d="M100 124L48 180" stroke="var(--osc)" stroke-width="16" stroke-linecap="round"></path><path d="M100 124L140 148L148 180" fill="none" stroke="var(--osc)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M40 181h12" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M147 181h12" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M100 80V122" stroke="var(--p)" stroke-width="30" stroke-linecap="round"></path><path d="M28 84H172" stroke="#8D5524" stroke-width="10" stroke-linecap="round"></path><circle cx="100" cy="56" r="14" fill="#8D5524"></circle><path d="M86 56a14 14 0 0 1 28 -3c-6-8-19-9-28 3z" fill="#2A1A12"></path><circle cx="100" cy="38" r="7" fill="#2A1A12"></circle></g>
+      </svg>
+      <figcaption><div style="font-size: 18px; font-weight: 600">Warrior II</div><div style="font-size: 13px; line-height: 18px; color: var(--osv)">Held pose, slow breathe, 6 s. Yoga player.</div></figcaption>
+    </figure>
+
+    <figure style="margin: 0; background: var(--c3); border-radius: 28px; padding: 16px 16px 18px">
+      <svg viewBox="0 0 200 200" width="100%" height="200" role="img" aria-label="Grapevine dance step: step out, then cross behind with arms swapping">
+        <ellipse cx="100" cy="186" rx="60" ry="6" fill="var(--on)" opacity=".08"></ellipse>
+        <g class="fa"><path d="M100 120L76 180" stroke="var(--osc)" stroke-width="16" stroke-linecap="round"></path><path d="M100 120L126 180" stroke="var(--osc)" stroke-width="16" stroke-linecap="round"></path><path d="M68 181h12" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M125 181h12" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M100 78V118" stroke="var(--p)" stroke-width="30" stroke-linecap="round"></path><path d="M100 84L72 72L66 46" fill="none" stroke="#B07445" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M100 84L128 98L146 86" fill="none" stroke="#B07445" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="100" cy="54" r="14" fill="#B07445"></circle><path d="M86 54a14 14 0 0 1 28 -3c-6-7-20-8-28 3z" fill="#2A1A12"></path></g>
+        <g class="fb"><path d="M100 120L112 180" stroke="var(--osc)" stroke-opacity=".6" stroke-width="16" stroke-linecap="round"></path><path d="M100 120L86 180" stroke="var(--osc)" stroke-width="16" stroke-linecap="round"></path><path d="M78 181h12" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M111 181h12" stroke="var(--t)" stroke-opacity=".6" stroke-width="9" stroke-linecap="round"></path><path d="M100 78V118" stroke="var(--p)" stroke-width="30" stroke-linecap="round"></path><path d="M100 84L72 98L54 86" fill="none" stroke="#B07445" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M100 84L128 72L134 46" fill="none" stroke="#B07445" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="102" cy="54" r="14" fill="#B07445"></circle><path d="M88 54a14 14 0 0 1 28 -3c-6-7-20-8-28 3z" fill="#2A1A12"></path></g>
+      </svg>
+      <figcaption><div style="font-size: 18px; font-weight: 600">Grapevine</div><div style="font-size: 13px; line-height: 18px; color: var(--osv)">Two-frame flip on the beat. Dance player.</div></figcaption>
+    </figure>
+
+    <figure style="margin: 0; background: var(--c3); border-radius: 28px; padding: 16px 16px 18px">
+      <svg viewBox="0 0 200 120" width="100%" height="200" role="img" aria-label="Dead bug: lying on the back, arms up, knees bent at ninety degrees">
+        <ellipse cx="96" cy="110" rx="84" ry="4" fill="var(--on)" opacity=".08"></ellipse>
+        <path d="M50 100L110 100" stroke="var(--p)" stroke-width="22" stroke-linecap="round"></path><path d="M62 96L66 48" stroke="#D49A6A" stroke-opacity=".6" stroke-width="9" stroke-linecap="round"></path><path d="M56 96L60 46" stroke="#D49A6A" stroke-width="9" stroke-linecap="round"></path><path d="M112 98L116 62L150 62" fill="none" stroke="var(--osc)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="34" cy="96" r="11" fill="#D49A6A"></circle><circle cx="23" cy="91" r="6" fill="#2A1A12"></circle>
+      </svg>
+      <figcaption><div style="font-size: 18px; font-weight: 600">Dead bug</div><div style="font-size: 13px; line-height: 18px; color: var(--osv)">Static thumbnail. Rest, up next.</div></figcaption>
+    </figure>
+
+    <figure style="margin: 0; background: var(--c3); border-radius: 28px; padding: 16px 16px 18px">
+      <svg viewBox="0 0 200 200" width="100%" height="200" role="img" aria-label="Seated neck release: sitting on a chair, head tilting gently side to side">
+        <path d="M66 132h72M72 136v44M132 136v44" stroke="var(--olv)" stroke-width="8" stroke-linecap="round"></path>
+        <path d="M100 130L138 132L138 176" fill="none" stroke="var(--osc)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path><path d="M137 178h12" stroke="var(--t)" stroke-width="9" stroke-linecap="round"></path><path d="M100 86V126" stroke="var(--p)" stroke-width="30" stroke-linecap="round"></path><path d="M100 92L116 116L132 124" fill="none" stroke="#8D5524" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+        <g style="transform-origin: 100px 78px; animation: tilt 3s ease-in-out infinite"><circle cx="100" cy="60" r="14" fill="#8D5524"></circle><path d="M86 60a14 14 0 0 1 28 -3c-6-8-19-9-28 3z" fill="#2A1A12"></path><circle cx="100" cy="42" r="7" fill="#2A1A12"></circle></g>
+      </svg>
+      <figcaption><div style="font-size: 18px; font-weight: 600">Neck release</div><div style="font-size: 13px; line-height: 18px; color: var(--osv)">Head tilt loop, 3 s. Desk reset.</div></figcaption>
+    </figure>
+  </div>
+
+  <div style="margin-top: 24px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px">
+    <div style="background: var(--tc); color: var(--otc); border-radius: 28px; padding: 20px 24px">
+      <div style="font-size: 18px; font-weight: 700">Motion tokens</div>
+      <div style="margin-top: 10px; display: grid; grid-template-columns: 160px 1fr; gap: 6px 16px; font-size: 14px; line-height: 20px">
+        <span>Emphasised</span><span>500 ms, cubic-bezier(.2, 0, 0, 1). Entrances, rings, bars.</span>
+        <span>Standard</span><span>200–300 ms, same curve. Presses, toggles, state changes.</span>
+        <span>Demo flip</span><span>1.8 s loop, hard cut between two frames.</span>
+        <span>Hold and breathe</span><span>4–8 s ease-in-out. Yoga holds, rest, paused timer.</span>
+      </div>
+    </div>
+    <div style="background: var(--sc); color: var(--osc); border-radius: 28px; padding: 20px 24px">
+      <div style="font-size: 18px; font-weight: 700">Rules</div>
+      <ul style="margin: 10px 0 0; padding-left: 18px; font-size: 14px; line-height: 20px">
+        <li>One orchestrated moment per screen. Demos may loop; nothing else does.</li>
+        <li>Reduced motion: show frame one only, no loops.</li>
+        <li>Real photos and filmed demos replace these later in the same frames.</li>
+        <li>Figures are always faceless. Mix skin tones and body types across screens.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1280,"height":1060}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { themeClass: this.props.dark ? 'dark' : '' };
+  }
+}
+</script>
+</body>
+</html>
