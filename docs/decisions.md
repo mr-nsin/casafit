@@ -20,6 +20,24 @@ A short, dated log of design and technical decisions. Add a row at the top. Keep
 - **Why:** removes weeks of StoreKit 2 and Play Billing wiring, gives entitlements and events in one place, and fits our "small team" bias.
 - **See:** `tech-stack.md` §1.4 and §2.4, `architecture.md` §3.3.
 
+## 2026-10-19 · Plan: first-run and onboarding
+- **Context:** the agent team needs a worked example and a concrete first feature.
+- **Decision:** project-manager wrote `docs/plans/onboarding.md` for PRD §5, §6 and §14, with 11 tasks across ux, content, backend, mobile and qa.
+- **Why:** onboarding is the critical path; it also exercises every agent at least once.
+- **See:** `docs/plans/onboarding.md`.
+
+## 2026-10-19 · Monorepo scaffolded: app, api, shared
+- **Context:** we needed a floor on which the engineers can write code.
+- **Decision:** pnpm workspace with `app/` (Expo + React Native + TypeScript), `api/` (NestJS + Prisma + Postgres), `shared/` (zod schemas for identifiers, auth, entitlements, plan).
+- **Why:** TypeScript on both sides lets us import the same request and response types; one `pnpm install` sets up the whole thing.
+- **See:** `package.json`, `pnpm-workspace.yaml`, `app/README.md`, `api/README.md`.
+
+## 2026-10-19 · First slice shipped as scaffold
+- **Context:** show the agent team end-to-end.
+- **Decision:** Welcome and Verify screens on the app, `POST /v1/auth/code` and `/v1/auth/verify` on the api, identifier normalisation shared in `@casafit/shared`, Jest unit for normalisation and OTP, Supertest e2e for the two endpoints.
+- **Why:** one running feature anchors the plan; the rest fills in behind it.
+- **See:** `app/src/screens/`, `api/src/modules/auth/`, `shared/src/`.
+
 ## Template
 
 ```

@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "CasaFit",
+    "slug": "casafit",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "casafit",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "app.casafit",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Form checks use the camera only while a check is running. Nothing is recorded, saved or uploaded.",
+        "NSMotionUsageDescription": "Counts your daily steps on-device. No GPS, no location."
+      }
+    },
+    "android": {
+      "package": "app.casafit",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.ACTIVITY_RECOGNITION",
+        "android.permission.POST_NOTIFICATIONS"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-dev-client",
+      ["react-native-vision-camera", { "cameraPermissionText": "CasaFit needs the camera only during form checks." }]
+    ],
+    "experiments": { "typedRoutes": true }
+  }
+}

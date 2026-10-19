@@ -1,0 +1,20 @@
+{
+  "name": "casafit",
+  "private": true,
+  "version": "0.1.0",
+  "description": "CasaFit: a 15-minute home-workout app. React Native app + NestJS API in one pnpm workspace.",
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20.18.0 <21"
+  },
+  "scripts": {
+    "check:design": "python tools/check.py",
+    "format": "prettier --write .",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test"
+  },
+  "devDependencies": {
+    "prettier": "3.3.3",
+    "typescript": "5.6.3"
+  }
+}

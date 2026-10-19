@@ -5,3 +5,28 @@
 # Local scratch
 *.tmp
 __pycache__/
+
+# Node / monorepo
+node_modules/
+.pnpm-store/
+dist/
+build/
+coverage/
+.env
+.env.*
+!.env.example
+
+# Expo / React Native
+app/.expo/
+app/.expo-shared/
+app/android/
+app/ios/
+app/web-build/
+
+# Prisma
+api/prisma/*.db
+api/prisma/migrations/dev.db
+
+# Logs
+*.log
+pnpm-debug.log*
