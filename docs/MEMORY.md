@@ -15,6 +15,7 @@ Updated 19 October 2026.
 | [glossary.md](glossary.md) | The product vocabulary (free check, lane, 15-minute shape, warm-up, cool-down and so on) | When terminology is unclear |
 | [decisions.md](decisions.md) | Short, dated log of design decisions and why they were made | When a decision needs recording, or you want the history |
 | [docs-agent.md](docs-agent.md) | How the `docs-keeper` agent reads and updates these files | When you invoke the agent, or want to understand its rules |
+| [team.md](team.md) | The agent team: who owns what, how a feature flows, what each specialist can and cannot touch | Before you call any sub-agent, or when designing a new one |
 
 ## Source files, outside `docs/`
 
