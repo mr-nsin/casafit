@@ -1,0 +1,1284 @@
+<title>CasaFit Architecture Report</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&display=swap">
+<style>
+  /* Layout: single-column document with anchored nav, wide tables scroll */
+  :root {
+    --bg: #FEFBF7;
+    --fg: #1E1B18;
+    --fg-dim: #6B6560;
+    --surface: #F5F0EA;
+    --surface-alt: #EDE7DF;
+    --border: #DDD5CC;
+    --accent: #B85C1F;
+    --accent-light: #FFF0E4;
+    --accent-dark: #8A4010;
+    --green: #2D7A4F;
+    --green-bg: #E8F5EE;
+    --red: #C23A3A;
+    --red-bg: #FDE8E8;
+    --yellow: #A67C1A;
+    --yellow-bg: #FEF7E0;
+    --blue: #2563EB;
+    --blue-bg: #EFF6FF;
+    --code-bg: #F0EBE4;
+    --ff-display: 'Fraunces', Georgia, serif;
+    --ff-body: 'DM Sans', system-ui, sans-serif;
+    --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151210;
+      --fg: #E8E2DB;
+      --fg-dim: #9A9389;
+      --surface: #1F1C19;
+      --surface-alt: #282420;
+      --border: #3A3530;
+      --accent: #E8924A;
+      --accent-light: #2A1D10;
+      --accent-dark: #FFB87A;
+      --green: #5ABE82;
+      --green-bg: #0F2218;
+      --red: #F07070;
+      --red-bg: #2A1010;
+      --yellow: #D4A840;
+      --yellow-bg: #231C0A;
+      --blue: #6B9FFF;
+      --blue-bg: #0F1A2E;
+      --code-bg: #1A1816;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151210;
+    --fg: #E8E2DB;
+    --fg-dim: #9A9389;
+    --surface: #1F1C19;
+    --surface-alt: #282420;
+    --border: #3A3530;
+    --accent: #E8924A;
+    --accent-light: #2A1D10;
+    --accent-dark: #FFB87A;
+    --green: #5ABE82;
+    --green-bg: #0F2218;
+    --red: #F07070;
+    --red-bg: #2A1010;
+    --yellow: #D4A840;
+    --yellow-bg: #231C0A;
+    --blue: #6B9FFF;
+    --blue-bg: #0F1A2E;
+    --code-bg: #1A1816;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--ff-body);
+    font-size: 15px;
+    line-height: 1.65;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+
+  /* Navigation */
+  .doc-nav {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    z-index: 100;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .doc-nav a {
+    font-family: var(--ff-body);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--fg-dim);
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--surface);
+    transition: background .15s, color .15s;
+    white-space: nowrap;
+  }
+  .doc-nav a:hover { background: var(--accent-light); color: var(--accent); }
+  .doc-nav .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-dim);
+    margin-right: 4px;
+  }
+
+  /* Header */
+  .report-header {
+    padding: 48px 0 32px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .report-header .eyebrow {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .report-header h1 {
+    font-family: var(--ff-display);
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--fg);
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  .report-header .summary {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--fg-dim);
+    max-width: 72ch;
+  }
+  .report-header .summary strong { color: var(--fg); font-weight: 600; }
+
+  /* Cost banner */
+  .cost-banner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    padding: 20px 0;
+    margin: 24px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .cost-card {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .cost-card .cost-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-dim);
+    margin-bottom: 6px;
+  }
+  .cost-card .cost-value {
+    font-family: var(--ff-display);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .cost-card .cost-note {
+    font-size: 12px;
+    color: var(--fg-dim);
+    margin-top: 4px;
+  }
+
+  /* Section headings */
+  .part-divider {
+    margin: 56px 0 32px;
+    padding: 24px 0;
+    border-top: 3px solid var(--accent);
+  }
+  .part-divider .part-label {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .part-divider h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--ff-display);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 40px 0 12px;
+    color: var(--fg);
+  }
+  h4 {
+    font-family: var(--ff-body);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 28px 0 8px;
+    color: var(--fg);
+  }
+
+  p { margin: 0 0 14px; max-width: 72ch; }
+  strong { font-weight: 600; color: var(--fg); }
+
+  /* Architecture diagrams */
+  .arch-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .arch-diagram pre {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--fg);
+    white-space: pre;
+    min-width: 0;
+  }
+  .arch-diagram .diagram-title {
+    font-family: var(--ff-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 24px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  thead { background: var(--surface-alt); }
+  th {
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fg-dim);
+    padding: 10px 14px;
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--fg);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface); }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); }
+
+  /* Recommendation callout */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-light);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+  .callout-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .callout p { margin: 0; font-size: 14px; }
+
+  .info-callout {
+    border-left: 3px solid var(--blue);
+    background: var(--blue-bg);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+  .info-callout .callout-title { color: var(--blue); }
+
+  /* Inline code */
+  code {
+    font-family: var(--ff-mono);
+    font-size: 0.88em;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* Flow diagrams — styled boxes */
+  .flow-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .flow-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .flow-box .flow-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .flow-box .flow-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .flow-box .flow-detail {
+    font-size: 13px;
+    color: var(--fg-dim);
+    line-height: 1.5;
+  }
+  .flow-box .flow-price {
+    font-family: var(--ff-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green);
+    margin-top: 6px;
+  }
+
+  /* Stack comparison columns */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .stack-col {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .stack-col-head {
+    padding: 16px;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .stack-col-head.azure { background: var(--blue-bg); color: var(--blue); }
+  .stack-col-head.aws { background: var(--yellow-bg); color: var(--yellow); }
+  .stack-col-head.budget { background: var(--green-bg); color: var(--green); }
+  .stack-col-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .stack-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+    gap: 8px;
+  }
+  .stack-item .item-name { color: var(--fg-dim); min-width: 0; }
+  .stack-item .item-val { font-family: var(--ff-mono); font-weight: 500; white-space: nowrap; }
+
+  /* Footer */
+  .report-footer {
+    margin-top: 56px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--fg-dim);
+  }
+
+  ul, ol { padding-left: 20px; margin: 8px 0 16px; }
+  li { margin-bottom: 4px; }
+
+  @media (max-width: 600px) {
+    .cost-banner { grid-template-columns: 1fr; }
+    .stack-grid { grid-template-columns: 1fr; }
+    .flow-grid { grid-template-columns: 1fr; }
+    table { font-size: 12px; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+
+<nav class="doc-nav">
+  <span class="nav-label">Jump to</span>
+  <a href="#part1">Architecture</a>
+  <a href="#login">Login & Sync</a>
+  <a href="#media">Media Delivery</a>
+  <a href="#dotnet">.NET Mapping</a>
+  <a href="#stacks">Stack Options</a>
+  <a href="#part2">Pricing</a>
+  <a href="#hosting">Hosting</a>
+  <a href="#database">Database</a>
+  <a href="#cache">Cache</a>
+  <a href="#cdn">CDN</a>
+  <a href="#sms">SMS</a>
+  <a href="#services">Services</a>
+  <a href="#totals">Totals</a>
+</nav>
+
+<header class="report-header">
+  <div class="eyebrow">CasaFit · Infrastructure Research · October 2026</div>
+  <h1>Backend Architecture Options &amp; Component Pricing</h1>
+  <div class="summary">
+    For a 15-minute home-workout app targeting India, the architecture hinges on three forces: <strong>DPDP Act data residency</strong>, <strong>near-zero launch costs</strong> via permanent free tiers, and <strong>CDN bandwidth as the dominant cost</strong> once workout videos scale past 1 TB/month. The recommended hybrid stack delivers India compliance at a fraction of pure-cloud costs.
+  </div>
+</header>
+
+<div class="cost-banner">
+  <div class="cost-card">
+    <div class="cost-label">Launch (0–1K users)</div>
+    <div class="cost-value">$5–10</div>
+    <div class="cost-note">per month · hybrid stack</div>
+  </div>
+  <div class="cost-card">
+    <div class="cost-label">Growth (1K–10K)</div>
+    <div class="cost-value">$70–120</div>
+    <div class="cost-note">per month · hybrid stack</div>
+  </div>
+  <div class="cost-card">
+    <div class="cost-label">Scale (10K–100K)</div>
+    <div class="cost-value">$300–600</div>
+    <div class="cost-note">per month · hybrid stack</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PART 1: ARCHITECTURE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<div class="part-divider" id="part1">
+  <div class="part-label">Part 1</div>
+  <h2>High-Level Architecture Overview</h2>
+</div>
+
+<p>CasaFit's architecture follows a standard mobile-backend pattern. The <strong>React Native app</strong> (Android-first for India) communicates with a <strong>backend API</strong> (currently NestJS, with ASP.NET Core evaluated as an alternative) that handles authentication, business logic, subscription management, and content delivery.</p>
+
+<div class="arch-diagram">
+  <div class="diagram-title">System Overview — All Components</div>
+<pre>
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          REACT NATIVE APP                                   │
+│  Expo SDK 52 · TypeScript · react-native-paper (Material 3)                │
+│                                                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌───────────────┐  │
+│  │  Zustand      │  │  TanStack    │  │  WatermelonDB│  │  VisionCamera │  │
+│  │  Auth State   │  │  Query       │  │  Offline DB  │  │  + MediaPipe  │  │
+│  │  + SecureStore│  │  Server State│  │  + Sync      │  │  Pose Runner  │  │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  └───────────────┘  │
+│         │                 │                  │                              │
+│         └─────────────────┼──────────────────┘                              │
+│                           │  HTTPS (JWT Bearer)                            │
+└───────────────────────────┼─────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌───────────────────────────────────────────────────────────────────────────┐
+│                    BACKEND API  (NestJS or ASP.NET Core)                   │
+│               Mumbai (ap-south-1 / Central India)                         │
+│                                                                           │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌───────────────┐  │
+│  │  Auth    │ │ Accounts │ │ Entitle- │ │ Content  │ │  Analytics    │  │
+│  │  Module  │ │ Module   │ │ ments    │ │ Module   │ │  Module       │  │
+│  │ OTP+JWT  │ │ Profile  │ │ Credits  │ │ Signed   │ │  PostHog      │  │
+│  │ Refresh  │ │ Plan     │ │ Pro/Free │ │ URLs     │ │  Proxy        │  │
+│  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘ └──────┬────────┘  │
+│       │            │            │             │              │            │
+└───────┼────────────┼────────────┼─────────────┼──────────────┼────────────┘
+        │            │            │             │              │
+   ┌────▼────┐  ┌────▼────┐  ┌───▼───┐   ┌────▼────┐   ┌─────▼─────┐
+   │ Upstash │  │Supabase │  │Revenue│   │Cloudflare│  │  PostHog  │
+   │ Redis   │  │Pro      │  │Cat    │   │R2 + CDN  │  │  Cloud    │
+   │ OTP/Rate│  │Postgres │  │Billing│   │Zero      │  │           │
+   │ Limit   │  │Auth     │  │Webhook│   │Egress    │  │           │
+   └─────────┘  │Storage  │  └───────┘   └──────────┘  └───────────┘
+                └─────────┘
+        │                           │
+   ┌────▼─────┐                ┌────▼─────┐
+   │ MSG91 /  │                │  Sentry  │
+   │ 2Factor  │                │  Errors  │
+   │ India OTP│                │          │
+   └──────────┘                └──────────┘
+</pre>
+</div>
+
+<!-- LOGIN & SYNC -->
+<h3 id="login">Login System &amp; Multi-Device Sync</h3>
+
+<p>The OTP + JWT login system works in four steps:</p>
+
+<div class="flow-grid">
+  <div class="flow-box">
+    <div class="flow-label">Step 1</div>
+    <div class="flow-name">Send OTP</div>
+    <div class="flow-detail">User submits phone or email. Server generates a 6-digit code with 5-minute TTL stored in Redis, sends via SMS (MSG91/2Factor.in).</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Step 2</div>
+    <div class="flow-name">Verify Code</div>
+    <div class="flow-detail">User enters code. Server verifies against Redis, creates or finds the account, returns JWT access + refresh tokens.</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Step 3</div>
+    <div class="flow-name">Token Pair</div>
+    <div class="flow-detail"><strong>Access token:</strong> 15 min, stateless JWT.<br><strong>Refresh token:</strong> 30 days, stored per device in <code>device_sessions</code>.</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Step 4</div>
+    <div class="flow-name">Offline Grace</div>
+    <div class="flow-detail">7-day offline grace via cached session in SecureStore. 30-day refresh token ensures silent re-auth on reconnect.</div>
+  </div>
+</div>
+
+<h4>Multi-Device Login</h4>
+<p>Each device gets its own independent token pair. A <code>device_sessions</code> table tracks all active sessions per account. Features:</p>
+<ul>
+  <li><strong>Concurrent sessions:</strong> allow up to N devices (configurable, default 5)</li>
+  <li><strong>Remote logout:</strong> user can revoke any device from Settings</li>
+  <li><strong>Refresh rotation:</strong> each refresh token is single-use; replay detection revokes the entire family</li>
+</ul>
+
+<h4>Data Sync Across Devices</h4>
+<p><strong>Pull-based sync</strong> (recommended for a workout app): each device calls <code>GET /sync?since=&lt;timestamp&gt;</code> on app open, and the server returns deltas.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Data Type</th><th>Sync Direction</th><th>Conflict Resolution</th><th>Authority</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Free-check balance</td><td>Server → Client</td><td>Server wins (idempotency key)</td><td>Server</td></tr>
+    <tr><td>Pro subscription status</td><td>Server → Client</td><td>Server wins (receipt validation)</td><td>Server</td></tr>
+    <tr><td>Plan &amp; onboarding</td><td>Bidirectional</td><td>Last-write-wins with timestamp</td><td>Last write</td></tr>
+    <tr><td>Food log</td><td>Client → Server batch</td><td>Merge by entry ID</td><td>Client creates</td></tr>
+    <tr><td>Step summaries</td><td>Client → Server batch</td><td>Max of both values per day</td><td>Merge</td></tr>
+    <tr><td>Session logs</td><td>Client → Server batch</td><td>Deduplicate by session UUID</td><td>Client creates</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- MEDIA DELIVERY -->
+<h3 id="media">Image &amp; Video Storage and Delivery</h3>
+
+<p>Workout videos are short exercise demos (10–30 seconds). The app is offline-first — users download session packs on Wi-Fi.</p>
+
+<div class="arch-diagram">
+  <div class="diagram-title">Media Delivery Flow</div>
+<pre>
+  Upload Pipeline                          Download Pipeline
+  ═══════════════                          ════════════════
+
+  Admin uploads           CDN caches          App requests
+  exercise video          at edge             session pack
+       │                     │                     │
+       ▼                     │                     ▼
+  ┌──────────┐          ┌────┴─────┐       ┌──────────────┐
+  │ Transcode│          │Cloudflare│       │ GET /content/ │
+  │ to 3     │──store──▶│  R2      │       │ pack/latest  │
+  │ qualities│          │ (origin) │       └──────┬───────┘
+  │ 360p     │          └────┬─────┘              │
+  │ 480p     │               │              JSON manifest
+  │ 720p     │               ▼              with signed URLs
+  └──────────┘          ┌──────────┐              │
+       │                │Cloudflare│              ▼
+  Generate              │  CDN     │       ┌──────────────┐
+  thumbnails            │ 22+ India│       │ Background   │
+  3 sizes               │ PoPs     │       │ Wi-Fi        │
+  WebP                  └────┬─────┘       │ Download     │
+       │                     │             │ WorkManager  │
+       └─────────────────────┘             │ BGTask       │
+                             │             └──────┬───────┘
+                             └─────────────────────┘
+                                   cached locally
+                                   plays offline
+
+  Video format: H.264 AVC / MP4 (max Indian device compat)
+  Quality tiers: 360p (2G), 480p (3G), 720p (4G+)
+  Pro content: signed URLs, 1–4 hour expiry
+  Cache: immutable, max-age=31536000
+</pre>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Recommendation</div>
+  <p>Use <strong>MP4 progressive download</strong> over HLS for 10–30s exercise demos. HLS adds complexity (manifest + segments) with no benefit for clips this short. Pre-generate 3 quality tiers at upload time.</p>
+</div>
+
+<!-- .NET MAPPING -->
+<h3 id="dotnet">Replacing NestJS with ASP.NET Core</h3>
+
+<p>NestJS and ASP.NET Core share remarkably similar patterns — decorator-based routing, constructor-injected services, and middleware pipelines — making the migration structurally straightforward.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>NestJS Concept</th><th>ASP.NET Core Equivalent</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>@Module()</code></td><td><code>IServiceCollection</code> extensions in <code>Program.cs</code></td><td>Register services per feature area</td></tr>
+    <tr><td><code>@Controller()</code></td><td><code>[ApiController]</code> class</td><td>Nearly identical decorator pattern</td></tr>
+    <tr><td><code>@Injectable()</code> service</td><td>Constructor-injected service via DI</td><td>Built-in DI, no third-party needed</td></tr>
+    <tr><td><code>@UseGuards(JwtGuard)</code></td><td><code>[Authorize]</code> + <code>AddJwtBearer()</code></td><td>Built-in JWT middleware</td></tr>
+    <tr><td>class-validator pipes</td><td>FluentValidation or DataAnnotations</td><td>FluentValidation is closest match</td></tr>
+    <tr><td>NestJS exception filters</td><td><code>IExceptionHandler</code> (.NET 8+)</td><td>Global or per-controller</td></tr>
+    <tr><td>Prisma 5 (ORM)</td><td>Entity Framework Core + Npgsql</td><td>Code-first migrations, LINQ queries</td></tr>
+    <tr><td>BullMQ (queues)</td><td>Hangfire with Postgres storage</td><td>Free, built-in dashboard</td></tr>
+    <tr><td>@nestjs/swagger</td><td>Swashbuckle / NSwag</td><td>OpenAPI generation built-in</td></tr>
+    <tr><td>Zod schemas (shared/)</td><td>Shared DTOs as a class library project</td><td>Compiled type safety</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>ASP.NET Core Project Structure (Clean Architecture)</h4>
+<div class="flow-grid">
+  <div class="flow-box">
+    <div class="flow-label">API Layer</div>
+    <div class="flow-name">CasaFit.Api</div>
+    <div class="flow-detail">Controllers, Program.cs, middleware config, Swagger setup</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Application</div>
+    <div class="flow-name">CasaFit.Application</div>
+    <div class="flow-detail">AuthService, AccountService, EntitlementService — business logic</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Domain</div>
+    <div class="flow-name">CasaFit.Domain</div>
+    <div class="flow-detail">Entities, interfaces, value objects, domain rules</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Infrastructure</div>
+    <div class="flow-name">CasaFit.Infrastructure</div>
+    <div class="flow-detail">EF Core DbContext, Redis client, external API integrations</div>
+  </div>
+</div>
+
+<h4>Tradeoffs: NestJS vs ASP.NET Core</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Factor</th><th>NestJS (current)</th><th>ASP.NET Core</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Performance</td><td>Good (V8 + libuv)</td><td><span class="badge badge-green">Better</span> TechEmpower benchmarks</td></tr>
+    <tr><td>Type safety</td><td>TypeScript (runtime)</td><td><span class="badge badge-green">Stronger</span> compile-time</td></tr>
+    <tr><td>Shared code w/ app</td><td><span class="badge badge-green">Same language</span> (TS)</td><td>Separate DTOs needed</td></tr>
+    <tr><td>Developer pool (India)</td><td><span class="badge badge-green">Large</span> Node.js/TS</td><td><span class="badge badge-yellow">Smaller</span> for backends</td></tr>
+    <tr><td>RevenueCat SDK</td><td><span class="badge badge-green">Official</span></td><td><span class="badge badge-red">REST API only</span></td></tr>
+    <tr><td>Cold start (serverless)</td><td>~1–2s</td><td>~3–5s (mitigated by AOT)</td></tr>
+    <tr><td>Azure integration</td><td>Good</td><td><span class="badge badge-green">Native</span></td></tr>
+    <tr><td>Migration cost</td><td>N/A (current)</td><td><span class="badge badge-red">Full rewrite</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Recommendation</div>
+  <p><strong>Keep NestJS for now.</strong> The shared TypeScript with the React Native app, the official RevenueCat SDK, and the larger Indian developer pool outweigh .NET's performance advantage at CasaFit's current stage. Consider .NET only if the team has .NET expertise or performance bottlenecks emerge.</p>
+</div>
+
+<!-- THREE STACKS -->
+<h3 id="stacks">Three Stack Options</h3>
+
+<p>The architecture is identical across all three — only the hosting providers change.</p>
+
+<div class="stack-grid">
+  <div class="stack-col">
+    <div class="stack-col-head azure">Stack A · Azure</div>
+    <div class="stack-col-body">
+      <div class="stack-item"><span class="item-name">API</span><span class="item-val">App Service B1</span></div>
+      <div class="stack-item"><span class="item-name">Database</span><span class="item-val">Azure Flex Postgres</span></div>
+      <div class="stack-item"><span class="item-name">Cache</span><span class="item-val">Azure Cache Redis</span></div>
+      <div class="stack-item"><span class="item-name">Storage</span><span class="item-val">Blob + Front Door</span></div>
+      <div class="stack-item"><span class="item-name">SMS</span><span class="item-val">MSG91</span></div>
+      <div class="stack-item"><span class="item-name">Push</span><span class="item-val">Notification Hubs</span></div>
+      <div class="stack-item"><span class="item-name">India Region</span><span class="badge badge-green">3 regions</span></div>
+      <div class="stack-item"><span class="item-name">Launch</span><span class="item-val" style="color:var(--red)">~$37–40/mo</span></div>
+    </div>
+  </div>
+  <div class="stack-col">
+    <div class="stack-col-head aws">Stack B · AWS</div>
+    <div class="stack-col-body">
+      <div class="stack-item"><span class="item-name">API</span><span class="item-val">App Runner / Fargate</span></div>
+      <div class="stack-item"><span class="item-name">Database</span><span class="item-val">RDS PostgreSQL</span></div>
+      <div class="stack-item"><span class="item-name">Cache</span><span class="item-val">ElastiCache Redis</span></div>
+      <div class="stack-item"><span class="item-name">Storage</span><span class="item-val">S3 + CloudFront</span></div>
+      <div class="stack-item"><span class="item-name">SMS</span><span class="item-val">MSG91</span></div>
+      <div class="stack-item"><span class="item-name">Push</span><span class="item-val">FCM (free)</span></div>
+      <div class="stack-item"><span class="item-name">India Region</span><span class="badge badge-green">Mumbai + Hyd</span></div>
+      <div class="stack-item"><span class="item-name">Launch</span><span class="item-val" style="color:var(--yellow)">~$8–10/mo</span></div>
+    </div>
+  </div>
+  <div class="stack-col">
+    <div class="stack-col-head budget">Stack C · Hybrid (Recommended)</div>
+    <div class="stack-col-body">
+      <div class="stack-item"><span class="item-name">API</span><span class="item-val">Render / App Runner</span></div>
+      <div class="stack-item"><span class="item-name">Database</span><span class="item-val">Supabase Pro</span></div>
+      <div class="stack-item"><span class="item-name">Cache</span><span class="item-val">Upstash Redis</span></div>
+      <div class="stack-item"><span class="item-name">Storage</span><span class="item-val">R2 + Cloudflare CDN</span></div>
+      <div class="stack-item"><span class="item-name">SMS</span><span class="item-val">2Factor.in / MSG91</span></div>
+      <div class="stack-item"><span class="item-name">Push</span><span class="item-val">FCM (free)</span></div>
+      <div class="stack-item"><span class="item-name">India Region</span><span class="badge badge-green">Mumbai + 22 CDN</span></div>
+      <div class="stack-item"><span class="item-name">Launch</span><span class="item-val" style="color:var(--green)">~$5–10/mo</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="info-callout">
+  <div class="callout-title">India Data Residency</div>
+  <p><strong>Railway and Render have no India region</strong> — nearest is Singapore. This fails DPDP Act compliance for the API/database layer. For the API compute, use AWS App Runner (Mumbai) or Azure Container Apps (Central India). Cloudflare R2 stores video in the nearest APAC region, but its CDN caches in 22+ Indian cities.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PART 2: PRICING -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<div class="part-divider" id="part2">
+  <div class="part-label">Part 2</div>
+  <h2>Component Alternatives &amp; Pricing</h2>
+</div>
+
+<p>Every component below has 2–3 alternatives compared on pricing, India region availability, and startup-friendliness. All costs in USD/month unless noted. Pricing as of October 2026.</p>
+
+<!-- HOSTING -->
+<h3 id="hosting">Backend Hosting</h3>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Platform</th><th>India Region</th><th>.NET Support</th><th>Launch Cost</th><th>Growth Cost</th><th>Scale Cost</th><th>Free Tier</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Azure Container Apps</strong></td>
+      <td><span class="badge badge-green">Yes</span> 3 regions</td>
+      <td><span class="badge badge-green">Native</span></td>
+      <td>$0</td>
+      <td>~$20</td>
+      <td>~$63</td>
+      <td>180K vCPU-sec/mo</td>
+    </tr>
+    <tr>
+      <td><strong>AWS App Runner</strong></td>
+      <td><span class="badge badge-green">Yes</span> Mumbai</td>
+      <td>Docker</td>
+      <td>$5–7</td>
+      <td>$25</td>
+      <td>$70–90</td>
+      <td>None (pay from $0.007/hr)</td>
+    </tr>
+    <tr>
+      <td><strong>Google Cloud Run</strong></td>
+      <td><span class="badge badge-green">Yes</span> Mumbai + Delhi</td>
+      <td>Docker</td>
+      <td>$0</td>
+      <td>~$30</td>
+      <td>~$55</td>
+      <td>240K vCPU-sec/mo</td>
+    </tr>
+    <tr>
+      <td><strong>Azure App Service</strong></td>
+      <td><span class="badge badge-green">Yes</span> 3 regions</td>
+      <td><span class="badge badge-green">Native</span></td>
+      <td>$0 (F1)</td>
+      <td>$13 (B1)</td>
+      <td>$100 (S2)</td>
+      <td>60 CPU min/day (limited)</td>
+    </tr>
+    <tr>
+      <td><strong>Coolify + DO BLR1</strong></td>
+      <td><span class="badge badge-green">Yes</span> Bangalore</td>
+      <td>Docker</td>
+      <td>$6–12</td>
+      <td>$12–24</td>
+      <td>$24–48</td>
+      <td>Coolify is OSS free</td>
+    </tr>
+    <tr>
+      <td><strong>Railway</strong></td>
+      <td><span class="badge badge-red">No</span> (Singapore)</td>
+      <td>Docker</td>
+      <td>$5</td>
+      <td>$25–30</td>
+      <td>$60–80</td>
+      <td>$5 free credit/mo</td>
+    </tr>
+    <tr>
+      <td><strong>Render</strong></td>
+      <td><span class="badge badge-red">No</span> (Singapore)</td>
+      <td>Docker</td>
+      <td>$0</td>
+      <td>$7</td>
+      <td>$25</td>
+      <td>Free with spin-down</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- DATABASE -->
+<h3 id="database">Database</h3>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Database</th><th>Mumbai Region</th><th>Launch</th><th>Growth</th><th>Scale</th><th>Auth/Storage Built-in</th><th>Free Tier</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Supabase Pro</strong></td>
+      <td><span class="badge badge-green">Yes</span></td>
+      <td>$0</td>
+      <td>$25</td>
+      <td>$75–150</td>
+      <td><span class="badge badge-green">Yes</span> all-in-one</td>
+      <td>500 MB, pauses after 1 wk idle</td>
+    </tr>
+    <tr>
+      <td><strong>AWS RDS PostgreSQL</strong></td>
+      <td><span class="badge badge-green">Yes</span></td>
+      <td>$0 (12-mo free)</td>
+      <td>$25–30</td>
+      <td>$120–150</td>
+      <td><span class="badge badge-red">No</span></td>
+      <td>750 hrs t3.micro × 12 mo</td>
+    </tr>
+    <tr>
+      <td><strong>Azure Flex Postgres</strong></td>
+      <td><span class="badge badge-green">Yes</span> Central India</td>
+      <td>$15</td>
+      <td>$25–30</td>
+      <td>$130–150</td>
+      <td><span class="badge badge-red">No</span></td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><strong>Neon</strong></td>
+      <td><span class="badge badge-yellow">Unconfirmed</span></td>
+      <td>$0</td>
+      <td>$19</td>
+      <td>Usage-based</td>
+      <td><span class="badge badge-red">No</span></td>
+      <td>0.5 GB, scale-to-zero</td>
+    </tr>
+    <tr>
+      <td><strong>Google Cloud SQL</strong></td>
+      <td><span class="badge badge-green">Yes</span></td>
+      <td>$35–50</td>
+      <td>~$50</td>
+      <td>$100+</td>
+      <td><span class="badge badge-red">No</span></td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><strong>CockroachDB</strong></td>
+      <td><span class="badge badge-yellow">Unconfirmed</span></td>
+      <td>$0</td>
+      <td>Usage-based</td>
+      <td>Usage-based</td>
+      <td><span class="badge badge-red">No</span></td>
+      <td>50M RUs + 10 GB</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Supabase as CasaFit's Backend?</div>
+  <p>Supabase Pro ($25/mo) bundles Postgres + Auth + Storage + Edge Functions + Realtime. It can replace the database and auth layers, but <strong>not the full backend</strong>: edge functions are limited to 256 MB RAM and 2s CPU, insufficient for complex business logic like plan generation or entitlement management. Use Supabase for data + auth, keep NestJS/.NET for API logic.</p>
+</div>
+
+<!-- CACHE -->
+<h3 id="cache">Cache &amp; Queue</h3>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Service</th><th>Mumbai</th><th>Launch</th><th>Growth</th><th>Scale</th><th>Free Tier</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Upstash Redis</strong></td>
+      <td><span class="badge badge-green">Likely</span> ap-south-1</td>
+      <td>$0</td>
+      <td>$3–8</td>
+      <td>$10–30</td>
+      <td>256 MB, 500K cmds/mo</td>
+    </tr>
+    <tr>
+      <td><strong>Upstash QStash</strong></td>
+      <td>Global (push-based)</td>
+      <td>$0</td>
+      <td>$1–3</td>
+      <td>$10–20</td>
+      <td>1K msgs/day</td>
+    </tr>
+    <tr>
+      <td><strong>AWS ElastiCache</strong></td>
+      <td><span class="badge badge-green">Yes</span></td>
+      <td>$13–16</td>
+      <td>$20–25</td>
+      <td>$80–100</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><strong>Azure Cache Redis</strong></td>
+      <td><span class="badge badge-green">Yes</span></td>
+      <td>$17</td>
+      <td>$40</td>
+      <td>$52–80</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><strong>Self-hosted Dragonfly</strong></td>
+      <td>Any Indian VPS</td>
+      <td>$8–10 (VM)</td>
+      <td>$10–15</td>
+      <td>$15–24</td>
+      <td>OSS free</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- CDN -->
+<h3 id="cdn">Object Storage + CDN</h3>
+
+<p>CDN bandwidth is the <strong>dominant variable cost</strong> for a video-heavy fitness app. At 100K users downloading ~200 MB/month of video content, that's ~20 TB/month.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Bundle</th><th>50 GB + 500 GB/mo</th><th>500 GB + 5 TB/mo</th><th>500 GB + 20 TB/mo</th><th>India PoPs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>R2 + Cloudflare CDN</strong></td>
+      <td style="color:var(--green);font-weight:600">$0.93</td>
+      <td style="color:var(--green);font-weight:600">$7.50</td>
+      <td style="color:var(--green);font-weight:600">$7.50</td>
+      <td>22+ cities</td>
+    </tr>
+    <tr>
+      <td><strong>S3 + CloudFront</strong></td>
+      <td>$1.25 (free CDN)</td>
+      <td style="color:var(--red)">$440</td>
+      <td style="color:var(--red)">$1,760</td>
+      <td>7 cities + 46 embedded</td>
+    </tr>
+    <tr>
+      <td><strong>Bunny Storage + CDN</strong></td>
+      <td>$16</td>
+      <td>$151</td>
+      <td>$601</td>
+      <td>5 cities</td>
+    </tr>
+    <tr>
+      <td><strong>B2 + Cloudflare</strong></td>
+      <td style="color:var(--green);font-weight:600">$0.30</td>
+      <td style="color:var(--green);font-weight:600">$3</td>
+      <td style="color:var(--green);font-weight:600">$3</td>
+      <td>22+ (CDN), US origin</td>
+    </tr>
+    <tr>
+      <td><strong>Azure Blob + Front Door</strong></td>
+      <td>$41</td>
+      <td style="color:var(--red)">~$550</td>
+      <td style="color:var(--red)">~$2,200</td>
+      <td>Varies by tier</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Key Insight</div>
+  <p>At 100K users with 20 TB/month video delivery: Azure CDN costs <strong>~$2,200/mo</strong>, AWS CloudFront costs <strong>~$1,760/mo</strong>, but Cloudflare R2 costs <strong>$7.50/mo</strong>. Choosing the right CDN from day one avoids a painful migration later.</p>
+</div>
+
+<!-- SMS -->
+<h3 id="sms">SMS/OTP for India</h3>
+
+<p>All providers require DLT (TRAI) registration. Azure Communication Services does not support SMS to India at all.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Provider</th><th>Per OTP (INR)</th><th>Per OTP (USD)</th><th>DLT Support</th><th>WhatsApp OTP</th><th>Best For</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>2Factor.in</strong></td>
+      <td style="color:var(--green);font-weight:600">~₹0.12</td>
+      <td>~$0.0014</td>
+      <td><span class="badge badge-green">Free setup</span></td>
+      <td>Yes (Meta rate)</td>
+      <td>Budget startup</td>
+    </tr>
+    <tr>
+      <td><strong>MSG91</strong></td>
+      <td>~₹0.15</td>
+      <td>~$0.0018</td>
+      <td><span class="badge badge-green">Included</span></td>
+      <td>Yes</td>
+      <td>Mature API + auto-retry</td>
+    </tr>
+    <tr>
+      <td><strong>Gupshup</strong></td>
+      <td>~₹0.17</td>
+      <td>~$0.0020</td>
+      <td><span class="badge badge-green">Included</span></td>
+      <td><span class="badge badge-green">Strong</span></td>
+      <td>WhatsApp-first delivery</td>
+    </tr>
+    <tr>
+      <td><strong>Twilio Verify</strong></td>
+      <td style="color:var(--red)">~₹0.45</td>
+      <td style="color:var(--red)">~$0.0054</td>
+      <td>Self-serve</td>
+      <td>Yes</td>
+      <td>Global apps, brand trust</td>
+    </tr>
+    <tr>
+      <td><strong>Exotel</strong></td>
+      <td>~₹0.20</td>
+      <td>~$0.0024</td>
+      <td><span class="badge badge-green">Included</span></td>
+      <td>No</td>
+      <td>Voice OTP fallback</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- SERVICES -->
+<h3 id="services">Push, Billing, Analytics &amp; Monitoring</h3>
+
+<h4>Push Notifications</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Service</th><th>Free Tier</th><th>Paid Tier</th><th>React Native SDK</th><th>Best For</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>FCM</strong></td>
+      <td><span class="badge badge-green">Unlimited free</span></td>
+      <td>N/A</td>
+      <td><span class="badge badge-green">@react-native-firebase</span></td>
+      <td>Android-first India app</td>
+    </tr>
+    <tr>
+      <td><strong>OneSignal</strong></td>
+      <td>Unlimited mobile push</td>
+      <td>$19/mo + $0.012/MAU</td>
+      <td>Good</td>
+      <td>Segmentation &amp; A/B</td>
+    </tr>
+    <tr>
+      <td><strong>Novu</strong></td>
+      <td>30K events/mo (OSS free)</td>
+      <td>$0–30/mo</td>
+      <td>HTTP API</td>
+      <td>Multi-channel (email + push + SMS)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h4>Subscription Billing</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Service</th><th>Free Tier</th><th>Pricing Model</th><th>React Native SDK</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>RevenueCat</strong></td>
+      <td>Up to $2,500 MTR</td>
+      <td>1% of revenue after free tier</td>
+      <td><span class="badge badge-green">Best in class</span></td>
+      <td>Industry standard, server-side validation, webhooks</td>
+    </tr>
+    <tr>
+      <td><strong>Adapty</strong></td>
+      <td>Up to $5,000 MTR</td>
+      <td>1–1.5% of revenue</td>
+      <td>Good</td>
+      <td>Higher free tier, less battle-tested RN SDK</td>
+    </tr>
+    <tr>
+      <td><strong>Qonversion</strong></td>
+      <td>Up to $10K MTR (Starter)</td>
+      <td>Starts ~$99/mo after</td>
+      <td>Good</td>
+      <td>Highest free tier, but flat fee scales worse</td>
+    </tr>
+    <tr>
+      <td><strong>DIY (StoreKit 2 + Play Billing)</strong></td>
+      <td>N/A</td>
+      <td>$0 + engineering time</td>
+      <td>N/A</td>
+      <td>2–4 weeks of engineering, complex edge cases</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h4>Analytics</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Service</th><th>Free Tier</th><th>Growth Cost</th><th>Self-Hosted</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>PostHog</strong></td>
+      <td><span class="badge badge-green">1M events/mo</span> + 5K recordings + 100K errors</td>
+      <td>$0–20/mo</td>
+      <td><span class="badge badge-green">Yes</span></td>
+      <td>All-in-one: analytics + recordings + feature flags + errors</td>
+    </tr>
+    <tr>
+      <td><strong>Mixpanel</strong></td>
+      <td>1M events/mo</td>
+      <td>~$28/mo (Growth)</td>
+      <td>No</td>
+      <td>Strong behavioral analytics, credit card for Growth</td>
+    </tr>
+    <tr>
+      <td><strong>Amplitude</strong></td>
+      <td>2M events/mo</td>
+      <td>Custom pricing</td>
+      <td>No</td>
+      <td>Best free tier volume, but limited features</td>
+    </tr>
+    <tr>
+      <td><strong>Firebase Analytics</strong></td>
+      <td><span class="badge badge-green">Unlimited free</span></td>
+      <td>$0</td>
+      <td>No</td>
+      <td>Free + integrates with FCM, but no session replay</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h4>Error Monitoring</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Service</th><th>Free Tier</th><th>Paid Tier</th><th>React Native SDK</th><th>.NET SDK</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Sentry</strong></td>
+      <td>5K errors/mo</td>
+      <td>~$26/mo (50K errors)</td>
+      <td><span class="badge badge-green">@sentry/react-native</span></td>
+      <td><span class="badge badge-green">Sentry.AspNetCore</span></td>
+    </tr>
+    <tr>
+      <td><strong>PostHog (bundled)</strong></td>
+      <td>100K exceptions/mo</td>
+      <td>Usage-based</td>
+      <td>Via PostHog SDK</td>
+      <td>HTTP API</td>
+    </tr>
+    <tr>
+      <td><strong>Azure App Insights</strong></td>
+      <td>5 GB/mo ingestion</td>
+      <td>~$2.30/GB after</td>
+      <td>No native RN SDK</td>
+      <td><span class="badge badge-green">Native .NET</span></td>
+    </tr>
+    <tr>
+      <td><strong>Bugsnag</strong></td>
+      <td>7.5K events/mo</td>
+      <td>~$47/mo</td>
+      <td>Good</td>
+      <td>Good</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- TOTALS -->
+<h3 id="totals">Total Cost Comparison</h3>
+
+<p>Aggregated monthly costs across all three stacks at three user-growth tiers. RevenueCat's revenue percentage is excluded from infrastructure totals.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Component</th><th colspan="3" style="text-align:center">Launch (0–1K users)</th><th colspan="3" style="text-align:center">Growth (1K–10K)</th><th colspan="3" style="text-align:center">Scale (10K–100K)</th></tr>
+    <tr><th></th><th>Azure</th><th>AWS</th><th>Hybrid</th><th>Azure</th><th>AWS</th><th>Hybrid</th><th>Azure</th><th>AWS</th><th>Hybrid</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>API Compute</td><td>$0</td><td>$5–7</td><td>$0–5</td><td>$13</td><td>$25</td><td>$7–30</td><td>$100</td><td>$70–90</td><td>$25–80</td></tr>
+    <tr><td>Database</td><td>$12–15</td><td>$0*</td><td>$0</td><td>$25–30</td><td>$25–30</td><td>$25</td><td>$130–150</td><td>$120–150</td><td>$75–150</td></tr>
+    <tr><td>Redis Cache</td><td>$17</td><td>$0*</td><td>$0</td><td>$40</td><td>$20–25</td><td>$3–10</td><td>$52</td><td>$80–100</td><td>$10–30</td></tr>
+    <tr><td>Storage + CDN</td><td>$6</td><td>$1</td><td>$0</td><td>$17</td><td>$6</td><td>$4</td><td>$65</td><td>$58</td><td>$7.50</td></tr>
+    <tr><td>SMS OTP</td><td>$2</td><td>$2</td><td>$2</td><td>$10–12</td><td>$10–12</td><td>$10–12</td><td>$80–100</td><td>$80–100</td><td>$80–100</td></tr>
+    <tr><td>Push</td><td>$0</td><td>$0</td><td>$0</td><td>$10</td><td>$0</td><td>$0</td><td>$10–200</td><td>$0</td><td>$0</td></tr>
+    <tr><td>Monitoring</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0–26</td><td>$0–26</td><td>$23–50</td><td>$26–89</td><td>$26–89</td></tr>
+    <tr><td>Analytics</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$50–150</td><td>$50–150</td><td>$50–150</td></tr>
+    <tr style="font-weight:700;background:var(--surface-alt)">
+      <td>TOTAL</td>
+      <td style="color:var(--red)">~$37–40</td>
+      <td style="color:var(--yellow)">~$8–10</td>
+      <td style="color:var(--green)">~$2–7</td>
+      <td style="color:var(--red)">~$115–122</td>
+      <td style="color:var(--yellow)">~$86–99</td>
+      <td style="color:var(--green)">~$49–82</td>
+      <td style="color:var(--red)">~$510–865</td>
+      <td style="color:var(--yellow)">~$484–679</td>
+      <td style="color:var(--green)">~$273–599</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p style="font-size:13px;color:var(--fg-dim)">* AWS free tier expires after 12 months; plan for $25–40/mo increase when it does.</p>
+
+<div class="callout" style="margin-top:32px">
+  <div class="callout-title">Final Recommendation</div>
+  <p><strong>Start with permanent free tiers, not 12-month trials.</strong> AWS's free tier cliff is a budgeting trap for startups. <strong>Choose zero-egress storage early</strong> — CDN bandwidth will become the dominant cost for a video-heavy fitness app. The recommended hybrid stack: <strong>Supabase Pro (Mumbai)</strong> for the data layer, <strong>Cloudflare R2</strong> for video assets, <strong>AWS App Runner or Azure Container Apps</strong> for compute, <strong>Upstash</strong> for serverless cache, <strong>MSG91/2Factor.in</strong> for SMS, <strong>FCM</strong> for push, <strong>RevenueCat</strong> for billing, <strong>PostHog + Sentry</strong> for observability.</p>
+</div>
+
+<div class="report-footer">
+  <p><strong>CasaFit Architecture Research Report</strong> · Generated October 2026 · Pricing is estimated from publicly available sources and may vary. Verify with provider pricing calculators before committing.</p>
+  <p>Sources: official pricing pages from AWS, Azure, Google Cloud, Cloudflare, Supabase, Upstash, Bunny.net, Backblaze, RevenueCat, PostHog, Sentry, MSG91, 2Factor.in, Twilio, and industry comparison articles.</p>
+</div>
