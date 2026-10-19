@@ -7,9 +7,9 @@ This is a proposed architecture for the first release. Nothing is built yet. The
 ```
    ┌────────────────────────────────────────────────────┐
    │                    Mobile client                   │
-   │  Jetpack Compose (Android) / SwiftUI (iOS)         │
+   │  React Native 0.76 + Expo Dev Client + TypeScript  │
    │  Plan engine · Session player · Pose runner        │
-   │  Local database (SQLite / Room / GRDB)             │
+   │  Local database (Op-SQLite + Drizzle ORM)          │
    └───────────────┬──────────────────────┬─────────────┘
                    │ HTTPS (OTP, sync)    │ store billing
                    │                      │
@@ -32,23 +32,28 @@ Everything else runs on the phone: the session player, the plan builder, the pos
 
 ## 2 · Client (phone)
 
-### 2.1 Platforms
+### 2.1 Platform
 
-- **Android:** Kotlin, Jetpack Compose, min SDK 26 (Android 8). This covers roughly the India-first install base.
-- **iOS:** Swift, SwiftUI, iOS 16 or newer.
-- Material 3 design language shared across both, from the Material 3 screens in `project/`.
+- **React Native 0.76+** with the New Architecture (Fabric + TurboModules).
+- **Expo SDK 52+ with a Dev Client** (not the managed workflow). Keeps Expo's ergonomics while allowing the native modules we need for pose, attestation and billing.
+- **TypeScript 5**, `strict: true`. One language with the backend.
+- **Material 3 look** matched by `react-native-paper` plus tokens exported from the design pack.
+- **Android min SDK 26**, **iOS 16+**.
 
 ### 2.2 On-device modules
+
+Each is a package under `app/src/modules/`.
 
 | Module | Responsibility |
 |---|---|
 | **Plan engine** | Builds the week-one plan from onboarding answers using rules. See `decisions.md` for the "rules not AI" decision. |
 | **Content catalogue** | Downloaded videos, demos, muscle tags and the substitution ladder, bundled or pulled on Wi-Fi. |
 | **Session player** | Timer, voice coach, rest and skip controls, offline. |
-| **Pose runner** | On-device MediaPipe Pose (Android via Tasks API; iOS via Vision + a shared ONNX model). Runs only on the four analysed exercises. |
-| **Step counter** | Reads the phone's step sensor (Android `TYPE_STEP_COUNTER`, Core Motion on iOS) or Health Connect / HealthKit. |
-| **Food database** | SQLite copy of the Indian food catalogue plus the user's log. |
+| **Pose runner** | `react-native-vision-camera` + a MediaPipe Pose Tasks frame-processor plugin. On-device on both platforms. Runs only on the four analysed exercises. |
+| **Step counter** | `expo-sensors` Pedometer, with `react-native-health-connect` as the Android fallback. Reads the phone's step sensor or Health Connect / HealthKit. No GPS. |
+| **Food database** | Op-SQLite copy of the Indian food catalogue plus the user's log. |
 | **Local store** | Encrypted at rest. Health answers never leave the phone unless the user turns on sync in Privacy. |
+| **Entitlements cache** | Caches the free-check balance and Pro state. Spends offline against the cache; reconciles with the server on reconnect. |
 
 ### 2.3 Offline first
 
@@ -63,7 +68,7 @@ The phone keeps a cached session token with a grace period (7 days by default). 
 
 ## 3 · Backend services
 
-Kept small. Everything stateless, horizontally scalable, behind one API gateway.
+**One NestJS 10 service on Node.js 20**, six `@Module`s inside it. One Dockerfile, one deploy. Stateless, horizontally scalable behind an application load balancer. Split a module into its own service only when traffic justifies.
 
 ### 3.1 Auth service
 
@@ -78,13 +83,14 @@ Kept small. Everything stateless, horizontally scalable, behind one API gateway.
 - **Store:** Postgres. One row per account, foreign-keyed child tables.
 - **Health answers:** stored only when the user turns on sync; encrypted column-level with a per-account key.
 
-### 3.3 Entitlement service
+### 3.3 Entitlements module
 
 Holds the number that matters most for billing: a free account's lifetime form-check balance.
 
 - **Rule:** 2 credits per account, for the life of the account. No daily reset. No reset on reinstall.
 - **Enforcement:** the server is the source of truth. The phone caches the balance, and reconciles when online. See `data-model.md` for the credit record and offline-spend rules.
-- **Pro:** backed by store subscription receipts, validated against Play Billing and App Store Server API. Cached on the phone, re-validated at least once a day when online.
+- **Idempotency:** every `/entitlements/consume` and `/entitlements/refund` carries a client-generated key. A unique index on `(account_id, kind, idempotency_key)` makes retries safe.
+- **Pro:** RevenueCat is the integration surface. It posts webhooks on sign-up, renewal and cancellation; the backend cross-checks with Google Play Developer API and App Store Server API. The phone caches Pro state for a day. |
 
 ### 3.4 Content delivery
 
@@ -146,11 +152,12 @@ Targets are starting hypotheses; refine from the first beta.
 
 ## 7 · What this architecture is not
 
-- No microservices-per-feature. One API binary with four packages is enough until there is traffic to split.
-- No bespoke video player. Use the platform video SDKs.
-- No bespoke pose model. MediaPipe Pose on both platforms until there is evidence it is not enough.
+- No microservices-per-feature. One NestJS service with six modules is enough until there is traffic to split.
+- No bespoke video player. `react-native-video` wraps the platform players.
+- No bespoke pose model. MediaPipe Pose Tasks on both platforms until there is evidence it is not enough.
 - No server-side computer vision in v1. See the "camera stays on the phone" decision in `decisions.md`.
 - No ML pipeline for food recognition in v1. v2 adds a third-party vision API behind a confirm-and-correct UI.
+- No GraphQL, no gRPC. REST + JSON at `/v1/`, versioned.
 
 ## 8 · Where to go next
 

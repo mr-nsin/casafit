@@ -2,6 +2,24 @@
 
 A short, dated log of design and technical decisions. Add a row at the top. Keep each entry to a few lines; link to the full discussion if there is one.
 
+## 2026-10-19 · React Native + Expo Dev Client for the mobile client
+- **Context:** two native codebases (Kotlin/Compose + Swift/SwiftUI) double the maintenance for a small team and slow shipping.
+- **Decision:** React Native 0.76 with the New Architecture, Expo SDK 52 with a Dev Client, TypeScript throughout.
+- **Why:** one language with the backend, one team, EAS Build removes most CI pain, and the UI ecosystem (`react-native-paper` and friends) covers Material 3.
+- **See:** `tech-stack.md` §1, `architecture.md` §2.
+
+## 2026-10-19 · NestJS on Node.js 20 for the backend
+- **Context:** we needed to pick one backend language before any code is written.
+- **Decision:** NestJS 10, Node.js 20 LTS, Prisma 5 over Postgres 16, Redis 7 for cache and BullMQ.
+- **Why:** TypeScript on both sides lets us share DTOs via a `shared/` package, NestJS gives us OpenAPI, DI and modules out of the box, and the hiring pool is deeper than Kotlin/Ktor.
+- **See:** `tech-stack.md` §2, `architecture.md` §3.
+
+## 2026-10-19 · RevenueCat for subscription billing
+- **Context:** Pro has Google Play and Apple App Store receipts to validate, plus webhooks on renewal and cancellation.
+- **Decision:** RevenueCat SDK on the app, webhook into the entitlements module, cross-checked with the store APIs.
+- **Why:** removes weeks of StoreKit 2 and Play Billing wiring, gives entitlements and events in one place, and fits our "small team" bias.
+- **See:** `tech-stack.md` §1.4 and §2.4, `architecture.md` §3.3.
+
 ## Template
 
 ```

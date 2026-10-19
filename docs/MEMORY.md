@@ -16,6 +16,7 @@ Updated 19 October 2026.
 | [decisions.md](decisions.md) | Short, dated log of design decisions and why they were made | When a decision needs recording, or you want the history |
 | [docs-agent.md](docs-agent.md) | How the `docs-keeper` agent reads and updates these files | When you invoke the agent, or want to understand its rules |
 | [team.md](team.md) | The agent team: who owns what, how a feature flows, what each specialist can and cannot touch | Before you call any sub-agent, or when designing a new one |
+| [plans/](plans/) | One `<feature-slug>.md` plan per feature, written by the project-manager agent | When starting work on a feature or looking up its tasks |
 
 ## Source files, outside `docs/`
 

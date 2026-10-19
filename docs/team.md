@@ -6,10 +6,15 @@ A small team of Claude Code sub-agents, each with one role. They are defined und
 
 | Agent | Owns | Reads only | Must not touch |
 |---|---|---|---|
+| **team-lead** | nothing (routes) | everything | any file at all |
 | **product-manager** | `fitness-app-prd.html`, `fitness-app-spec.html` | screens, docs | screens, docs, `.claude/` |
 | **architect** | `docs/architecture.md`, `docs/tech-stack.md`, `docs/data-model.md` | PRD, screens, other docs | PRD, screens, `.claude/` |
+| **project-manager** | `docs/plans/*.md` | docs, PRD | screens, code, `.claude/` |
 | **ux-designer** | `project/m3-*.dc.html` | docs, PRD | `project/canvas.json`, docs, PRD |
 | **content-writer** | visible strings inside `project/m3-*.dc.html` | docs, PRD | layout, markup, icons, links, ARIA |
+| **mobile-engineer** | `app/**` (React Native + TypeScript) | docs, plans, screens | `api/`, docs, screens |
+| **backend-engineer** | `api/**` (NestJS + Prisma) | docs, plans | `app/`, docs, screens |
+| **qa-engineer** | `app/**/*.test.*`, `api/test/`, `api/**/*.spec.*`, `tests/maestro/**` | code, docs, plans | feature code (hands bugs back) |
 | **reviewer** | *nothing* (read-only) | everything | any file at all |
 | **integrator** | `project/canvas.json`, the publish step | everything | screens, docs, PRD |
 | **docs-keeper** | `docs/MEMORY.md`, `docs/*.md` | its own files | everything else |
@@ -17,16 +22,29 @@ A small team of Claude Code sub-agents, each with one role. They are defined und
 ## How a feature flows
 
 ```
-  product-manager       →   PRD edit, lands on docs lane
+  team-lead             ·   routes the request
           │
           ▼
-  architect             →   architecture.md / tech-stack.md / data-model.md if the feature needs them
+  product-manager       →   PRD edit
           │
           ▼
-  ux-designer           →   screens on the matching lane (onboarding, session or features)
+  architect             →   architecture.md / tech-stack.md / data-model.md, if affected
+          │
+          ▼
+  project-manager       →   docs/plans/<slug>.md with mobile, backend and QA tasks
+          │
+          ▼
+  ux-designer           →   screens on the matching lane
           │
           ▼
   content-writer        →   strings on the same lane
+          │
+          ▼
+  mobile-engineer       →   React Native code under app/
+  backend-engineer      →   NestJS code under api/
+          │
+          ▼
+  qa-engineer           →   Jest, Supertest and Maestro tests
           │
           ▼
   reviewer              →   runs tools/check.py and scans the diff
@@ -38,7 +56,7 @@ A small team of Claude Code sub-agents, each with one role. They are defined und
   docs-keeper           →   logs a one-line entry in decisions.md
 ```
 
-Each arrow is a separate sub-agent run with its own context window.
+Each arrow is a separate sub-agent run with its own context window. The team-lead agent can spawn specialists in parallel for independent work.
 
 ## Rules every agent follows
 
