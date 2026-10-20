@@ -424,6 +424,115 @@
   ul, ol { padding-left: 20px; margin: 8px 0 16px; }
   li { margin-bottom: 4px; }
 
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-16px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes countUp {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(184, 92, 31, 0.15); }
+    50% { box-shadow: 0 0 0 8px rgba(184, 92, 31, 0); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .report-header { animation: fadeUp 0.6s ease-out; }
+    .cost-card { animation: countUp 0.5s ease-out both; }
+    .cost-card:nth-child(2) { animation-delay: 0.1s; }
+    .cost-card:nth-child(3) { animation-delay: 0.2s; }
+    .part-divider { animation: fadeUp 0.4s ease-out; }
+    .flow-box { animation: fadeUp 0.4s ease-out both; }
+    .flow-box:nth-child(2) { animation-delay: 0.08s; }
+    .flow-box:nth-child(3) { animation-delay: 0.16s; }
+    .flow-box:nth-child(4) { animation-delay: 0.24s; }
+    .stack-col { animation: fadeUp 0.5s ease-out both; }
+    .stack-col:nth-child(2) { animation-delay: 0.12s; }
+    .stack-col:nth-child(3) { animation-delay: 0.24s; }
+    .callout { animation: slideIn 0.4s ease-out; }
+    .table-wrap { animation: fadeUp 0.35s ease-out; }
+    .arch-diagram { animation: fadeUp 0.5s ease-out; }
+    h3 { animation: slideIn 0.35s ease-out; }
+  }
+
+  /* Enhanced card hover effects */
+  .cost-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .cost-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+  .flow-box {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .flow-box:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .stack-col {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .stack-col:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+
+  /* Active nav state */
+  .doc-nav a {
+    transition: background .2s, color .2s, transform .15s;
+  }
+  .doc-nav a:active { transform: scale(0.95); }
+
+  /* Table row highlight animation */
+  tbody tr {
+    transition: background 0.15s ease;
+  }
+
+  /* Gradient accent bar on part dividers */
+  .part-divider {
+    border-top: 3px solid transparent;
+    border-image: linear-gradient(90deg, var(--accent), var(--accent-dark), var(--accent)) 1;
+  }
+
+  /* Highlight badge on the recommended option */
+  .badge-rec {
+    background: linear-gradient(135deg, var(--accent-light), var(--accent));
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Section number indicators */
+  .section-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
   @media (max-width: 600px) {
     .cost-banner { grid-template-columns: 1fr; }
     .stack-grid { grid-template-columns: 1fr; }
@@ -450,32 +559,35 @@
   <a href="#paywall">Paywalls</a>
   <a href="#services">Services</a>
   <a href="#totals">Totals</a>
+  <a href="#sub-pricing">Subscription Pricing</a>
+  <a href="#dev-costs">Dev Tools</a>
+  <a href="#ads">Ads & Marketing</a>
   <a href="#full-cost">Full Platform Cost</a>
 </nav>
 
 <header class="report-header">
   <div class="eyebrow">CasaFit · Infrastructure Research · October 2026</div>
-  <h1>Backend Architecture Options &amp; Component Pricing</h1>
+  <h1>Backend Architecture, Pricing &amp; Business Costs</h1>
   <div class="summary">
-    For a 15-minute home-workout app targeting India, the architecture hinges on three forces: <strong>DPDP Act data residency</strong>, <strong>near-zero launch costs</strong> via permanent free tiers, and <strong>CDN bandwidth as the dominant cost</strong> once workout videos scale past 1 TB/month. The recommended hybrid stack delivers India compliance at a fraction of pure-cloud costs.
+    Complete infrastructure, subscription strategy, and business cost analysis for a 15-minute home-workout app targeting India with international expansion. Covers <strong>DPDP-compliant architecture</strong>, <strong>component alternatives with pricing</strong>, <strong>recommended subscription rates by country</strong>, <strong>development tool costs</strong>, and <strong>ad platform budgets</strong> — everything needed to plan CasaFit's technical and financial roadmap.
   </div>
 </header>
 
 <div class="cost-banner">
   <div class="cost-card">
     <div class="cost-label">Launch (0–1K users)</div>
-    <div class="cost-value">$5–10</div>
-    <div class="cost-note">per month · hybrid stack</div>
+    <div class="cost-value">$634–1.1K</div>
+    <div class="cost-note">per month · total burn</div>
   </div>
   <div class="cost-card">
     <div class="cost-label">Growth (10K+ users)</div>
-    <div class="cost-value">$56–117</div>
-    <div class="cost-note">per month · full platform</div>
+    <div class="cost-value">$2.3–5.4K</div>
+    <div class="cost-note">per month · total burn</div>
   </div>
   <div class="cost-card">
     <div class="cost-label">Scale (100K+ users)</div>
-    <div class="cost-value">$433–1,099</div>
-    <div class="cost-note">per month · full platform</div>
+    <div class="cost-value">$11–27K</div>
+    <div class="cost-note">per month · total burn</div>
   </div>
 </div>
 
@@ -1492,12 +1604,433 @@
   <p>At 100K users, the three biggest costs are: <strong>(1) SMS/messaging</strong> ($150–200/mo combined domestic + intl), <strong>(2) Paywall SDK</strong> ($90–300/mo, revenue-proportional), and <strong>(3) Database</strong> ($75–150/mo). CDN bandwidth — often the killer cost — stays at just $7.50/mo thanks to Cloudflare R2 zero-egress. The savings vs AWS CloudFront ($1,760/mo at 20 TB) alone justifies the hybrid stack.</p>
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PART 3: BUSINESS COSTS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<div class="part-divider" id="sub-pricing">
+  <div class="part-label">Part 3</div>
+  <h2>Subscription Pricing, Development &amp; Marketing Costs</h2>
+</div>
+
+<!-- SUBSCRIPTION PRICING -->
+<h3><span class="section-num">1</span> Recommended Subscription Rates by Country</h3>
+
+<p>Pricing strategy based on competitor analysis (HealthifyMe, Cult.fit, Apple Fitness+, Freeletics, Fitbit Premium) and regional purchasing power. CasaFit uses a <strong>freemium + Pro</strong> model: 2 lifetime form checks free, unlimited with Pro.</p>
+
+<h4>Competitor Landscape</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>App</th><th>India Monthly</th><th>India Yearly</th><th>US Monthly</th><th>US Yearly</th><th>Model</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>HealthifyMe</strong></td>
+      <td>~₹208</td>
+      <td>₹2,499</td>
+      <td>$9.99</td>
+      <td>$49.99</td>
+      <td>Freemium + coach tiers</td>
+    </tr>
+    <tr>
+      <td><strong>Cult.fit Home</strong></td>
+      <td>~₹116</td>
+      <td>₹1,392</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>India-only, gym + home</td>
+    </tr>
+    <tr>
+      <td><strong>Apple Fitness+</strong></td>
+      <td>₹149</td>
+      <td>₹1,499</td>
+      <td>$10.99</td>
+      <td>$79.99</td>
+      <td>Video classes, Apple Watch</td>
+    </tr>
+    <tr>
+      <td><strong>Freeletics</strong></td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>~$12.50</td>
+      <td>~$79.99</td>
+      <td>AI coach, bodyweight</td>
+    </tr>
+    <tr>
+      <td><strong>Fitbit Premium</strong></td>
+      <td>~₹819</td>
+      <td>~₹6,399</td>
+      <td>$9.99</td>
+      <td>$79.99</td>
+      <td>Health metrics + programs</td>
+    </tr>
+    <tr>
+      <td><strong>Nike Training</strong></td>
+      <td colspan="4" style="text-align:center;color:var(--green);font-weight:600">Completely Free</td>
+      <td>Ad-supported / brand play</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h4>Recommended CasaFit Pro Pricing</h4>
+<p>Positioned below HealthifyMe and Apple Fitness+ to gain market share, with aggressive India pricing. Google Play and Apple handle currency conversion and local payment methods automatically.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Country / Region</th><th>Monthly</th><th>Yearly</th><th>Yearly Savings</th><th>Rationale</th></tr>
+  </thead>
+  <tbody>
+    <tr style="background:var(--accent-light)">
+      <td><strong>India</strong> (primary)</td>
+      <td style="font-weight:600">₹99 (~$1.19)</td>
+      <td style="font-weight:600">₹799 (~$9.59)</td>
+      <td><span class="badge badge-green">33% off</span></td>
+      <td>Below Cult.fit Home (₹116) and Fitness+ (₹149). Sweet spot for Tier 2/3 cities.</td>
+    </tr>
+    <tr>
+      <td><strong>United States</strong></td>
+      <td>$4.99</td>
+      <td>$39.99</td>
+      <td><span class="badge badge-green">33% off</span></td>
+      <td>Entry tier — 50% below Fitness+ and Fitbit. Value play for budget-conscious users.</td>
+    </tr>
+    <tr>
+      <td><strong>United Kingdom</strong></td>
+      <td>£3.99</td>
+      <td>£29.99</td>
+      <td><span class="badge badge-green">37% off</span></td>
+      <td>Strong LTV market (median $23.6/yr). Undercut Fitbit by 50%.</td>
+    </tr>
+    <tr>
+      <td><strong>UAE / Gulf</strong></td>
+      <td>AED 19.99 (~$5.44)</td>
+      <td>AED 149.99 (~$40.84)</td>
+      <td><span class="badge badge-green">37% off</span></td>
+      <td>High purchasing power. Price parity with US in real terms.</td>
+    </tr>
+    <tr>
+      <td><strong>Southeast Asia</strong></td>
+      <td>~$1.99 (local equiv)</td>
+      <td>~$14.99</td>
+      <td><span class="badge badge-green">37% off</span></td>
+      <td>Purchasing power index ~0.3 vs US. Match India strategy.</td>
+    </tr>
+    <tr>
+      <td><strong>Europe (EU)</strong></td>
+      <td>€4.99</td>
+      <td>€39.99</td>
+      <td><span class="badge badge-green">33% off</span></td>
+      <td>Germany has highest LTV (4.4x Turkey). Budget positioning vs Freeletics (€6.67/mo).</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Pricing Strategy</div>
+  <p><strong>Launch at ₹99/mo in India</strong> — significantly below competitors, driving volume. Use the yearly plan as the default with 33–37% savings to maximize LTV. Start with a <strong>7-day free trial</strong> for the yearly plan only (weekly and monthly get no trial — industry best practice). Use Qonversion or RevenueCat to A/B test pricing by country: India's price index is 0.3 vs 1.0 in the US, so regional pricing is essential.</p>
+</div>
+
+<!-- DEV TOOLS COST -->
+<h3 id="dev-costs"><span class="section-num">2</span> Development Tool Costs</h3>
+
+<p>AI coding tools and developer infrastructure needed to build and maintain CasaFit.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Tool</th><th>Plan</th><th>Cost/mo</th><th>What It Does</th><th>Needed?</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Claude Pro</strong></td>
+      <td>Pro</td>
+      <td>$20</td>
+      <td>AI coding assistant, Claude Code CLI</td>
+      <td><span class="badge badge-green">Essential</span></td>
+    </tr>
+    <tr>
+      <td><strong>Claude Max (5x)</strong></td>
+      <td>Max</td>
+      <td>$100</td>
+      <td>Heavy Claude Code usage, parallel agents</td>
+      <td><span class="badge badge-yellow">Growth</span></td>
+    </tr>
+    <tr>
+      <td><strong>Claude Max (20x)</strong></td>
+      <td>Max</td>
+      <td>$200</td>
+      <td>Full team usage, complex multi-agent workflows</td>
+      <td><span class="badge badge-yellow">Scale</span></td>
+    </tr>
+    <tr>
+      <td><strong>GitHub Copilot Pro</strong></td>
+      <td>Pro</td>
+      <td>$10</td>
+      <td>Inline code completions in VS Code / JetBrains</td>
+      <td><span class="badge badge-blue">Optional</span></td>
+    </tr>
+    <tr>
+      <td><strong>Cursor Pro</strong></td>
+      <td>Pro</td>
+      <td>$20</td>
+      <td>AI-first code editor with chat + multi-file edit</td>
+      <td><span class="badge badge-blue">Alternative</span></td>
+    </tr>
+    <tr>
+      <td><strong>GitHub (repo)</strong></td>
+      <td>Free / Team</td>
+      <td>$0–4/user</td>
+      <td>Git hosting, CI/CD (Actions), issue tracking</td>
+      <td><span class="badge badge-green">Essential</span></td>
+    </tr>
+    <tr>
+      <td><strong>Expo EAS</strong></td>
+      <td>Production</td>
+      <td>$99</td>
+      <td>Build, submit, OTA updates for React Native</td>
+      <td><span class="badge badge-green">Essential</span></td>
+    </tr>
+    <tr>
+      <td><strong>Apple Developer</strong></td>
+      <td>Annual</td>
+      <td>$8.25 ($99/yr)</td>
+      <td>App Store publishing</td>
+      <td><span class="badge badge-green">Essential</span></td>
+    </tr>
+    <tr>
+      <td><strong>Google Play</strong></td>
+      <td>One-time</td>
+      <td>$2.08 ($25 once)</td>
+      <td>Play Store publishing</td>
+      <td><span class="badge badge-green">Essential</span></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h4>Monthly Dev Tool Budget</h4>
+<div class="flow-grid">
+  <div class="flow-box">
+    <div class="flow-label">Solo Dev / Launch</div>
+    <div class="flow-name">~$127/mo</div>
+    <div class="flow-detail">Claude Pro ($20) + Expo EAS ($99) + Apple ($8)</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Small Team / Growth</div>
+    <div class="flow-name">~$237/mo</div>
+    <div class="flow-detail">Claude Max 5x ($100) + Copilot ($10) + Expo ($99) + GitHub Team ($16) + Apple ($8) + misc ($4)</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Larger Team / Scale</div>
+    <div class="flow-name">~$450/mo</div>
+    <div class="flow-detail">Claude Max 20x ($200) + Copilot×2 ($20) + Expo ($99) + GitHub Team ($32) + Apple ($8) + misc</div>
+  </div>
+</div>
+
+<!-- ADS & MARKETING -->
+<h3 id="ads"><span class="section-num">3</span> Advertising &amp; User Acquisition Costs</h3>
+
+<p>Cost-per-install (CPI) and cost-per-trial benchmarks for fitness apps across major ad platforms. India is the cheapest market; Middle East and US are the most expensive.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Platform</th><th>India CPI</th><th>US CPI</th><th>UK CPI</th><th>UAE CPI</th><th>Best For</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Google App Campaigns</strong></td>
+      <td style="color:var(--green);font-weight:600">₹15–40 ($0.18–0.48)</td>
+      <td>$1.50–3.00</td>
+      <td>$2.00–4.00</td>
+      <td>$3.00–5.00</td>
+      <td>Android installs, widest reach in India</td>
+    </tr>
+    <tr>
+      <td><strong>Meta (Instagram + FB)</strong></td>
+      <td style="color:var(--green);font-weight:600">₹14–50 ($0.17–0.60)</td>
+      <td>$2.00–4.00</td>
+      <td>$2.50–5.00</td>
+      <td>$3.00–6.00</td>
+      <td>Visual creative, lookalike audiences, Reels</td>
+    </tr>
+    <tr>
+      <td><strong>TikTok Ads</strong></td>
+      <td>₹25–60 ($0.30–0.72)</td>
+      <td>$1.20–2.40</td>
+      <td>$1.80–3.50</td>
+      <td>$2.50–4.00</td>
+      <td>Short-form video, 35–50% cheaper than Meta (US)</td>
+    </tr>
+    <tr>
+      <td><strong>Apple Search Ads</strong></td>
+      <td>N/A (low iOS share)</td>
+      <td>$2.50–5.00</td>
+      <td>$3.00–5.00</td>
+      <td>$4.00–7.00</td>
+      <td>High-intent iOS users at search moment</td>
+    </tr>
+    <tr>
+      <td><strong>YouTube Ads</strong></td>
+      <td>₹20–50 ($0.24–0.60)</td>
+      <td>$2.00–4.50</td>
+      <td>$2.50–4.50</td>
+      <td>$3.50–6.00</td>
+      <td>Long-form demos, tutorial content</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h4>Monthly Ad Budget Scenarios</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Stage</th><th>Monthly Budget</th><th>India Installs (est)</th><th>US Installs (est)</th><th>Strategy</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Soft Launch</strong></td>
+      <td>$500–1,000</td>
+      <td>1,500–5,000</td>
+      <td>200–500</td>
+      <td>Google App + Meta in 3 Indian metros. Test creatives.</td>
+    </tr>
+    <tr>
+      <td><strong>Growth</strong></td>
+      <td>$2,000–5,000</td>
+      <td>5,000–20,000</td>
+      <td>700–2,000</td>
+      <td>Add TikTok. Tier 2 India cities. US/UK lookalikes.</td>
+    </tr>
+    <tr>
+      <td><strong>Scale</strong></td>
+      <td>$10,000–25,000</td>
+      <td>25,000–100,000</td>
+      <td>3,000–10,000</td>
+      <td>All platforms. YouTube for brand. Apple Search for iOS.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Recommendation</div>
+  <p><strong>Start with Google App Campaigns + Meta in India only.</strong> India CPI for fitness is ₹15–50 — at $500/mo budget, that's 1,500–5,000 installs. Focus on Reels/short video creative showing 15-minute workout results. Add TikTok at the growth stage. Skip Apple Search Ads until you have meaningful iOS revenue. Track LTV:CAC ratio — aim for 3:1 minimum.</p>
+</div>
+
+<!-- ENHANCED ARCHITECTURE -->
+<h3 id="arch-patterns"><span class="section-num">4</span> Backend Architecture Patterns from the Industry</h3>
+
+<p>Common patterns observed in production fitness apps (based on case studies, job postings, and engineering blogs from apps serving 100K+ users):</p>
+
+<div class="flow-grid">
+  <div class="flow-box">
+    <div class="flow-label">Pattern 1</div>
+    <div class="flow-name">Domain Microservices</div>
+    <div class="flow-detail">Each module (auth, workout, nutrition, analytics) runs as an independent service with its own database. Enables independent scaling and deployment. Used at scale by Peloton, Strava.</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Pattern 2</div>
+    <div class="flow-name">Event-Driven Processing</div>
+    <div class="flow-detail">Wearable syncs, AI pose analysis, and analytics run on async message queues (SQS, BullMQ, RabbitMQ). Prevents blocking user requests. Critical for form-check processing.</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Pattern 3</div>
+    <div class="flow-name">Time-Series Health Data</div>
+    <div class="flow-detail">Step counts, heart rate, and workout metrics stored in TimescaleDB or InfluxDB alongside the main Postgres. Enables efficient aggregation queries for progress charts.</div>
+  </div>
+  <div class="flow-box">
+    <div class="flow-label">Pattern 4</div>
+    <div class="flow-name">Content as Config</div>
+    <div class="flow-detail">Workout plans, exercise libraries, and food databases served as versioned JSON manifests. App downloads the manifest + media pack once, plays sessions offline.</div>
+  </div>
+</div>
+
+<h4>CasaFit Architecture — Recommended Approach</h4>
+<p>Start as a <strong>modular monolith</strong> (NestJS modules with clear boundaries), not microservices. Extract services only when a specific module needs independent scaling. This matches CasaFit's current team size and avoids premature complexity.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Module</th><th>Start As</th><th>Extract When</th><th>Why Wait</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Auth</strong></td><td>NestJS module</td><td>Never (stays in monolith)</td><td>Low traffic, critical path, simple</td></tr>
+    <tr><td><strong>Content / Media</strong></td><td>NestJS module + R2</td><td>>50K daily active users</td><td>Signed URL generation is CPU-light</td></tr>
+    <tr><td><strong>Plan Engine</strong></td><td>NestJS module</td><td>When adding AI generation</td><td>Rule-based engine is fast; AI needs GPU</td></tr>
+    <tr><td><strong>Analytics Proxy</strong></td><td>NestJS module</td><td>>10K events/second</td><td>PostHog handles the heavy lifting</td></tr>
+    <tr><td><strong>Form Check Processing</strong></td><td>Async queue (BullMQ)</td><td>Already async from day 1</td><td>On-device camera; server stores results only</td></tr>
+    <tr><td><strong>Food DB</strong></td><td>Static JSON + Postgres</td><td>Never (stays in monolith)</td><td>Read-heavy, cache-friendly, rarely writes</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="info-callout">
+  <div class="callout-title">Key Insight</div>
+  <p><strong>CasaFit's architecture is simpler than most fitness apps</strong> because pose analysis runs on-device (no GPU servers), workouts are offline-first (no streaming), and the food database is static. The main backend complexity is in auth, entitlements, and content manifest generation — all manageable in a modular monolith until well past 100K users.</p>
+</div>
+
+<!-- UPDATED FULL COST TABLE -->
+<h3><span class="section-num">5</span> Complete Monthly Business Cost</h3>
+
+<p>Everything it costs to run CasaFit as a business — infrastructure, messaging, paywall, dev tools, and marketing. This is the <strong>total burn rate</strong>.</p>
+
+<div class="stack-grid">
+  <div class="stack-col">
+    <div class="stack-col-head budget" style="text-align:center">Launch · 0–1K Users</div>
+    <div class="stack-col-body">
+      <div class="stack-item"><span class="item-name">Infrastructure</span><span class="item-val">$5–10</span></div>
+      <div class="stack-item"><span class="item-name">SMS / Messaging</span><span class="item-val">$2–5</span></div>
+      <div class="stack-item"><span class="item-name">Paywall SDK</span><span class="item-val">$0</span></div>
+      <div class="stack-item"><span class="item-name">Dev Tools</span><span class="item-val">$127</span></div>
+      <div class="stack-item"><span class="item-name">Ad Budget</span><span class="item-val">$500–1,000</span></div>
+      <div style="border-top:2px solid var(--green);padding-top:10px;margin-top:4px">
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">TOTAL BURN</span><span class="item-val" style="font-size:18px;color:var(--green)">$634–1,142/mo</span></div>
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">ANNUAL</span><span class="item-val" style="color:var(--green)">$7,608–13,704</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="stack-col">
+    <div class="stack-col-head aws" style="text-align:center">Growth · 10K+ Users</div>
+    <div class="stack-col-body">
+      <div class="stack-item"><span class="item-name">Infrastructure</span><span class="item-val">$56–117</span></div>
+      <div class="stack-item"><span class="item-name">SMS + Intl Messaging</span><span class="item-val">$17–22</span></div>
+      <div class="stack-item"><span class="item-name">Paywall SDK</span><span class="item-val">$0</span></div>
+      <div class="stack-item"><span class="item-name">Dev Tools</span><span class="item-val">$237</span></div>
+      <div class="stack-item"><span class="item-name">Ad Budget</span><span class="item-val">$2,000–5,000</span></div>
+      <div style="border-top:2px solid var(--yellow);padding-top:10px;margin-top:4px">
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">TOTAL BURN</span><span class="item-val" style="font-size:18px;color:var(--yellow)">$2,310–5,376/mo</span></div>
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">ANNUAL</span><span class="item-val" style="color:var(--yellow)">$27,720–64,512</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="stack-col">
+    <div class="stack-col-head azure" style="text-align:center">Scale · 100K+ Users</div>
+    <div class="stack-col-body">
+      <div class="stack-item"><span class="item-name">Infrastructure</span><span class="item-val">$433–1,099</span></div>
+      <div class="stack-item"><span class="item-name">SMS + Intl Messaging</span><span class="item-val">$150–200</span></div>
+      <div class="stack-item"><span class="item-name">Paywall SDK</span><span class="item-val">$90–300</span></div>
+      <div class="stack-item"><span class="item-name">Dev Tools</span><span class="item-val">$450</span></div>
+      <div class="stack-item"><span class="item-name">Ad Budget</span><span class="item-val">$10,000–25,000</span></div>
+      <div style="border-top:2px solid var(--accent);padding-top:10px;margin-top:4px">
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">TOTAL BURN</span><span class="item-val" style="font-size:18px;color:var(--accent)">$11,123–27,049/mo</span></div>
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">ANNUAL</span><span class="item-val" style="color:var(--accent)">$133K–325K</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="callout" style="margin-top:32px">
   <div class="callout-title">Final Recommendation</div>
-  <p><strong>Start with permanent free tiers, not 12-month trials.</strong> AWS's free tier cliff is a budgeting trap for startups. <strong>Choose zero-egress storage early</strong> — CDN bandwidth will become the dominant cost for a video-heavy fitness app. <strong>Use WhatsApp OTP for international users</strong> — saves 10x vs SMS on cross-border routes. The recommended hybrid stack: <strong>Supabase Pro (Mumbai)</strong> for the data layer, <strong>Cloudflare R2</strong> for video assets, <strong>AWS App Runner or Azure Container Apps</strong> for compute, <strong>Upstash</strong> for serverless cache, <strong>MSG91/2Factor.in</strong> for domestic SMS + WhatsApp for international, <strong>FCM</strong> for push, <strong>Qonversion or RevenueCat</strong> for paywall + billing, <strong>PostHog + Sentry</strong> for observability.</p>
+  <p><strong>At launch, 80% of your burn is marketing, not infrastructure.</strong> The hybrid stack keeps infra under $10/mo, while $500–1,000/mo in ads drives 1,500–5,000 India installs. <strong>Price aggressively at ₹99/mo in India</strong> — below all competitors — and test higher prices in US/UK/UAE with Qonversion's A/B tools. <strong>Breakeven math:</strong> at ₹99/mo with 5% conversion from free to Pro, you need ~13,000 free users to cover $634/mo launch costs. At India CPI of ₹30, that's ~₹3.9L ($4,700) in ad spend — achievable in 5–6 months of $800/mo campaigns. <strong>Use WhatsApp OTP for international users</strong> (saves 10x vs SMS). Keep the modular monolith until 100K+ users — extract services only when a specific bottleneck demands it.</p>
 </div>
 
 <div class="report-footer">
-  <p><strong>CasaFit Architecture Research Report</strong> · Generated October 2026 · Pricing is estimated from publicly available sources and may vary. Verify with provider pricing calculators before committing.</p>
-  <p>Sources: official pricing pages from AWS, Azure, Google Cloud, Cloudflare, Supabase, Upstash, Bunny.net, Backblaze, RevenueCat, PostHog, Sentry, MSG91, 2Factor.in, Twilio, and industry comparison articles.</p>
+  <p><strong>CasaFit Architecture &amp; Business Cost Report</strong> · Updated October 2026 · Pricing is estimated from publicly available sources and may vary. Verify with provider pricing calculators and ad platform dashboards before committing.</p>
+  <p>Sources: official pricing from AWS, Azure, Google Cloud, Cloudflare, Supabase, Upstash, RevenueCat, Superwall, Qonversion, Adapty, PostHog, Sentry, MSG91, Twilio, Google Ads, Meta Business, TikTok Ads, Apple Search Ads, Anthropic (Claude), GitHub, Expo, HealthifyMe, Cult.fit, Apple Fitness+, Freeletics, Fitbit, and industry benchmarks from Adapty, AppOps Store, and VMobify.</p>
 </div>
