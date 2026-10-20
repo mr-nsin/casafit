@@ -2,6 +2,30 @@
 
 A short, dated log of design and technical decisions. Add a row at the top. Keep each entry to a few lines; link to the full discussion if there is one.
 
+## 2026-10-20 · Supabase Pro (Mumbai) for Postgres
+- **Context:** choosing a managed Postgres host; backend research pack scored AWS RDS vs Google Cloud SQL vs Supabase Pro in `ap-south-1`.
+- **Decision:** Supabase Pro, Mumbai (`ap-south-1`), $25/mo at launch. Replaces the earlier "AWS RDS or Google Cloud SQL" placeholder.
+- **Why:** DPDP-compliant Mumbai region, bundles Postgres + Supavisor pooling + auth + 100 GB storage + daily backups, cheapest path to a production DB; we can still run NestJS in front for business logic.
+- **See:** `tech-stack.md` §2.3, `reports/CasaFit backend architecture options.md`.
+
+## 2026-10-20 · Upstash serverless Redis for cache
+- **Context:** Redis for OTP codes, rate limits and idempotency keys has very sparse traffic; always-on managed Redis idles most of the day.
+- **Decision:** Upstash Redis (serverless) with Mumbai region, pay-per-command. Replaces the earlier "Redis 7 managed, Mumbai" placeholder.
+- **Why:** Free tier covers launch, ~$3-10/mo at growth, no VPC plumbing. BullMQ stays as the queue library for now; revisit QStash if worker always-on cost becomes material.
+- **See:** `tech-stack.md` §2.3, `reports/CasaFit backend architecture options.md`.
+
+## 2026-10-20 · Cloudflare R2 + Cloudflare CDN for media
+- **Context:** CDN egress is the dominant cost driver for a video-heavy app; S3 + CloudFront is $0.109/GB after 1 TB.
+- **Decision:** Cloudflare R2 for video and food-pack storage, Cloudflare CDN (22+ India PoPs) in front. Replaces the earlier "S3 or GCS + CloudFront or Cloud CDN" placeholder.
+- **Why:** Zero egress fees keep CDN flat as video traffic grows (~$7/mo at 20 TB vs ~$1,760 on CloudFront); R2 has no Mumbai origin region but the CDN caches in India so the origin hop is one-off per asset. Signed URLs via Workers for Pro content.
+- **See:** `tech-stack.md` §2.3, `architecture.md` §3.4, `reports/CasaFit backend architecture options.md`.
+
+## 2026-10-20 · Defer the API host choice to App Runner / Cloud Run / Container Apps
+- **Context:** the earlier doc said "ECS Fargate or Cloud Run, pick one before the first commit." The research pack narrows the field but does not pick a winner.
+- **Decision:** defer. Shortlist is **AWS App Runner (Mumbai)**, **GCP Cloud Run (Mumbai)**, **Azure Container Apps (Pune/Chennai/Mumbai)** — all scale-to-near-zero, all DPDP-compliant. App Runner is cheapest at launch (~$5-7/mo); Cloud Run and Container Apps have the largest free grants. Decide before the first production deploy.
+- **Why:** cost delta is small at launch, and the choice can live inside one Dockerfile. Picking it later lets us weight whichever cloud we already run secrets, logs and CI artefacts in.
+- **See:** `tech-stack.md` §2.6, `architecture.md` §3.
+
 ## 2026-10-19 · React Native + Expo Dev Client for the mobile client
 - **Context:** two native codebases (Kotlin/Compose + Swift/SwiftUI) double the maintenance for a small team and slow shipping.
 - **Decision:** React Native 0.76 with the New Architecture, Expo SDK 52 with a Dev Client, TypeScript throughout.

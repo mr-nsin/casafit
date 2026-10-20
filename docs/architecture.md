@@ -24,8 +24,9 @@ This is a proposed architecture for the first release. Nothing is built yet. The
     ┌──────────────┼──────────────────────────────────┐
     │              │                                  │
     ▼              ▼                                  ▼
-  SMS vendor    Managed Postgres + object store     Push and crash
-  (DLT-reg.)    (plan metadata, credits, logs)      (FCM / APNs)
+  SMS vendor    Supabase Pro Postgres (Mumbai) +    Push and crash
+  (DLT-reg.)    Cloudflare R2 + Cloudflare CDN      (FCM / APNs)
+                Upstash Redis (serverless)
 ```
 
 Everything else runs on the phone: the session player, the plan builder, the pose analyser, the step counter and the food lookup.
@@ -68,7 +69,7 @@ The phone keeps a cached session token with a grace period (7 days by default). 
 
 ## 3 · Backend services
 
-**One NestJS 10 service on Node.js 20**, six `@Module`s inside it. One Dockerfile, one deploy. Stateless, horizontally scalable behind an application load balancer. Split a module into its own service only when traffic justifies.
+**One NestJS 10 service on Node.js 20**, six `@Module`s inside it. One Dockerfile, one deploy. Stateless, horizontally scalable behind an application load balancer. Split a module into its own service only when traffic justifies. **Open question (defer):** host on AWS App Runner, GCP Cloud Run, or Azure Container Apps — all Mumbai; see `decisions.md`.
 
 ### 3.1 Auth service
 
@@ -94,7 +95,7 @@ Holds the number that matters most for billing: a free account's lifetime form-c
 
 ### 3.4 Content delivery
 
-- **Videos and demos:** uploaded to object storage with a CDN in front. Signed URLs for premium content.
+- **Videos and demos:** uploaded to Cloudflare R2 with Cloudflare CDN in front. Signed URLs for premium content. R2's zero egress keeps CDN cost flat as video traffic grows; see `decisions.md`.
 - **Food database:** published as a versioned JSON pack, downloaded on Wi-Fi and merged into the local SQLite.
 
 ### 3.5 Analytics intake

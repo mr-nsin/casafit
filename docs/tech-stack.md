@@ -103,11 +103,11 @@ Each is one `@Module` in the Nest sense; one package in `src/modules/`.
 | Layer | Choice | Why |
 |---|---|---|
 | ORM | Prisma 5 | Type-safe migrations, matches the TypeScript theme. |
-| Database | Postgres 16 (AWS RDS or Google Cloud SQL, Mumbai) | India residency. |
-| Cache | Redis 7 (managed, Mumbai) | OTP codes, rate counters, idempotency keys. |
-| Queue | BullMQ on Redis | Daily food and step syncs, batched analytics flushes. |
-| Object storage | S3 or GCS, Mumbai | Videos, food packs, data exports. |
-| CDN | CloudFront or Cloud CDN | For video and the food pack. |
+| Database | Postgres 16 on **Supabase Pro, Mumbai (`ap-south-1`)** | India residency, bundles managed Postgres + Supavisor pooling + daily backups; $25/mo covers launch. |
+| Cache | **Upstash Redis (serverless)** | OTP codes, rate counters, idempotency keys. Pay-per-command fits sparse OTP traffic; no idle fee. |
+| Queue | BullMQ on Upstash Redis | Daily food and step syncs, batched analytics flushes. Revisit QStash if worker always-on cost bites. |
+| Object storage | **Cloudflare R2** | Videos, food packs, data exports. Zero egress is the single biggest line-item saving at scale. |
+| CDN | **Cloudflare CDN** (22+ India PoPs) | For video and the food pack. Pairs with R2 at zero egress. |
 
 ### 2.4 Platform integrations
 
@@ -141,7 +141,7 @@ GET    /v1/content/pack/latest    the current food pack version
 |---|---|
 | Tests | Jest (unit, built into NestJS) + Supertest (e2e against a Testcontainers Postgres) |
 | Container | Dockerfile targeting `node:20-alpine` |
-| Deploy | AWS ECS Fargate (Mumbai) **or** GCP Cloud Run (Mumbai). Pick one before the first commit. |
+| Deploy | **Open question (defer):** AWS App Runner, GCP Cloud Run, or Azure Container Apps — all in a Mumbai region. App Runner is cheapest at launch; Cloud Run and Container Apps have larger free grants. Pick one before the first commit. |
 | CI | GitHub Actions matrix: unit, e2e, build and push the image |
 | Secrets | AWS Secrets Manager or GCP Secret Manager |
 
@@ -170,10 +170,10 @@ Order-of-magnitude only. All numbers are "roughly" and would be re-quoted before
 
 | Line | Shape |
 |---|---|
-| Mumbai managed Postgres (small) | $60 to $150 a month |
-| Redis (small, managed) | $30 to $80 a month |
-| Fargate or Cloud Run (one small task) | $40 to $120 a month |
-| Object storage + CDN (one 50 MB session pack per active user per month) | A few cents per active user per month |
+| Supabase Pro, Mumbai (Postgres + auth + 100 GB storage) | $25 a month at launch, +$10-110 compute add-on as load grows |
+| Upstash Redis (serverless) | Free tier covers launch; ~$3-10 a month at growth |
+| App Runner / Cloud Run / Container Apps (one small task, Mumbai) | $5 to $30 a month at launch, $25 to $90 at growth |
+| Cloudflare R2 + Cloudflare CDN (one 50 MB session pack per active user per month) | ~$1 a month at launch; zero CDN egress through growth |
 | SMS OTP (India) | Roughly ₹0.15 to ₹0.30 per message. Belongs in LTV calculations. |
 | RevenueCat | Free up to $10k MTR, then 1% of revenue. |
 | EAS Build | Metered by build minutes; one or two paid plans typical for a small team. |
