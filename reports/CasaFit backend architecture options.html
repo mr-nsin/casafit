@@ -446,8 +446,11 @@
   <a href="#cache">Cache</a>
   <a href="#cdn">CDN</a>
   <a href="#sms">SMS</a>
+  <a href="#intl-sms">Intl Messaging</a>
+  <a href="#paywall">Paywalls</a>
   <a href="#services">Services</a>
   <a href="#totals">Totals</a>
+  <a href="#full-cost">Full Platform Cost</a>
 </nav>
 
 <header class="report-header">
@@ -465,14 +468,14 @@
     <div class="cost-note">per month · hybrid stack</div>
   </div>
   <div class="cost-card">
-    <div class="cost-label">Growth (1K–10K)</div>
-    <div class="cost-value">$70–120</div>
-    <div class="cost-note">per month · hybrid stack</div>
+    <div class="cost-label">Growth (10K+ users)</div>
+    <div class="cost-value">$56–117</div>
+    <div class="cost-note">per month · full platform</div>
   </div>
   <div class="cost-card">
-    <div class="cost-label">Scale (10K–100K)</div>
-    <div class="cost-value">$300–600</div>
-    <div class="cost-note">per month · hybrid stack</div>
+    <div class="cost-label">Scale (100K+ users)</div>
+    <div class="cost-value">$433–1,099</div>
+    <div class="cost-note">per month · full platform</div>
   </div>
 </div>
 
@@ -1083,8 +1086,208 @@
 </table>
 </div>
 
+<!-- INTERNATIONAL MESSAGING -->
+<h3 id="intl-sms">International SMS/OTP Pricing</h3>
+
+<p>If CasaFit expands beyond India, SMS OTP costs rise dramatically. International routes are 5–40x more expensive than domestic India SMS. WhatsApp OTP is a much cheaper alternative for cross-border authentication.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Country</th><th>Twilio SMS</th><th>MSG91 SMS</th><th>WhatsApp OTP</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>India (domestic)</strong></td>
+      <td style="color:var(--red)">~$0.0054</td>
+      <td style="color:var(--green);font-weight:600">~$0.0018</td>
+      <td style="color:var(--green)">~$0.0014</td>
+      <td>DLT registration required for all</td>
+    </tr>
+    <tr>
+      <td><strong>United States</strong></td>
+      <td>~$0.0083</td>
+      <td style="color:var(--green);font-weight:600">~$0.0065</td>
+      <td style="color:var(--green)">~$0.0034</td>
+      <td>10DLC registration required for A2P SMS</td>
+    </tr>
+    <tr>
+      <td><strong>United Kingdom</strong></td>
+      <td>~$0.056</td>
+      <td>~$0.04–0.05</td>
+      <td style="color:var(--green)">~$0.0046</td>
+      <td>Sender ID pre-registration</td>
+    </tr>
+    <tr>
+      <td><strong>UAE</strong></td>
+      <td style="color:var(--red)">~$0.11</td>
+      <td>~$0.08–0.10</td>
+      <td style="color:var(--green)">~$0.0046</td>
+      <td>Sender ID fee: $225 setup + $115/mo</td>
+    </tr>
+    <tr>
+      <td><strong>Southeast Asia (avg)</strong></td>
+      <td>~$0.03–0.06</td>
+      <td>~$0.02–0.04</td>
+      <td style="color:var(--green)">~$0.003–0.005</td>
+      <td>Varies by country; SG is cheapest</td>
+    </tr>
+    <tr>
+      <td><strong>Middle East (avg)</strong></td>
+      <td style="color:var(--red)">~$0.08–0.12</td>
+      <td>~$0.06–0.10</td>
+      <td style="color:var(--green)">~$0.004–0.006</td>
+      <td>KSA, Bahrain similar to UAE rates</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h4>International Messaging Cost at Scale</h4>
+
+<p>Assuming 10% of users are international with 2 OTPs per user per month:</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Tier</th><th>Intl Users</th><th>OTPs/mo</th><th>Via Twilio SMS</th><th>Via MSG91 SMS</th><th>Via WhatsApp OTP</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Growth (10K total)</strong></td>
+      <td>1,000</td>
+      <td>2,000</td>
+      <td style="color:var(--red)">~$60–110</td>
+      <td>~$30–60</td>
+      <td style="color:var(--green);font-weight:600">~$7–10</td>
+    </tr>
+    <tr>
+      <td><strong>Scale (100K total)</strong></td>
+      <td>10,000</td>
+      <td>20,000</td>
+      <td style="color:var(--red)">~$600–1,100</td>
+      <td>~$300–600</td>
+      <td style="color:var(--green);font-weight:600">~$70–100</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Recommendation</div>
+  <p><strong>Use WhatsApp OTP as the primary channel for international users.</strong> At 100K users with 10% international, WhatsApp saves $500–1,000/mo versus SMS. Fall back to SMS only where WhatsApp isn't available. For India, domestic SMS remains the cheapest and most reliable channel. Use MSG91 or Gupshup for WhatsApp Business API integration — both support automatic fallback from WhatsApp to SMS.</p>
+</div>
+
+<!-- PAYWALL SDK -->
+<h3 id="paywall">Paywall &amp; Subscription SDK</h3>
+
+<p>A paywall SDK handles the purchase UI, subscription management, receipt validation, and cross-platform entitlements. Some tools focus on the paywall presentation layer while others manage the full subscription lifecycle. For cross-border payments, Google Play and Apple handle the currency conversion — the paywall SDK manages the presentation and receipt validation.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>SDK</th><th>Free Tier</th><th>Pricing Model</th><th>Paywall Builder</th><th>RN SDK</th><th>Cross-Border</th><th>Best For</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Superwall</strong></td>
+      <td><span class="badge badge-green">$10K MAR free</span></td>
+      <td>$0 Indie / $49+1% Startup / $199+1% Scale</td>
+      <td><span class="badge badge-green">No-code, remote</span></td>
+      <td>Good</td>
+      <td>Via RevenueCat or StoreKit</td>
+      <td>A/B testing paywalls, rapid iteration</td>
+    </tr>
+    <tr>
+      <td><strong>RevenueCat</strong></td>
+      <td>$2,500 MTR free</td>
+      <td>1% of tracked revenue</td>
+      <td>Paywall templates (v4+)</td>
+      <td><span class="badge badge-green">Best in class</span></td>
+      <td><span class="badge badge-green">Built-in multi-currency</span></td>
+      <td>Full subscription backend + entitlements</td>
+    </tr>
+    <tr>
+      <td><strong>Adapty</strong></td>
+      <td>$5,000 MTR free</td>
+      <td>1–1.5% of tracked revenue</td>
+      <td><span class="badge badge-green">No-code, remote</span></td>
+      <td>Good</td>
+      <td><span class="badge badge-green">Built-in multi-currency</span></td>
+      <td>Higher free tier, paywall A/B testing</td>
+    </tr>
+    <tr>
+      <td><strong>Qonversion</strong></td>
+      <td><span class="badge badge-green">$10K MTR free</span></td>
+      <td>0.6% Starter / 0.8% Growth</td>
+      <td><span class="badge badge-green">No-code drag &amp; drop</span></td>
+      <td>Good</td>
+      <td><span class="badge badge-green">Built-in multi-currency</span></td>
+      <td>Highest free tier, lowest paid %</td>
+    </tr>
+    <tr>
+      <td><strong>Superwall + RevenueCat</strong></td>
+      <td>Combined free tiers</td>
+      <td>Both fees apply</td>
+      <td><span class="badge badge-green">Best paywall UX</span></td>
+      <td><span class="badge badge-green">Both SDKs</span></td>
+      <td><span class="badge badge-green">Full stack</span></td>
+      <td>Best-in-class paywall + subscription mgmt</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h4>Paywall SDK Cost at Revenue Scale</h4>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Monthly Revenue</th><th>Superwall (Indie)</th><th>RevenueCat</th><th>Adapty</th><th>Qonversion</th><th>Superwall + RevenueCat</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>$2,000/mo</strong></td>
+      <td style="color:var(--green);font-weight:600">$0</td>
+      <td style="color:var(--green)">$0</td>
+      <td style="color:var(--green)">$0</td>
+      <td style="color:var(--green)">$0</td>
+      <td style="color:var(--green)">$0</td>
+    </tr>
+    <tr>
+      <td><strong>$5,000/mo</strong></td>
+      <td style="color:var(--green);font-weight:600">$0</td>
+      <td>$50</td>
+      <td style="color:var(--green)">$0</td>
+      <td style="color:var(--green)">$0</td>
+      <td>$50</td>
+    </tr>
+    <tr>
+      <td><strong>$15,000/mo</strong></td>
+      <td>$150</td>
+      <td>$150</td>
+      <td>$150–225</td>
+      <td style="color:var(--green);font-weight:600">$90</td>
+      <td style="color:var(--red)">$300</td>
+    </tr>
+    <tr>
+      <td><strong>$50,000/mo</strong></td>
+      <td>$500 + $49</td>
+      <td>$500</td>
+      <td>$500–750</td>
+      <td style="color:var(--green);font-weight:600">$300</td>
+      <td style="color:var(--red)">$1,049</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Recommendation</div>
+  <p><strong>Start with Qonversion or RevenueCat alone.</strong> Qonversion offers the highest free tier ($10K MTR) and the lowest paid percentage (0.6%), plus a built-in no-code paywall builder — no need for a separate paywall SDK. RevenueCat is the safer choice for its mature React Native SDK and industry adoption. Add Superwall later only if you need heavy paywall A/B testing. For cross-border payments, all SDKs handle multi-currency through the app stores — Google Play and Apple manage currency conversion and local pricing automatically.</p>
+</div>
+
 <!-- SERVICES -->
-<h3 id="services">Push, Billing, Analytics &amp; Monitoring</h3>
+<h3 id="services">Push, Analytics &amp; Monitoring</h3>
 
 <h4>Push Notifications</h4>
 <div class="table-wrap">
@@ -1118,44 +1321,7 @@
 </table>
 </div>
 
-<h4>Subscription Billing</h4>
-<div class="table-wrap">
-<table>
-  <thead>
-    <tr><th>Service</th><th>Free Tier</th><th>Pricing Model</th><th>React Native SDK</th><th>Notes</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>RevenueCat</strong></td>
-      <td>Up to $2,500 MTR</td>
-      <td>1% of revenue after free tier</td>
-      <td><span class="badge badge-green">Best in class</span></td>
-      <td>Industry standard, server-side validation, webhooks</td>
-    </tr>
-    <tr>
-      <td><strong>Adapty</strong></td>
-      <td>Up to $5,000 MTR</td>
-      <td>1–1.5% of revenue</td>
-      <td>Good</td>
-      <td>Higher free tier, less battle-tested RN SDK</td>
-    </tr>
-    <tr>
-      <td><strong>Qonversion</strong></td>
-      <td>Up to $10K MTR (Starter)</td>
-      <td>Starts ~$99/mo after</td>
-      <td>Good</td>
-      <td>Highest free tier, but flat fee scales worse</td>
-    </tr>
-    <tr>
-      <td><strong>DIY (StoreKit 2 + Play Billing)</strong></td>
-      <td>N/A</td>
-      <td>$0 + engineering time</td>
-      <td>N/A</td>
-      <td>2–4 weeks of engineering, complex edge cases</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+<p style="font-size:13px;color:var(--fg-dim)">For Subscription Billing and Paywall SDK comparison, see the dedicated <a href="#paywall">Paywall &amp; Subscription SDK</a> section above.</p>
 
 <h4>Analytics</h4>
 <div class="table-wrap">
@@ -1251,21 +1417,23 @@
     <tr><td>Database</td><td>$12–15</td><td>$0*</td><td>$0</td><td>$25–30</td><td>$25–30</td><td>$25</td><td>$130–150</td><td>$120–150</td><td>$75–150</td></tr>
     <tr><td>Redis Cache</td><td>$17</td><td>$0*</td><td>$0</td><td>$40</td><td>$20–25</td><td>$3–10</td><td>$52</td><td>$80–100</td><td>$10–30</td></tr>
     <tr><td>Storage + CDN</td><td>$6</td><td>$1</td><td>$0</td><td>$17</td><td>$6</td><td>$4</td><td>$65</td><td>$58</td><td>$7.50</td></tr>
-    <tr><td>SMS OTP</td><td>$2</td><td>$2</td><td>$2</td><td>$10–12</td><td>$10–12</td><td>$10–12</td><td>$80–100</td><td>$80–100</td><td>$80–100</td></tr>
+    <tr><td>SMS OTP (India)</td><td>$2</td><td>$2</td><td>$2</td><td>$10–12</td><td>$10–12</td><td>$10–12</td><td>$80–100</td><td>$80–100</td><td>$80–100</td></tr>
+    <tr><td>Intl Messaging</td><td>$0</td><td>$0</td><td>$0</td><td>$7–60</td><td>$7–60</td><td>$7–10</td><td>$70–600</td><td>$70–600</td><td>$70–100</td></tr>
+    <tr><td>Paywall SDK</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$90–500</td><td>$90–500</td><td>$90–500</td></tr>
     <tr><td>Push</td><td>$0</td><td>$0</td><td>$0</td><td>$10</td><td>$0</td><td>$0</td><td>$10–200</td><td>$0</td><td>$0</td></tr>
     <tr><td>Monitoring</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0–26</td><td>$0–26</td><td>$23–50</td><td>$26–89</td><td>$26–89</td></tr>
     <tr><td>Analytics</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$50–150</td><td>$50–150</td><td>$50–150</td></tr>
     <tr style="font-weight:700;background:var(--surface-alt)">
-      <td>TOTAL</td>
+      <td>INFRA TOTAL</td>
       <td style="color:var(--red)">~$37–40</td>
       <td style="color:var(--yellow)">~$8–10</td>
       <td style="color:var(--green)">~$2–7</td>
-      <td style="color:var(--red)">~$115–122</td>
-      <td style="color:var(--yellow)">~$86–99</td>
-      <td style="color:var(--green)">~$49–82</td>
-      <td style="color:var(--red)">~$510–865</td>
-      <td style="color:var(--yellow)">~$484–679</td>
-      <td style="color:var(--green)">~$273–599</td>
+      <td style="color:var(--red)">~$125–184</td>
+      <td style="color:var(--yellow)">~$93–159</td>
+      <td style="color:var(--green)">~$56–92</td>
+      <td style="color:var(--red)">~$670–1,565</td>
+      <td style="color:var(--yellow)">~$644–1,279</td>
+      <td style="color:var(--green)">~$433–1,099</td>
     </tr>
   </tbody>
 </table>
@@ -1273,9 +1441,60 @@
 
 <p style="font-size:13px;color:var(--fg-dim)">* AWS free tier expires after 12 months; plan for $25–40/mo increase when it does.</p>
 
+<!-- FULL PLATFORM COST -->
+<h3 id="full-cost">Full Platform Cost at 10K+ and 100K+ Users</h3>
+
+<p>Complete monthly cost including infrastructure, messaging (domestic + international), paywall SDK, and third-party services. This is the <strong>total cost to run CasaFit</strong> — not just infrastructure. Assumes 10% international users, WhatsApp OTP for international, and Qonversion (0.6% at scale).</p>
+
+<div class="stack-grid">
+  <div class="stack-col">
+    <div class="stack-col-head aws" style="text-align:center">10K+ Users · Growth</div>
+    <div class="stack-col-body">
+      <div class="stack-item"><span class="item-name">API Compute</span><span class="item-val">$7–30</span></div>
+      <div class="stack-item"><span class="item-name">Database (Supabase Pro)</span><span class="item-val">$25</span></div>
+      <div class="stack-item"><span class="item-name">Redis (Upstash)</span><span class="item-val">$3–10</span></div>
+      <div class="stack-item"><span class="item-name">Storage + CDN (R2)</span><span class="item-val">$4</span></div>
+      <div class="stack-item"><span class="item-name">India SMS OTP</span><span class="item-val">$10–12</span></div>
+      <div class="stack-item"><span class="item-name">Intl WhatsApp OTP</span><span class="item-val">$7–10</span></div>
+      <div class="stack-item"><span class="item-name">Paywall SDK</span><span class="item-val">$0</span></div>
+      <div class="stack-item"><span class="item-name">Push (FCM)</span><span class="item-val">$0</span></div>
+      <div class="stack-item"><span class="item-name">Analytics (PostHog)</span><span class="item-val">$0</span></div>
+      <div class="stack-item"><span class="item-name">Errors (Sentry)</span><span class="item-val">$0–26</span></div>
+      <div style="border-top:2px solid var(--accent);padding-top:10px;margin-top:4px">
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">TOTAL</span><span class="item-val" style="font-size:18px;color:var(--green)">$56–117/mo</span></div>
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">ANNUAL</span><span class="item-val" style="color:var(--green)">$672–1,404</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="stack-col">
+    <div class="stack-col-head azure" style="text-align:center">100K+ Users · Scale</div>
+    <div class="stack-col-body">
+      <div class="stack-item"><span class="item-name">API Compute</span><span class="item-val">$25–80</span></div>
+      <div class="stack-item"><span class="item-name">Database (Supabase Pro)</span><span class="item-val">$75–150</span></div>
+      <div class="stack-item"><span class="item-name">Redis (Upstash)</span><span class="item-val">$10–30</span></div>
+      <div class="stack-item"><span class="item-name">Storage + CDN (R2)</span><span class="item-val">$7.50</span></div>
+      <div class="stack-item"><span class="item-name">India SMS OTP</span><span class="item-val">$80–100</span></div>
+      <div class="stack-item"><span class="item-name">Intl WhatsApp OTP</span><span class="item-val">$70–100</span></div>
+      <div class="stack-item"><span class="item-name">Paywall SDK (Qonversion 0.6%)</span><span class="item-val">$90–300</span></div>
+      <div class="stack-item"><span class="item-name">Push (FCM)</span><span class="item-val">$0</span></div>
+      <div class="stack-item"><span class="item-name">Analytics (PostHog)</span><span class="item-val">$50–150</span></div>
+      <div class="stack-item"><span class="item-name">Errors (Sentry)</span><span class="item-val">$26–89</span></div>
+      <div style="border-top:2px solid var(--accent);padding-top:10px;margin-top:4px">
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">TOTAL</span><span class="item-val" style="font-size:18px;color:var(--accent)">$433–1,099/mo</span></div>
+        <div class="stack-item"><span class="item-name" style="font-weight:600;color:var(--fg)">ANNUAL</span><span class="item-val" style="color:var(--accent)">$5,196–13,188</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="info-callout">
+  <div class="callout-title">Cost Drivers at Scale</div>
+  <p>At 100K users, the three biggest costs are: <strong>(1) SMS/messaging</strong> ($150–200/mo combined domestic + intl), <strong>(2) Paywall SDK</strong> ($90–300/mo, revenue-proportional), and <strong>(3) Database</strong> ($75–150/mo). CDN bandwidth — often the killer cost — stays at just $7.50/mo thanks to Cloudflare R2 zero-egress. The savings vs AWS CloudFront ($1,760/mo at 20 TB) alone justifies the hybrid stack.</p>
+</div>
+
 <div class="callout" style="margin-top:32px">
   <div class="callout-title">Final Recommendation</div>
-  <p><strong>Start with permanent free tiers, not 12-month trials.</strong> AWS's free tier cliff is a budgeting trap for startups. <strong>Choose zero-egress storage early</strong> — CDN bandwidth will become the dominant cost for a video-heavy fitness app. The recommended hybrid stack: <strong>Supabase Pro (Mumbai)</strong> for the data layer, <strong>Cloudflare R2</strong> for video assets, <strong>AWS App Runner or Azure Container Apps</strong> for compute, <strong>Upstash</strong> for serverless cache, <strong>MSG91/2Factor.in</strong> for SMS, <strong>FCM</strong> for push, <strong>RevenueCat</strong> for billing, <strong>PostHog + Sentry</strong> for observability.</p>
+  <p><strong>Start with permanent free tiers, not 12-month trials.</strong> AWS's free tier cliff is a budgeting trap for startups. <strong>Choose zero-egress storage early</strong> — CDN bandwidth will become the dominant cost for a video-heavy fitness app. <strong>Use WhatsApp OTP for international users</strong> — saves 10x vs SMS on cross-border routes. The recommended hybrid stack: <strong>Supabase Pro (Mumbai)</strong> for the data layer, <strong>Cloudflare R2</strong> for video assets, <strong>AWS App Runner or Azure Container Apps</strong> for compute, <strong>Upstash</strong> for serverless cache, <strong>MSG91/2Factor.in</strong> for domestic SMS + WhatsApp for international, <strong>FCM</strong> for push, <strong>Qonversion or RevenueCat</strong> for paywall + billing, <strong>PostHog + Sentry</strong> for observability.</p>
 </div>
 
 <div class="report-footer">
