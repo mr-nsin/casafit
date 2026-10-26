@@ -69,7 +69,7 @@ The phone keeps a cached session token with a grace period (7 days by default). 
 
 ## 3 · Backend services
 
-**One NestJS 10 service on Node.js 20**, six `@Module`s inside it. One Dockerfile, one deploy. Stateless, horizontally scalable behind an application load balancer. Split a module into its own service only when traffic justifies. **Open question (defer):** host on AWS App Runner, GCP Cloud Run, or Azure Container Apps — all Mumbai; see `decisions.md`.
+**One ASP.NET Core service on .NET 10 LTS**, six feature modules inside it (`Auth`, `Accounts`, `Entitlements`, `Content`, `Analytics`, `Admin`), laid out as Clean Architecture projects. One Dockerfile, one deploy. Stateless, horizontally scalable behind an application load balancer. Split a module into its own service only when traffic justifies. **Open question (defer):** host on AWS App Runner, GCP Cloud Run, or Azure Container Apps — all Mumbai; see `decisions.md`.
 
 ### 3.1 Auth service
 
@@ -153,7 +153,7 @@ Targets are starting hypotheses; refine from the first beta.
 
 ## 7 · What this architecture is not
 
-- No microservices-per-feature. One NestJS service with six modules is enough until there is traffic to split.
+- No microservices-per-feature. One ASP.NET Core service with six modules is enough until there is traffic to split.
 - No bespoke video player. `react-native-video` wraps the platform players.
 - No bespoke pose model. MediaPipe Pose Tasks on both platforms until there is evidence it is not enough.
 - No server-side computer vision in v1. See the "camera stays on the phone" decision in `decisions.md`.

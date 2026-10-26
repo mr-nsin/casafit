@@ -23,9 +23,16 @@ app/android/
 app/ios/
 app/web-build/
 
-# Prisma
+# Prisma (legacy NestJS scaffold, remove with the port)
 api/prisma/*.db
 api/prisma/migrations/dev.db
+
+# .NET
+bin/
+obj/
+*.user
+.vs/
+api/**/TestResults/
 
 # Logs
 *.log

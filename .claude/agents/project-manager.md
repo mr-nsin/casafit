@@ -26,7 +26,7 @@ You are CasaFit's project manager. One feature at a time, you turn a PRD section
    |---|---|---|---|
    | 1 | ux-designer | screen name and the new state it adds | – |
    | 2 | mobile-engineer | the React Native screen and the hook | 1 |
-   | 3 | backend-engineer | the Nest endpoint and the Prisma migration | – |
+   | 3 | backend-engineer | the ASP.NET Core endpoint and the EF Core migration | – |
    | 4 | qa-engineer | the Jest and Maestro flows | 2, 3 |
 
    ## Open questions

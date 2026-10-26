@@ -600,7 +600,7 @@
   <h2>High-Level Architecture Overview</h2>
 </div>
 
-<p>CasaFit's architecture follows a standard mobile-backend pattern. The <strong>React Native app</strong> (Android-first for India) communicates with a <strong>backend API</strong> (currently NestJS, with ASP.NET Core evaluated as an alternative) that handles authentication, business logic, subscription management, and content delivery.</p>
+<p>CasaFit's architecture follows a standard mobile-backend pattern. The <strong>React Native app</strong> (Android-first for India) communicates with a <strong>backend API</strong> (ASP.NET Core on .NET 10 LTS, replacing the earlier NestJS scaffold) that handles authentication, business logic, subscription management, and content delivery.</p>
 
 <div class="arch-diagram">
   <div class="diagram-title">System Overview — All Components</div>
@@ -621,7 +621,7 @@
                             │
                             ▼
 ┌───────────────────────────────────────────────────────────────────────────┐
-│                    BACKEND API  (NestJS or ASP.NET Core)                   │
+│                    BACKEND API  (ASP.NET Core, .NET 10)                    │
 │               Mumbai (ap-south-1 / Central India)                         │
 │                                                                           │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌───────────────┐  │
@@ -752,26 +752,33 @@
 </div>
 
 <!-- .NET MAPPING -->
-<h3 id="dotnet">Replacing NestJS with ASP.NET Core</h3>
+<h3 id="dotnet">ASP.NET Core on .NET 10 LTS: the chosen backend</h3>
 
-<p>NestJS and ASP.NET Core share remarkably similar patterns — decorator-based routing, constructor-injected services, and middleware pipelines — making the migration structurally straightforward.</p>
+<p>The backend is ASP.NET Core, replacing the earlier NestJS scaffold. The two frameworks share remarkably similar patterns — attribute-routed controllers, constructor-injected services, and middleware pipelines — so the architecture, hosting, data and cost analysis in this report apply unchanged.</p>
+
+<div class="info-callout">
+  <div class="callout-title">Target .NET 10 LTS, not 8</div>
+  <p>.NET 8 LTS leaves support in November 2026. A service started now should begin on <strong>.NET 10 LTS (C# 14)</strong>, supported to November 2028.</p>
+</div>
 
 <div class="table-wrap">
 <table>
   <thead>
-    <tr><th>NestJS Concept</th><th>ASP.NET Core Equivalent</th><th>Notes</th></tr>
+    <tr><th>Earlier NestJS Concept</th><th>ASP.NET Core Equivalent</th><th>Notes</th></tr>
   </thead>
   <tbody>
-    <tr><td><code>@Module()</code></td><td><code>IServiceCollection</code> extensions in <code>Program.cs</code></td><td>Register services per feature area</td></tr>
-    <tr><td><code>@Controller()</code></td><td><code>[ApiController]</code> class</td><td>Nearly identical decorator pattern</td></tr>
+    <tr><td><code>@Module()</code></td><td><code>AddXxxModule()</code> extension on <code>IServiceCollection</code></td><td>One per feature area, called from <code>Program.cs</code></td></tr>
+    <tr><td><code>@Controller()</code></td><td><code>[ApiController]</code> class</td><td>Nearly identical attribute pattern</td></tr>
     <tr><td><code>@Injectable()</code> service</td><td>Constructor-injected service via DI</td><td>Built-in DI, no third-party needed</td></tr>
-    <tr><td><code>@UseGuards(JwtGuard)</code></td><td><code>[Authorize]</code> + <code>AddJwtBearer()</code></td><td>Built-in JWT middleware</td></tr>
-    <tr><td>class-validator pipes</td><td>FluentValidation or DataAnnotations</td><td>FluentValidation is closest match</td></tr>
-    <tr><td>NestJS exception filters</td><td><code>IExceptionHandler</code> (.NET 8+)</td><td>Global or per-controller</td></tr>
-    <tr><td>Prisma 5 (ORM)</td><td>Entity Framework Core + Npgsql</td><td>Code-first migrations, LINQ queries</td></tr>
-    <tr><td>BullMQ (queues)</td><td>Hangfire with Postgres storage</td><td>Free, built-in dashboard</td></tr>
-    <tr><td>@nestjs/swagger</td><td>Swashbuckle / NSwag</td><td>OpenAPI generation built-in</td></tr>
-    <tr><td>Zod schemas (shared/)</td><td>Shared DTOs as a class library project</td><td>Compiled type safety</td></tr>
+    <tr><td><code>@UseGuards(JwtGuard)</code></td><td>Fallback policy + <code>AddJwtBearer()</code>; <code>[AllowAnonymous]</code> to opt out</td><td>Built-in JWT middleware. ASP.NET Identity is not used (OTP only).</td></tr>
+    <tr><td>class-validator pipes</td><td>FluentValidation via an endpoint filter</td><td>Closest match to the old rules</td></tr>
+    <tr><td>NestJS exception filters</td><td><code>IExceptionHandler</code> + <code>ProblemDetails</code></td><td>One error shape for the app to parse</td></tr>
+    <tr><td>@nestjs/throttler</td><td>Built-in <code>AddRateLimiter</code> + Redis counters</td><td>Per-IP in memory; per-number and per-device in Redis</td></tr>
+    <tr><td>Prisma 5 (ORM)</td><td>Entity Framework Core 10 + Npgsql</td><td>Code-first migrations, LINQ queries</td></tr>
+    <tr><td>BullMQ (queues)</td><td>Hangfire with Postgres storage</td><td>Free, built-in dashboard. Needs one warm instance; QStash is the serverless fallback.</td></tr>
+    <tr><td>@nestjs/swagger</td><td><code>Microsoft.AspNetCore.OpenApi</code> + Scalar UI</td><td>OpenAPI document is generated at build</td></tr>
+    <tr><td>Zod schemas (shared/)</td><td>OpenAPI-generated TypeScript types in <code>shared/</code></td><td>The OpenAPI document is now the app/API contract</td></tr>
+    <tr><td>Jest + Supertest</td><td>xUnit + <code>WebApplicationFactory</code> + Testcontainers</td><td>Integration tests run against real Postgres</td></tr>
   </tbody>
 </table>
 </div>
@@ -781,47 +788,50 @@
   <div class="flow-box">
     <div class="flow-label">API Layer</div>
     <div class="flow-name">CasaFit.Api</div>
-    <div class="flow-detail">Controllers, Program.cs, middleware config, Swagger setup</div>
+    <div class="flow-detail">Controllers, Program.cs, auth, rate limiting, OpenAPI setup</div>
   </div>
   <div class="flow-box">
     <div class="flow-label">Application</div>
     <div class="flow-name">CasaFit.Application</div>
-    <div class="flow-detail">AuthService, AccountService, EntitlementService — business logic</div>
+    <div class="flow-detail">Auth, Accounts and Entitlement services, validators, idempotency, identifier normalisation</div>
   </div>
   <div class="flow-box">
     <div class="flow-label">Domain</div>
     <div class="flow-name">CasaFit.Domain</div>
-    <div class="flow-detail">Entities, interfaces, value objects, domain rules</div>
+    <div class="flow-detail">Entities, interfaces, value objects, domain rules. No dependencies.</div>
   </div>
   <div class="flow-box">
     <div class="flow-label">Infrastructure</div>
     <div class="flow-name">CasaFit.Infrastructure</div>
-    <div class="flow-detail">EF Core DbContext, Redis client, external API integrations</div>
+    <div class="flow-detail">EF Core DbContext and migrations, Redis, SMS, RevenueCat and store clients</div>
   </div>
 </div>
 
-<h4>Tradeoffs: NestJS vs ASP.NET Core</h4>
+<p>Tests live in <code>CasaFit.UnitTests</code> and <code>CasaFit.IntegrationTests</code>. The six modules (Auth, Accounts, Entitlements, Content, Analytics, Admin) are feature folders inside these projects, not separate services.</p>
+
+<h4>What the choice costs, and how the project absorbs it</h4>
 <div class="table-wrap">
 <table>
   <thead>
-    <tr><th>Factor</th><th>NestJS (current)</th><th>ASP.NET Core</th></tr>
+    <tr><th>Factor</th><th>Impact</th><th>How it is handled</th></tr>
   </thead>
   <tbody>
-    <tr><td>Performance</td><td>Good (V8 + libuv)</td><td><span class="badge badge-green">Better</span> TechEmpower benchmarks</td></tr>
-    <tr><td>Type safety</td><td>TypeScript (runtime)</td><td><span class="badge badge-green">Stronger</span> compile-time</td></tr>
-    <tr><td>Shared code w/ app</td><td><span class="badge badge-green">Same language</span> (TS)</td><td>Separate DTOs needed</td></tr>
-    <tr><td>Developer pool (India)</td><td><span class="badge badge-green">Large</span> Node.js/TS</td><td><span class="badge badge-yellow">Smaller</span> for backends</td></tr>
-    <tr><td>RevenueCat SDK</td><td><span class="badge badge-green">Official</span></td><td><span class="badge badge-red">REST API only</span></td></tr>
-    <tr><td>Cold start (serverless)</td><td>~1–2s</td><td>~3–5s (mitigated by AOT)</td></tr>
-    <tr><td>Azure integration</td><td>Good</td><td><span class="badge badge-green">Native</span></td></tr>
-    <tr><td>Migration cost</td><td>N/A (current)</td><td><span class="badge badge-red">Full rewrite</span></td></tr>
+    <tr><td>Performance</td><td><span class="badge badge-green">Better</span> TechEmpower benchmarks</td><td>No action needed</td></tr>
+    <tr><td>Type safety</td><td><span class="badge badge-green">Stronger</span> compile-time checks on entitlement and billing paths</td><td>Nullable reference types on, warnings as errors</td></tr>
+    <tr><td>Rewrite of <code>api/</code></td><td><span class="badge badge-yellow">One-off</span> no automated path; nothing is deployed yet</td><td>Port the first auth slice, then delete the NestJS scaffold</td></tr>
+    <tr><td>Shared code with the app</td><td><span class="badge badge-yellow">Lost</span> no shared TypeScript package</td><td>OpenAPI-generated types; shared JSON test vectors for identifier normalisation run in both Jest and xUnit</td></tr>
+    <tr><td>RevenueCat</td><td><span class="badge badge-yellow">REST + webhooks only</span> no official .NET SDK</td><td>Typed <code>HttpClient</code>; the app keeps the official React Native SDK</td></tr>
+    <tr><td>App Attest validation</td><td><span class="badge badge-red">No official .NET library</span></td><td>Small, well-tested validator (CBOR + certificate chain); spike it before the onboarding backend tasks</td></tr>
+    <tr><td>Developer pool (India)</td><td><span class="badge badge-yellow">Smaller</span> for .NET backends</td><td>Conventional Clean Architecture, documented in <code>docs/</code></td></tr>
+    <tr><td>Cold start (scale-to-zero)</td><td>~3–5s (mitigated by Native AOT)</td><td>Hangfire needs one warm instance anyway: price the host with min = 1</td></tr>
+    <tr><td>Azure integration</td><td><span class="badge badge-green">Native</span> Container Apps, Application Insights</td><td>Azure Container Apps becomes the smoothest hosting option</td></tr>
   </tbody>
 </table>
 </div>
 
 <div class="callout">
-  <div class="callout-title">Recommendation</div>
-  <p><strong>Keep NestJS for now.</strong> The shared TypeScript with the React Native app, the official RevenueCat SDK, and the larger Indian developer pool outweigh .NET's performance advantage at CasaFit's current stage. Consider .NET only if the team has .NET expertise or performance bottlenecks emerge.</p>
+  <div class="callout-title">Decision</div>
+  <p><strong>ASP.NET Core on .NET 10 LTS.</strong> The infrastructure and cost conclusions in this report are framework-independent, so they stand. The work plan changes: port the first auth slice, publish an OpenAPI document that generates the app's types, share identifier test vectors between TypeScript and C#, and spike the App Attest validator early.</p>
 </div>
 
 <!-- THREE STACKS -->
@@ -859,7 +869,7 @@
   <div class="stack-col">
     <div class="stack-col-head budget">Stack C · Hybrid (Recommended)</div>
     <div class="stack-col-body">
-      <div class="stack-item"><span class="item-name">API</span><span class="item-val">Render / App Runner</span></div>
+      <div class="stack-item"><span class="item-name">API</span><span class="item-val">App Runner / Container Apps</span></div>
       <div class="stack-item"><span class="item-name">Database</span><span class="item-val">Supabase Pro</span></div>
       <div class="stack-item"><span class="item-name">Cache</span><span class="item-val">Upstash Redis</span></div>
       <div class="stack-item"><span class="item-name">Storage</span><span class="item-val">R2 + Cloudflare CDN</span></div>
@@ -1032,7 +1042,7 @@
 
 <div class="callout">
   <div class="callout-title">Supabase as CasaFit's Backend?</div>
-  <p>Supabase Pro ($25/mo) bundles Postgres + Auth + Storage + Edge Functions + Realtime. It can replace the database and auth layers, but <strong>not the full backend</strong>: edge functions are limited to 256 MB RAM and 2s CPU, insufficient for complex business logic like plan generation or entitlement management. Use Supabase for data + auth, keep NestJS/.NET for API logic.</p>
+  <p>Supabase Pro ($25/mo) bundles Postgres + Auth + Storage + Edge Functions + Realtime. It can replace the database and auth layers, but <strong>not the full backend</strong>: edge functions are limited to 256 MB RAM and 2s CPU, insufficient for complex business logic like plan generation or entitlement management. Use Supabase for data + auth, keep the ASP.NET Core API for business logic.</p>
 </div>
 
 <!-- CACHE -->
@@ -1937,7 +1947,7 @@
   <div class="flow-box">
     <div class="flow-label">Pattern 2</div>
     <div class="flow-name">Event-Driven Processing</div>
-    <div class="flow-detail">Wearable syncs, AI pose analysis, and analytics run on async message queues (SQS, BullMQ, RabbitMQ). Prevents blocking user requests. Critical for form-check processing.</div>
+    <div class="flow-detail">Wearable syncs, AI pose analysis, and analytics run on async message queues (SQS, Hangfire, RabbitMQ). Prevents blocking user requests. Critical for form-check processing.</div>
   </div>
   <div class="flow-box">
     <div class="flow-label">Pattern 3</div>
@@ -1952,7 +1962,7 @@
 </div>
 
 <h4>CasaFit Architecture — Recommended Approach</h4>
-<p>Start as a <strong>modular monolith</strong> (NestJS modules with clear boundaries), not microservices. Extract services only when a specific module needs independent scaling. This matches CasaFit's current team size and avoids premature complexity.</p>
+<p>Start as a <strong>modular monolith</strong> (ASP.NET Core feature modules with clear boundaries), not microservices. Extract services only when a specific module needs independent scaling. This matches CasaFit's current team size and avoids premature complexity.</p>
 
 <div class="table-wrap">
 <table>
@@ -1960,11 +1970,11 @@
     <tr><th>Module</th><th>Start As</th><th>Extract When</th><th>Why Wait</th></tr>
   </thead>
   <tbody>
-    <tr><td><strong>Auth</strong></td><td>NestJS module</td><td>Never (stays in monolith)</td><td>Low traffic, critical path, simple</td></tr>
-    <tr><td><strong>Content / Media</strong></td><td>NestJS module + R2</td><td>>50K daily active users</td><td>Signed URL generation is CPU-light</td></tr>
-    <tr><td><strong>Plan Engine</strong></td><td>NestJS module</td><td>When adding AI generation</td><td>Rule-based engine is fast; AI needs GPU</td></tr>
-    <tr><td><strong>Analytics Proxy</strong></td><td>NestJS module</td><td>>10K events/second</td><td>PostHog handles the heavy lifting</td></tr>
-    <tr><td><strong>Form Check Processing</strong></td><td>Async queue (BullMQ)</td><td>Already async from day 1</td><td>On-device camera; server stores results only</td></tr>
+    <tr><td><strong>Auth</strong></td><td>Feature module</td><td>Never (stays in monolith)</td><td>Low traffic, critical path, simple</td></tr>
+    <tr><td><strong>Content / Media</strong></td><td>Feature module + R2</td><td>>50K daily active users</td><td>Signed URL generation is CPU-light</td></tr>
+    <tr><td><strong>Plan Engine</strong></td><td>Feature module</td><td>When adding AI generation</td><td>Rule-based engine is fast; AI needs GPU</td></tr>
+    <tr><td><strong>Analytics Proxy</strong></td><td>Feature module</td><td>>10K events/second</td><td>PostHog handles the heavy lifting</td></tr>
+    <tr><td><strong>Form Check Processing</strong></td><td>Async job (Hangfire)</td><td>Already async from day 1</td><td>On-device camera; server stores results only</td></tr>
     <tr><td><strong>Food DB</strong></td><td>Static JSON + Postgres</td><td>Never (stays in monolith)</td><td>Read-heavy, cache-friendly, rarely writes</td></tr>
   </tbody>
 </table>

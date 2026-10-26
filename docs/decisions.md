@@ -2,16 +2,25 @@
 
 A short, dated log of design and technical decisions. Add a row at the top. Keep each entry to a few lines; link to the full discussion if there is one.
 
+## 2026-10-26 · ASP.NET Core on .NET 10 LTS for the backend
+- **Context:** the architecture report (`reports/CasaFit backend architecture options.md`) mapped NestJS to ASP.NET Core one-to-one and found the architecture, hosting and data choices unchanged. The product owner chose .NET.
+- **Decision:** ASP.NET Core Web API on .NET 10 LTS (C# 14). EF Core 10 + Npgsql replaces Prisma, Hangfire (PostgreSQL storage) replaces BullMQ, FluentValidation replaces class-validator, built-in JWT bearer auth and rate limiting replace the Nest guards and throttler, xUnit + `WebApplicationFactory` + Testcontainers replace Jest and Supertest. The mobile client stays React Native + TypeScript.
+- **Why:** stronger compile-time safety on the entitlement and billing paths, native Azure path, better raw throughput, and the owner's preferred stack. Start on .NET 10, not 8: .NET 8 LTS leaves support in November 2026.
+- **Costs accepted:** a full rewrite of the scaffolded `api/` (nothing is deployed yet), no shared TypeScript package with the app, no official RevenueCat or App Attest server library (typed `HttpClient` and a custom validator), and a smaller .NET hiring pool in India.
+- **Consequences:** the OpenAPI document becomes the app/API contract and `shared/` generates types from it. Identifier normalisation exists in TypeScript and C#, both run against `shared/fixtures/identifiers.json`. Hangfire needs one warm instance, so price the host with `min = 1`.
+- **Supersedes:** "NestJS on Node.js 20 for the backend" (2026-10-19).
+- **See:** `tech-stack.md` §2 and §3, `architecture.md` §3, `api/README.md`.
+
 ## 2026-10-20 · Supabase Pro (Mumbai) for Postgres
 - **Context:** choosing a managed Postgres host; backend research pack scored AWS RDS vs Google Cloud SQL vs Supabase Pro in `ap-south-1`.
 - **Decision:** Supabase Pro, Mumbai (`ap-south-1`), $25/mo at launch. Replaces the earlier "AWS RDS or Google Cloud SQL" placeholder.
-- **Why:** DPDP-compliant Mumbai region, bundles Postgres + Supavisor pooling + auth + 100 GB storage + daily backups, cheapest path to a production DB; we can still run NestJS in front for business logic.
+- **Why:** DPDP-compliant Mumbai region, bundles Postgres + Supavisor pooling + auth + 100 GB storage + daily backups, cheapest path to a production DB; we can still run the API in front for business logic (ASP.NET Core since 2026-10-26).
 - **See:** `tech-stack.md` §2.3, `reports/CasaFit backend architecture options.md`.
 
 ## 2026-10-20 · Upstash serverless Redis for cache
 - **Context:** Redis for OTP codes, rate limits and idempotency keys has very sparse traffic; always-on managed Redis idles most of the day.
 - **Decision:** Upstash Redis (serverless) with Mumbai region, pay-per-command. Replaces the earlier "Redis 7 managed, Mumbai" placeholder.
-- **Why:** Free tier covers launch, ~$3-10/mo at growth, no VPC plumbing. BullMQ stays as the queue library for now; revisit QStash if worker always-on cost becomes material.
+- **Why:** Free tier covers launch, ~$3-10/mo at growth, no VPC plumbing. BullMQ was the queue library here; Hangfire on Postgres replaces it from 2026-10-26. Revisit QStash if worker always-on cost becomes material.
 - **See:** `tech-stack.md` §2.3, `reports/CasaFit backend architecture options.md`.
 
 ## 2026-10-20 · Cloudflare R2 + Cloudflare CDN for media
@@ -32,7 +41,7 @@ A short, dated log of design and technical decisions. Add a row at the top. Keep
 - **Why:** one language with the backend, one team, EAS Build removes most CI pain, and the UI ecosystem (`react-native-paper` and friends) covers Material 3.
 - **See:** `tech-stack.md` §1, `architecture.md` §2.
 
-## 2026-10-19 · NestJS on Node.js 20 for the backend
+## 2026-10-19 · NestJS on Node.js 20 for the backend (superseded 2026-10-26)
 - **Context:** we needed to pick one backend language before any code is written.
 - **Decision:** NestJS 10, Node.js 20 LTS, Prisma 5 over Postgres 16, Redis 7 for cache and BullMQ.
 - **Why:** TypeScript on both sides lets us share DTOs via a `shared/` package, NestJS gives us OpenAPI, DI and modules out of the box, and the hiring pool is deeper than Kotlin/Ktor.

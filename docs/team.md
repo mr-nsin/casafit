@@ -13,8 +13,8 @@ A small team of Claude Code sub-agents, each with one role. They are defined und
 | **ux-designer** | `project/m3-*.dc.html` | docs, PRD | `project/canvas.json`, docs, PRD |
 | **content-writer** | visible strings inside `project/m3-*.dc.html` | docs, PRD | layout, markup, icons, links, ARIA |
 | **mobile-engineer** | `app/**` (React Native + TypeScript) | docs, plans, screens | `api/`, docs, screens |
-| **backend-engineer** | `api/**` (NestJS + Prisma) | docs, plans | `app/`, docs, screens |
-| **qa-engineer** | `app/**/*.test.*`, `api/test/`, `api/**/*.spec.*`, `tests/maestro/**` | code, docs, plans | feature code (hands bugs back) |
+| **backend-engineer** | `api/**` (ASP.NET Core + EF Core, C#) | docs, plans | `app/`, docs, screens |
+| **qa-engineer** | `app/**/*.test.*`, `api/tests/**`, `tests/maestro/**` | code, docs, plans | feature code (hands bugs back) |
 | **reviewer** | *nothing* (read-only) | everything | any file at all |
 | **integrator** | `project/canvas.json`, the publish step | everything | screens, docs, PRD |
 | **docs-keeper** | `docs/MEMORY.md`, `docs/*.md` | its own files | everything else |
@@ -41,10 +41,10 @@ A small team of Claude Code sub-agents, each with one role. They are defined und
           │
           ▼
   mobile-engineer       →   React Native code under app/
-  backend-engineer      →   NestJS code under api/
+  backend-engineer      →   C# / ASP.NET Core code under api/
           │
           ▼
-  qa-engineer           →   Jest, Supertest and Maestro tests
+  qa-engineer           →   Jest, xUnit / integration and Maestro tests
           │
           ▼
   reviewer              →   runs tools/check.py and scans the diff

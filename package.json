@@ -2,7 +2,7 @@
   "name": "casafit",
   "private": true,
   "version": "0.1.0",
-  "description": "CasaFit: a 15-minute home-workout app. React Native app + NestJS API in one pnpm workspace.",
+  "description": "CasaFit: a 15-minute home-workout app. React Native app (pnpm workspace) + ASP.NET Core API (.NET solution in api/).",
   "packageManager": "pnpm@9.12.0",
   "engines": {
     "node": ">=20.18.0 <21"

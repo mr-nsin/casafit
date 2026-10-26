@@ -1,26 +1,37 @@
 # CasaFit · api
 
-NestJS 10 on Node.js 20, Prisma over Postgres, Redis for OTPs and rate limits.
+ASP.NET Core Web API on .NET 10 LTS (C#), EF Core + Npgsql over Postgres, Redis for OTPs and rate limits, Hangfire for background jobs.
 
-See `docs/tech-stack.md` §2 and `docs/architecture.md` §3.
+See `docs/tech-stack.md` §2 and §3, `docs/architecture.md` §3 and the 2026-10-26 entry in `docs/decisions.md`.
 
-## Dev
+> **Status: port pending.** The code currently in this folder (`src/`, `test/`, `prisma/`, `package.json`) is the earlier NestJS + Prisma scaffold. The backend is now ASP.NET Core, so that scaffold is to be ported to the solution below and then deleted, along with the `api` entry in `pnpm-workspace.yaml`. Do not add features to it. The first slice to port is `POST /v1/auth/code` and `POST /v1/auth/verify` (plan task 7 in `docs/plans/onboarding.md`).
 
-```bash
-cp .env.example .env
-pnpm install
-pnpm --filter @casafit/api prisma:generate
-pnpm --filter @casafit/api prisma:migrate
-pnpm --filter @casafit/api start:dev
+## Target layout
+
+```
+api/
+  CasaFit.sln
+  Directory.Packages.props        central NuGet versions
+  src/
+    CasaFit.Domain/               entities, value objects, no dependencies
+    CasaFit.Application/          services, validators, idempotency, identifier normalisation
+    CasaFit.Infrastructure/       EF Core DbContext + migrations, Redis, SMS / RevenueCat / store clients
+    CasaFit.Api/                  controllers, Program.cs, auth, rate limiting, OpenAPI
+  tests/
+    CasaFit.UnitTests/            xUnit + NSubstitute
+    CasaFit.IntegrationTests/     WebApplicationFactory + Testcontainers (Postgres)
 ```
 
-OpenAPI docs: http://localhost:3000/v1/docs
+Each module (`Auth`, `Accounts`, `Entitlements`, `Content`, `Analytics`, `Admin`) is a feature folder in every project that needs it.
 
-## Layout
+## Dev (once ported)
 
-- `src/main.ts` — bootstrap, global prefix, validation pipe, Swagger.
-- `src/app.module.ts` — root module.
-- `src/modules/<name>/` — one Nest module per capability.
-- `src/prisma/` — the generated client, DI wrapper.
-- `src/common/` — small shared helpers (idempotency, auth guard, request IDs).
-- `test/` — Supertest e2e specs; unit tests sit next to the file as `.spec.ts`.
+```bash
+cd api
+dotnet restore
+dotnet ef database update --project src/CasaFit.Infrastructure --startup-project src/CasaFit.Api
+dotnet run --project src/CasaFit.Api
+dotnet test
+```
+
+OpenAPI document: `http://localhost:5080/openapi/v1.json`. The build writes it to `api/openapi.json`; `shared/` generates the app's request and response types from that file.

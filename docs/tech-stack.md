@@ -2,12 +2,14 @@
 
 Chosen technologies for the first release. Pricing is at list prices as of October 2026 and is a planning estimate, not a quote.
 
-## 0 · What changed (19 October 2026)
+## 0 · What changed
 
-The native plan (Kotlin + Compose on Android, Swift + SwiftUI on iOS, Kotlin + Ktor on the backend) was replaced with:
+**26 October 2026.** The backend moved from NestJS on Node.js 20 to **ASP.NET Core on .NET 10 LTS (C#)**. Prisma became EF Core, BullMQ became Hangfire, class-validator became FluentValidation, and Jest/Supertest became xUnit with `WebApplicationFactory`. The mobile choice below is unchanged. See `decisions.md`.
+
+**19 October 2026.** The native plan (Kotlin + Compose on Android, Swift + SwiftUI on iOS, Kotlin + Ktor on the backend) was replaced with:
 
 - **Mobile:** React Native with Expo Dev Client, TypeScript.
-- **Backend:** NestJS on Node.js 20, TypeScript.
+- **Backend:** NestJS on Node.js 20, TypeScript (superseded on 26 October).
 
 See `decisions.md` for why.
 
@@ -72,53 +74,58 @@ See `decisions.md` for why.
 - **Redux Toolkit.** Zustand plus TanStack Query covers both state kinds.
 - **WatermelonDB.** Op-SQLite + Drizzle is enough.
 
-## 2 · Backend (NestJS)
+## 2 · Backend (ASP.NET Core)
 
 ### 2.1 Core
 
 | Layer | Choice | Why |
 |---|---|---|
-| Framework | NestJS 10 or later | Opinionated, modular, strong DI, OpenAPI generation. Same language as the app. |
-| Runtime | Node.js 20 LTS | Supported until April 2026. Move to 22 LTS when the next window opens. |
-| Language | TypeScript 5, `strict: true`, `noUncheckedIndexedAccess: true` | |
-| Package manager | pnpm | |
-| API | REST + JSON at `/v1/`, OpenAPI via @nestjs/swagger | Simple, versioned, cacheable. |
-| Validation | class-validator + class-transformer + ValidationPipe | NestJS standard. |
+| Framework | ASP.NET Core Web API (controllers with `[ApiController]`) | Built-in DI, middleware pipeline, JWT bearer auth, rate limiting and OpenAPI. Mature Azure path. |
+| Runtime | .NET 10 LTS (supported to November 2028) | .NET 8 LTS leaves support in November 2026, so a new service starts on 10. |
+| Language | C# 14, nullable reference types on, warnings as errors | |
+| Solution | `api/CasaFit.sln`, Clean Architecture: `CasaFit.Api`, `CasaFit.Application`, `CasaFit.Domain`, `CasaFit.Infrastructure`, plus `CasaFit.UnitTests` and `CasaFit.IntegrationTests` | Domain has no dependencies; Infrastructure is the only project that knows EF Core, Redis and HTTP vendors. |
+| Package manager | NuGet, central package management (`Directory.Packages.props`) | One place to pin versions. |
+| API | REST + JSON at `/v1/` (Asp.Versioning), OpenAPI via `Microsoft.AspNetCore.OpenApi`, Scalar UI in development | Simple, versioned, cacheable. The OpenAPI document is the contract with the app (see §3). |
+| Validation | FluentValidation, run by an endpoint filter on every request DTO | Closest match to the old class-validator rules. |
+| Errors | `IExceptionHandler` + RFC 9457 `ProblemDetails` | One error shape for the app to parse. |
 
 ### 2.2 Modules
 
-Each is one `@Module` in the Nest sense; one package in `src/modules/`.
+Each module is one feature folder (`Auth/`, `Accounts/`, ...) repeated in `Api` (controllers), `Application` (services, validators) and `Infrastructure` (EF configuration, vendor clients), and registered by one `AddXxxModule()` extension on `IServiceCollection`.
 
 | Module | Purpose |
 |---|---|
-| `auth` | OTP send and verify, JWT issue, refresh tokens, Google sign-in. |
-| `accounts` | Profile, plan metadata, consent records. |
-| `entitlements` | The lifetime free-check balance. Receives RevenueCat webhooks for Pro. |
-| `content` | Signed URLs for videos and the food pack. |
-| `analytics` | Thin passthrough to PostHog. No health values. |
-| `admin` | Internal endpoints behind a separate guard. |
+| `Auth` | OTP send and verify, JWT issue, refresh tokens, Google sign-in. |
+| `Accounts` | Profile, plan metadata, consent records. |
+| `Entitlements` | The lifetime free-check balance. Receives RevenueCat webhooks for Pro. |
+| `Content` | Signed URLs for videos and the food pack. |
+| `Analytics` | Thin passthrough to PostHog. No health values. |
+| `Admin` | Internal endpoints behind a separate authorization policy. |
 
 ### 2.3 Data
 
 | Layer | Choice | Why |
 |---|---|---|
-| ORM | Prisma 5 | Type-safe migrations, matches the TypeScript theme. |
-| Database | Postgres 16 on **Supabase Pro, Mumbai (`ap-south-1`)** | India residency, bundles managed Postgres + Supavisor pooling + daily backups; $25/mo covers launch. |
-| Cache | **Upstash Redis (serverless)** | OTP codes, rate counters, idempotency keys. Pay-per-command fits sparse OTP traffic; no idle fee. |
-| Queue | BullMQ on Upstash Redis | Daily food and step syncs, batched analytics flushes. Revisit QStash if worker always-on cost bites. |
-| Object storage | **Cloudflare R2** | Videos, food packs, data exports. Zero egress is the single biggest line-item saving at scale. |
-| CDN | **Cloudflare CDN** (22+ India PoPs) | For video and the food pack. Pairs with R2 at zero egress. |
+| ORM | Entity Framework Core 10 with Npgsql, code-first migrations | Replaces Prisma. LINQ queries, change tracking, migrations checked into `api/`. |
+| Database | Postgres 16 on **Supabase Pro, Mumbai (`ap-south-1`)** | India residency, bundles managed Postgres + Supavisor pooling + daily backups; $25/mo covers launch. Connect through the Supavisor pooler string. |
+| Cache | **Upstash Redis (serverless)** through StackExchange.Redis over TLS | OTP codes, rate counters, idempotency keys. Pay-per-command fits sparse OTP traffic; no idle fee. |
+| Background jobs | **Hangfire** with PostgreSQL storage (`Hangfire.PostgreSql`), in the same container | Replaces BullMQ. Daily food and step syncs, batched analytics flushes, a dashboard behind the admin policy. Needs one warm instance. Revisit Upstash QStash (HTTP push) if that always-on cost bites. |
+| Object storage | **Cloudflare R2** through `AWSSDK.S3` against R2's S3-compatible endpoint | Videos, food packs, data exports. Zero egress is the single biggest line-item saving at scale. |
+| CDN | **Cloudflare CDN** (22+ India PoPs) | For video and the food pack. Pairs with R2 at zero egress. Pro content uses pre-signed URLs; Worker-verified tokens stay an option. |
 
 ### 2.4 Platform integrations
 
 | Capability | Choice | Why |
 |---|---|---|
-| SMS (India) | A DLT-registered aggregator (MSG91 or Gupshup) over HTTP | Required for Indian OTP delivery. |
+| Auth | `Microsoft.AspNetCore.Authentication.JwtBearer`; a fallback policy requires auth on every endpoint, `[AllowAnonymous]` opts out | ASP.NET Identity is not used: the flow is OTP only, with no passwords. |
+| Rate limiting | Built-in `AddRateLimiter` for per-IP limits; Redis counters for per-number and per-device send limits | |
+| SMS (India) | A DLT-registered aggregator (MSG91 or Gupshup) over a typed `HttpClient` | Required for Indian OTP delivery. |
 | Email | Resend or AWS SES | Email verification, support replies. |
-| Store receipt validation | Google Play Developer API, App Store Server API, cross-checked with the RevenueCat webhook | Belt and braces for Pro state. |
-| Attestation checks | Google Play Integrity decryption, App Attest validation | Verified before any OTP send. |
-| Observability | OpenTelemetry SDK → Grafana Cloud (Loki, Prometheus, Tempo) | One stack across logs, metrics and traces. |
-| Error reporting | Sentry | Same org as the app. |
+| Store receipt validation | Google Play Developer API (`Google.Apis.AndroidPublisher.v3`), App Store Server API (Apple's `app-store-server-library-dotnet`), cross-checked with the RevenueCat webhook | Belt and braces for Pro state. |
+| RevenueCat | Webhooks plus the REST API through a typed `HttpClient` | There is no official RevenueCat .NET SDK. The app uses the React Native SDK; the server only needs the webhook and a lookup call. |
+| Attestation checks | Google Play Integrity token decoding (`Google.Apis.PlayIntegrity.v1`), App Attest assertion validation | Verified before any OTP send. App Attest has no official .NET library: budget a small, well-tested validator (CBOR + certificate chain). |
+| Observability | OpenTelemetry .NET SDK → Grafana Cloud (Loki, Prometheus, Tempo) | One stack across logs, metrics and traces. |
+| Error reporting | Sentry (`Sentry.AspNetCore`) | Same org as the app. |
 
 ### 2.5 API surface, in one glance
 
@@ -139,18 +146,20 @@ GET    /v1/content/pack/latest    the current food pack version
 
 | Area | Choice |
 |---|---|
-| Tests | Jest (unit, built into NestJS) + Supertest (e2e against a Testcontainers Postgres) |
-| Container | Dockerfile targeting `node:20-alpine` |
-| Deploy | **Open question (defer):** AWS App Runner, GCP Cloud Run, or Azure Container Apps — all in a Mumbai region. App Runner is cheapest at launch; Cloud Run and Container Apps have larger free grants. Pick one before the first commit. |
-| CI | GitHub Actions matrix: unit, e2e, build and push the image |
-| Secrets | AWS Secrets Manager or GCP Secret Manager |
+| Tests | xUnit + NSubstitute (unit); `WebApplicationFactory<Program>` with Testcontainers for .NET running Postgres (integration, one per public endpoint) |
+| Style | `dotnet format`, Roslyn analyzers, `TreatWarningsAsErrors` |
+| Container | Multi-stage Dockerfile: `mcr.microsoft.com/dotnet/sdk:10.0` to build, `mcr.microsoft.com/dotnet/aspnet:10.0` (or the chiseled variant) to run |
+| Deploy | **Open question (defer):** AWS App Runner, GCP Cloud Run, or Azure Container Apps — all in a Mumbai region and all run a .NET container. Azure Container Apps has the smoothest .NET tooling; App Runner is cheapest at launch. Hangfire needs a minimum of one running instance, so price the host with `min = 1`. Pick one before the first production deploy. |
+| CI | GitHub Actions with `actions/setup-dotnet`: build, unit, integration, publish the image; a job regenerates the OpenAPI document and fails if `shared/` types are stale |
+| Secrets | AWS Secrets Manager, GCP Secret Manager or Azure Key Vault, matching the host |
 
 ### 2.7 Not using
 
-- **FastAPI, Ktor.** Dropped by the switch to TypeScript everywhere.
+- **Node.js and NestJS.** Replaced by this decision; see `decisions.md`.
+- **ASP.NET Identity.** Built around passwords; OTP-only auth does not need it.
 - **GraphQL.** The surface is small and change-light. Not worth the extra complexity.
 - **gRPC.** Same.
-- **Microservices per feature.** One Nest service, six modules, scales horizontally.
+- **Microservices per feature.** One ASP.NET Core service, six modules, scales horizontally.
 
 ## 3 · Shared across the stack
 
@@ -158,11 +167,12 @@ GET    /v1/content/pack/latest    the current food pack version
 |---|---|
 | Source | GitHub `mr-nsin/casafit` |
 | CI | GitHub Actions |
-| Project tooling | pnpm workspaces, three packages: `app/` (React Native), `api/` (NestJS), `shared/` (TypeScript types and zod schemas for request bodies) |
-| Shared types | Generated from Prisma for DB types; hand-written zod schemas for request and response shapes |
+| Project tooling | pnpm workspaces for `app/` (React Native) and `shared/` (TypeScript); `api/` is a .NET solution built with `dotnet`, outside pnpm |
+| API contract | The API publishes `openapi.json` at build time. `shared/` generates TypeScript request and response types from it (`openapi-typescript`). Hand-written zod schemas for API bodies are retired once generation lands. |
+| Duplicated rules | Identifier normalisation (phone to E.164, email canonicalisation) exists twice: in `shared/` (TypeScript) and in `CasaFit.Application` (C#). Both run against the same test vectors in `shared/fixtures/identifiers.json`, so they cannot drift. |
 | Monitoring | OpenTelemetry across both runtimes, into Grafana Cloud |
 
-Keeping React Native and NestJS in one monorepo means `shared/` holds the DTOs both sides agree on, with the compiler enforcing it.
+With two languages the OpenAPI document, not a shared package, is the contract between app and API. CI regenerates it and fails the build if the generated types differ from the committed ones.
 
 ## 4 · Cost shape
 
@@ -172,7 +182,7 @@ Order-of-magnitude only. All numbers are "roughly" and would be re-quoted before
 |---|---|
 | Supabase Pro, Mumbai (Postgres + auth + 100 GB storage) | $25 a month at launch, +$10-110 compute add-on as load grows |
 | Upstash Redis (serverless) | Free tier covers launch; ~$3-10 a month at growth |
-| App Runner / Cloud Run / Container Apps (one small task, Mumbai) | $5 to $30 a month at launch, $25 to $90 at growth |
+| App Runner / Cloud Run / Container Apps (one small task, Mumbai, minimum one instance for Hangfire) | $5 to $30 a month at launch, $25 to $90 at growth |
 | Cloudflare R2 + Cloudflare CDN (one 50 MB session pack per active user per month) | ~$1 a month at launch; zero CDN egress through growth |
 | SMS OTP (India) | Roughly ₹0.15 to ₹0.30 per message. Belongs in LTV calculations. |
 | RevenueCat | Free up to $10k MTR, then 1% of revenue. |
@@ -188,6 +198,10 @@ Order-of-magnitude only. All numbers are "roughly" and would be re-quoted before
 - **Store policy drift.** Apple's "biometric-adjacent processing" and "server-side analysis" rules have moved before. Re-check both store policies at submission time.
 - **DPDP timing.** The Rules apply in full around 13 May 2027. A launch after that date needs the privacy notice reviewed by counsel.
 - **SMS pumping.** Any open OTP endpoint can be abused. Attestation and send-limits are mandatory, not optional.
+- **Two languages, one contract.** The app is TypeScript and the API is C#, so request shapes can drift. The OpenAPI document is the contract, types are generated from it, and CI fails on stale output.
+- **Duplicated normalisation.** Phone and email normalisation lives in both TypeScript and C#. Shared JSON test vectors run in both suites; a failing vector blocks the merge.
+- **App Attest on .NET.** There is no official server library for App Attest assertions. Treat the validator as security-critical code with its own tests, and spike it before the onboarding backend tasks start.
+- **Smaller hiring pool.** Fewer affordable .NET backend developers in India than Node.js ones. Keep the service small, conventional Clean Architecture, and well documented.
 
 ## 6 · Pinned versions
 
