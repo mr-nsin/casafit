@@ -1,0 +1,50 @@
+# Local stack: api + Postgres 16 + Redis 7.   docker compose up --build   (run from api/)
+# The api listens on http://localhost:5080. Secrets here are for local use only.
+services:
+  api:
+    build: .
+    ports:
+      - "5080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Default: "Host=postgres;Port=5432;Database=casafit;Username=casafit;Password=casafit"
+      Redis__Url: "redis://redis:6379"
+      Jwt__Secret: "local-compose-jwt-secret-0123456789abcdef"
+      Auth__Pepper: "local-compose-pepper-0123456789"
+      Sms__Provider: "log"
+      Attestation__Provider: "dev"
+      Database__MigrateOnStartup: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: casafit
+      POSTGRES_PASSWORD: casafit
+      POSTGRES_DB: casafit
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U casafit -d casafit"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
