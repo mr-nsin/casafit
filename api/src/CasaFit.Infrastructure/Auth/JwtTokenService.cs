@@ -33,6 +33,27 @@ public sealed class JwtTokenService(IOptions<JwtOptions> options, TimeProvider c
             Create(accountId, o.RefreshAudience, TimeSpan.FromSeconds(o.RefreshTtlSeconds)));
     }
 
+    public async Task<Guid?> ValidateRefreshAsync(string refreshToken)
+    {
+        var o = options.Value;
+        var result = await _handler.ValidateTokenAsync(refreshToken, new TokenValidationParameters
+        {
+            ValidIssuer = o.Issuer,
+            ValidAudience = o.RefreshAudience,
+            IssuerSigningKey = o.SigningKey,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromSeconds(30),
+            LifetimeValidator = (nbf, exp, _, _) =>
+            {
+                var now = clock.GetUtcNow().UtcDateTime;
+                return (nbf is null || nbf <= now.AddSeconds(30)) && (exp is null || exp > now.AddSeconds(-30));
+            },
+        });
+        if (!result.IsValid) return null;
+        var sub = result.Claims.TryGetValue(JwtRegisteredClaimNames.Sub, out var v) ? v?.ToString() : null;
+        return Guid.TryParse(sub, out var id) ? id : null;
+    }
+
     private string Create(Guid accountId, string audience, TimeSpan lifetime)
     {
         var o = options.Value;

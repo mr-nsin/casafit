@@ -1,4 +1,6 @@
+using CasaFit.Application.Accounts;
 using CasaFit.Application.Auth;
+using CasaFit.Application.Entitlements;
 using CasaFit.Application.Common.Idempotency;
 using CasaFit.Infrastructure.Auth;
 using CasaFit.Infrastructure.Persistence;
@@ -28,6 +30,9 @@ public static class DependencyInjection
         });
         services.AddScoped<IAuthStore, EfAuthStore>();
         services.AddScoped<IFormCheckLedger, EfFormCheckLedger>();
+        services.AddScoped<IAccountStore, EfAccountStore>();
+        services.AddScoped<IEntitlementStore, EfEntitlementStore>();
+        services.AddOptions<RevenueCatOptions>().Bind(config.GetSection(RevenueCatOptions.Section));
 
         // The OpenAPI build step starts the host without configuration; skip the fail-fast check there only.
         var generatingDocs = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";

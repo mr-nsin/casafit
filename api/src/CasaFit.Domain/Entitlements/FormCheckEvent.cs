@@ -10,6 +10,9 @@ public sealed class FormCheckEvent
     public Guid AccountId { get; set; }
     public FormCheckKind Kind { get; set; }
     public string IdempotencyKey { get; set; } = "";
+
+    /// <summary>For a refund, the idempotency key of the consume it reverses. One refund per consume.</summary>
+    public string? RelatedKey { get; set; }
     public DateTimeOffset At { get; set; }
 }
 

@@ -36,6 +36,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 
 builder.Services.AddAuthModule();
+builder.Services.AddPlatformModules();
 builder.Services.AddAuthInfrastructure(builder.Configuration);
 
 builder.Services.AddOpenApi(o => o.AddDocumentTransformer<BearerSecurityTransformer>());

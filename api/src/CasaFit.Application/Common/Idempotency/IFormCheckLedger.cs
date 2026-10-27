@@ -19,5 +19,5 @@ public enum IdempotencyResult
 public interface IFormCheckLedger
 {
     Task<IdempotencyResult> RecordAsync(
-        Guid accountId, FormCheckKind kind, string idempotencyKey, CancellationToken ct);
+        Guid accountId, FormCheckKind kind, string idempotencyKey, CancellationToken ct, string? relatedKey = null);
 }
