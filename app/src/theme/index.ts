@@ -1,9 +1,23 @@
-import { MD3LightTheme, MD3DarkTheme, type MD3Theme } from 'react-native-paper';
-import { dark, light, type Tokens } from './tokens';
+import { MD3LightTheme, MD3DarkTheme, configureFonts, type MD3Theme } from 'react-native-paper';
+import { dark, light } from './tokens';
 
-function toPaper(t: Tokens, base: MD3Theme): MD3Theme {
+/**
+ * `light` and `dark` are declared `as const`, so their value types are distinct
+ * string literals. A theme builder must accept either palette, so widen each
+ * colour to `string` while keeping the key set identical.
+ */
+export type ThemeTokens = { [K in keyof typeof light]: string };
+
+/** Font family names registered in `src/app/fonts.ts`. */
+export const fontFamily = {
+  latin: 'RobotoFlex_400Regular',
+  devanagari: 'NotoSansDevanagari_400Regular',
+} as const;
+
+function toPaper(t: ThemeTokens, base: MD3Theme): MD3Theme {
   return {
     ...base,
+    fonts: configureFonts({ config: { fontFamily: fontFamily.latin } }),
     colors: {
       ...base.colors,
       primary: t.p,

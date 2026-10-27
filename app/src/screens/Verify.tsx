@@ -34,7 +34,7 @@ export function VerifyScreen({ navigation }: Props) {
         ? { phone: identifier, code }
         : { email: identifier, code };
     await verify.mutateAsync(body);
-    navigation.replace('Home');
+    navigation.reset({ index: 0, routes: [{ name: 'Main' }] });
   }
 
   return (
