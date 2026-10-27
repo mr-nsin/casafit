@@ -49,4 +49,7 @@ public interface IAuthStore
 public interface ITokenService
 {
     TokenPair Issue(Guid accountId);
+
+    /// <summary>Returns the account id inside a valid, unexpired refresh token, otherwise null.</summary>
+    Task<Guid?> ValidateRefreshAsync(string refreshToken);
 }

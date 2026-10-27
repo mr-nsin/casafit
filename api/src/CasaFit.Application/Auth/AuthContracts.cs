@@ -25,3 +25,8 @@ public sealed record VerifyCodeResponse(
     ProState Pro);
 
 public sealed record TokenPair(string AccessToken, string RefreshToken);
+
+public sealed record RefreshRequest
+{
+    public string RefreshToken { get; init; } = "";
+}

@@ -13,6 +13,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("postgres:16-alpine").Build();
 
+    public const string WebhookSecret = "integration-webhook-secret";
+
     public string ConnectionString => _postgres.GetConnectionString();
 
     public DevOtpOutbox Outbox => Services.GetRequiredService<DevOtpOutbox>();
@@ -23,6 +25,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         Environment.SetEnvironmentVariable("ConnectionStrings__Default", _postgres.GetConnectionString());
         Environment.SetEnvironmentVariable("Jwt__Secret", "integration-test-secret-0123456789-abcdef");
         Environment.SetEnvironmentVariable("Auth__Pepper", "integration-test-pepper-0123456789");
+        Environment.SetEnvironmentVariable("RevenueCat__WebhookSecret", WebhookSecret);
         Environment.SetEnvironmentVariable("Sms__Provider", "log");
         Environment.SetEnvironmentVariable("Attestation__Provider", "dev");
         Environment.SetEnvironmentVariable("Database__MigrateOnStartup", "true");

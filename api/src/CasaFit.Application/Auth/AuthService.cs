@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using CasaFit.Application.Common;
 using CasaFit.Domain.Accounts;
 using CasaFit.Domain.Auth;
 using Microsoft.Extensions.Logging;
@@ -16,11 +17,7 @@ public sealed class AuthOptions
 }
 
 /// <summary>A failure the API should report with a specific status and machine-readable code.</summary>
-public sealed class AuthException(int status, string code, string detail) : Exception(detail)
-{
-    public int Status { get; } = status;
-    public string Code { get; } = code;
-}
+public sealed class AuthException(int status, string code, string detail) : DomainException(status, code, detail);
 
 public sealed class AuthService(
     IOtpStore otpStore,
@@ -134,7 +131,7 @@ public sealed class AuthService(
         return (kind, value);
     }
 
-    private byte[] HashIdentifier(string normalised) => HMACSHA256.HashData(_pepper, Encoding.UTF8.GetBytes(normalised));
+    private byte[] HashIdentifier(string normalised) => IdentifierHasher.Hash(_pepper, normalised);
 
     private byte[] HashCode(string key, string code) =>
         HMACSHA256.HashData(_pepper, Encoding.UTF8.GetBytes($"{key}:{code}"));
@@ -157,4 +154,11 @@ public static class AuthStatus
     public const int BadRequest = 400;
     public const int Unauthorized = 401;
     public const int Forbidden = 403;
+}
+
+/// <summary>The one place identifiers are hashed, so sign-in and account deletion always agree.</summary>
+public static class IdentifierHasher
+{
+    public static byte[] Hash(byte[] pepper, string normalised) =>
+        HMACSHA256.HashData(pepper, Encoding.UTF8.GetBytes(normalised));
 }

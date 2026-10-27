@@ -1,4 +1,4 @@
-using CasaFit.Application.Auth;
+using CasaFit.Application.Common;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +9,11 @@ public sealed class ApiExceptionHandler(IProblemDetailsService problems, ILogger
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken ct)
     {
-        var problem = exception is AuthException auth
+        var problem = exception is DomainException auth
             ? new ProblemDetails { Status = auth.Status, Title = auth.Message, Extensions = { ["code"] = auth.Code } }
             : new ProblemDetails { Status = StatusCodes.Status500InternalServerError, Title = "Something went wrong." };
 
-        if (exception is not AuthException)
+        if (exception is not DomainException)
             log.LogError(exception, "Unhandled exception"); // never log request bodies: they can hold phones and codes
 
         context.Response.StatusCode = problem.Status!.Value;

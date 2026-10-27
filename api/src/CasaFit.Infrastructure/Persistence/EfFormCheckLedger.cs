@@ -8,7 +8,7 @@ namespace CasaFit.Infrastructure.Persistence;
 public sealed class EfFormCheckLedger(CasaFitDbContext db, TimeProvider clock) : IFormCheckLedger
 {
     public async Task<IdempotencyResult> RecordAsync(
-        Guid accountId, FormCheckKind kind, string idempotencyKey, CancellationToken ct)
+        Guid accountId, FormCheckKind kind, string idempotencyKey, CancellationToken ct, string? relatedKey = null)
     {
         var entry = new FormCheckEvent
         {
@@ -16,6 +16,7 @@ public sealed class EfFormCheckLedger(CasaFitDbContext db, TimeProvider clock) :
             AccountId = accountId,
             Kind = kind,
             IdempotencyKey = idempotencyKey,
+            RelatedKey = relatedKey,
             At = clock.GetUtcNow(),
         };
 

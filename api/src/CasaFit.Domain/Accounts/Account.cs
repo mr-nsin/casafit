@@ -14,4 +14,7 @@ public sealed class Account
     public int FreeChecksRemaining { get; set; } = FreeChecksForLife;
     public bool ProActive { get; set; }
     public DateTimeOffset? ProExpiresAt { get; set; }
+
+    /// <summary>Timestamp of the last RevenueCat event applied, so an older event delivered late is ignored.</summary>
+    public DateTimeOffset? ProEventAt { get; set; }
 }

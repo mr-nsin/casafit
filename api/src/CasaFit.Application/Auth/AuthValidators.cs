@@ -36,3 +36,8 @@ public sealed class VerifyCodeRequestValidator : AbstractValidator<VerifyCodeReq
         RuleFor(x => x.Code).Matches(@"^\d{6}$").WithMessage("Code must be 6 digits.");
     }
 }
+
+public sealed class RefreshRequestValidator : AbstractValidator<RefreshRequest>
+{
+    public RefreshRequestValidator() => RuleFor(x => x.RefreshToken).NotEmpty().MaximumLength(4096);
+}
