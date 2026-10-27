@@ -1,0 +1,1778 @@
+{
+  "schemaVersion": 1,
+  "contentType": "plans",
+  "packVersion": 1,
+  "needsExpertReview": true,
+  "reviewNotes": "Sample content. Every record needs review by a qualified person (trainer or physiotherapist for exercise safety, registered dietitian for food values, editor and reviewer for learn cards) before release.",
+  "styles": [
+    {
+      "id": "normal",
+      "proOnly": false,
+      "tasterPlanIds": []
+    },
+    {
+      "id": "yoga",
+      "proOnly": true,
+      "tasterPlanIds": [
+        "yoga_flow_15",
+        "gentle_yoga",
+        "yoga_strength"
+      ]
+    },
+    {
+      "id": "dance",
+      "proOnly": true,
+      "tasterPlanIds": [
+        "dance_cardio_15",
+        "easy_bollywood"
+      ]
+    }
+  ],
+  "plans": [
+    {
+      "id": "full_body_starter",
+      "style": "normal",
+      "titleKey": "plan.full_body_starter.title",
+      "blurbKey": "plan.full_body_starter.blurb",
+      "level": "beginner",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "arm_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "chair_squat",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "wall_pushup",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "glute_bridge",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "bird_dog",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "dead_bug",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "calf_raise",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "quad_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "beginner",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "core_glutes_15",
+      "style": "normal",
+      "titleKey": "plan.core_glutes_15.title",
+      "blurbKey": "plan.core_glutes_15.blurb",
+      "level": "beginner",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "cat_cow",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "torso_twist",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "glute_bridge",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "bird_dog",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "dead_bug",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "fire_hydrant",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "forearm_plank",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "figure_four",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp",
+        "pregnancy"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "beginner",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "legs_glutes_burn",
+      "style": "normal",
+      "titleKey": "plan.legs_glutes_burn.title",
+      "blurbKey": "plan.legs_glutes_burn.blurb",
+      "level": "intermediate",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "step_jacks",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "arm_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "squat",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "reverse_lunge",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "side_lunge",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "glute_bridge",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "wall_sit",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "calf_raise",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "quad_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "figure_four",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "intermediate",
+        "15_min",
+        "low_impact",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "upper_body_no_gear",
+      "style": "normal",
+      "titleKey": "plan.upper_body_no_gear.title",
+      "blurbKey": "plan.upper_body_no_gear.blurb",
+      "level": "intermediate",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "arm_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "cat_cow",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "inchworm",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "knee_pushup",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "pushup",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "shoulder_taps",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "superman",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "plank",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "figure_four",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "other_pain",
+        "heart_bp"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "intermediate",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "core_strong",
+      "style": "normal",
+      "titleKey": "plan.core_strong.title",
+      "blurbKey": "plan.core_strong.blurb",
+      "level": "intermediate",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "cat_cow",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "torso_twist",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "plank",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "bicycle_crunch",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "reverse_crunch",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "side_plank",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "russian_twist",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "dead_bug",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "figure_four",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "other_pain",
+        "heart_bp"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "intermediate",
+        "15_min",
+        "low_impact",
+        "knee_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "cardio_burst",
+      "style": "normal",
+      "titleKey": "plan.cardio_burst.title",
+      "blurbKey": "plan.cardio_burst.blurb",
+      "level": "intermediate",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "arm_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "step_jacks",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "jumping_jacks",
+          "sets": 3,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "high_knees",
+          "sets": 3,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "skater_hop",
+          "sets": 3,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "mountain_climbers",
+          "sets": 3,
+          "workS": 40,
+          "restS": 15
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "quad_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "calf_raise",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "back",
+        "other_pain"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "intermediate",
+        "15_min",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "knee_friendly_full_body",
+      "style": "normal",
+      "titleKey": "plan.knee_friendly_full_body.title",
+      "blurbKey": "plan.knee_friendly_full_body.blurb",
+      "level": "beginner",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "arm_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "glute_bridge",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "wall_pushup",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "bird_dog",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "dead_bug",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "low_skater",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "calf_raise",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "figure_four",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "cat_cow",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "beginner",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "gentle_morning",
+      "style": "normal",
+      "titleKey": "plan.gentle_morning.title",
+      "blurbKey": "plan.gentle_morning.blurb",
+      "level": "beginner",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "torso_twist",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "chair_squat",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "wall_pushup",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "glute_bridge",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "step_jacks",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "bird_dog",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "cat_cow",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "beginner",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "back_friendly_core",
+      "style": "normal",
+      "titleKey": "plan.back_friendly_core.title",
+      "blurbKey": "plan.back_friendly_core.blurb",
+      "level": "beginner",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "cat_cow",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "bird_dog",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "dead_bug",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "glute_bridge",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "forearm_plank",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "fire_hydrant",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "figure_four",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp",
+        "pregnancy"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "beginner",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "full_body_challenge",
+      "style": "normal",
+      "titleKey": "plan.full_body_challenge.title",
+      "blurbKey": "plan.full_body_challenge.blurb",
+      "level": "advanced",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "arm_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "step_jacks",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "inchworm",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "jump_squat",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "pushup",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "mountain_climbers",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "single_leg_bridge",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "hollow_hold",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "diamond_pushup",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "quad_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "other_pain"
+      ],
+      "tags": [
+        "no_equipment",
+        "normal",
+        "advanced",
+        "15_min"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "yoga_flow_15",
+      "style": "yoga",
+      "titleKey": "plan.yoga_flow_15.title",
+      "blurbKey": "plan.yoga_flow_15.blurb",
+      "level": "intermediate",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "cat_cow",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "mountain_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "torso_twist",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "warrior_ii",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "downward_dog",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "chair_pose",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "tree_pose",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "cobra_pose",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "figure_four",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "quad_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain"
+      ],
+      "tags": [
+        "no_equipment",
+        "yoga",
+        "intermediate",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "gentle_yoga",
+      "style": "yoga",
+      "titleKey": "plan.gentle_yoga.title",
+      "blurbKey": "plan.gentle_yoga.blurb",
+      "level": "beginner",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "cat_cow",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "torso_twist",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "cobra_pose",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "chair_pose",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "tree_pose",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "warrior_ii",
+          "sets": 2,
+          "workS": 25,
+          "restS": 16
+        },
+        {
+          "exerciseId": "mountain_pose",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "figure_four",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp"
+      ],
+      "tags": [
+        "no_equipment",
+        "yoga",
+        "beginner",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "yoga_strength",
+      "style": "yoga",
+      "titleKey": "plan.yoga_strength.title",
+      "blurbKey": "plan.yoga_strength.blurb",
+      "level": "intermediate",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "cat_cow",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "mountain_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "arm_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "chair_pose",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "warrior_ii",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "downward_dog",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "tree_pose",
+          "sets": 2,
+          "workS": 20,
+          "restS": 15
+        },
+        {
+          "exerciseId": "cobra_pose",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "forearm_plank",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "childs_pose",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "quad_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "figure_four",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain"
+      ],
+      "tags": [
+        "no_equipment",
+        "yoga",
+        "intermediate",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "dance_cardio_15",
+      "style": "dance",
+      "titleKey": "plan.dance_cardio_15.title",
+      "blurbKey": "plan.dance_cardio_15.blurb",
+      "level": "beginner",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "arm_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "step_touch",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "grapevine",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "box_step",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "hip_sway",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        },
+        {
+          "exerciseId": "bollywood_clap_step",
+          "sets": 2,
+          "workS": 50,
+          "restS": 16
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "quad_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "calf_raise",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "tags": [
+        "no_equipment",
+        "dance",
+        "beginner",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "easy_bollywood",
+      "style": "dance",
+      "titleKey": "plan.easy_bollywood.title",
+      "blurbKey": "plan.easy_bollywood.blurb",
+      "level": "beginner",
+      "kind": "full15",
+      "durationS": 900,
+      "warmup": [
+        {
+          "exerciseId": "march_in_place",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_rolls",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hip_circles",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "torso_twist",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "work": [
+        {
+          "exerciseId": "hip_sway",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "step_touch",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "bollywood_clap_step",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "grapevine",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "box_step",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        },
+        {
+          "exerciseId": "low_skater",
+          "sets": 2,
+          "workS": 40,
+          "restS": 15
+        }
+      ],
+      "cooldown": [
+        {
+          "exerciseId": "quad_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "hamstring_stretch",
+          "sets": 1,
+          "workS": 15,
+          "restS": 0
+        },
+        {
+          "exerciseId": "chest_opener",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "calf_raise",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        }
+      ],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "tags": [
+        "no_equipment",
+        "dance",
+        "beginner",
+        "15_min",
+        "low_impact",
+        "knee_friendly",
+        "back_friendly"
+      ],
+      "needsExpertReview": true
+    },
+    {
+      "id": "desk_reset",
+      "style": "normal",
+      "titleKey": "plan.desk_reset.title",
+      "blurbKey": "plan.desk_reset.blurb",
+      "level": "beginner",
+      "kind": "micro",
+      "durationS": 240,
+      "warmup": [],
+      "work": [
+        {
+          "exerciseId": "neck_release",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "seated_twist",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "wrist_stretch",
+          "sets": 1,
+          "workS": 30,
+          "restS": 0
+        },
+        {
+          "exerciseId": "shoulder_blade_squeeze",
+          "sets": 1,
+          "workS": 60,
+          "restS": 0
+        }
+      ],
+      "cooldown": [],
+      "safeForFlags": [
+        "knee",
+        "back",
+        "shoulder",
+        "wrist",
+        "other_pain",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "tags": [
+        "no_equipment",
+        "desk",
+        "low_impact",
+        "4_min"
+      ],
+      "needsExpertReview": true
+    }
+  ]
+}

@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 1,
+  "contentType": "learn",
+  "packVersion": 1,
+  "needsExpertReview": true,
+  "reviewNotes": "Sample content. Every record needs review by a qualified person (trainer or physiotherapist for exercise safety, registered dietitian for food values, editor and reviewer for learn cards) before release.",
+  "myths": [
+    {
+      "id": "crunches_belly_fat",
+      "kind": "myth",
+      "order": 1,
+      "titleKey": "learn.myth.crunches_belly_fat.title",
+      "verdict": "false",
+      "trueKey": "learn.myth.crunches_belly_fat.true",
+      "evidenceKey": "learn.myth.crunches_belly_fat.evidence",
+      "cta": {
+        "labelKey": "learn.myth.crunches_belly_fat.cta",
+        "route": "BodyPart",
+        "params": {
+          "part": "core"
+        }
+      },
+      "sources": [
+        {
+          "label": "Six-week abdominal training and abdominal fat trial (named in the PRD, section 13)",
+          "status": "pending"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "no_pain_no_gain",
+      "kind": "myth",
+      "order": 2,
+      "titleKey": "learn.myth.no_pain_no_gain.title",
+      "verdict": "false",
+      "trueKey": "learn.myth.no_pain_no_gain.true",
+      "evidenceKey": "learn.myth.no_pain_no_gain.evidence",
+      "cta": {
+        "labelKey": "learn.myth.no_pain_no_gain.cta",
+        "route": "Library"
+      },
+      "sources": [
+        {
+          "label": "General exercise guidance; a clinical citation is still needed",
+          "status": "pending"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "weights_bulky_women",
+      "kind": "myth",
+      "order": 3,
+      "titleKey": "learn.myth.weights_bulky_women.title",
+      "verdict": "false",
+      "trueKey": "learn.myth.weights_bulky_women.true",
+      "evidenceKey": "learn.myth.weights_bulky_women.evidence",
+      "cta": {
+        "labelKey": "learn.myth.weights_bulky_women.cta",
+        "route": "Library"
+      },
+      "sources": [
+        {
+          "label": "Strength training and body composition research (original paper to be confirmed)",
+          "status": "pending"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "ten_thousand_steps",
+      "kind": "myth",
+      "order": 4,
+      "titleKey": "learn.myth.ten_thousand_steps.title",
+      "verdict": "partly_true",
+      "trueKey": "learn.myth.ten_thousand_steps.true",
+      "evidenceKey": "learn.myth.ten_thousand_steps.evidence",
+      "cta": {
+        "labelKey": "learn.myth.ten_thousand_steps.cta",
+        "route": "Steps"
+      },
+      "sources": [
+        {
+          "label": "Paluch et al., Lancet Public Health, 2022 (daily steps and all-cause mortality meta-analysis; confirm the citation)",
+          "status": "found"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "stretch_before_exercise",
+      "kind": "myth",
+      "order": 5,
+      "titleKey": "learn.myth.stretch_before_exercise.title",
+      "verdict": "partly_true",
+      "trueKey": "learn.myth.stretch_before_exercise.true",
+      "evidenceKey": "learn.myth.stretch_before_exercise.evidence",
+      "cta": {
+        "labelKey": "learn.myth.stretch_before_exercise.cta",
+        "route": "Concepts",
+        "params": {
+          "id": "warm_up"
+        }
+      },
+      "sources": [
+        {
+          "label": "Warm-up and stretching literature; a primary source is still needed",
+          "status": "pending"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "fifteen_minutes_too_short",
+      "kind": "myth",
+      "order": 6,
+      "titleKey": "learn.myth.fifteen_minutes_too_short.title",
+      "verdict": "false",
+      "trueKey": "learn.myth.fifteen_minutes_too_short.true",
+      "evidenceKey": "learn.myth.fifteen_minutes_too_short.evidence",
+      "cta": {
+        "labelKey": "learn.myth.fifteen_minutes_too_short.cta",
+        "route": "Home"
+      },
+      "sources": [
+        {
+          "label": "Exercise snacks and short-bout training reviews (original papers to be confirmed)",
+          "status": "pending"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "sweat_burns_fat",
+      "kind": "myth",
+      "order": 7,
+      "titleKey": "learn.myth.sweat_burns_fat.title",
+      "verdict": "false",
+      "trueKey": "learn.myth.sweat_burns_fat.true",
+      "evidenceKey": "learn.myth.sweat_burns_fat.evidence",
+      "cta": {
+        "labelKey": "learn.myth.sweat_burns_fat.cta",
+        "route": "Concepts",
+        "params": {
+          "id": "effort_talk_test"
+        }
+      },
+      "sources": [
+        {
+          "label": "Needs a source",
+          "status": "pending"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "cardio_only",
+      "kind": "myth",
+      "order": 8,
+      "titleKey": "learn.myth.cardio_only.title",
+      "verdict": "false",
+      "trueKey": "learn.myth.cardio_only.true",
+      "evidenceKey": "learn.myth.cardio_only.evidence",
+      "cta": {
+        "labelKey": "learn.myth.cardio_only.cta",
+        "route": "Library"
+      },
+      "sources": [
+        {
+          "label": "Needs a source",
+          "status": "pending"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "walking_backwards",
+      "kind": "myth",
+      "order": 9,
+      "titleKey": "learn.myth.walking_backwards.title",
+      "verdict": "partly_true",
+      "trueKey": "learn.myth.walking_backwards.true",
+      "evidenceKey": "learn.myth.walking_backwards.evidence",
+      "cta": {
+        "labelKey": "learn.myth.walking_backwards.cta",
+        "route": "Reverse"
+      },
+      "sources": [
+        {
+          "label": "Backward walking studies, limited evidence (PRD section 12; confirm originals)",
+          "status": "pending"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "yoga_dance_not_exercise",
+      "kind": "myth",
+      "order": 10,
+      "titleKey": "learn.myth.yoga_dance_not_exercise.title",
+      "verdict": "false",
+      "trueKey": "learn.myth.yoga_dance_not_exercise.true",
+      "evidenceKey": "learn.myth.yoga_dance_not_exercise.evidence",
+      "cta": {
+        "labelKey": "learn.myth.yoga_dance_not_exercise.cta",
+        "route": "Library"
+      },
+      "sources": [
+        {
+          "label": "Yoga and Zumba trials (PRD section 13; confirm originals)",
+          "status": "pending"
+        }
+      ],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    }
+  ],
+  "concepts": [
+    {
+      "id": "warm_up",
+      "kind": "concept",
+      "order": 1,
+      "titleKey": "learn.concept.warm_up.title",
+      "readMinutes": 1,
+      "icon": "self_improvement",
+      "startHere": true,
+      "bodyKeys": [
+        "learn.concept.warm_up.p1",
+        "learn.concept.warm_up.p2",
+        "learn.concept.warm_up.p3"
+      ],
+      "takeawayKey": "learn.concept.warm_up.take",
+      "sources": [],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "effort_talk_test",
+      "kind": "concept",
+      "order": 2,
+      "titleKey": "learn.concept.effort_talk_test.title",
+      "readMinutes": 1,
+      "icon": "speed",
+      "startHere": false,
+      "bodyKeys": [
+        "learn.concept.effort_talk_test.p1",
+        "learn.concept.effort_talk_test.p2",
+        "learn.concept.effort_talk_test.p3"
+      ],
+      "takeawayKey": "learn.concept.effort_talk_test.take",
+      "sources": [],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "rest_and_recovery",
+      "kind": "concept",
+      "order": 3,
+      "titleKey": "learn.concept.rest_and_recovery.title",
+      "readMinutes": 1,
+      "icon": "bedtime",
+      "startHere": false,
+      "bodyKeys": [
+        "learn.concept.rest_and_recovery.p1",
+        "learn.concept.rest_and_recovery.p2",
+        "learn.concept.rest_and_recovery.p3"
+      ],
+      "takeawayKey": "learn.concept.rest_and_recovery.take",
+      "sources": [],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "steps_vs_workouts",
+      "kind": "concept",
+      "order": 4,
+      "titleKey": "learn.concept.steps_vs_workouts.title",
+      "readMinutes": 1,
+      "icon": "directions_walk",
+      "startHere": false,
+      "bodyKeys": [
+        "learn.concept.steps_vs_workouts.p1",
+        "learn.concept.steps_vs_workouts.p2",
+        "learn.concept.steps_vs_workouts.p3"
+      ],
+      "takeawayKey": "learn.concept.steps_vs_workouts.take",
+      "sources": [],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "sore_or_hurt",
+      "kind": "concept",
+      "order": 5,
+      "titleKey": "learn.concept.sore_or_hurt.title",
+      "readMinutes": 1,
+      "icon": "healing",
+      "startHere": false,
+      "bodyKeys": [
+        "learn.concept.sore_or_hurt.p1",
+        "learn.concept.sore_or_hurt.p2",
+        "learn.concept.sore_or_hurt.p3"
+      ],
+      "takeawayKey": "learn.concept.sore_or_hurt.take",
+      "sources": [],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "protein_basics",
+      "kind": "concept",
+      "order": 6,
+      "titleKey": "learn.concept.protein_basics.title",
+      "readMinutes": 1,
+      "icon": "egg_alt",
+      "startHere": false,
+      "bodyKeys": [
+        "learn.concept.protein_basics.p1",
+        "learn.concept.protein_basics.p2",
+        "learn.concept.protein_basics.p3"
+      ],
+      "takeawayKey": "learn.concept.protein_basics.take",
+      "sources": [],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "form_before_speed",
+      "kind": "concept",
+      "order": 7,
+      "titleKey": "learn.concept.form_before_speed.title",
+      "readMinutes": 1,
+      "icon": "accessibility_new",
+      "startHere": false,
+      "bodyKeys": [
+        "learn.concept.form_before_speed.p1",
+        "learn.concept.form_before_speed.p2",
+        "learn.concept.form_before_speed.p3"
+      ],
+      "takeawayKey": "learn.concept.form_before_speed.take",
+      "sources": [],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    },
+    {
+      "id": "small_sessions_add_up",
+      "kind": "concept",
+      "order": 8,
+      "titleKey": "learn.concept.small_sessions_add_up.title",
+      "readMinutes": 1,
+      "icon": "timer",
+      "startHere": false,
+      "bodyKeys": [
+        "learn.concept.small_sessions_add_up.p1",
+        "learn.concept.small_sessions_add_up.p2",
+        "learn.concept.small_sessions_add_up.p3"
+      ],
+      "takeawayKey": "learn.concept.small_sessions_add_up.take",
+      "sources": [],
+      "reviewedOn": null,
+      "reviewStatus": "pending",
+      "needsExpertReview": true
+    }
+  ]
+}
