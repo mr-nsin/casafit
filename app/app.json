@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "scheme": "casafit",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "bundleIdentifier": "app.casafit",
       "supportsTablet": false,
@@ -24,10 +23,14 @@
       ]
     },
     "plugins": [
-      "expo-router",
       "expo-dev-client",
-      ["react-native-vision-camera", { "cameraPermissionText": "CasaFit needs the camera only during form checks." }]
-    ],
-    "experiments": { "typedRoutes": true }
+      "expo-secure-store",
+      "expo-localization",
+      "expo-font",
+      "expo-audio",
+      "expo-notifications",
+      "react-native-health-connect",
+      ["expo-build-properties", { "android": { "minSdkVersion": 26 } }]
+    ]
   }
 }

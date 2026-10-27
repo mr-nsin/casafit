@@ -1,50 +1,38 @@
 import 'react-native-gesture-handler';
-import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { PaperProvider } from 'react-native-paper';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
 
-import { casafitDark, casafitLight } from '@/theme';
+import { AppProviders, RootNavigator, useAppFonts } from '@/app';
 import { useAuth } from '@/state/auth';
-import { WelcomeScreen } from '@/screens/Welcome';
-import { VerifyScreen } from '@/screens/Verify';
-import { HomeScreen } from '@/screens/Home';
 
-export type RootStackParamList = {
-  Welcome: undefined;
-  Verify: { phone?: string; email?: string };
-  Home: undefined;
-};
+export type { RootStackParamList } from '@/app';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-const queryClient = new QueryClient();
+void SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const scheme = useColorScheme();
-  const theme = scheme === 'dark' ? casafitDark : casafitLight;
+  const fontsReady = useAppFonts();
   const hydrate = useAuth((s) => s.hydrate);
   const hasSession = useAuth((s) => !!s.session);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    hydrate();
+    // A SecureStore failure must not block launch; treat it as signed out.
+    hydrate()
+      .catch(() => undefined)
+      .finally(() => setHydrated(true));
   }, [hydrate]);
 
+  const ready = fontsReady && hydrated;
+
+  useEffect(() => {
+    if (ready) void SplashScreen.hideAsync();
+  }, [ready]);
+
+  if (!ready) return null;
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <PaperProvider theme={theme}>
-        <NavigationContainer theme={{ ...theme, dark: scheme === 'dark', fonts: {} as any }}>
-          <Stack.Navigator
-            initialRouteName={hasSession ? 'Home' : 'Welcome'}
-            screenOptions={{ headerShown: false }}
-          >
-            <Stack.Screen name="Welcome" component={WelcomeScreen} />
-            <Stack.Screen name="Verify" component={VerifyScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </QueryClientProvider>
+    <AppProviders>
+      <RootNavigator initialRouteName={hasSession ? 'Main' : 'Welcome'} />
+    </AppProviders>
   );
 }
