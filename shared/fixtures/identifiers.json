@@ -1,0 +1,29 @@
+{
+  "$comment": "Shared vectors for identifier normalisation. The app (shared/src/identifiers.ts) and the api (CasaFit.Application/Auth/IdentifierNormaliser.cs) must both pass these. expected null means the input is rejected. Rules: docs/data-model.md section 1.",
+  "phone": [
+    { "input": "9876543210", "expected": "+919876543210" },
+    { "input": "98765 43210", "expected": "+919876543210" },
+    { "input": "(987) 654-3210", "expected": "+919876543210" },
+    { "input": "+919876543210", "expected": "+919876543210" },
+    { "input": "+91 98765 43210", "expected": "+919876543210" },
+    { "input": "+14155552671", "expected": "+14155552671" },
+    { "input": "  9876543210  ", "expected": "+919876543210" },
+    { "input": "98765", "expected": null },
+    { "input": "919876543210", "expected": null },
+    { "input": "", "expected": null }
+  ],
+  "email": [
+    { "input": "Asha@Example.com", "expected": "asha@example.com" },
+    { "input": "  asha@example.com  ", "expected": "asha@example.com" },
+    { "input": "asha+gym@example.com", "expected": "asha@example.com" },
+    { "input": "a.s.h.a@gmail.com", "expected": "asha@gmail.com" },
+    { "input": "A.Sha+tag@GMAIL.com", "expected": "asha@gmail.com" },
+    { "input": "a.sha@example.com", "expected": "a.sha@example.com" },
+    { "input": "x@mailinator.com", "expected": null },
+    { "input": "x@yopmail.com", "expected": null },
+    { "input": "no-at-sign", "expected": null },
+    { "input": "@example.com", "expected": null },
+    { "input": "asha@", "expected": null },
+    { "input": "", "expected": null }
+  ]
+}
