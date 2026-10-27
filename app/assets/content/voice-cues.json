@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 1,
+  "contentType": "voice-cues",
+  "packVersion": 1,
+  "lang": "en-IN",
+  "needsExpertReview": true,
+  "reviewNotes": "Sample content. Every record needs review by a qualified person (trainer or physiotherapist for exercise safety, registered dietitian for food values, editor and reviewer for learn cards) before release.",
+  "rules": {
+    "maxCuesPerRep": 1,
+    "quietWhenLowConfidence": true,
+    "countdownFromS": 3,
+    "tenSecondWarning": true,
+    "clipIdPattern": "{lang}/{event}/{n}"
+  },
+  "events": [
+    {
+      "id": "session_start",
+      "group": "session",
+      "keys": [
+        "cue.session_start.1",
+        "cue.session_start.2"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "warmup_start",
+      "group": "phase",
+      "keys": [
+        "cue.warmup_start.1",
+        "cue.warmup_start.2"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "work_start",
+      "group": "phase",
+      "keys": [
+        "cue.work_start.1",
+        "cue.work_start.2"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "cooldown_start",
+      "group": "phase",
+      "keys": [
+        "cue.cooldown_start.1",
+        "cue.cooldown_start.2"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "step_start",
+      "group": "step",
+      "keys": [
+        "cue.step_start.1",
+        "cue.step_start.2"
+      ],
+      "tokens": [
+        "name",
+        "cue"
+      ],
+      "priority": 1,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "up_next",
+      "group": "step",
+      "keys": [
+        "cue.up_next.1",
+        "cue.up_next.2"
+      ],
+      "tokens": [
+        "name"
+      ],
+      "priority": 3,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "countin",
+      "group": "timer",
+      "keys": [
+        "cue.countin.1",
+        "cue.countin.2"
+      ],
+      "tokens": [],
+      "priority": 1,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "count_3",
+      "group": "timer",
+      "keys": [
+        "cue.count_3.1"
+      ],
+      "tokens": [],
+      "priority": 1,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "count_2",
+      "group": "timer",
+      "keys": [
+        "cue.count_2.1"
+      ],
+      "tokens": [],
+      "priority": 1,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "count_1",
+      "group": "timer",
+      "keys": [
+        "cue.count_1.1"
+      ],
+      "tokens": [],
+      "priority": 1,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "go",
+      "group": "timer",
+      "keys": [
+        "cue.go.1",
+        "cue.go.2"
+      ],
+      "tokens": [],
+      "priority": 1,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "switch_sides",
+      "group": "timer",
+      "keys": [
+        "cue.switch_sides.1",
+        "cue.switch_sides.2"
+      ],
+      "tokens": [],
+      "priority": 1,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "halfway",
+      "group": "timer",
+      "keys": [
+        "cue.halfway.1",
+        "cue.halfway.2"
+      ],
+      "tokens": [],
+      "priority": 3,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "ten_seconds",
+      "group": "timer",
+      "keys": [
+        "cue.ten_seconds.1"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "last_set",
+      "group": "timer",
+      "keys": [
+        "cue.last_set.1",
+        "cue.last_set.2"
+      ],
+      "tokens": [],
+      "priority": 3,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "rest_start",
+      "group": "rest",
+      "keys": [
+        "cue.rest_start.1",
+        "cue.rest_start.2"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "encourage",
+      "group": "encourage",
+      "keys": [
+        "cue.encourage.1",
+        "cue.encourage.2",
+        "cue.encourage.3",
+        "cue.encourage.4"
+      ],
+      "tokens": [],
+      "priority": 4,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "easier_offer",
+      "group": "adapt",
+      "keys": [
+        "cue.easier_offer.1",
+        "cue.easier_offer.2"
+      ],
+      "tokens": [],
+      "priority": 4,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "harder_offer",
+      "group": "adapt",
+      "keys": [
+        "cue.harder_offer.1"
+      ],
+      "tokens": [],
+      "priority": 4,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "paused",
+      "group": "state",
+      "keys": [
+        "cue.paused.1"
+      ],
+      "tokens": [],
+      "priority": 1,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "resumed",
+      "group": "state",
+      "keys": [
+        "cue.resumed.1",
+        "cue.resumed.2"
+      ],
+      "tokens": [],
+      "priority": 1,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "session_saved",
+      "group": "state",
+      "keys": [
+        "cue.session_saved.1"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "session_complete",
+      "group": "session",
+      "keys": [
+        "cue.session_complete.1",
+        "cue.session_complete.2"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "quiet_mode_on",
+      "group": "state",
+      "keys": [
+        "cue.quiet_mode_on.1"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "yoga_breath_in",
+      "group": "breath",
+      "keys": [
+        "cue.yoga_breath_in.1"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "yoga_breath_out",
+      "group": "breath",
+      "keys": [
+        "cue.yoga_breath_out.1"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "dance_beat",
+      "group": "beat",
+      "keys": [
+        "cue.dance_beat.1",
+        "cue.dance_beat.2"
+      ],
+      "tokens": [],
+      "priority": 3,
+      "duck": true,
+      "maxChars": 80
+    },
+    {
+      "id": "desk_start",
+      "group": "session",
+      "keys": [
+        "cue.desk_start.1"
+      ],
+      "tokens": [],
+      "priority": 2,
+      "duck": true,
+      "maxChars": 80
+    }
+  ],
+  "formCues": [
+    {
+      "exerciseId": "squat",
+      "cues": [
+        {
+          "id": "knees_in",
+          "key": "formcue.squat.knees_in",
+          "maxPerRep": 1
+        },
+        {
+          "id": "depth",
+          "key": "formcue.squat.depth",
+          "maxPerRep": 1
+        },
+        {
+          "id": "heels",
+          "key": "formcue.squat.heels",
+          "maxPerRep": 1
+        },
+        {
+          "id": "chest",
+          "key": "formcue.squat.chest",
+          "maxPerRep": 1
+        }
+      ]
+    },
+    {
+      "exerciseId": "pushup",
+      "cues": [
+        {
+          "id": "hips_sag",
+          "key": "formcue.pushup.hips_sag",
+          "maxPerRep": 1
+        },
+        {
+          "id": "hips_high",
+          "key": "formcue.pushup.hips_high",
+          "maxPerRep": 1
+        },
+        {
+          "id": "elbows",
+          "key": "formcue.pushup.elbows",
+          "maxPerRep": 1
+        },
+        {
+          "id": "depth",
+          "key": "formcue.pushup.depth",
+          "maxPerRep": 1
+        }
+      ]
+    },
+    {
+      "exerciseId": "plank",
+      "cues": [
+        {
+          "id": "hips_high",
+          "key": "formcue.plank.hips_high",
+          "maxPerRep": 1
+        },
+        {
+          "id": "hips_sag",
+          "key": "formcue.plank.hips_sag",
+          "maxPerRep": 1
+        },
+        {
+          "id": "neck",
+          "key": "formcue.plank.neck",
+          "maxPerRep": 1
+        },
+        {
+          "id": "breathe",
+          "key": "formcue.plank.breathe",
+          "maxPerRep": 1
+        }
+      ]
+    },
+    {
+      "exerciseId": "lunge",
+      "cues": [
+        {
+          "id": "front_knee",
+          "key": "formcue.lunge.front_knee",
+          "maxPerRep": 1
+        },
+        {
+          "id": "torso",
+          "key": "formcue.lunge.torso",
+          "maxPerRep": 1
+        },
+        {
+          "id": "step",
+          "key": "formcue.lunge.step",
+          "maxPerRep": 1
+        },
+        {
+          "id": "balance",
+          "key": "formcue.lunge.balance",
+          "maxPerRep": 1
+        }
+      ]
+    }
+  ],
+  "goodFormKeys": [
+    "formcue.good.1",
+    "formcue.good.2"
+  ],
+  "needsExpertReviewNote": "Check wording with a trainer. Recorded or synthetic voice is an open product question (PRD Q21)."
+}

@@ -1,0 +1,1236 @@
+{
+  "schemaVersion": 1,
+  "contentType": "substitutions",
+  "packVersion": 1,
+  "needsExpertReview": true,
+  "reviewNotes": "Sample content. Every record needs review by a qualified person (trainer or physiotherapist for exercise safety, registered dietitian for food values, editor and reviewer for learn cards) before release.",
+  "substitutions": [
+    {
+      "id": "jumping_jacks__easier",
+      "exerciseId": "jumping_jacks",
+      "kind": "easier",
+      "toExerciseId": "step_jacks",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "step_jacks__harder",
+      "exerciseId": "step_jacks",
+      "kind": "harder",
+      "toExerciseId": "jumping_jacks",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "skater_hop__easier",
+      "exerciseId": "skater_hop",
+      "kind": "easier",
+      "toExerciseId": "low_skater",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "low_skater__harder",
+      "exerciseId": "low_skater",
+      "kind": "harder",
+      "toExerciseId": "skater_hop",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "chair_squat__harder",
+      "exerciseId": "chair_squat",
+      "kind": "harder",
+      "toExerciseId": "squat",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "squat__easier",
+      "exerciseId": "squat",
+      "kind": "easier",
+      "toExerciseId": "chair_squat",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "squat__harder",
+      "exerciseId": "squat",
+      "kind": "harder",
+      "toExerciseId": "jump_squat",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "sumo_squat__easier",
+      "exerciseId": "sumo_squat",
+      "kind": "easier",
+      "toExerciseId": "chair_squat",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "sumo_squat__harder",
+      "exerciseId": "sumo_squat",
+      "kind": "harder",
+      "toExerciseId": "jump_squat",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "jump_squat__easier",
+      "exerciseId": "jump_squat",
+      "kind": "easier",
+      "toExerciseId": "squat",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "wall_sit__easier",
+      "exerciseId": "wall_sit",
+      "kind": "easier",
+      "toExerciseId": "chair_squat",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "wall_sit__harder",
+      "exerciseId": "wall_sit",
+      "kind": "harder",
+      "toExerciseId": "jump_squat",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "lunge__easier",
+      "exerciseId": "lunge",
+      "kind": "easier",
+      "toExerciseId": "reverse_lunge",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "reverse_lunge__harder",
+      "exerciseId": "reverse_lunge",
+      "kind": "harder",
+      "toExerciseId": "lunge",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "side_lunge__easier",
+      "exerciseId": "side_lunge",
+      "kind": "easier",
+      "toExerciseId": "reverse_lunge",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "glute_bridge__harder",
+      "exerciseId": "glute_bridge",
+      "kind": "harder",
+      "toExerciseId": "single_leg_bridge",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "single_leg_bridge__easier",
+      "exerciseId": "single_leg_bridge",
+      "kind": "easier",
+      "toExerciseId": "glute_bridge",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "wall_pushup__harder",
+      "exerciseId": "wall_pushup",
+      "kind": "harder",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "knee_pushup__easier",
+      "exerciseId": "knee_pushup",
+      "kind": "easier",
+      "toExerciseId": "wall_pushup",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "knee_pushup__harder",
+      "exerciseId": "knee_pushup",
+      "kind": "harder",
+      "toExerciseId": "pushup",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "pushup__easier",
+      "exerciseId": "pushup",
+      "kind": "easier",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "pushup__harder",
+      "exerciseId": "pushup",
+      "kind": "harder",
+      "toExerciseId": "diamond_pushup",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "diamond_pushup__easier",
+      "exerciseId": "diamond_pushup",
+      "kind": "easier",
+      "toExerciseId": "pushup",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "pike_pushup__easier",
+      "exerciseId": "pike_pushup",
+      "kind": "easier",
+      "toExerciseId": "pushup",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "shoulder_taps__easier",
+      "exerciseId": "shoulder_taps",
+      "kind": "easier",
+      "toExerciseId": "forearm_plank",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "plank__easier",
+      "exerciseId": "plank",
+      "kind": "easier",
+      "toExerciseId": "forearm_plank",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "knee_plank__harder",
+      "exerciseId": "knee_plank",
+      "kind": "harder",
+      "toExerciseId": "forearm_plank",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "forearm_plank__easier",
+      "exerciseId": "forearm_plank",
+      "kind": "easier",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "forearm_plank__harder",
+      "exerciseId": "forearm_plank",
+      "kind": "harder",
+      "toExerciseId": "plank",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "side_plank__easier",
+      "exerciseId": "side_plank",
+      "kind": "easier",
+      "toExerciseId": "forearm_plank",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "crunch__harder",
+      "exerciseId": "crunch",
+      "kind": "harder",
+      "toExerciseId": "bicycle_crunch",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "bicycle_crunch__easier",
+      "exerciseId": "bicycle_crunch",
+      "kind": "easier",
+      "toExerciseId": "crunch",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "bicycle_crunch__harder",
+      "exerciseId": "bicycle_crunch",
+      "kind": "harder",
+      "toExerciseId": "hollow_hold",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "reverse_crunch__easier",
+      "exerciseId": "reverse_crunch",
+      "kind": "easier",
+      "toExerciseId": "crunch",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "reverse_crunch__harder",
+      "exerciseId": "reverse_crunch",
+      "kind": "harder",
+      "toExerciseId": "hollow_hold",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "russian_twist__easier",
+      "exerciseId": "russian_twist",
+      "kind": "easier",
+      "toExerciseId": "bicycle_crunch",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "hollow_hold__easier",
+      "exerciseId": "hollow_hold",
+      "kind": "easier",
+      "toExerciseId": "bicycle_crunch",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "mountain_pose__harder",
+      "exerciseId": "mountain_pose",
+      "kind": "harder",
+      "toExerciseId": "chair_pose",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "warrior_ii__easier",
+      "exerciseId": "warrior_ii",
+      "kind": "easier",
+      "toExerciseId": "cobra_pose",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "downward_dog__easier",
+      "exerciseId": "downward_dog",
+      "kind": "easier",
+      "toExerciseId": "cobra_pose",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "cobra_pose__harder",
+      "exerciseId": "cobra_pose",
+      "kind": "harder",
+      "toExerciseId": "chair_pose",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "tree_pose__easier",
+      "exerciseId": "tree_pose",
+      "kind": "easier",
+      "toExerciseId": "cobra_pose",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "chair_pose__easier",
+      "exerciseId": "chair_pose",
+      "kind": "easier",
+      "toExerciseId": "cobra_pose",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "grapevine__harder",
+      "exerciseId": "grapevine",
+      "kind": "harder",
+      "toExerciseId": "bollywood_clap_step",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "step_touch__harder",
+      "exerciseId": "step_touch",
+      "kind": "harder",
+      "toExerciseId": "bollywood_clap_step",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "box_step__easier",
+      "exerciseId": "box_step",
+      "kind": "easier",
+      "toExerciseId": "grapevine",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "hip_sway__harder",
+      "exerciseId": "hip_sway",
+      "kind": "harder",
+      "toExerciseId": "bollywood_clap_step",
+      "reasonKey": "substitution.reason.harder",
+      "needsExpertReview": true
+    },
+    {
+      "id": "bollywood_clap_step__easier",
+      "exerciseId": "bollywood_clap_step",
+      "kind": "easier",
+      "toExerciseId": "grapevine",
+      "reasonKey": "substitution.reason.easier",
+      "needsExpertReview": true
+    },
+    {
+      "id": "jumping_jacks__low_impact",
+      "exerciseId": "jumping_jacks",
+      "kind": "low_impact",
+      "toExerciseId": "step_jacks",
+      "reasonKey": "substitution.reason.low_impact",
+      "needsExpertReview": true
+    },
+    {
+      "id": "high_knees__low_impact",
+      "exerciseId": "high_knees",
+      "kind": "low_impact",
+      "toExerciseId": "dead_bug",
+      "reasonKey": "substitution.reason.low_impact",
+      "needsExpertReview": true
+    },
+    {
+      "id": "mountain_climbers__low_impact",
+      "exerciseId": "mountain_climbers",
+      "kind": "low_impact",
+      "toExerciseId": "dead_bug",
+      "reasonKey": "substitution.reason.low_impact",
+      "needsExpertReview": true
+    },
+    {
+      "id": "skater_hop__low_impact",
+      "exerciseId": "skater_hop",
+      "kind": "low_impact",
+      "toExerciseId": "low_skater",
+      "reasonKey": "substitution.reason.low_impact",
+      "needsExpertReview": true
+    },
+    {
+      "id": "jump_squat__low_impact",
+      "exerciseId": "jump_squat",
+      "kind": "low_impact",
+      "toExerciseId": "chair_squat",
+      "reasonKey": "substitution.reason.low_impact",
+      "needsExpertReview": true
+    },
+    {
+      "id": "hip_circles__seated",
+      "exerciseId": "hip_circles",
+      "kind": "seated",
+      "toExerciseId": "shadow_boxing",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "inchworm__seated",
+      "exerciseId": "inchworm",
+      "kind": "seated",
+      "toExerciseId": "shadow_boxing",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "jumping_jacks__seated",
+      "exerciseId": "jumping_jacks",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "step_jacks__seated",
+      "exerciseId": "step_jacks",
+      "kind": "seated",
+      "toExerciseId": "shadow_boxing",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "high_knees__seated",
+      "exerciseId": "high_knees",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "skater_hop__seated",
+      "exerciseId": "skater_hop",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "low_skater__seated",
+      "exerciseId": "low_skater",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "chair_squat__seated",
+      "exerciseId": "chair_squat",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "squat__seated",
+      "exerciseId": "squat",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "sumo_squat__seated",
+      "exerciseId": "sumo_squat",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "jump_squat__seated",
+      "exerciseId": "jump_squat",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "wall_sit__seated",
+      "exerciseId": "wall_sit",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "lunge__seated",
+      "exerciseId": "lunge",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "reverse_lunge__seated",
+      "exerciseId": "reverse_lunge",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "side_lunge__seated",
+      "exerciseId": "side_lunge",
+      "kind": "seated",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "wall_pushup__seated",
+      "exerciseId": "wall_pushup",
+      "kind": "seated",
+      "toExerciseId": "shadow_boxing",
+      "reasonKey": "substitution.reason.seated",
+      "needsExpertReview": true
+    },
+    {
+      "id": "inchworm__flag_swap_pregnancy",
+      "exerciseId": "inchworm",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "inchworm__flag_swap_recent_surgery",
+      "exerciseId": "inchworm",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "jumping_jacks__flag_swap_knee",
+      "exerciseId": "jumping_jacks",
+      "kind": "flag_swap",
+      "toExerciseId": "step_jacks",
+      "reasonKey": "substitution.reason.flag_swap.knee",
+      "needsExpertReview": true,
+      "flag": "knee"
+    },
+    {
+      "id": "jumping_jacks__flag_swap_heart_bp",
+      "exerciseId": "jumping_jacks",
+      "kind": "flag_swap",
+      "toExerciseId": "step_jacks",
+      "reasonKey": "substitution.reason.flag_swap.heart_bp",
+      "needsExpertReview": true,
+      "flag": "heart_bp"
+    },
+    {
+      "id": "jumping_jacks__flag_swap_pregnancy",
+      "exerciseId": "jumping_jacks",
+      "kind": "flag_swap",
+      "toExerciseId": "step_jacks",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "jumping_jacks__flag_swap_recent_surgery",
+      "exerciseId": "jumping_jacks",
+      "kind": "flag_swap",
+      "toExerciseId": "step_jacks",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "high_knees__flag_swap_knee",
+      "exerciseId": "high_knees",
+      "kind": "flag_swap",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.flag_swap.knee",
+      "needsExpertReview": true,
+      "flag": "knee"
+    },
+    {
+      "id": "high_knees__flag_swap_heart_bp",
+      "exerciseId": "high_knees",
+      "kind": "flag_swap",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.flag_swap.heart_bp",
+      "needsExpertReview": true,
+      "flag": "heart_bp"
+    },
+    {
+      "id": "high_knees__flag_swap_pregnancy",
+      "exerciseId": "high_knees",
+      "kind": "flag_swap",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "high_knees__flag_swap_recent_surgery",
+      "exerciseId": "high_knees",
+      "kind": "flag_swap",
+      "toExerciseId": "march_in_place",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "mountain_climbers__flag_swap_shoulder",
+      "exerciseId": "mountain_climbers",
+      "kind": "flag_swap",
+      "toExerciseId": "dead_bug",
+      "reasonKey": "substitution.reason.flag_swap.shoulder",
+      "needsExpertReview": true,
+      "flag": "shoulder"
+    },
+    {
+      "id": "mountain_climbers__flag_swap_wrist",
+      "exerciseId": "mountain_climbers",
+      "kind": "flag_swap",
+      "toExerciseId": "dead_bug",
+      "reasonKey": "substitution.reason.flag_swap.wrist",
+      "needsExpertReview": true,
+      "flag": "wrist"
+    },
+    {
+      "id": "mountain_climbers__flag_swap_heart_bp",
+      "exerciseId": "mountain_climbers",
+      "kind": "flag_swap",
+      "toExerciseId": "dead_bug",
+      "reasonKey": "substitution.reason.flag_swap.heart_bp",
+      "needsExpertReview": true,
+      "flag": "heart_bp"
+    },
+    {
+      "id": "mountain_climbers__flag_swap_pregnancy",
+      "exerciseId": "mountain_climbers",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "mountain_climbers__flag_swap_recent_surgery",
+      "exerciseId": "mountain_climbers",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "skater_hop__flag_swap_knee",
+      "exerciseId": "skater_hop",
+      "kind": "flag_swap",
+      "toExerciseId": "low_skater",
+      "reasonKey": "substitution.reason.flag_swap.knee",
+      "needsExpertReview": true,
+      "flag": "knee"
+    },
+    {
+      "id": "skater_hop__flag_swap_heart_bp",
+      "exerciseId": "skater_hop",
+      "kind": "flag_swap",
+      "toExerciseId": "low_skater",
+      "reasonKey": "substitution.reason.flag_swap.heart_bp",
+      "needsExpertReview": true,
+      "flag": "heart_bp"
+    },
+    {
+      "id": "skater_hop__flag_swap_pregnancy",
+      "exerciseId": "skater_hop",
+      "kind": "flag_swap",
+      "toExerciseId": "low_skater",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "skater_hop__flag_swap_recent_surgery",
+      "exerciseId": "skater_hop",
+      "kind": "flag_swap",
+      "toExerciseId": "low_skater",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "jump_squat__flag_swap_knee",
+      "exerciseId": "jump_squat",
+      "kind": "flag_swap",
+      "toExerciseId": "glute_bridge",
+      "reasonKey": "substitution.reason.flag_swap.knee",
+      "needsExpertReview": true,
+      "flag": "knee"
+    },
+    {
+      "id": "jump_squat__flag_swap_back",
+      "exerciseId": "jump_squat",
+      "kind": "flag_swap",
+      "toExerciseId": "chair_squat",
+      "reasonKey": "substitution.reason.flag_swap.back",
+      "needsExpertReview": true,
+      "flag": "back"
+    },
+    {
+      "id": "jump_squat__flag_swap_heart_bp",
+      "exerciseId": "jump_squat",
+      "kind": "flag_swap",
+      "toExerciseId": "chair_squat",
+      "reasonKey": "substitution.reason.flag_swap.heart_bp",
+      "needsExpertReview": true,
+      "flag": "heart_bp"
+    },
+    {
+      "id": "jump_squat__flag_swap_pregnancy",
+      "exerciseId": "jump_squat",
+      "kind": "flag_swap",
+      "toExerciseId": "chair_squat",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "jump_squat__flag_swap_recent_surgery",
+      "exerciseId": "jump_squat",
+      "kind": "flag_swap",
+      "toExerciseId": "chair_squat",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "wall_sit__flag_swap_knee",
+      "exerciseId": "wall_sit",
+      "kind": "flag_swap",
+      "toExerciseId": "glute_bridge",
+      "reasonKey": "substitution.reason.flag_swap.knee",
+      "needsExpertReview": true,
+      "flag": "knee"
+    },
+    {
+      "id": "lunge__flag_swap_knee",
+      "exerciseId": "lunge",
+      "kind": "flag_swap",
+      "toExerciseId": "glute_bridge",
+      "reasonKey": "substitution.reason.flag_swap.knee",
+      "needsExpertReview": true,
+      "flag": "knee"
+    },
+    {
+      "id": "lunge__flag_swap_pregnancy",
+      "exerciseId": "lunge",
+      "kind": "flag_swap",
+      "toExerciseId": "chair_squat",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "reverse_lunge__flag_swap_knee",
+      "exerciseId": "reverse_lunge",
+      "kind": "flag_swap",
+      "toExerciseId": "glute_bridge",
+      "reasonKey": "substitution.reason.flag_swap.knee",
+      "needsExpertReview": true,
+      "flag": "knee"
+    },
+    {
+      "id": "side_lunge__flag_swap_knee",
+      "exerciseId": "side_lunge",
+      "kind": "flag_swap",
+      "toExerciseId": "glute_bridge",
+      "reasonKey": "substitution.reason.flag_swap.knee",
+      "needsExpertReview": true,
+      "flag": "knee"
+    },
+    {
+      "id": "single_leg_bridge__flag_swap_pregnancy",
+      "exerciseId": "single_leg_bridge",
+      "kind": "flag_swap",
+      "toExerciseId": "donkey_kick",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "single_leg_bridge__flag_swap_recent_surgery",
+      "exerciseId": "single_leg_bridge",
+      "kind": "flag_swap",
+      "toExerciseId": "glute_bridge",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "knee_pushup__flag_swap_wrist",
+      "exerciseId": "knee_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "shadow_boxing",
+      "reasonKey": "substitution.reason.flag_swap.wrist",
+      "needsExpertReview": true,
+      "flag": "wrist"
+    },
+    {
+      "id": "pushup__flag_swap_wrist",
+      "exerciseId": "pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "forearm_plank",
+      "reasonKey": "substitution.reason.flag_swap.wrist",
+      "needsExpertReview": true,
+      "flag": "wrist"
+    },
+    {
+      "id": "pushup__flag_swap_shoulder",
+      "exerciseId": "pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.flag_swap.shoulder",
+      "needsExpertReview": true,
+      "flag": "shoulder"
+    },
+    {
+      "id": "pushup__flag_swap_recent_surgery",
+      "exerciseId": "pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "diamond_pushup__flag_swap_wrist",
+      "exerciseId": "diamond_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "shadow_boxing",
+      "reasonKey": "substitution.reason.flag_swap.wrist",
+      "needsExpertReview": true,
+      "flag": "wrist"
+    },
+    {
+      "id": "diamond_pushup__flag_swap_shoulder",
+      "exerciseId": "diamond_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.flag_swap.shoulder",
+      "needsExpertReview": true,
+      "flag": "shoulder"
+    },
+    {
+      "id": "diamond_pushup__flag_swap_recent_surgery",
+      "exerciseId": "diamond_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "diamond_pushup__flag_swap_pregnancy",
+      "exerciseId": "diamond_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "pike_pushup__flag_swap_wrist",
+      "exerciseId": "pike_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "shadow_boxing",
+      "reasonKey": "substitution.reason.flag_swap.wrist",
+      "needsExpertReview": true,
+      "flag": "wrist"
+    },
+    {
+      "id": "pike_pushup__flag_swap_shoulder",
+      "exerciseId": "pike_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.flag_swap.shoulder",
+      "needsExpertReview": true,
+      "flag": "shoulder"
+    },
+    {
+      "id": "pike_pushup__flag_swap_heart_bp",
+      "exerciseId": "pike_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.flag_swap.heart_bp",
+      "needsExpertReview": true,
+      "flag": "heart_bp"
+    },
+    {
+      "id": "pike_pushup__flag_swap_recent_surgery",
+      "exerciseId": "pike_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "pike_pushup__flag_swap_pregnancy",
+      "exerciseId": "pike_pushup",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_pushup",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "shoulder_taps__flag_swap_wrist",
+      "exerciseId": "shoulder_taps",
+      "kind": "flag_swap",
+      "toExerciseId": "forearm_plank",
+      "reasonKey": "substitution.reason.flag_swap.wrist",
+      "needsExpertReview": true,
+      "flag": "wrist"
+    },
+    {
+      "id": "shoulder_taps__flag_swap_shoulder",
+      "exerciseId": "shoulder_taps",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.shoulder",
+      "needsExpertReview": true,
+      "flag": "shoulder"
+    },
+    {
+      "id": "shoulder_taps__flag_swap_recent_surgery",
+      "exerciseId": "shoulder_taps",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "shoulder_taps__flag_swap_pregnancy",
+      "exerciseId": "shoulder_taps",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "superman__flag_swap_pregnancy",
+      "exerciseId": "superman",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "superman__flag_swap_recent_surgery",
+      "exerciseId": "superman",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "plank__flag_swap_wrist",
+      "exerciseId": "plank",
+      "kind": "flag_swap",
+      "toExerciseId": "forearm_plank",
+      "reasonKey": "substitution.reason.flag_swap.wrist",
+      "needsExpertReview": true,
+      "flag": "wrist"
+    },
+    {
+      "id": "plank__flag_swap_shoulder",
+      "exerciseId": "plank",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.shoulder",
+      "needsExpertReview": true,
+      "flag": "shoulder"
+    },
+    {
+      "id": "plank__flag_swap_recent_surgery",
+      "exerciseId": "plank",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "knee_plank__flag_swap_wrist",
+      "exerciseId": "knee_plank",
+      "kind": "flag_swap",
+      "toExerciseId": "forearm_plank",
+      "reasonKey": "substitution.reason.flag_swap.wrist",
+      "needsExpertReview": true,
+      "flag": "wrist"
+    },
+    {
+      "id": "forearm_plank__flag_swap_recent_surgery",
+      "exerciseId": "forearm_plank",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "side_plank__flag_swap_wrist",
+      "exerciseId": "side_plank",
+      "kind": "flag_swap",
+      "toExerciseId": "forearm_plank",
+      "reasonKey": "substitution.reason.flag_swap.wrist",
+      "needsExpertReview": true,
+      "flag": "wrist"
+    },
+    {
+      "id": "side_plank__flag_swap_shoulder",
+      "exerciseId": "side_plank",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.shoulder",
+      "needsExpertReview": true,
+      "flag": "shoulder"
+    },
+    {
+      "id": "side_plank__flag_swap_recent_surgery",
+      "exerciseId": "side_plank",
+      "kind": "flag_swap",
+      "toExerciseId": "knee_plank",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "crunch__flag_swap_pregnancy",
+      "exerciseId": "crunch",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "crunch__flag_swap_recent_surgery",
+      "exerciseId": "crunch",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "bicycle_crunch__flag_swap_pregnancy",
+      "exerciseId": "bicycle_crunch",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "bicycle_crunch__flag_swap_recent_surgery",
+      "exerciseId": "bicycle_crunch",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "reverse_crunch__flag_swap_back",
+      "exerciseId": "reverse_crunch",
+      "kind": "flag_swap",
+      "toExerciseId": "dead_bug",
+      "reasonKey": "substitution.reason.flag_swap.back",
+      "needsExpertReview": true,
+      "flag": "back"
+    },
+    {
+      "id": "reverse_crunch__flag_swap_pregnancy",
+      "exerciseId": "reverse_crunch",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "reverse_crunch__flag_swap_recent_surgery",
+      "exerciseId": "reverse_crunch",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "russian_twist__flag_swap_back",
+      "exerciseId": "russian_twist",
+      "kind": "flag_swap",
+      "toExerciseId": "dead_bug",
+      "reasonKey": "substitution.reason.flag_swap.back",
+      "needsExpertReview": true,
+      "flag": "back"
+    },
+    {
+      "id": "russian_twist__flag_swap_pregnancy",
+      "exerciseId": "russian_twist",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "russian_twist__flag_swap_recent_surgery",
+      "exerciseId": "russian_twist",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "hollow_hold__flag_swap_back",
+      "exerciseId": "hollow_hold",
+      "kind": "flag_swap",
+      "toExerciseId": "dead_bug",
+      "reasonKey": "substitution.reason.flag_swap.back",
+      "needsExpertReview": true,
+      "flag": "back"
+    },
+    {
+      "id": "hollow_hold__flag_swap_heart_bp",
+      "exerciseId": "hollow_hold",
+      "kind": "flag_swap",
+      "toExerciseId": "reverse_crunch",
+      "reasonKey": "substitution.reason.flag_swap.heart_bp",
+      "needsExpertReview": true,
+      "flag": "heart_bp"
+    },
+    {
+      "id": "hollow_hold__flag_swap_pregnancy",
+      "exerciseId": "hollow_hold",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "hollow_hold__flag_swap_recent_surgery",
+      "exerciseId": "hollow_hold",
+      "kind": "flag_swap",
+      "toExerciseId": "bird_dog",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    },
+    {
+      "id": "downward_dog__flag_swap_heart_bp",
+      "exerciseId": "downward_dog",
+      "kind": "flag_swap",
+      "toExerciseId": "warrior_ii",
+      "reasonKey": "substitution.reason.flag_swap.heart_bp",
+      "needsExpertReview": true,
+      "flag": "heart_bp"
+    },
+    {
+      "id": "cobra_pose__flag_swap_pregnancy",
+      "exerciseId": "cobra_pose",
+      "kind": "flag_swap",
+      "toExerciseId": "chair_pose",
+      "reasonKey": "substitution.reason.flag_swap.pregnancy",
+      "needsExpertReview": true,
+      "flag": "pregnancy"
+    },
+    {
+      "id": "cobra_pose__flag_swap_recent_surgery",
+      "exerciseId": "cobra_pose",
+      "kind": "flag_swap",
+      "toExerciseId": "chair_pose",
+      "reasonKey": "substitution.reason.flag_swap.recent_surgery",
+      "needsExpertReview": true,
+      "flag": "recent_surgery"
+    }
+  ]
+}

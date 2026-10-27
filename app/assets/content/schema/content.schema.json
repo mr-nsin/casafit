@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://casafit.app/schema/content.schema.json",
+  "title": "CasaFit bundled content packs",
+  "description": "One definition per pack file. The validator in app/src/content/validate.ts supports the subset of JSON Schema used here (type, enum, const, required, properties, additionalProperties, items, minItems, maxItems, minLength, maxLength, pattern, minimum, maximum, uniqueItems, $ref). Every pack and every record carries needsExpertReview: true until a qualified person signs it off.",
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(_[a-z0-9]+)*$", "maxLength": 80 },
+    "key": { "type": "string", "pattern": "^[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)+$", "maxLength": 120 },
+    "flag": { "enum": ["knee", "back", "shoulder", "wrist", "other_pain", "heart_bp", "pregnancy", "recent_surgery"] },
+    "bodyPart": { "enum": ["arms", "chest", "back", "shoulders", "core", "glutes", "legs"] },
+    "muscle": { "enum": ["quadriceps", "hamstrings", "glutes", "calves", "hip_flexors", "adductors", "abductors", "abs", "obliques", "lower_back", "upper_back", "lats", "chest", "shoulders", "triceps", "biceps", "neck", "forearms", "full_body"] },
+    "style": { "enum": ["normal", "yoga", "dance"] },
+    "difficulty": { "enum": ["easy", "medium", "hard"] },
+    "level": { "enum": ["beginner", "intermediate", "advanced"] },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "packHeader": {
+      "type": "object",
+      "required": ["schemaVersion", "contentType", "packVersion", "needsExpertReview", "reviewNotes"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "packVersion": { "type": "integer", "minimum": 1 },
+        "needsExpertReview": { "const": true },
+        "reviewNotes": { "type": "string", "minLength": 20 }
+      }
+    },
+
+    "PoseFrame": {
+      "description": "Pose descriptor for one frame of the two-frame SVG demo loop (D17). Free English text for the illustrator or the SVG generator, not shown to users.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["posture", "torso", "arms", "legs"],
+      "properties": {
+        "posture": { "enum": ["standing", "seated", "kneeling", "quadruped", "supine", "prone", "side", "plank", "kneeling plank", "lunge", "inverted"] },
+        "torso": { "type": "string", "minLength": 3, "maxLength": 140 },
+        "arms": { "type": "string", "minLength": 3, "maxLength": 140 },
+        "legs": { "type": "string", "minLength": 3, "maxLength": 140 }
+      }
+    },
+    "Exercise": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "style", "nameKey", "cueKey", "stepKeys", "demo", "family", "rung", "difficulty", "bodyParts", "muscles", "equipment", "mode", "defaultSets", "defaultWorkS", "sides", "formCheckable", "lowImpact", "seatedOk", "phases", "excludedByFlags", "cautionFlags", "proOnly", "tags", "voiceClips", "catalogueVersion", "needsExpertReview"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "style": { "$ref": "#/$defs/style" },
+        "nameKey": { "$ref": "#/$defs/key" },
+        "cueKey": { "$ref": "#/$defs/key" },
+        "stepKeys": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "$ref": "#/$defs/key" } },
+        "demo": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["frames", "altKey", "loopMs"],
+          "properties": {
+            "frames": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "$ref": "#/$defs/PoseFrame" } },
+            "altKey": { "$ref": "#/$defs/key" },
+            "loopMs": { "type": "integer", "minimum": 600, "maximum": 4000 },
+            "videoUrl": { "type": "string", "description": "Reserved. Not used in v1 (D17)." }
+          }
+        },
+        "family": { "$ref": "#/$defs/id" },
+        "rung": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "difficulty": { "$ref": "#/$defs/difficulty" },
+        "bodyParts": { "type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": true, "items": { "$ref": "#/$defs/bodyPart" } },
+        "muscles": { "type": "array", "minItems": 1, "maxItems": 5, "uniqueItems": true, "items": { "$ref": "#/$defs/muscle" } },
+        "equipment": { "const": "none" },
+        "mode": { "enum": ["timed", "hold", "reps", "routine_step"] },
+        "defaultSets": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "defaultWorkS": { "type": "integer", "minimum": 10, "maximum": 90 },
+        "sides": { "enum": ["none", "each"] },
+        "breath": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["inS", "outS"],
+          "properties": { "inS": { "type": "integer", "minimum": 1, "maximum": 10 }, "outS": { "type": "integer", "minimum": 1, "maximum": 12 } }
+        },
+        "bpm": { "type": "integer", "minimum": 60, "maximum": 180 },
+        "formCheckable": { "type": "boolean" },
+        "lowImpact": { "type": "boolean" },
+        "seatedOk": { "type": "boolean" },
+        "phases": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["warmup", "work", "cooldown", "micro"] } },
+        "excludedByFlags": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/flag" } },
+        "cautionFlags": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/flag" } },
+        "proOnly": { "type": "boolean" },
+        "tags": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "voiceClips": { "type": "object", "description": "Reserved: language code to pre-rendered clip id.", "additionalProperties": { "type": "string" } },
+        "catalogueVersion": { "type": "integer", "minimum": 1 },
+        "needsExpertReview": { "const": true }
+      }
+    },
+    "ExercisePack": {
+      "allOf": [{ "$ref": "#/$defs/packHeader" }],
+      "type": "object",
+      "required": ["exercises"],
+      "properties": {
+        "contentType": { "const": "exercises" },
+        "exercises": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Exercise" } }
+      }
+    },
+
+    "Substitution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "exerciseId", "kind", "toExerciseId", "reasonKey", "needsExpertReview"],
+      "properties": {
+        "id": { "type": "string", "minLength": 3, "maxLength": 120 },
+        "exerciseId": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["easier", "harder", "no_equipment", "low_impact", "seated", "flag_swap"] },
+        "toExerciseId": { "$ref": "#/$defs/id" },
+        "flag": { "$ref": "#/$defs/flag" },
+        "reasonKey": { "$ref": "#/$defs/key" },
+        "needsExpertReview": { "const": true }
+      }
+    },
+    "SubstitutionPack": {
+      "allOf": [{ "$ref": "#/$defs/packHeader" }],
+      "type": "object",
+      "required": ["substitutions"],
+      "properties": {
+        "contentType": { "const": "substitutions" },
+        "substitutions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Substitution" } }
+      }
+    },
+
+    "PlanMove": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exerciseId", "sets", "workS", "restS"],
+      "properties": {
+        "exerciseId": { "$ref": "#/$defs/id" },
+        "sets": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "workS": { "type": "integer", "minimum": 5, "maximum": 90, "description": "Seconds of work per side. Both sides are done in each set when the exercise has sides: each." },
+        "restS": { "type": "integer", "minimum": 0, "maximum": 60, "description": "Rest after each set." }
+      }
+    },
+    "ReadyMadePlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "style", "titleKey", "blurbKey", "level", "kind", "durationS", "warmup", "work", "cooldown", "safeForFlags", "tags", "needsExpertReview"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "style": { "$ref": "#/$defs/style" },
+        "titleKey": { "$ref": "#/$defs/key" },
+        "blurbKey": { "$ref": "#/$defs/key" },
+        "level": { "$ref": "#/$defs/level" },
+        "kind": { "enum": ["full15", "micro"] },
+        "durationS": { "enum": [900, 240] },
+        "warmup": { "type": "array", "items": { "$ref": "#/$defs/PlanMove" } },
+        "work": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/PlanMove" } },
+        "cooldown": { "type": "array", "items": { "$ref": "#/$defs/PlanMove" } },
+        "safeForFlags": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/flag" } },
+        "tags": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "needsExpertReview": { "const": true }
+      }
+    },
+    "PlanPack": {
+      "allOf": [{ "$ref": "#/$defs/packHeader" }],
+      "type": "object",
+      "required": ["styles", "plans"],
+      "properties": {
+        "contentType": { "const": "plans" },
+        "styles": {
+          "type": "array", "minItems": 3,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "proOnly", "tasterPlanIds"],
+            "properties": { "id": { "$ref": "#/$defs/style" }, "proOnly": { "type": "boolean" }, "tasterPlanIds": { "type": "array", "items": { "$ref": "#/$defs/id" } } }
+          }
+        },
+        "plans": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ReadyMadePlan" } }
+      }
+    },
+
+    "FoodUnit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit", "labelKey", "gramsOrMl", "gramsPerUnit", "steps", "default"],
+      "properties": {
+        "unit": { "enum": ["katori", "chamach", "piece", "g"] },
+        "labelKey": { "$ref": "#/$defs/key" },
+        "gramsOrMl": { "type": "number", "minimum": 1, "description": "The stated measure of one unit: 150 for a katori (ml), 15 for a chamach (ml), grams for a piece, 1 for g." },
+        "gramsPerUnit": { "type": "number", "minimum": 0.1, "description": "Weight of one unit of this food in grams. Used to convert between units." },
+        "steps": { "type": "array", "minItems": 2, "maxItems": 8, "items": { "type": "number", "minimum": 0.5 } },
+        "default": { "type": "number", "minimum": 0.5 }
+      }
+    },
+    "FoodItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "nameKey", "kind", "section", "diet", "allergens", "units", "perDefaultUnit", "source", "packVersion", "needsExpertReview"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "nameKey": { "$ref": "#/$defs/key" },
+        "nameHiKey": { "$ref": "#/$defs/key" },
+        "kind": { "enum": ["home", "packaged", "restaurant", "custom"] },
+        "section": { "type": "string", "minLength": 3 },
+        "diet": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["veg", "egg", "nonveg", "jain"] } },
+        "allergens": { "type": "array", "uniqueItems": true, "items": { "enum": ["peanut", "dairy", "gluten", "other"] } },
+        "units": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "$ref": "#/$defs/FoodUnit" } },
+        "perDefaultUnit": {
+          "type": "object", "additionalProperties": false, "required": ["kcal", "proteinG", "carbsG", "fatG"],
+          "description": "Nutrients in ONE unit of units[0], the default unit.",
+          "properties": { "kcal": { "type": "number", "minimum": 0, "maximum": 1500 }, "proteinG": { "type": "number", "minimum": 0, "maximum": 100 }, "carbsG": { "type": "number", "minimum": 0, "maximum": 200 }, "fatG": { "type": "number", "minimum": 0, "maximum": 100 } }
+        },
+        "source": { "type": "string", "minLength": 3 },
+        "packVersion": { "type": "integer", "minimum": 1 },
+        "needsExpertReview": { "const": true }
+      }
+    },
+    "FoodPack": {
+      "allOf": [{ "$ref": "#/$defs/packHeader" }],
+      "type": "object",
+      "required": ["units", "foods"],
+      "properties": {
+        "contentType": { "const": "foods" },
+        "units": { "type": "object", "additionalProperties": false, "required": ["katoriMl", "chamachMl"], "properties": { "katoriMl": { "const": 150 }, "chamachMl": { "const": 15 } } },
+        "foods": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/FoodItem" } }
+      }
+    },
+
+    "Source": {
+      "type": "object", "additionalProperties": false, "required": ["label", "status"],
+      "properties": { "label": { "type": "string", "minLength": 5 }, "status": { "enum": ["found", "pending"] }, "url": { "type": "string" } }
+    },
+    "Myth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "order", "titleKey", "verdict", "trueKey", "evidenceKey", "cta", "sources", "reviewedOn", "reviewStatus", "needsExpertReview"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "const": "myth" },
+        "order": { "type": "integer", "minimum": 1 },
+        "titleKey": { "$ref": "#/$defs/key" },
+        "verdict": { "enum": ["false", "partly_true", "true"] },
+        "trueKey": { "$ref": "#/$defs/key" },
+        "evidenceKey": { "$ref": "#/$defs/key" },
+        "cta": {
+          "type": "object", "additionalProperties": false, "required": ["labelKey", "route"],
+          "properties": { "labelKey": { "$ref": "#/$defs/key" }, "route": { "type": "string", "pattern": "^[A-Z][A-Za-z]+$" }, "params": { "type": "object" } }
+        },
+        "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Source" } },
+        "reviewedOn": { "type": ["string", "null"] },
+        "reviewStatus": { "enum": ["pending", "reviewed"] },
+        "needsExpertReview": { "const": true }
+      }
+    },
+    "Concept": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "order", "titleKey", "readMinutes", "icon", "startHere", "bodyKeys", "takeawayKey", "sources", "reviewedOn", "reviewStatus", "needsExpertReview"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "const": "concept" },
+        "order": { "type": "integer", "minimum": 1 },
+        "titleKey": { "$ref": "#/$defs/key" },
+        "readMinutes": { "type": "integer", "minimum": 1, "maximum": 2 },
+        "icon": { "$ref": "#/$defs/id" },
+        "startHere": { "type": "boolean" },
+        "bodyKeys": { "type": "array", "minItems": 2, "maxItems": 5, "items": { "$ref": "#/$defs/key" } },
+        "takeawayKey": { "$ref": "#/$defs/key" },
+        "sources": { "type": "array", "items": { "$ref": "#/$defs/Source" } },
+        "reviewedOn": { "type": ["string", "null"] },
+        "reviewStatus": { "enum": ["pending", "reviewed"] },
+        "needsExpertReview": { "const": true }
+      }
+    },
+    "LearnPack": {
+      "allOf": [{ "$ref": "#/$defs/packHeader" }],
+      "type": "object",
+      "required": ["myths", "concepts"],
+      "properties": {
+        "contentType": { "const": "learn" },
+        "myths": { "type": "array", "items": { "$ref": "#/$defs/Myth" } },
+        "concepts": { "type": "array", "items": { "$ref": "#/$defs/Concept" } }
+      }
+    },
+
+    "VoiceEvent": {
+      "type": "object", "additionalProperties": false, "required": ["id", "group", "keys", "tokens", "priority", "duck", "maxChars"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "group": { "type": "string", "minLength": 3 },
+        "keys": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/key" } },
+        "tokens": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "priority": { "type": "integer", "minimum": 1, "maximum": 5, "description": "1 is most important. Lower-priority cues are dropped first when cues would overlap." },
+        "duck": { "type": "boolean" },
+        "maxChars": { "type": "integer", "minimum": 10, "maximum": 160 }
+      }
+    },
+    "VoicePack": {
+      "allOf": [{ "$ref": "#/$defs/packHeader" }],
+      "type": "object",
+      "required": ["lang", "rules", "events", "formCues", "goodFormKeys"],
+      "properties": {
+        "contentType": { "const": "voice-cues" },
+        "lang": { "type": "string", "pattern": "^[a-z]{2}-[A-Z]{2}$" },
+        "rules": {
+          "type": "object", "required": ["maxCuesPerRep", "quietWhenLowConfidence", "countdownFromS", "tenSecondWarning", "clipIdPattern"],
+          "properties": { "maxCuesPerRep": { "const": 1 }, "quietWhenLowConfidence": { "type": "boolean" }, "countdownFromS": { "type": "integer" }, "tenSecondWarning": { "type": "boolean" }, "clipIdPattern": { "type": "string" } }
+        },
+        "events": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/VoiceEvent" } },
+        "formCues": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["exerciseId", "cues"],
+            "properties": {
+              "exerciseId": { "$ref": "#/$defs/id" },
+              "cues": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["id", "key", "maxPerRep"], "properties": { "id": { "$ref": "#/$defs/id" }, "key": { "$ref": "#/$defs/key" }, "maxPerRep": { "const": 1 } } } }
+            }
+          }
+        },
+        "goodFormKeys": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/key" } },
+        "needsExpertReviewNote": { "type": "string" }
+      }
+    },
+
+    "StringsPack": {
+      "allOf": [{ "$ref": "#/$defs/packHeader" }],
+      "type": "object",
+      "required": ["locale", "strings"],
+      "properties": {
+        "contentType": { "const": "strings" },
+        "locale": { "type": "string", "pattern": "^[a-z]{2}-[A-Z]{2}$" },
+        "strings": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 600 } }
+      }
+    }
+  }
+}

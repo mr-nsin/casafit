@@ -1,0 +1,4340 @@
+{
+  "schemaVersion": 1,
+  "contentType": "exercises",
+  "packVersion": 1,
+  "needsExpertReview": true,
+  "reviewNotes": "Sample content. Every record needs review by a qualified person (trainer or physiotherapist for exercise safety, registered dietitian for food values, editor and reviewer for learn cards) before release.",
+  "exercises": [
+    {
+      "id": "march_in_place",
+      "style": "normal",
+      "nameKey": "exercise.march_in_place.name",
+      "cueKey": "exercise.march_in_place.cue",
+      "stepKeys": [
+        "exercise.march_in_place.step1",
+        "exercise.march_in_place.step2",
+        "exercise.march_in_place.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "elbows bent, left arm forward",
+            "legs": "left knee raised to hip height"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "elbows bent, right arm forward",
+            "legs": "right knee raised to hip height"
+          }
+        ],
+        "altKey": "exercise.march_in_place.alt",
+        "loopMs": 1800
+      },
+      "family": "march",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs",
+        "core"
+      ],
+      "muscles": [
+        "quadriceps",
+        "hip_flexors",
+        "calves"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "warmup",
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "arm_circles",
+      "style": "normal",
+      "nameKey": "exercise.arm_circles.name",
+      "cueKey": "exercise.arm_circles.cue",
+      "stepKeys": [
+        "exercise.arm_circles.step1",
+        "exercise.arm_circles.step2",
+        "exercise.arm_circles.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms out to the sides at shoulder height, circling forward and up",
+            "legs": "feet hip-width"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms out to the sides, circling forward and down",
+            "legs": "feet hip-width"
+          }
+        ],
+        "altKey": "exercise.arm_circles.alt",
+        "loopMs": 1800
+      },
+      "family": "armcircle",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "shoulders",
+        "arms"
+      ],
+      "muscles": [
+        "shoulders",
+        "upper_back"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "warmup",
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "shoulder"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "hip_circles",
+      "style": "normal",
+      "nameKey": "exercise.hip_circles.name",
+      "cueKey": "exercise.hip_circles.cue",
+      "stepKeys": [
+        "exercise.hip_circles.step1",
+        "exercise.hip_circles.step2",
+        "exercise.hip_circles.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands on waist",
+            "legs": "feet wider than hips, hips pushed to the left"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands on waist",
+            "legs": "feet wider than hips, hips pushed to the right"
+          }
+        ],
+        "altKey": "exercise.hip_circles.alt",
+        "loopMs": 1800
+      },
+      "family": "hipcircle",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "core",
+        "glutes"
+      ],
+      "muscles": [
+        "hip_flexors",
+        "glutes",
+        "obliques"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "warmup",
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "shoulder_rolls",
+      "style": "normal",
+      "nameKey": "exercise.shoulder_rolls.name",
+      "cueKey": "exercise.shoulder_rolls.cue",
+      "stepKeys": [
+        "exercise.shoulder_rolls.step1",
+        "exercise.shoulder_rolls.step2",
+        "exercise.shoulder_rolls.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms relaxed by sides",
+            "legs": "shoulders lifted toward the ears"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms relaxed by sides",
+            "legs": "shoulders pulled back and down"
+          }
+        ],
+        "altKey": "exercise.shoulder_rolls.alt",
+        "loopMs": 1800
+      },
+      "family": "shoulderroll",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "shoulders",
+        "back"
+      ],
+      "muscles": [
+        "shoulders",
+        "upper_back",
+        "neck"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "warmup",
+        "work",
+        "cooldown"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "torso_twist",
+      "style": "normal",
+      "nameKey": "exercise.torso_twist.name",
+      "cueKey": "exercise.torso_twist.cue",
+      "stepKeys": [
+        "exercise.torso_twist.step1",
+        "exercise.torso_twist.step2",
+        "exercise.torso_twist.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "chest turned right",
+            "arms": "arms swung to the right",
+            "legs": "feet hip-width, hips facing front"
+          },
+          {
+            "posture": "standing",
+            "torso": "chest turned left",
+            "arms": "arms swung to the left",
+            "legs": "feet hip-width, hips facing front"
+          }
+        ],
+        "altKey": "exercise.torso_twist.alt",
+        "loopMs": 1800
+      },
+      "family": "twist",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "core"
+      ],
+      "muscles": [
+        "obliques",
+        "lower_back"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "warmup",
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "back"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "inchworm",
+      "style": "normal",
+      "nameKey": "exercise.inchworm.name",
+      "cueKey": "exercise.inchworm.cue",
+      "stepKeys": [
+        "exercise.inchworm.step1",
+        "exercise.inchworm.step2",
+        "exercise.inchworm.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "folded forward",
+            "arms": "hands on the floor by the feet",
+            "legs": "knees soft"
+          },
+          {
+            "posture": "plank",
+            "torso": "long straight line",
+            "arms": "hands on the floor under shoulders",
+            "legs": "legs straight, toes down"
+          }
+        ],
+        "altKey": "exercise.inchworm.alt",
+        "loopMs": 1800
+      },
+      "family": "inchworm",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "core",
+        "shoulders",
+        "legs"
+      ],
+      "muscles": [
+        "hamstrings",
+        "abs",
+        "shoulders"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "warmup",
+        "work"
+      ],
+      "excludedByFlags": [
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "wrist",
+        "heart_bp"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "cat_cow",
+      "style": "normal",
+      "nameKey": "exercise.cat_cow.name",
+      "cueKey": "exercise.cat_cow.cue",
+      "stepKeys": [
+        "exercise.cat_cow.step1",
+        "exercise.cat_cow.step2",
+        "exercise.cat_cow.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "quadruped",
+            "torso": "back arched down, chest lifted",
+            "arms": "arms straight under shoulders",
+            "legs": "knees under hips"
+          },
+          {
+            "posture": "quadruped",
+            "torso": "back rounded up, head relaxed",
+            "arms": "arms straight under shoulders",
+            "legs": "knees under hips"
+          }
+        ],
+        "altKey": "exercise.cat_cow.alt",
+        "loopMs": 1800
+      },
+      "family": "catcow",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "back",
+        "core"
+      ],
+      "muscles": [
+        "lower_back",
+        "upper_back",
+        "abs"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "warmup",
+        "work",
+        "cooldown"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "wrist"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "jumping_jacks",
+      "style": "normal",
+      "nameKey": "exercise.jumping_jacks.name",
+      "cueKey": "exercise.jumping_jacks.cue",
+      "stepKeys": [
+        "exercise.jumping_jacks.step1",
+        "exercise.jumping_jacks.step2",
+        "exercise.jumping_jacks.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms by sides",
+            "legs": "feet together"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms overhead",
+            "legs": "feet wide apart"
+          }
+        ],
+        "altKey": "exercise.jumping_jacks.alt",
+        "loopMs": 1800
+      },
+      "family": "jack",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "shoulders"
+      ],
+      "muscles": [
+        "calves",
+        "quadriceps",
+        "shoulders"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": false,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "knee",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "back"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "step_jacks",
+      "style": "normal",
+      "nameKey": "exercise.step_jacks.name",
+      "cueKey": "exercise.step_jacks.cue",
+      "stepKeys": [
+        "exercise.step_jacks.step1",
+        "exercise.step_jacks.step2",
+        "exercise.step_jacks.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms by sides",
+            "legs": "feet together"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms overhead",
+            "legs": "left foot stepped wide"
+          }
+        ],
+        "altKey": "exercise.step_jacks.alt",
+        "loopMs": 1800
+      },
+      "family": "jack",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs",
+        "shoulders"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "shoulders"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "warmup",
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "high_knees",
+      "style": "normal",
+      "nameKey": "exercise.high_knees.name",
+      "cueKey": "exercise.high_knees.cue",
+      "stepKeys": [
+        "exercise.high_knees.step1",
+        "exercise.high_knees.step2",
+        "exercise.high_knees.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "elbows bent, right arm forward",
+            "legs": "left knee at hip height"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "elbows bent, left arm forward",
+            "legs": "right knee at hip height"
+          }
+        ],
+        "altKey": "exercise.high_knees.alt",
+        "loopMs": 1800
+      },
+      "family": "knees",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "core"
+      ],
+      "muscles": [
+        "hip_flexors",
+        "quadriceps",
+        "abs"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": false,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "knee",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "mountain_climbers",
+      "style": "normal",
+      "nameKey": "exercise.mountain_climbers.name",
+      "cueKey": "exercise.mountain_climbers.cue",
+      "stepKeys": [
+        "exercise.mountain_climbers.step1",
+        "exercise.mountain_climbers.step2",
+        "exercise.mountain_climbers.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "plank",
+            "torso": "long straight line",
+            "arms": "arms straight under shoulders",
+            "legs": "right knee drawn to chest"
+          },
+          {
+            "posture": "plank",
+            "torso": "long straight line",
+            "arms": "arms straight under shoulders",
+            "legs": "left knee drawn to chest"
+          }
+        ],
+        "altKey": "exercise.mountain_climbers.alt",
+        "loopMs": 1800
+      },
+      "family": "climber",
+      "rung": 3,
+      "difficulty": "hard",
+      "bodyParts": [
+        "core",
+        "shoulders",
+        "legs"
+      ],
+      "muscles": [
+        "abs",
+        "hip_flexors",
+        "shoulders"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": false,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "shoulder",
+        "wrist",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "knee"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "skater_hop",
+      "style": "normal",
+      "nameKey": "exercise.skater_hop.name",
+      "cueKey": "exercise.skater_hop.cue",
+      "stepKeys": [
+        "exercise.skater_hop.step1",
+        "exercise.skater_hop.step2",
+        "exercise.skater_hop.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "leaning to the right",
+            "arms": "arms swinging across to the right",
+            "legs": "left leg crossed behind"
+          },
+          {
+            "posture": "standing",
+            "torso": "leaning to the left",
+            "arms": "arms swinging across to the left",
+            "legs": "right leg crossed behind"
+          }
+        ],
+        "altKey": "exercise.skater_hop.alt",
+        "loopMs": 1800
+      },
+      "family": "skater",
+      "rung": 2,
+      "difficulty": "hard",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "abductors"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": false,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "knee",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "low_skater",
+      "style": "normal",
+      "nameKey": "exercise.low_skater.name",
+      "cueKey": "exercise.low_skater.cue",
+      "stepKeys": [
+        "exercise.low_skater.step1",
+        "exercise.low_skater.step2",
+        "exercise.low_skater.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "leaning right",
+            "arms": "arms swing right",
+            "legs": "left leg sweeps behind, toes touch the floor"
+          },
+          {
+            "posture": "standing",
+            "torso": "leaning left",
+            "arms": "arms swing left",
+            "legs": "right leg sweeps behind, toes touch the floor"
+          }
+        ],
+        "altKey": "exercise.low_skater.alt",
+        "loopMs": 1800
+      },
+      "family": "skater",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "abductors"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "shadow_boxing",
+      "style": "normal",
+      "nameKey": "exercise.shadow_boxing.name",
+      "cueKey": "exercise.shadow_boxing.cue",
+      "stepKeys": [
+        "exercise.shadow_boxing.step1",
+        "exercise.shadow_boxing.step2",
+        "exercise.shadow_boxing.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "slight turn left",
+            "arms": "right fist punching forward, left fist by chin",
+            "legs": "feet staggered"
+          },
+          {
+            "posture": "standing",
+            "torso": "slight turn right",
+            "arms": "left fist punching forward, right fist by chin",
+            "legs": "feet staggered"
+          }
+        ],
+        "altKey": "exercise.shadow_boxing.alt",
+        "loopMs": 1800
+      },
+      "family": "boxing",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "arms",
+        "shoulders",
+        "core"
+      ],
+      "muscles": [
+        "shoulders",
+        "triceps",
+        "obliques"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "shoulder"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "chair_squat",
+      "style": "normal",
+      "nameKey": "exercise.chair_squat.name",
+      "cueKey": "exercise.chair_squat.cue",
+      "stepKeys": [
+        "exercise.chair_squat.step1",
+        "exercise.chair_squat.step2",
+        "exercise.chair_squat.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms forward for balance",
+            "legs": "feet hip-width"
+          },
+          {
+            "posture": "standing",
+            "torso": "leaning slightly forward",
+            "arms": "arms forward",
+            "legs": "hips back and low, lightly touching a chair"
+          }
+        ],
+        "altKey": "exercise.chair_squat.alt",
+        "loopMs": 1800
+      },
+      "family": "squat",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "knee"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "squat",
+      "style": "normal",
+      "nameKey": "exercise.squat.name",
+      "cueKey": "exercise.squat.cue",
+      "stepKeys": [
+        "exercise.squat.step1",
+        "exercise.squat.step2",
+        "exercise.squat.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms by sides",
+            "legs": "feet shoulder-width"
+          },
+          {
+            "posture": "standing",
+            "torso": "leaning slightly forward",
+            "arms": "arms forward",
+            "legs": "knees bent to about 90 degrees, hips back"
+          }
+        ],
+        "altKey": "exercise.squat.alt",
+        "loopMs": 1800
+      },
+      "family": "squat",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": true,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "knee",
+        "pregnancy"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "sumo_squat",
+      "style": "normal",
+      "nameKey": "exercise.sumo_squat.name",
+      "cueKey": "exercise.sumo_squat.cue",
+      "stepKeys": [
+        "exercise.sumo_squat.step1",
+        "exercise.sumo_squat.step2",
+        "exercise.sumo_squat.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands together at chest",
+            "legs": "feet wide, toes out"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands together at chest",
+            "legs": "feet wide, knees bent over the toes"
+          }
+        ],
+        "altKey": "exercise.sumo_squat.alt",
+        "loopMs": 1800
+      },
+      "family": "squat",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "adductors",
+        "glutes",
+        "quadriceps"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "knee"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "jump_squat",
+      "style": "normal",
+      "nameKey": "exercise.jump_squat.name",
+      "cueKey": "exercise.jump_squat.cue",
+      "stepKeys": [
+        "exercise.jump_squat.step1",
+        "exercise.jump_squat.step2",
+        "exercise.jump_squat.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "leaning forward",
+            "arms": "arms swung back",
+            "legs": "knees bent deeply"
+          },
+          {
+            "posture": "standing",
+            "torso": "fully extended",
+            "arms": "arms overhead",
+            "legs": "feet off the floor"
+          }
+        ],
+        "altKey": "exercise.jump_squat.alt",
+        "loopMs": 1800
+      },
+      "family": "squat",
+      "rung": 3,
+      "difficulty": "hard",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "calves"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": false,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "knee",
+        "back",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "wall_sit",
+      "style": "normal",
+      "nameKey": "exercise.wall_sit.name",
+      "cueKey": "exercise.wall_sit.cue",
+      "stepKeys": [
+        "exercise.wall_sit.step1",
+        "exercise.wall_sit.step2",
+        "exercise.wall_sit.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright against a wall",
+            "arms": "arms by sides",
+            "legs": "knees slightly bent"
+          },
+          {
+            "posture": "seated",
+            "torso": "upright against a wall",
+            "arms": "arms by sides or on thighs",
+            "legs": "knees bent to about 90 degrees"
+          }
+        ],
+        "altKey": "exercise.wall_sit.alt",
+        "loopMs": 1800
+      },
+      "family": "squat",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "knee"
+      ],
+      "cautionFlags": [
+        "heart_bp"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "lunge",
+      "style": "normal",
+      "nameKey": "exercise.lunge.name",
+      "cueKey": "exercise.lunge.cue",
+      "stepKeys": [
+        "exercise.lunge.step1",
+        "exercise.lunge.step2",
+        "exercise.lunge.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands on hips",
+            "legs": "feet together"
+          },
+          {
+            "posture": "lunge",
+            "torso": "upright",
+            "arms": "hands on hips",
+            "legs": "right foot forward, both knees bent about 90 degrees"
+          }
+        ],
+        "altKey": "exercise.lunge.alt",
+        "loopMs": 1800
+      },
+      "family": "lunge",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": true,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "knee",
+        "pregnancy"
+      ],
+      "cautionFlags": [
+        "back"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "reverse_lunge",
+      "style": "normal",
+      "nameKey": "exercise.reverse_lunge.name",
+      "cueKey": "exercise.reverse_lunge.cue",
+      "stepKeys": [
+        "exercise.reverse_lunge.step1",
+        "exercise.reverse_lunge.step2",
+        "exercise.reverse_lunge.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands on hips",
+            "legs": "feet together"
+          },
+          {
+            "posture": "lunge",
+            "torso": "upright",
+            "arms": "hands on hips",
+            "legs": "right foot forward, left foot stepped back, knees bent"
+          }
+        ],
+        "altKey": "exercise.reverse_lunge.alt",
+        "loopMs": 1800
+      },
+      "family": "lunge",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "knee"
+      ],
+      "cautionFlags": [
+        "pregnancy"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "side_lunge",
+      "style": "normal",
+      "nameKey": "exercise.side_lunge.name",
+      "cueKey": "exercise.side_lunge.cue",
+      "stepKeys": [
+        "exercise.side_lunge.step1",
+        "exercise.side_lunge.step2",
+        "exercise.side_lunge.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands together at chest",
+            "legs": "feet together"
+          },
+          {
+            "posture": "lunge",
+            "torso": "leaning slightly forward",
+            "arms": "hands together at chest",
+            "legs": "right knee bent, left leg straight out to the side"
+          }
+        ],
+        "altKey": "exercise.side_lunge.alt",
+        "loopMs": 1800
+      },
+      "family": "lunge",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "adductors",
+        "glutes",
+        "quadriceps"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "knee"
+      ],
+      "cautionFlags": [
+        "pregnancy"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "glute_bridge",
+      "style": "normal",
+      "nameKey": "exercise.glute_bridge.name",
+      "cueKey": "exercise.glute_bridge.cue",
+      "stepKeys": [
+        "exercise.glute_bridge.step1",
+        "exercise.glute_bridge.step2",
+        "exercise.glute_bridge.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "supine",
+            "torso": "lying flat",
+            "arms": "arms by sides, palms down",
+            "legs": "knees bent, feet flat, hips on the floor"
+          },
+          {
+            "posture": "supine",
+            "torso": "straight line from shoulders to knees",
+            "arms": "arms by sides",
+            "legs": "knees bent, hips lifted"
+          }
+        ],
+        "altKey": "exercise.glute_bridge.alt",
+        "loopMs": 1800
+      },
+      "family": "bridge",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "glutes",
+        "legs",
+        "core"
+      ],
+      "muscles": [
+        "glutes",
+        "hamstrings",
+        "lower_back"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "pregnancy"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "single_leg_bridge",
+      "style": "normal",
+      "nameKey": "exercise.single_leg_bridge.name",
+      "cueKey": "exercise.single_leg_bridge.cue",
+      "stepKeys": [
+        "exercise.single_leg_bridge.step1",
+        "exercise.single_leg_bridge.step2",
+        "exercise.single_leg_bridge.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "supine",
+            "torso": "lying flat",
+            "arms": "arms by sides",
+            "legs": "one knee bent with foot flat, other leg raised straight"
+          },
+          {
+            "posture": "supine",
+            "torso": "straight line from shoulders to knee",
+            "arms": "arms by sides",
+            "legs": "hips lifted, other leg raised straight"
+          }
+        ],
+        "altKey": "exercise.single_leg_bridge.alt",
+        "loopMs": 1800
+      },
+      "family": "bridge",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "glutes",
+        "legs"
+      ],
+      "muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "back"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "donkey_kick",
+      "style": "normal",
+      "nameKey": "exercise.donkey_kick.name",
+      "cueKey": "exercise.donkey_kick.cue",
+      "stepKeys": [
+        "exercise.donkey_kick.step1",
+        "exercise.donkey_kick.step2",
+        "exercise.donkey_kick.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "quadruped",
+            "torso": "flat back",
+            "arms": "arms straight",
+            "legs": "knees under hips"
+          },
+          {
+            "posture": "quadruped",
+            "torso": "flat back",
+            "arms": "arms straight",
+            "legs": "left knee bent, thigh lifted level with the back"
+          }
+        ],
+        "altKey": "exercise.donkey_kick.alt",
+        "loopMs": 1800
+      },
+      "family": "kick",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "glutes",
+        "legs"
+      ],
+      "muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "wrist",
+        "knee"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "fire_hydrant",
+      "style": "normal",
+      "nameKey": "exercise.fire_hydrant.name",
+      "cueKey": "exercise.fire_hydrant.cue",
+      "stepKeys": [
+        "exercise.fire_hydrant.step1",
+        "exercise.fire_hydrant.step2",
+        "exercise.fire_hydrant.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "quadruped",
+            "torso": "flat back",
+            "arms": "arms straight",
+            "legs": "knees under hips"
+          },
+          {
+            "posture": "quadruped",
+            "torso": "flat back",
+            "arms": "arms straight",
+            "legs": "right knee lifted out to the side"
+          }
+        ],
+        "altKey": "exercise.fire_hydrant.alt",
+        "loopMs": 1800
+      },
+      "family": "kick",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "glutes",
+        "legs"
+      ],
+      "muscles": [
+        "abductors",
+        "glutes"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "wrist",
+        "knee"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "calf_raise",
+      "style": "normal",
+      "nameKey": "exercise.calf_raise.name",
+      "cueKey": "exercise.calf_raise.cue",
+      "stepKeys": [
+        "exercise.calf_raise.step1",
+        "exercise.calf_raise.step2",
+        "exercise.calf_raise.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms by sides",
+            "legs": "feet flat"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms by sides",
+            "legs": "heels lifted, on toes"
+          }
+        ],
+        "altKey": "exercise.calf_raise.alt",
+        "loopMs": 1800
+      },
+      "family": "calf",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs"
+      ],
+      "muscles": [
+        "calves"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "warmup",
+        "work",
+        "cooldown"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "wall_pushup",
+      "style": "normal",
+      "nameKey": "exercise.wall_pushup.name",
+      "cueKey": "exercise.wall_pushup.cue",
+      "stepKeys": [
+        "exercise.wall_pushup.step1",
+        "exercise.wall_pushup.step2",
+        "exercise.wall_pushup.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "leaning forward, straight line",
+            "arms": "hands flat on a wall, arms straight",
+            "legs": "feet back"
+          },
+          {
+            "posture": "standing",
+            "torso": "leaning towards the wall, straight line",
+            "arms": "hands on the wall, elbows bent",
+            "legs": "feet back"
+          }
+        ],
+        "altKey": "exercise.wall_pushup.alt",
+        "loopMs": 1800
+      },
+      "family": "pushup",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "chest",
+        "arms",
+        "shoulders"
+      ],
+      "muscles": [
+        "chest",
+        "triceps",
+        "shoulders"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "wrist",
+        "shoulder"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "knee_pushup",
+      "style": "normal",
+      "nameKey": "exercise.knee_pushup.name",
+      "cueKey": "exercise.knee_pushup.cue",
+      "stepKeys": [
+        "exercise.knee_pushup.step1",
+        "exercise.knee_pushup.step2",
+        "exercise.knee_pushup.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "kneeling plank",
+            "torso": "straight line from head to knees",
+            "arms": "arms straight",
+            "legs": "knees on the floor"
+          },
+          {
+            "posture": "kneeling plank",
+            "torso": "straight line from head to knees",
+            "arms": "elbows bent, chest low",
+            "legs": "knees on the floor"
+          }
+        ],
+        "altKey": "exercise.knee_pushup.alt",
+        "loopMs": 1800
+      },
+      "family": "pushup",
+      "rung": 2,
+      "difficulty": "easy",
+      "bodyParts": [
+        "chest",
+        "arms",
+        "shoulders"
+      ],
+      "muscles": [
+        "chest",
+        "triceps",
+        "shoulders",
+        "abs"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "wrist"
+      ],
+      "cautionFlags": [
+        "shoulder"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "pushup",
+      "style": "normal",
+      "nameKey": "exercise.pushup.name",
+      "cueKey": "exercise.pushup.cue",
+      "stepKeys": [
+        "exercise.pushup.step1",
+        "exercise.pushup.step2",
+        "exercise.pushup.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "plank",
+            "torso": "straight line from head to heels",
+            "arms": "arms straight",
+            "legs": "legs straight, toes down"
+          },
+          {
+            "posture": "plank",
+            "torso": "straight line from head to heels",
+            "arms": "elbows bent about 90 degrees",
+            "legs": "legs straight, toes down"
+          }
+        ],
+        "altKey": "exercise.pushup.alt",
+        "loopMs": 1800
+      },
+      "family": "pushup",
+      "rung": 3,
+      "difficulty": "medium",
+      "bodyParts": [
+        "chest",
+        "arms",
+        "shoulders"
+      ],
+      "muscles": [
+        "chest",
+        "triceps",
+        "shoulders",
+        "abs"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": true,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "wrist",
+        "shoulder",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "pregnancy"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "diamond_pushup",
+      "style": "normal",
+      "nameKey": "exercise.diamond_pushup.name",
+      "cueKey": "exercise.diamond_pushup.cue",
+      "stepKeys": [
+        "exercise.diamond_pushup.step1",
+        "exercise.diamond_pushup.step2",
+        "exercise.diamond_pushup.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "plank",
+            "torso": "straight line",
+            "arms": "hands together under the chest, arms straight",
+            "legs": "legs straight"
+          },
+          {
+            "posture": "plank",
+            "torso": "straight line",
+            "arms": "hands together, elbows tucked and bent",
+            "legs": "legs straight"
+          }
+        ],
+        "altKey": "exercise.diamond_pushup.alt",
+        "loopMs": 1800
+      },
+      "family": "pushup",
+      "rung": 4,
+      "difficulty": "hard",
+      "bodyParts": [
+        "chest",
+        "arms"
+      ],
+      "muscles": [
+        "triceps",
+        "chest",
+        "shoulders"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "wrist",
+        "shoulder",
+        "recent_surgery",
+        "pregnancy"
+      ],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "pike_pushup",
+      "style": "normal",
+      "nameKey": "exercise.pike_pushup.name",
+      "cueKey": "exercise.pike_pushup.cue",
+      "stepKeys": [
+        "exercise.pike_pushup.step1",
+        "exercise.pike_pushup.step2",
+        "exercise.pike_pushup.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "inverted",
+            "torso": "hips high, back flat",
+            "arms": "arms straight",
+            "legs": "legs straight, heels lifted"
+          },
+          {
+            "posture": "inverted",
+            "torso": "hips high, head lowered",
+            "arms": "elbows bent",
+            "legs": "legs straight, heels lifted"
+          }
+        ],
+        "altKey": "exercise.pike_pushup.alt",
+        "loopMs": 1800
+      },
+      "family": "pushup",
+      "rung": 4,
+      "difficulty": "hard",
+      "bodyParts": [
+        "shoulders",
+        "arms"
+      ],
+      "muscles": [
+        "shoulders",
+        "triceps",
+        "upper_back"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "wrist",
+        "shoulder",
+        "heart_bp",
+        "recent_surgery",
+        "pregnancy"
+      ],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "shoulder_taps",
+      "style": "normal",
+      "nameKey": "exercise.shoulder_taps.name",
+      "cueKey": "exercise.shoulder_taps.cue",
+      "stepKeys": [
+        "exercise.shoulder_taps.step1",
+        "exercise.shoulder_taps.step2",
+        "exercise.shoulder_taps.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "plank",
+            "torso": "straight line",
+            "arms": "both arms straight",
+            "legs": "feet wide"
+          },
+          {
+            "posture": "plank",
+            "torso": "straight line",
+            "arms": "one hand tapping the opposite shoulder",
+            "legs": "feet wide"
+          }
+        ],
+        "altKey": "exercise.shoulder_taps.alt",
+        "loopMs": 1800
+      },
+      "family": "plank",
+      "rung": 3,
+      "difficulty": "medium",
+      "bodyParts": [
+        "shoulders",
+        "core"
+      ],
+      "muscles": [
+        "shoulders",
+        "abs",
+        "obliques"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "wrist",
+        "shoulder",
+        "recent_surgery",
+        "pregnancy"
+      ],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "superman",
+      "style": "normal",
+      "nameKey": "exercise.superman.name",
+      "cueKey": "exercise.superman.cue",
+      "stepKeys": [
+        "exercise.superman.step1",
+        "exercise.superman.step2",
+        "exercise.superman.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "prone",
+            "torso": "flat on the floor",
+            "arms": "arms stretched forward",
+            "legs": "legs straight"
+          },
+          {
+            "posture": "prone",
+            "torso": "chest and thighs lifted",
+            "arms": "arms stretched forward and lifted",
+            "legs": "legs lifted"
+          }
+        ],
+        "altKey": "exercise.superman.alt",
+        "loopMs": 1800
+      },
+      "family": "back",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "back",
+        "glutes"
+      ],
+      "muscles": [
+        "lower_back",
+        "glutes",
+        "upper_back"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "back"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "plank",
+      "style": "normal",
+      "nameKey": "exercise.plank.name",
+      "cueKey": "exercise.plank.cue",
+      "stepKeys": [
+        "exercise.plank.step1",
+        "exercise.plank.step2",
+        "exercise.plank.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "plank",
+            "torso": "straight line from head to heels",
+            "arms": "arms straight under shoulders",
+            "legs": "legs straight"
+          },
+          {
+            "posture": "plank",
+            "torso": "straight line from head to heels",
+            "arms": "arms straight under shoulders",
+            "legs": "legs straight"
+          }
+        ],
+        "altKey": "exercise.plank.alt",
+        "loopMs": 1800
+      },
+      "family": "plank",
+      "rung": 3,
+      "difficulty": "medium",
+      "bodyParts": [
+        "core",
+        "shoulders"
+      ],
+      "muscles": [
+        "abs",
+        "shoulders",
+        "glutes"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "none",
+      "formCheckable": true,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "wrist",
+        "shoulder",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "pregnancy",
+        "heart_bp",
+        "back"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "knee_plank",
+      "style": "normal",
+      "nameKey": "exercise.knee_plank.name",
+      "cueKey": "exercise.knee_plank.cue",
+      "stepKeys": [
+        "exercise.knee_plank.step1",
+        "exercise.knee_plank.step2",
+        "exercise.knee_plank.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "kneeling plank",
+            "torso": "straight line from head to knees",
+            "arms": "arms straight",
+            "legs": "knees on the floor"
+          },
+          {
+            "posture": "kneeling plank",
+            "torso": "straight line from head to knees",
+            "arms": "arms straight",
+            "legs": "knees on the floor"
+          }
+        ],
+        "altKey": "exercise.knee_plank.alt",
+        "loopMs": 1800
+      },
+      "family": "plank",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "core",
+        "shoulders"
+      ],
+      "muscles": [
+        "abs",
+        "shoulders"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "wrist"
+      ],
+      "cautionFlags": [
+        "shoulder"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "forearm_plank",
+      "style": "normal",
+      "nameKey": "exercise.forearm_plank.name",
+      "cueKey": "exercise.forearm_plank.cue",
+      "stepKeys": [
+        "exercise.forearm_plank.step1",
+        "exercise.forearm_plank.step2",
+        "exercise.forearm_plank.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "plank",
+            "torso": "straight line from head to heels",
+            "arms": "forearms on the floor",
+            "legs": "legs straight"
+          },
+          {
+            "posture": "plank",
+            "torso": "straight line from head to heels",
+            "arms": "forearms on the floor",
+            "legs": "legs straight"
+          }
+        ],
+        "altKey": "exercise.forearm_plank.alt",
+        "loopMs": 1800
+      },
+      "family": "plank",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "core",
+        "shoulders"
+      ],
+      "muscles": [
+        "abs",
+        "shoulders",
+        "glutes"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "shoulder",
+        "pregnancy"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "side_plank",
+      "style": "normal",
+      "nameKey": "exercise.side_plank.name",
+      "cueKey": "exercise.side_plank.cue",
+      "stepKeys": [
+        "exercise.side_plank.step1",
+        "exercise.side_plank.step2",
+        "exercise.side_plank.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "side",
+            "torso": "straight diagonal line",
+            "arms": "forearm on the floor, top arm on hip",
+            "legs": "legs stacked"
+          },
+          {
+            "posture": "side",
+            "torso": "straight diagonal line",
+            "arms": "forearm on the floor, top arm reaching up",
+            "legs": "legs stacked"
+          }
+        ],
+        "altKey": "exercise.side_plank.alt",
+        "loopMs": 1800
+      },
+      "family": "plank",
+      "rung": 3,
+      "difficulty": "medium",
+      "bodyParts": [
+        "core",
+        "shoulders"
+      ],
+      "muscles": [
+        "obliques",
+        "shoulders",
+        "glutes"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "wrist",
+        "shoulder",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "pregnancy"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "dead_bug",
+      "style": "normal",
+      "nameKey": "exercise.dead_bug.name",
+      "cueKey": "exercise.dead_bug.cue",
+      "stepKeys": [
+        "exercise.dead_bug.step1",
+        "exercise.dead_bug.step2",
+        "exercise.dead_bug.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "supine",
+            "torso": "lower back flat",
+            "arms": "arms up toward the ceiling",
+            "legs": "knees bent over hips"
+          },
+          {
+            "posture": "supine",
+            "torso": "lower back flat",
+            "arms": "right arm overhead, left arm up",
+            "legs": "left leg extended, right knee bent"
+          }
+        ],
+        "altKey": "exercise.dead_bug.alt",
+        "loopMs": 1800
+      },
+      "family": "core",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "core"
+      ],
+      "muscles": [
+        "abs",
+        "hip_flexors"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "bird_dog",
+      "style": "normal",
+      "nameKey": "exercise.bird_dog.name",
+      "cueKey": "exercise.bird_dog.cue",
+      "stepKeys": [
+        "exercise.bird_dog.step1",
+        "exercise.bird_dog.step2",
+        "exercise.bird_dog.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "quadruped",
+            "torso": "flat back",
+            "arms": "arms straight",
+            "legs": "knees under hips"
+          },
+          {
+            "posture": "quadruped",
+            "torso": "flat back, one straight line",
+            "arms": "right arm reaching forward",
+            "legs": "left leg reaching back"
+          }
+        ],
+        "altKey": "exercise.bird_dog.alt",
+        "loopMs": 1800
+      },
+      "family": "core",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "core",
+        "back",
+        "glutes"
+      ],
+      "muscles": [
+        "abs",
+        "lower_back",
+        "glutes"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "wrist"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "crunch",
+      "style": "normal",
+      "nameKey": "exercise.crunch.name",
+      "cueKey": "exercise.crunch.cue",
+      "stepKeys": [
+        "exercise.crunch.step1",
+        "exercise.crunch.step2",
+        "exercise.crunch.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "supine",
+            "torso": "lying flat",
+            "arms": "hands lightly behind ears",
+            "legs": "knees bent, feet flat"
+          },
+          {
+            "posture": "supine",
+            "torso": "shoulders curled up",
+            "arms": "hands lightly behind ears",
+            "legs": "knees bent, feet flat"
+          }
+        ],
+        "altKey": "exercise.crunch.alt",
+        "loopMs": 1800
+      },
+      "family": "crunch",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "core"
+      ],
+      "muscles": [
+        "abs"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "back"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "bicycle_crunch",
+      "style": "normal",
+      "nameKey": "exercise.bicycle_crunch.name",
+      "cueKey": "exercise.bicycle_crunch.cue",
+      "stepKeys": [
+        "exercise.bicycle_crunch.step1",
+        "exercise.bicycle_crunch.step2",
+        "exercise.bicycle_crunch.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "supine",
+            "torso": "shoulders lifted",
+            "arms": "hands by ears",
+            "legs": "left knee drawn in, right leg extended"
+          },
+          {
+            "posture": "supine",
+            "torso": "shoulders lifted, turned",
+            "arms": "hands by ears",
+            "legs": "right knee drawn in, left leg extended"
+          }
+        ],
+        "altKey": "exercise.bicycle_crunch.alt",
+        "loopMs": 1800
+      },
+      "family": "crunch",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "core"
+      ],
+      "muscles": [
+        "abs",
+        "obliques"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "back"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "reverse_crunch",
+      "style": "normal",
+      "nameKey": "exercise.reverse_crunch.name",
+      "cueKey": "exercise.reverse_crunch.cue",
+      "stepKeys": [
+        "exercise.reverse_crunch.step1",
+        "exercise.reverse_crunch.step2",
+        "exercise.reverse_crunch.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "supine",
+            "torso": "lying flat",
+            "arms": "arms by sides",
+            "legs": "knees bent over hips"
+          },
+          {
+            "posture": "supine",
+            "torso": "hips curled off the floor",
+            "arms": "arms by sides",
+            "legs": "knees drawn towards the chest"
+          }
+        ],
+        "altKey": "exercise.reverse_crunch.alt",
+        "loopMs": 1800
+      },
+      "family": "crunch",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "core"
+      ],
+      "muscles": [
+        "abs",
+        "hip_flexors"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "back",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "russian_twist",
+      "style": "normal",
+      "nameKey": "exercise.russian_twist.name",
+      "cueKey": "exercise.russian_twist.cue",
+      "stepKeys": [
+        "exercise.russian_twist.step1",
+        "exercise.russian_twist.step2",
+        "exercise.russian_twist.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "seated",
+            "torso": "leaning back",
+            "arms": "hands clasped, turned right",
+            "legs": "knees bent, feet on the floor"
+          },
+          {
+            "posture": "seated",
+            "torso": "leaning back",
+            "arms": "hands clasped, turned left",
+            "legs": "knees bent, feet on the floor"
+          }
+        ],
+        "altKey": "exercise.russian_twist.alt",
+        "loopMs": 1800
+      },
+      "family": "crunch",
+      "rung": 3,
+      "difficulty": "medium",
+      "bodyParts": [
+        "core"
+      ],
+      "muscles": [
+        "obliques",
+        "abs"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "back",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "hollow_hold",
+      "style": "normal",
+      "nameKey": "exercise.hollow_hold.name",
+      "cueKey": "exercise.hollow_hold.cue",
+      "stepKeys": [
+        "exercise.hollow_hold.step1",
+        "exercise.hollow_hold.step2",
+        "exercise.hollow_hold.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "supine",
+            "torso": "lying flat",
+            "arms": "arms overhead",
+            "legs": "legs straight on the floor"
+          },
+          {
+            "posture": "supine",
+            "torso": "shoulders and legs lifted, lower back flat",
+            "arms": "arms overhead",
+            "legs": "legs straight and lifted"
+          }
+        ],
+        "altKey": "exercise.hollow_hold.alt",
+        "loopMs": 1800
+      },
+      "family": "crunch",
+      "rung": 3,
+      "difficulty": "hard",
+      "bodyParts": [
+        "core"
+      ],
+      "muscles": [
+        "abs",
+        "hip_flexors"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "back",
+        "heart_bp",
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "quad_stretch",
+      "style": "normal",
+      "nameKey": "exercise.quad_stretch.name",
+      "cueKey": "exercise.quad_stretch.cue",
+      "stepKeys": [
+        "exercise.quad_stretch.step1",
+        "exercise.quad_stretch.step2",
+        "exercise.quad_stretch.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "right hand on a wall",
+            "legs": "feet together"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "left hand holding the left ankle",
+            "legs": "left knee bent behind"
+          }
+        ],
+        "altKey": "exercise.quad_stretch.alt",
+        "loopMs": 1800
+      },
+      "family": "stretch",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs"
+      ],
+      "muscles": [
+        "quadriceps",
+        "hip_flexors"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 15,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "cooldown"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "knee"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "hamstring_stretch",
+      "style": "normal",
+      "nameKey": "exercise.hamstring_stretch.name",
+      "cueKey": "exercise.hamstring_stretch.cue",
+      "stepKeys": [
+        "exercise.hamstring_stretch.step1",
+        "exercise.hamstring_stretch.step2",
+        "exercise.hamstring_stretch.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "seated",
+            "torso": "upright",
+            "arms": "hands on thighs",
+            "legs": "one leg straight, other bent"
+          },
+          {
+            "posture": "seated",
+            "torso": "leaning forward with a long back",
+            "arms": "hands reaching towards the foot",
+            "legs": "one leg straight"
+          }
+        ],
+        "altKey": "exercise.hamstring_stretch.alt",
+        "loopMs": 1800
+      },
+      "family": "stretch",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs"
+      ],
+      "muscles": [
+        "hamstrings",
+        "calves"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 15,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "cooldown"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "childs_pose",
+      "style": "normal",
+      "nameKey": "exercise.childs_pose.name",
+      "cueKey": "exercise.childs_pose.cue",
+      "stepKeys": [
+        "exercise.childs_pose.step1",
+        "exercise.childs_pose.step2",
+        "exercise.childs_pose.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "kneeling",
+            "torso": "upright",
+            "arms": "hands on thighs",
+            "legs": "sitting on heels"
+          },
+          {
+            "posture": "kneeling",
+            "torso": "folded forward",
+            "arms": "arms stretched ahead on the floor",
+            "legs": "hips back on heels"
+          }
+        ],
+        "altKey": "exercise.childs_pose.alt",
+        "loopMs": 1800
+      },
+      "family": "stretch",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "back",
+        "glutes"
+      ],
+      "muscles": [
+        "lower_back",
+        "glutes",
+        "lats"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "cooldown"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "knee"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "chest_opener",
+      "style": "normal",
+      "nameKey": "exercise.chest_opener.name",
+      "cueKey": "exercise.chest_opener.cue",
+      "stepKeys": [
+        "exercise.chest_opener.step1",
+        "exercise.chest_opener.step2",
+        "exercise.chest_opener.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands clasped behind the back",
+            "legs": "feet hip-width"
+          },
+          {
+            "posture": "standing",
+            "torso": "chest lifted",
+            "arms": "hands clasped behind, arms straight and lifted",
+            "legs": "feet hip-width"
+          }
+        ],
+        "altKey": "exercise.chest_opener.alt",
+        "loopMs": 1800
+      },
+      "family": "stretch",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "chest",
+        "shoulders"
+      ],
+      "muscles": [
+        "chest",
+        "shoulders",
+        "biceps"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "cooldown"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "shoulder"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "figure_four",
+      "style": "normal",
+      "nameKey": "exercise.figure_four.name",
+      "cueKey": "exercise.figure_four.cue",
+      "stepKeys": [
+        "exercise.figure_four.step1",
+        "exercise.figure_four.step2",
+        "exercise.figure_four.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "seated",
+            "torso": "upright",
+            "arms": "hands on thighs",
+            "legs": "right ankle crossed over left knee"
+          },
+          {
+            "posture": "seated",
+            "torso": "leaning forward with a long back",
+            "arms": "hands on shins",
+            "legs": "right ankle crossed over left knee"
+          }
+        ],
+        "altKey": "exercise.figure_four.alt",
+        "loopMs": 1800
+      },
+      "family": "stretch",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "glutes",
+        "legs"
+      ],
+      "muscles": [
+        "glutes",
+        "hip_flexors"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "cooldown"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "mountain_pose",
+      "style": "yoga",
+      "nameKey": "exercise.mountain_pose.name",
+      "cueKey": "exercise.mountain_pose.cue",
+      "stepKeys": [
+        "exercise.mountain_pose.step1",
+        "exercise.mountain_pose.step2",
+        "exercise.mountain_pose.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "tall",
+            "arms": "arms by sides, palms forward",
+            "legs": "feet together"
+          },
+          {
+            "posture": "standing",
+            "torso": "tall",
+            "arms": "arms by sides, shoulders relaxed",
+            "legs": "feet together"
+          }
+        ],
+        "altKey": "exercise.mountain_pose.alt",
+        "loopMs": 1800
+      },
+      "family": "yogaflow",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "core",
+        "legs"
+      ],
+      "muscles": [
+        "full_body"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "warmup",
+        "work",
+        "cooldown"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "yoga",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "breath": {
+        "inS": 4,
+        "outS": 6
+      }
+    },
+    {
+      "id": "warrior_ii",
+      "style": "yoga",
+      "nameKey": "exercise.warrior_ii.name",
+      "cueKey": "exercise.warrior_ii.cue",
+      "stepKeys": [
+        "exercise.warrior_ii.step1",
+        "exercise.warrior_ii.step2",
+        "exercise.warrior_ii.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms out to the sides",
+            "legs": "feet wide apart"
+          },
+          {
+            "posture": "lunge",
+            "torso": "upright",
+            "arms": "arms long to both sides",
+            "legs": "front knee bent, back leg straight"
+          }
+        ],
+        "altKey": "exercise.warrior_ii.alt",
+        "loopMs": 1800
+      },
+      "family": "yogaflow",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "glutes",
+        "shoulders"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "adductors",
+        "shoulders"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "knee",
+        "pregnancy"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "yoga"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "breath": {
+        "inS": 4,
+        "outS": 6
+      }
+    },
+    {
+      "id": "downward_dog",
+      "style": "yoga",
+      "nameKey": "exercise.downward_dog.name",
+      "cueKey": "exercise.downward_dog.cue",
+      "stepKeys": [
+        "exercise.downward_dog.step1",
+        "exercise.downward_dog.step2",
+        "exercise.downward_dog.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "quadruped",
+            "torso": "flat back",
+            "arms": "arms straight",
+            "legs": "knees under hips"
+          },
+          {
+            "posture": "inverted",
+            "torso": "hips high, long back",
+            "arms": "arms straight",
+            "legs": "legs straight, heels reaching down"
+          }
+        ],
+        "altKey": "exercise.downward_dog.alt",
+        "loopMs": 1800
+      },
+      "family": "yogaflow",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "shoulders",
+        "back",
+        "legs"
+      ],
+      "muscles": [
+        "hamstrings",
+        "shoulders",
+        "calves",
+        "lats"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "heart_bp"
+      ],
+      "cautionFlags": [
+        "wrist",
+        "shoulder",
+        "pregnancy"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "yoga"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "breath": {
+        "inS": 4,
+        "outS": 6
+      }
+    },
+    {
+      "id": "cobra_pose",
+      "style": "yoga",
+      "nameKey": "exercise.cobra_pose.name",
+      "cueKey": "exercise.cobra_pose.cue",
+      "stepKeys": [
+        "exercise.cobra_pose.step1",
+        "exercise.cobra_pose.step2",
+        "exercise.cobra_pose.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "prone",
+            "torso": "flat on the floor",
+            "arms": "hands under shoulders",
+            "legs": "legs straight"
+          },
+          {
+            "posture": "prone",
+            "torso": "chest lifted, neck long",
+            "arms": "elbows bent, hands under shoulders",
+            "legs": "legs on the floor"
+          }
+        ],
+        "altKey": "exercise.cobra_pose.alt",
+        "loopMs": 1800
+      },
+      "family": "yogaflow",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "back",
+        "chest"
+      ],
+      "muscles": [
+        "lower_back",
+        "chest",
+        "upper_back"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [
+        "pregnancy",
+        "recent_surgery"
+      ],
+      "cautionFlags": [
+        "back"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "yoga"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "breath": {
+        "inS": 4,
+        "outS": 6
+      }
+    },
+    {
+      "id": "tree_pose",
+      "style": "yoga",
+      "nameKey": "exercise.tree_pose.name",
+      "cueKey": "exercise.tree_pose.cue",
+      "stepKeys": [
+        "exercise.tree_pose.step1",
+        "exercise.tree_pose.step2",
+        "exercise.tree_pose.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "tall",
+            "arms": "hands together at chest",
+            "legs": "weight on the left foot, right foot resting on the ankle"
+          },
+          {
+            "posture": "standing",
+            "torso": "tall",
+            "arms": "hands overhead",
+            "legs": "weight on the left foot, right foot on the inner thigh"
+          }
+        ],
+        "altKey": "exercise.tree_pose.alt",
+        "loopMs": 1800
+      },
+      "family": "yogaflow",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "core"
+      ],
+      "muscles": [
+        "glutes",
+        "quadriceps",
+        "adductors"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "knee"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "yoga"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "breath": {
+        "inS": 4,
+        "outS": 6
+      }
+    },
+    {
+      "id": "chair_pose",
+      "style": "yoga",
+      "nameKey": "exercise.chair_pose.name",
+      "cueKey": "exercise.chair_pose.cue",
+      "stepKeys": [
+        "exercise.chair_pose.step1",
+        "exercise.chair_pose.step2",
+        "exercise.chair_pose.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms by sides",
+            "legs": "feet together"
+          },
+          {
+            "posture": "standing",
+            "torso": "leaning slightly forward",
+            "arms": "arms overhead",
+            "legs": "knees bent, hips back"
+          }
+        ],
+        "altKey": "exercise.chair_pose.alt",
+        "loopMs": 1800
+      },
+      "family": "yogaflow",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "lower_back"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 30,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [
+        "knee"
+      ],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "yoga"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "breath": {
+        "inS": 4,
+        "outS": 6
+      }
+    },
+    {
+      "id": "grapevine",
+      "style": "dance",
+      "nameKey": "exercise.grapevine.name",
+      "cueKey": "exercise.grapevine.cue",
+      "stepKeys": [
+        "exercise.grapevine.step1",
+        "exercise.grapevine.step2",
+        "exercise.grapevine.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms out to the sides",
+            "legs": "right foot stepped out"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms out to the sides",
+            "legs": "left foot crossed behind"
+          }
+        ],
+        "altKey": "exercise.grapevine.alt",
+        "loopMs": 1800
+      },
+      "family": "dance",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs",
+        "core"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "adductors"
+      ],
+      "equipment": "none",
+      "mode": "routine_step",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "dance",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "bpm": 112
+    },
+    {
+      "id": "step_touch",
+      "style": "dance",
+      "nameKey": "exercise.step_touch.name",
+      "cueKey": "exercise.step_touch.cue",
+      "stepKeys": [
+        "exercise.step_touch.step1",
+        "exercise.step_touch.step2",
+        "exercise.step_touch.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms swinging right",
+            "legs": "right foot stepped out"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms swinging left",
+            "legs": "left foot stepped out"
+          }
+        ],
+        "altKey": "exercise.step_touch.alt",
+        "loopMs": 1800
+      },
+      "family": "dance",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs"
+      ],
+      "muscles": [
+        "quadriceps",
+        "adductors"
+      ],
+      "equipment": "none",
+      "mode": "routine_step",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "dance",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "bpm": 108
+    },
+    {
+      "id": "box_step",
+      "style": "dance",
+      "nameKey": "exercise.box_step.name",
+      "cueKey": "exercise.box_step.cue",
+      "stepKeys": [
+        "exercise.box_step.step1",
+        "exercise.box_step.step2",
+        "exercise.box_step.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands on hips",
+            "legs": "right foot forward"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands on hips",
+            "legs": "left foot stepped to the side"
+          }
+        ],
+        "altKey": "exercise.box_step.alt",
+        "loopMs": 1800
+      },
+      "family": "dance",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "glutes"
+      ],
+      "muscles": [
+        "quadriceps",
+        "glutes",
+        "calves"
+      ],
+      "equipment": "none",
+      "mode": "routine_step",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "dance",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "bpm": 112
+    },
+    {
+      "id": "hip_sway",
+      "style": "dance",
+      "nameKey": "exercise.hip_sway.name",
+      "cueKey": "exercise.hip_sway.cue",
+      "stepKeys": [
+        "exercise.hip_sway.step1",
+        "exercise.hip_sway.step2",
+        "exercise.hip_sway.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms swinging left",
+            "legs": "hips pushed right"
+          },
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "arms swinging right",
+            "legs": "hips pushed left"
+          }
+        ],
+        "altKey": "exercise.hip_sway.alt",
+        "loopMs": 1800
+      },
+      "family": "dance",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "core",
+        "glutes"
+      ],
+      "muscles": [
+        "obliques",
+        "glutes"
+      ],
+      "equipment": "none",
+      "mode": "routine_step",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "dance",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "bpm": 100
+    },
+    {
+      "id": "bollywood_clap_step",
+      "style": "dance",
+      "nameKey": "exercise.bollywood_clap_step.name",
+      "cueKey": "exercise.bollywood_clap_step.cue",
+      "stepKeys": [
+        "exercise.bollywood_clap_step.step1",
+        "exercise.bollywood_clap_step.step2",
+        "exercise.bollywood_clap_step.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "standing",
+            "torso": "upright",
+            "arms": "hands in front at chest",
+            "legs": "right foot forward"
+          },
+          {
+            "posture": "standing",
+            "torso": "stretched tall",
+            "arms": "hands clapping overhead",
+            "legs": "feet together"
+          }
+        ],
+        "altKey": "exercise.bollywood_clap_step.alt",
+        "loopMs": 1800
+      },
+      "family": "dance",
+      "rung": 2,
+      "difficulty": "medium",
+      "bodyParts": [
+        "legs",
+        "shoulders",
+        "core"
+      ],
+      "muscles": [
+        "quadriceps",
+        "shoulders",
+        "calves"
+      ],
+      "equipment": "none",
+      "mode": "routine_step",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": false,
+      "phases": [
+        "work"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "dance",
+        "low_impact"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true,
+      "bpm": 120
+    },
+    {
+      "id": "neck_release",
+      "style": "normal",
+      "nameKey": "exercise.neck_release.name",
+      "cueKey": "exercise.neck_release.cue",
+      "stepKeys": [
+        "exercise.neck_release.step1",
+        "exercise.neck_release.step2",
+        "exercise.neck_release.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "seated",
+            "torso": "upright",
+            "arms": "hands in lap",
+            "legs": "head tilted right"
+          },
+          {
+            "posture": "seated",
+            "torso": "upright",
+            "arms": "hands in lap",
+            "legs": "head tilted left"
+          }
+        ],
+        "altKey": "exercise.neck_release.alt",
+        "loopMs": 1800
+      },
+      "family": "desk",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "shoulders"
+      ],
+      "muscles": [
+        "neck",
+        "upper_back"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "micro"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact",
+        "desk"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "seated_twist",
+      "style": "normal",
+      "nameKey": "exercise.seated_twist.name",
+      "cueKey": "exercise.seated_twist.cue",
+      "stepKeys": [
+        "exercise.seated_twist.step1",
+        "exercise.seated_twist.step2",
+        "exercise.seated_twist.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "seated",
+            "torso": "chest turned right",
+            "arms": "right hand on chair back",
+            "legs": "feet flat"
+          },
+          {
+            "posture": "seated",
+            "torso": "chest turned left",
+            "arms": "left hand on chair back",
+            "legs": "feet flat"
+          }
+        ],
+        "altKey": "exercise.seated_twist.alt",
+        "loopMs": 1800
+      },
+      "family": "desk",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "core",
+        "back"
+      ],
+      "muscles": [
+        "obliques",
+        "lower_back"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "micro"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact",
+        "desk"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "wrist_stretch",
+      "style": "normal",
+      "nameKey": "exercise.wrist_stretch.name",
+      "cueKey": "exercise.wrist_stretch.cue",
+      "stepKeys": [
+        "exercise.wrist_stretch.step1",
+        "exercise.wrist_stretch.step2",
+        "exercise.wrist_stretch.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "seated",
+            "torso": "upright",
+            "arms": "right arm extended palm up",
+            "legs": "left hand holding the fingers"
+          },
+          {
+            "posture": "seated",
+            "torso": "upright",
+            "arms": "left arm extended palm up",
+            "legs": "right hand holding the fingers"
+          }
+        ],
+        "altKey": "exercise.wrist_stretch.alt",
+        "loopMs": 1800
+      },
+      "family": "desk",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "arms"
+      ],
+      "muscles": [
+        "forearms"
+      ],
+      "equipment": "none",
+      "mode": "hold",
+      "defaultSets": 2,
+      "defaultWorkS": 20,
+      "sides": "each",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "micro"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact",
+        "desk"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "shoulder_blade_squeeze",
+      "style": "normal",
+      "nameKey": "exercise.shoulder_blade_squeeze.name",
+      "cueKey": "exercise.shoulder_blade_squeeze.cue",
+      "stepKeys": [
+        "exercise.shoulder_blade_squeeze.step1",
+        "exercise.shoulder_blade_squeeze.step2",
+        "exercise.shoulder_blade_squeeze.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "seated",
+            "torso": "upright",
+            "arms": "elbows bent, hands by ribs",
+            "legs": "shoulders relaxed"
+          },
+          {
+            "posture": "seated",
+            "torso": "chest lifted",
+            "arms": "elbows pulled back",
+            "legs": "shoulder blades squeezed"
+          }
+        ],
+        "altKey": "exercise.shoulder_blade_squeeze.alt",
+        "loopMs": 1800
+      },
+      "family": "desk",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "back",
+        "shoulders"
+      ],
+      "muscles": [
+        "upper_back",
+        "shoulders"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "micro"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact",
+        "desk"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    },
+    {
+      "id": "ankle_pumps",
+      "style": "normal",
+      "nameKey": "exercise.ankle_pumps.name",
+      "cueKey": "exercise.ankle_pumps.cue",
+      "stepKeys": [
+        "exercise.ankle_pumps.step1",
+        "exercise.ankle_pumps.step2",
+        "exercise.ankle_pumps.step3"
+      ],
+      "demo": {
+        "frames": [
+          {
+            "posture": "seated",
+            "torso": "upright",
+            "arms": "hands on thighs",
+            "legs": "right foot lifted, toes pointed"
+          },
+          {
+            "posture": "seated",
+            "torso": "upright",
+            "arms": "hands on thighs",
+            "legs": "right foot lifted, toes pulled back"
+          }
+        ],
+        "altKey": "exercise.ankle_pumps.alt",
+        "loopMs": 1800
+      },
+      "family": "desk",
+      "rung": 1,
+      "difficulty": "easy",
+      "bodyParts": [
+        "legs"
+      ],
+      "muscles": [
+        "calves"
+      ],
+      "equipment": "none",
+      "mode": "timed",
+      "defaultSets": 2,
+      "defaultWorkS": 40,
+      "sides": "none",
+      "formCheckable": false,
+      "lowImpact": true,
+      "seatedOk": true,
+      "phases": [
+        "micro"
+      ],
+      "excludedByFlags": [],
+      "cautionFlags": [],
+      "proOnly": false,
+      "tags": [
+        "no_equipment",
+        "normal",
+        "low_impact",
+        "desk"
+      ],
+      "voiceClips": {},
+      "catalogueVersion": 1,
+      "needsExpertReview": true
+    }
+  ]
+}

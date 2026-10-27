@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "packVersion": 1,
+  "locale": "en-IN",
+  "needsExpertReview": true,
+  "reviewNotes": "Sample content. Every record needs review by a qualified person (trainer or physiotherapist for exercise safety, registered dietitian for food values, editor and reviewer for learn cards) before release.",
+  "files": [
+    "exercises.json",
+    "substitutions.json",
+    "plans.json",
+    "foods.json",
+    "learn.json",
+    "voice-cues.json",
+    "strings.en-IN.json"
+  ],
+  "counts": {
+    "exercises": 66,
+    "substitutions": 144,
+    "plans": 16,
+    "foods": 269,
+    "myths": 10,
+    "concepts": 8,
+    "voiceEvents": 28,
+    "strings": 1191
+  }
+}
