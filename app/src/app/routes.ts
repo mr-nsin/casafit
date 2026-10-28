@@ -104,5 +104,20 @@ export const tabIcons: Record<TabRouteName, 'self-improvement' | 'restaurant' | 
   Progress: 'bar-chart',
 };
 
-/** Routes that already have a real screen. Everything else renders PlaceholderScreen. */
-export const implementedRootRoutes = ['Welcome', 'Verify'] as const;
+/**
+ * Routes that have a real screen registered in RootNavigator (stack routes only; the Progress
+ * and Nutrition tab roots are registered in TabNavigator). Everything else renders PlaceholderScreen.
+ */
+export const implementedRootRoutes = [
+  // onboarding
+  'Splash', 'Welcome', 'Age', 'Verify', 'Offline', 'WelcomeBack', 'Goals', 'About', 'Mix',
+  'Health', 'Building', 'WeekOne',
+  // session
+  'Player', 'Yoga', 'Dance', 'Rest', 'Paused', 'Complete', 'Desk', 'EndSession', 'Feel',
+  'SessionSettings',
+  // nutrition
+  'NutriProfile', 'NutriPlan', 'FoodSearch', 'Meal', 'FoodEmpty',
+  // steps, learn, progress
+  'Steps', 'StepsPermission', 'Reverse', 'ReverseTimer', 'Learn', 'Myth', 'Concepts',
+  'ProgressEmpty', 'Recap',
+] as const satisfies readonly Exclude<RootRouteName, 'Main'>[];
