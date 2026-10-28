@@ -3,7 +3,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from 'react-native-paper';
 
 import { HomeScreen } from '@/screens/Home';
-import { PlaceholderScreen } from './PlaceholderScreen';
+import { nutritionTab } from '../features/nutrition';
+import { progressRoutes } from '../features/progress';
 import { tabIcons, tabLabels } from './routes';
 import type { TabParamList } from './types';
 
@@ -26,8 +27,8 @@ export function TabNavigator() {
       })}
     >
       <Tab.Screen name="Workout" component={HomeScreen} />
-      <Tab.Screen name="Nutrition" component={PlaceholderScreen} />
-      <Tab.Screen name="Progress" component={PlaceholderScreen} />
+      <Tab.Screen name="Nutrition" component={nutritionTab} />
+      <Tab.Screen name="Progress" component={progressRoutes.Progress.component} />
     </Tab.Navigator>
   );
 }

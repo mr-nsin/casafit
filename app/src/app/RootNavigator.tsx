@@ -1,29 +1,56 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { ComponentType } from 'react';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
-import { VerifyScreen } from '@/screens/Verify';
-import { WelcomeScreen } from '@/screens/Welcome';
+import { learnRoutes } from '../features/learn';
+import { nutritionRoutes } from '../features/nutrition';
+import { onboardingRoutes } from '../features/onboarding';
+import { progressRoutes } from '../features/progress';
+import { sessionRoutes } from '../features/session';
+import { stepsRoutes } from '../features/steps';
 import { PlaceholderScreen } from './PlaceholderScreen';
-import { rootRouteLanes } from './routes';
+import { implementedRootRoutes, rootRouteLanes } from './routes';
 import { TabNavigator } from './TabNavigator';
 import type { RootRouteName, RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-/** Routes that have a real screen; every other route in `rootRouteLanes` is a placeholder. */
-type ImplementedRoute = 'Welcome' | 'Verify';
-type PlaceholderRoute = Exclude<RootRouteName, 'Main' | ImplementedRoute>;
+export interface RouteEntry {
+  component: ComponentType<any>;
+  options: NativeStackNavigationOptions;
+}
 
-const implemented: ReadonlySet<string> = new Set<ImplementedRoute>(['Welcome', 'Verify']);
-export const placeholderRoutes = (Object.keys(rootRouteLanes) as PlaceholderRoute[]).filter(
-  (name) => !implemented.has(name),
-);
+/** Every lane's stack routes, merged. Progress is the tab root, so only its stack routes are here. */
+const { Progress: _progressTab, ...progressStack } = progressRoutes;
+export const laneRoutes: Partial<Record<Exclude<RootRouteName, 'Main'>, RouteEntry>> = {
+  ...onboardingRoutes,
+  ...sessionRoutes,
+  ...nutritionRoutes,
+  ...stepsRoutes,
+  ...learnRoutes,
+  ...progressStack,
+};
 
-export function RootNavigator({ initialRouteName }: { initialRouteName: 'Welcome' | 'Main' }) {
+const implemented: ReadonlySet<string> = new Set<string>(implementedRootRoutes);
+export const placeholderRoutes = (
+  Object.keys(rootRouteLanes) as Exclude<RootRouteName, 'Main'>[]
+).filter((name) => !implemented.has(name));
+
+export type InitialRoute = 'Splash' | 'Welcome' | 'Main';
+
+/** Splash is the initial route: it resets to Welcome, Goals or Main once it has looked at the session and plan. */
+export function RootNavigator({ initialRouteName = 'Splash' }: { initialRouteName?: InitialRoute }) {
   return (
     <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Main" component={TabNavigator} />
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="Verify" component={VerifyScreen} />
+      {(Object.keys(laneRoutes) as Exclude<RootRouteName, 'Main'>[]).map((name) => (
+        <Stack.Screen
+          key={name}
+          name={name}
+          component={laneRoutes[name]!.component}
+          options={laneRoutes[name]!.options}
+        />
+      ))}
       {placeholderRoutes.map((name) => (
         <Stack.Screen key={name} name={name} component={PlaceholderScreen} />
       ))}

@@ -1,11 +1,20 @@
-import { render, screen } from '@testing-library/react-native';
+import { act, render, screen } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { PlaceholderScreen } from './PlaceholderScreen';
 import { casafitLight } from '@/theme';
-import { placeholderRoutes, RootNavigator } from './RootNavigator';
-import { rootRouteLanes, tabRouteLanes } from './routes';
+import { createTestDb } from '../db/testing/nodeSqliteDriver';
+import { createFakeStepCounter } from '../services/step-counter';
+import { createFakeKeepAwake } from '../services/keep-awake';
+import { setRepositories } from '../state/storage';
+import { useAuth } from '../state/auth';
+import { nutritionTab } from '../features/nutrition';
+import { progressRoutes } from '../features/progress';
+import { bootstrap } from './bootstrap';
+import { laneRoutes, placeholderRoutes, RootNavigator, type InitialRoute } from './RootNavigator';
+import { implementedRootRoutes, rootRouteLanes, tabRouteLanes } from './routes';
 
 // Every route named in docs/plans/implementation.md section 1, minus the three
 // that live in tabs or on the Main container (Home, Nutrition, Progress).
@@ -23,7 +32,7 @@ const sectionOneRoutes = [
   'Settings', 'Notify', 'Language', 'Privacy', 'Profile', 'EditProfile', 'Help', 'DeleteAccount',
 ];
 
-async function renderNav(initialRouteName: 'Welcome' | 'Main') {
+async function renderNav(initialRouteName: InitialRoute) {
   return await render(
     <SafeAreaProvider
       initialMetrics={{ frame: { x: 0, y: 0, width: 390, height: 844 }, insets: { top: 0, left: 0, right: 0, bottom: 0 } }}
@@ -46,17 +55,61 @@ describe('route map', () => {
     expect(Object.keys(tabRouteLanes)).toEqual(['Workout', 'Nutrition', 'Progress']);
   });
 
-  it('registers a placeholder for every route without a real screen', () => {
-    expect(placeholderRoutes).not.toContain('Welcome');
-    expect(placeholderRoutes).not.toContain('Verify');
-    expect(placeholderRoutes).toHaveLength(Object.keys(rootRouteLanes).length - 2);
+  it('registers a placeholder only for routes without a lane screen', () => {
+    for (const name of implementedRootRoutes) expect(placeholderRoutes).not.toContain(name);
+    expect(placeholderRoutes).toHaveLength(Object.keys(rootRouteLanes).length - implementedRootRoutes.length);
+  });
+
+  it('resolves every implemented route to a real component, never the placeholder', () => {
+    expect(Object.keys(laneRoutes).sort()).toEqual([...implementedRootRoutes].sort());
+    for (const name of implementedRootRoutes) {
+      const entry = laneRoutes[name];
+      expect(entry).toBeDefined();
+      expect(['function', 'object']).toContain(typeof entry!.component);
+      expect(entry!.component).not.toBe(PlaceholderScreen);
+    }
+  });
+
+  it('wires the lane tab roots', () => {
+    expect(nutritionTab).toBeDefined();
+    expect(progressRoutes.Progress.component).toBeDefined();
+  });
+});
+
+describe('cold start', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+  afterEach(() => {
+    jest.useRealTimers();
+    setRepositories(null);
+    useAuth.setState({ session: null });
+  });
+
+  it('reaches Splash with a fake DB, then Welcome when signed out', async () => {
+    await bootstrap({
+      openDatabase: async () => {
+        const { driver, repos } = await createTestDb();
+        return { driver, repos };
+      },
+      hydrateAuth: async () => undefined,
+      stepCounter: () => createFakeStepCounter(),
+      keepAwake: () => createFakeKeepAwake(),
+      send: async () => ({ status: 200 }),
+    });
+    await renderNav('Splash');
+    expect(screen.getByLabelText('CasaFit, loading')).toBeTruthy();
+    await act(async () => {
+      jest.advanceTimersByTime(2000);
+    });
+    expect(screen.getByText('Get my 15-minute plan')).toBeTruthy();
   });
 });
 
 describe('RootNavigator', () => {
   it('opens on Welcome when signed out', async () => {
     await renderNav('Welcome');
-    expect(screen.getByTestId('welcome-cta')).toBeTruthy();
+    expect(screen.getByText('Get my 15-minute plan')).toBeTruthy();
   });
 
   it('opens on the Workout tab when signed in', async () => {

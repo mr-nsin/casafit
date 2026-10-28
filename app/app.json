@@ -30,7 +30,7 @@
       "expo-audio",
       "expo-notifications",
       "react-native-health-connect",
-      ["expo-build-properties", { "android": { "minSdkVersion": 26 } }]
+      ["expo-build-properties", { "android": { "compileSdkVersion": 36, "targetSdkVersion": 36, "minSdkVersion": 26 } }]
     ]
   }
 }
