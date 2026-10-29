@@ -23,10 +23,14 @@ public sealed class ValidationFilter(IServiceProvider services) : IAsyncActionFi
             var errors = result.Errors
                 .GroupBy(e => JsonNamingPolicy.CamelCase.ConvertName(e.PropertyName))
                 .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
-            context.Result = new BadRequestObjectResult(new ValidationProblemDetails(errors)
+            context.Result = new JsonResult(new ValidationProblemDetails(errors)
             {
                 Status = StatusCodes.Status400BadRequest,
-            });
+            })
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                ContentType = "application/problem+json",
+            };
             return;
         }
 

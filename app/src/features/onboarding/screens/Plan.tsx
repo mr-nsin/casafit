@@ -64,7 +64,7 @@ export function GoalsScreen() {
       <Text variant="headline">What do you want?</Text>
       <SectionLabel title="Your goal" />
       <ChoiceCard icon="accessibility_new" label="Stay fit, full body" selected={draft.goal === 'stay_fit'} onPress={() => void update({ goal: 'stay_fit' })} />
-      <ChoiceCard icon="target" label="Train specific body parts" selected={draft.goal === 'body_part'} onPress={() => void update({ goal: 'body_part' })} />
+      <ChoiceCard icon="gps_fixed" label="Train specific body parts" selected={draft.goal === 'body_part'} onPress={() => void update({ goal: 'body_part' })} />
       {draft.goal === 'body_part' ? (
         <>
           <SectionLabel title="Which body parts?" hint="Up to 2" />

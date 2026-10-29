@@ -2,7 +2,7 @@
 
 **The single source of truth for what is done, what is pending and what comes next.** Read it at the start of every session and before picking up work. Update it in the same commit as the work, every time something is completed, started, blocked or decided.
 
-Last updated: 29 October 2026 · `main` after the Windows build plugin (`c60a68a`) plus the bottom-sheet scroll fix.
+Last updated: 29 October 2026 · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
 
 ## How to keep this file current
 
@@ -15,10 +15,10 @@ Last updated: 29 October 2026 · `main` after the Windows build plugin (`c60a68a
 
 ## Next up
 
-1. Finish the on-device onboarding pass: Welcome and Age are checked; Verify renders but needs the API running to go further (Goals, Mix, About, Health, Building, WeekOne unchecked). Fix the status bar (below) and add the app icon.
+1. Finish the on-device onboarding pass from Goals onward (Mix, About, Health, Building, Week one). Sign-in against the local API works.
 2. Wave 2 lane `session`: Home and plan surfaces. The Workout tab is still a placeholder.
 3. Wave 2 lane `settings`: Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount.
-4. Run the backend integration tests once Docker Desktop is running.
+4. Fix the status bar contrast (below) and add the app icon.
 
 ## Done
 
@@ -32,6 +32,8 @@ Last updated: 29 October 2026 · `main` after the Windows build plugin (`c60a68a
 | Device | App builds as a debug APK and runs on the Pixel 7 emulator; real Welcome screen renders; no crash | 29 Oct |
 | Build | compileSdk 37 (Expo SDK 58 needs it), flat `node_modules` (`.npmrc`), `app/plugins/with-windows-build.js` makes the Windows Gradle fixes survive `prebuild --clean` | 29 Oct |
 | On-device check | Welcome, Age and Verify screens verified on the emulator. Bug fixed: bottom sheets with long lists (year of birth) overflowed the screen and could not scroll; `BottomSheet` content now scrolls (`app/src/ui/overlays.tsx`) | 29 Oct |
+| Backend verified | `docker compose up --build` works (API, Postgres 16, Redis 7); 11 tables migrated; OTP send and verify tested live; all 51 integration tests pass (they were 25 failing: test sign-ins tripped the 30-a-minute auth rate limit, and validation and domain errors were `application/json` instead of `application/problem+json`; both fixed) plus 105 unit tests | 29 Oct |
+| App to API | App defaults to `http://localhost:5080` (override with `EXPO_PUBLIC_API_BASE_URL`); `adb reverse tcp:5080 tcp:5080` for the emulator. Signed in on the emulator through Welcome, Age, Verify, code entry and Goals. Fixed a missing icon on the Goals screen (`target` is not in the icon set; now `gps_fixed`) | 29 Oct |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
@@ -49,7 +51,9 @@ Nothing running. Next lanes start from the **Next up** list.
 | P1 | Form-check and Pro lane: camera, live check, result, camdenied, nocredits, paywall, managepro. Re-check the vision-camera and Nitro spikes on RN 0.88 |
 | P1 | Gap and empty states, Maestro end-to-end flows |
 | P1 | On-device pass through every built screen (only Welcome seen so far) |
-| P1 | Status bar icons are white on the cream background. Tried `expo-status-bar` and React Native `StatusBar` with `barStyle` from `App.tsx`; the system still reports only light navigation bars, so the light-status-bar flag is not being set. Next idea: set it natively (`MainActivity` / theme `android:windowLightStatusBar`) or via a config plugin |
+| P1 | Status bar: dark icons now show on light screens (React Native `StatusBar` set from the app theme in `App.tsx`). My earlier "still white" result came from stale Metro code, not the fix. Still to check on a dark-theme device |
+| P1 | Code entry: the six boxes show focus but the keyboard does not open until a box is tapped (autofocus) |
+| P1 | Audit every icon name against the glyph set. Names are fine today, but `ads_click` rendered as "?" even though it is a valid name, so check new icons on a device. A node check is in this session's history; turn it into a test |
 | P1 | App icon and splash are still the Expo defaults |
 | P2 | Material Symbols Rounded font (icons are MaterialIcons today) |
 
@@ -57,7 +61,6 @@ Nothing running. Next lanes start from the **Next up** list.
 
 | Pri | Item |
 |---|---|
-| P0 | Run the 51 integration tests and `docker build` / `docker compose up` (needs Docker Desktop) |
 | P1 | Real SMS (MSG91 or 2Factor with DLT registration) |
 | P1 | Play Integrity and App Attest |
 | P1 | Refresh-token revocation |
@@ -94,6 +97,7 @@ Nothing running. Next lanes start from the **Next up** list.
 - Command from the repo root: `app/android/gradlew.bat -p app/android assembleDebug -x lint --no-daemon --max-workers=2 -PreactNativeArchitectures=x86_64`.
 - Never `cd` into `app/android` in a shell you will later use for `prebuild --clean` (EBUSY).
 - Run: `cd app && npx expo start --dev-client --port 8081`, `adb reverse tcp:8081 tcp:8081`, then open `casafit://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081`. The first bundle takes about a minute.
-- If an edit does not show up on the emulator, check the served bundle (`curl` the bundle URL and grep for your change). Metro's file watcher went stale once; restart with `npx expo start --dev-client --port 8081 --clear`.
+- Dev API: from `api/`, `docker compose up -d --build`; health at `http://localhost:5080/healthz`. With `Sms__Provider=log` the one-time code is printed in `docker compose logs api`.
+- If an edit does not show up on the emulator, check the served bundle (`curl` the bundle URL and grep for your change). Metro's file watcher goes stale on this machine often (it cost hours of false leads); restart it with `npx expo start --dev-client --port 8081 --clear` after edits rather than debugging a change that is not showing up.
 - The emulator loses installed apps after a cold boot; reinstall the APK with `adb install -r app/android/app/build/outputs/apk/debug/app-debug.apk`.
 - pnpm is not on PATH; use `npx --yes pnpm@9.12.0`.

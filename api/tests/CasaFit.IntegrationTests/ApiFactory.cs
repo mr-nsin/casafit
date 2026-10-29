@@ -30,6 +30,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         Environment.SetEnvironmentVariable("Attestation__Provider", "dev");
         Environment.SetEnvironmentVariable("Database__MigrateOnStartup", "true");
         Environment.SetEnvironmentVariable("Redis__Url", null);
+        // Every test signs in from the same address; the production limit of 30 a minute would trip the suite.
+        Environment.SetEnvironmentVariable("RateLimit__AuthPerMinute", "100000");
     }
 
     async Task IAsyncLifetime.DisposeAsync()

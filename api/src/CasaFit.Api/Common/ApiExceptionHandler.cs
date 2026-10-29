@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CasaFit.Api.Common;
 
 /// <summary>One error shape for the app: RFC 9457 ProblemDetails, with a machine-readable `code` where we have one.</summary>
-public sealed class ApiExceptionHandler(IProblemDetailsService problems, ILogger<ApiExceptionHandler> log) : IExceptionHandler
+public sealed class ApiExceptionHandler(ILogger<ApiExceptionHandler> log) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken ct)
     {
@@ -17,11 +17,8 @@ public sealed class ApiExceptionHandler(IProblemDetailsService problems, ILogger
             log.LogError(exception, "Unhandled exception"); // never log request bodies: they can hold phones and codes
 
         context.Response.StatusCode = problem.Status!.Value;
-        return await problems.TryWriteAsync(new ProblemDetailsContext
-        {
-            HttpContext = context,
-            ProblemDetails = problem,
-            Exception = exception,
-        });
+        // Written directly so the media type is application/problem+json whatever the client's Accept header says.
+        await context.Response.WriteAsJsonAsync(problem, options: null, contentType: "application/problem+json", ct);
+        return true;
     }
 }
