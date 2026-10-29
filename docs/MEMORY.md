@@ -8,6 +8,7 @@ Updated 19 October 2026.
 
 | File | What it holds | When to read it |
 |---|---|---|
+| [progress.md](progress.md) | What is done, in progress, pending and next up; open decisions; build notes | **At the start of every session, and update it whenever work completes** |
 | [overview.md](overview.md) | What CasaFit is in 10 lines, the main decisions | Always, for context |
 | [architecture.md](architecture.md) | The proposed system: layers, services, data flow | Before any backend, API or app-platform work |
 | [tech-stack.md](tech-stack.md) | Chosen frameworks, SDKs, libraries, versions, cost estimates | Before you add a dependency or pick a tool |

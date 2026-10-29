@@ -2,6 +2,10 @@
 
 A 15-minute home workout app with food and step tracking. This repo holds the product documents and the Material 3 screen designs. There is no app code yet.
 
+## Progress tracking
+
+**Read `docs/progress.md` at the start of every session and before picking up work.** It lists what is done, in progress, pending and next up. Update it in the same commit whenever you complete, start or block an item, and keep its "Next up" list accurate.
+
 ## What is where
 
 | Path | What it is |
