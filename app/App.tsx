@@ -1,16 +1,23 @@
 import 'react-native-gesture-handler';
 import { useCallback, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'react-native';
 
 import { AppProviders, RootNavigator, useAppFonts } from '@/app';
 import { BootErrorScreen } from '@/app/BootError';
 import { bootstrap } from '@/app/bootstrap';
+import { useScheme } from '@/ui';
 
 export type { RootStackParamList } from '@/app';
 
 void SplashScreen.preventAutoHideAsync();
 
 type Boot = 'loading' | 'ready' | 'failed';
+
+/** Dark icons on light screens and the reverse, following the app theme rather than the system. */
+function ThemedStatusBar() {
+  return <StatusBar barStyle={useScheme() === 'dark' ? 'light-content' : 'dark-content'} />;
+}
 
 export default function App() {
   const fontsReady = useAppFonts();
@@ -38,6 +45,7 @@ export default function App() {
 
   return (
     <AppProviders>
+      <ThemedStatusBar />
       <RootNavigator initialRouteName="Splash" />
     </AppProviders>
   );

@@ -2,7 +2,7 @@
 
 **The single source of truth for what is done, what is pending and what comes next.** Read it at the start of every session and before picking up work. Update it in the same commit as the work, every time something is completed, started, blocked or decided.
 
-Last updated: 29 October 2026 · `main` after the shell merge (`4e48139`) plus the Windows build plugin commit.
+Last updated: 29 October 2026 · `main` after the Windows build plugin (`c60a68a`) plus the bottom-sheet scroll fix.
 
 ## How to keep this file current
 
@@ -15,7 +15,7 @@ Last updated: 29 October 2026 · `main` after the shell merge (`4e48139`) plus t
 
 ## Next up
 
-1. Tap through onboarding on the emulator and fix what breaks (status bar contrast, app icon).
+1. Finish the on-device onboarding pass: Welcome and Age are checked; Verify renders but needs the API running to go further (Goals, Mix, About, Health, Building, WeekOne unchecked). Fix the status bar (below) and add the app icon.
 2. Wave 2 lane `session`: Home and plan surfaces. The Workout tab is still a placeholder.
 3. Wave 2 lane `settings`: Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount.
 4. Run the backend integration tests once Docker Desktop is running.
@@ -31,6 +31,7 @@ Last updated: 29 October 2026 · `main` after the shell merge (`4e48139`) plus t
 | Backend | ASP.NET Core: auth, profile and plan, consents, export and delete, sync, form-check credits with refunds, RevenueCat webhook, 2 migrations, OpenAPI (14 paths), Dockerfile, docker-compose; 105 unit tests passing | B1 to B3 |
 | Device | App builds as a debug APK and runs on the Pixel 7 emulator; real Welcome screen renders; no crash | 29 Oct |
 | Build | compileSdk 37 (Expo SDK 58 needs it), flat `node_modules` (`.npmrc`), `app/plugins/with-windows-build.js` makes the Windows Gradle fixes survive `prebuild --clean` | 29 Oct |
+| On-device check | Welcome, Age and Verify screens verified on the emulator. Bug fixed: bottom sheets with long lists (year of birth) overflowed the screen and could not scroll; `BottomSheet` content now scrolls (`app/src/ui/overlays.tsx`) | 29 Oct |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
@@ -48,7 +49,8 @@ Nothing running. Next lanes start from the **Next up** list.
 | P1 | Form-check and Pro lane: camera, live check, result, camdenied, nocredits, paywall, managepro. Re-check the vision-camera and Nitro spikes on RN 0.88 |
 | P1 | Gap and empty states, Maestro end-to-end flows |
 | P1 | On-device pass through every built screen (only Welcome seen so far) |
-| P1 | Status bar is hard to read on the cream background; add an app icon and splash |
+| P1 | Status bar icons are white on the cream background. Tried `expo-status-bar` and React Native `StatusBar` with `barStyle` from `App.tsx`; the system still reports only light navigation bars, so the light-status-bar flag is not being set. Next idea: set it natively (`MainActivity` / theme `android:windowLightStatusBar`) or via a config plugin |
+| P1 | App icon and splash are still the Expo defaults |
 | P2 | Material Symbols Rounded font (icons are MaterialIcons today) |
 
 ### Backend
@@ -92,4 +94,6 @@ Nothing running. Next lanes start from the **Next up** list.
 - Command from the repo root: `app/android/gradlew.bat -p app/android assembleDebug -x lint --no-daemon --max-workers=2 -PreactNativeArchitectures=x86_64`.
 - Never `cd` into `app/android` in a shell you will later use for `prebuild --clean` (EBUSY).
 - Run: `cd app && npx expo start --dev-client --port 8081`, `adb reverse tcp:8081 tcp:8081`, then open `casafit://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081`. The first bundle takes about a minute.
+- If an edit does not show up on the emulator, check the served bundle (`curl` the bundle URL and grep for your change). Metro's file watcher went stale once; restart with `npx expo start --dev-client --port 8081 --clear`.
+- The emulator loses installed apps after a cold boot; reinstall the APK with `adb install -r app/android/app/build/outputs/apk/debug/app-debug.apk`.
 - pnpm is not on PATH; use `npx --yes pnpm@9.12.0`.

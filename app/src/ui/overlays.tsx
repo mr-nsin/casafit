@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Modal, Pressable, View } from 'react-native';
+import { Animated, Modal, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import { DestructiveButton, FilledButton, TextButton, TonalButton } from './buttons';
 import { Icon, Text, type IconName } from './primitives';
 import { fixed, radius, space } from './tokens';
@@ -32,9 +32,9 @@ export function BottomSheet({ visible, title, onDismiss, children }: { visible: 
 function SheetBody({ title, children }: { title: string; children?: React.ReactNode }) {
   const t = useTokens();
   const v = useEntrance();
+  const { height } = useWindowDimensions();
   return (
     <Animated.View
-      
       style={{
         backgroundColor: t.c2,
         borderTopLeftRadius: radius.xxl,
@@ -49,7 +49,7 @@ function SheetBody({ title, children }: { title: string; children?: React.ReactN
       <Text variant="headline" accessibilityRole="header">
         {title}
       </Text>
-      {children}
+      <ScrollView style={{ maxHeight: height * 0.6 }} showsVerticalScrollIndicator={false}>{children}</ScrollView>
     </Animated.View>
   );
 }
