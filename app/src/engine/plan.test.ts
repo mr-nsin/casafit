@@ -190,7 +190,7 @@ describe('goal rules', () => {
     expect(p.why.find((w) => w.kind === 'focus')?.text).toContain('core and glutes');
     expect(p.why.find((w) => w.kind === 'days')?.text).toBe('4 days a week, 15 minutes each, with 3 rest days.');
     expect(p.why.find((w) => w.kind === 'skip')?.text).toMatch(/^Skipping .*because of your knees\.$/);
-    expect(p.why.find((w) => w.kind === 'style')?.text).toBe('2 normal and 2 yoga.');
+    expect(p.why.find((w) => w.kind === 'style')?.text).toBe('Your week mixes 2 normal and 2 yoga.');
   });
 });
 

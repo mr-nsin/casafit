@@ -324,7 +324,7 @@ export function buildPlan(input: PlanInput, catalogue: Catalogue | CatalogueInde
   });
   why.push({
     kind: 'style',
-    text: list(STYLES.filter((s) => counts[s] > 0).map((s) => `${counts[s]} ${s}`)) + '.',
+    text: `Your week mixes ${list(STYLES.filter((s) => counts[s] > 0).map((s) => `${counts[s]} ${s}`))}.`,
   });
   const byReason = new Map<string, string[]>();
   for (const s of skipped) {
