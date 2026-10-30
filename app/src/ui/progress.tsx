@@ -229,7 +229,7 @@ export function Heatmap({ cells, summary }: { cells: number[]; summary: string }
 
 export type DayKind = 'today' | 'planned' | 'active-rest' | 'rest' | 'done' | 'yoga' | 'optional';
 
-export function DayPill({ day, kind, icon, caption, height = 88, onPress }: { day: string; kind: DayKind; icon?: IconName; caption?: string; height?: number; onPress?: () => void }) {
+export function DayPill({ day, kind, icon, caption, height = 88, onPress, a11yLabel }: { day: string; kind: DayKind; icon?: IconName; caption?: string; height?: number; onPress?: () => void; /** Spoken label; defaults to day, caption and "today". */ a11yLabel?: string }) {
   const t = useTokens();
   const isToday = kind === 'today';
   const bg = isToday ? t.p : kind === 'rest' ? 'transparent' : t.c3;
@@ -237,7 +237,7 @@ export function DayPill({ day, kind, icon, caption, height = 88, onPress }: { da
   const desc = `${day}${caption ? `, ${caption}` : ''}${isToday ? ', today' : ''}`;
   return (
     <Touchable
-      label={desc}
+      label={a11yLabel ?? desc}
       onPress={onPress}
       style={{
         flex: 1,

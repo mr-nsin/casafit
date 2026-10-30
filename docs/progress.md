@@ -2,7 +2,7 @@
 
 **The single source of truth for what is done, what is pending and what comes next.** Read it at the start of every session and before picking up work. Update it in the same commit as the work, every time something is completed, started, blocked or decided.
 
-Last updated: 30 October 2026 · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
+Last updated: 30 October 2026 (Home and plan slice) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
 
 ## How to keep this file current
 
@@ -15,6 +15,7 @@ Last updated: 30 October 2026 · `main` after the bottom-sheet fix (`9b339ab`) p
 
 ## Next up
 
+0. Home and plan slice B: Library, BodyPart, Editor, Picker, Parts, Lunge, Exercise, CheckIn (Home links to them already and lands on placeholders). Then the Player polish list under Pending frontend.
 1. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
 2. Wave 2 lane `session`: Home and plan surfaces. The Workout tab is still a placeholder.
 3. Wave 2 lane `settings`: Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount.
@@ -35,6 +36,7 @@ Last updated: 30 October 2026 · `main` after the bottom-sheet fix (`9b339ab`) p
 | Backend verified | `docker compose up --build` works (API, Postgres 16, Redis 7); 11 tables migrated; OTP send and verify tested live; all 51 integration tests pass (they were 25 failing: test sign-ins tripped the 30-a-minute auth rate limit, and validation and domain errors were `application/json` instead of `application/problem+json`; both fixed) plus 105 unit tests | 29 Oct |
 | App to API | App defaults to `http://localhost:5080` (override with `EXPO_PUBLIC_API_BASE_URL`); `adb reverse tcp:5080 tcp:5080` for the emulator. Signed in on the emulator through Welcome, Age, Verify, code entry and Goals. Fixed a missing icon on the Goals screen (`target` is not in the icon set; now `gps_fixed`) | 29 Oct |
 | Onboarding pass | Goals, About you, Building and Week one verified on the emulator against the local API. Fixed the plan reason ending in a bare "4 normal." (now "Your week mixes 4 normal.") | 30 Oct |
+| Home and plan | Workout tab is now the real Home (training day, rest day, resume, comeback, hide calories), plus WeekPlan, Why and Plan detail, registered in the session lane. 587 tests pass. Verified on the emulator: Home, My plan, Why this plan, Plan detail, Start session into the Player | 30 Oct |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
@@ -54,6 +56,10 @@ Nothing running. Next lanes start from the **Next up** list.
 | P1 | On-device pass through every built screen (only Welcome seen so far) |
 | P1 | Status bar: dark icons now show on light screens (React Native `StatusBar` set from the app theme in `App.tsx`). My earlier "still white" result came from stale Metro code, not the fix. Still to check on a dark-theme device |
 | P1 | Week one: the cool-down segment of the session bar is nearly invisible on the tonal card (`sc` on `pc`); the 2/11/2 split also has no labels on warm-up and cool-down. Check contrast |
+| P1 | Player screen (verified on device) needs polish: status bar text is dark on the dark screen (clock unreadable); close, previous, next and menu show plain characters (X, <, >, =, v) instead of icons; the move illustration is a placeholder bar; caption reads "Work . 14:56" with a full stop instead of a middle dot |
+| P1 | Plan detail: the Bird dog row shows a dash instead of an icon; a ready-made plan (`readyMadeId`) is a title card only until Library lands |
+| P1 | Day zero for the week is taken from `plan.updatedAt`, while progress treats dayIndex as Monday = 0. Persist a plan start date and make both agree |
+| P1 | Home: weekly myth card not built (Learn lane has no weekly pick); comeback week is not rebuilt with the engine's comebackInput; WeekPlan shows only the current week |
 | P1 | Code entry: the six boxes show focus but the keyboard does not open until a box is tapped (autofocus) |
 | P1 | Audit every icon name against the glyph set. Names are fine today, but `ads_click` rendered as "?" even though it is a valid name, so check new icons on a device. A node check is in this session's history; turn it into a test |
 | P1 | App icon and splash are still the Expo defaults |

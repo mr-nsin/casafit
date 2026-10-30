@@ -9,11 +9,14 @@ import { PausedScreen } from './screens/PausedScreen';
 import { EndSessionScreen, FeelScreen, SessionSettingsScreen } from './screens/Overlays';
 import { CompleteScreen } from './screens/CompleteScreen';
 import { DeskScreen } from './screens/DeskScreen';
+import { HomeRestScreen, HomeScreen } from './browse/HomeScreen';
+import { PlanScreen, WeekPlanScreen, WhyScreen } from './browse/PlanScreens';
 import type { SessionRouteName } from './hooks';
 import { useSessionStore, type StartOptions } from './store';
 import type { SessionPlan } from './types';
 
 export { PlayerScreen, YogaScreen, DanceScreen };
+export { HomeScreen, HomeRestScreen, WeekPlanScreen, WhyScreen, PlanScreen };
 export { RestScreen, PausedScreen, EndSessionScreen, FeelScreen, SessionSettingsScreen, CompleteScreen, DeskScreen };
 
 export interface SessionRouteEntry {
@@ -34,7 +37,15 @@ const sheet: NativeStackNavigationOptions = {
  * Names are keys of RootStackParamList. Yoga and Dance are the same store and stage with a
  * different layout; Player switches to them automatically from the plan style.
  */
-export const sessionRoutes: Record<SessionRouteName, SessionRouteEntry> = {
+export type BrowseRouteName = 'HomeRest' | 'WeekPlan' | 'Why' | 'Plan';
+
+const page: NativeStackNavigationOptions = { headerShown: false };
+
+export const sessionRoutes: Record<SessionRouteName | BrowseRouteName, SessionRouteEntry> = {
+  HomeRest: { component: HomeRestScreen, options: page },
+  WeekPlan: { component: WeekPlanScreen, options: page },
+  Why: { component: WhyScreen, options: page },
+  Plan: { component: PlanScreen, options: page },
   Player: { component: PlayerScreen, options: stage },
   Yoga: { component: YogaScreen, options: stage },
   Dance: { component: DanceScreen, options: stage },

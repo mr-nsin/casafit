@@ -114,6 +114,6 @@ describe('RootNavigator', () => {
 
   it('opens on the Workout tab when signed in', async () => {
     await renderNav('Main');
-    expect(screen.getByText('Home · placeholder')).toBeTruthy();
+    expect(await screen.findByText('Your plan is on its way')).toBeTruthy();
   });
 });

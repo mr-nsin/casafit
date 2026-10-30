@@ -113,7 +113,7 @@ export const implementedRootRoutes = [
   'Splash', 'Welcome', 'Age', 'Verify', 'Offline', 'WelcomeBack', 'Goals', 'About', 'Mix',
   'Health', 'Building', 'WeekOne',
   // session
-  'Player', 'Yoga', 'Dance', 'Rest', 'Paused', 'Complete', 'Desk', 'EndSession', 'Feel',
+  'HomeRest', 'WeekPlan', 'Why', 'Plan', 'Player', 'Yoga', 'Dance', 'Rest', 'Paused', 'Complete', 'Desk', 'EndSession', 'Feel',
   'SessionSettings',
   // nutrition
   'NutriProfile', 'NutriPlan', 'FoodSearch', 'Meal', 'FoodEmpty',
