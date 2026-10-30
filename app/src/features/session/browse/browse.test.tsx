@@ -152,8 +152,8 @@ describe('model', () => {
     for (const n of names) expect(n.replace(/_/g, '-') in glyphs).toBe(true);
   });
 
-  it('registers the four browse routes with the session lane', () => {
-    for (const name of ['HomeRest', 'WeekPlan', 'Why', 'Plan'] as const) expect(sessionRoutes[name].component).toBeDefined();
+  it('registers the browse routes with the session lane', () => {
+    for (const name of ['HomeRest', 'WeekPlan', 'Why', 'Plan', 'Library', 'BodyPart', 'Editor', 'Picker', 'Parts', 'Lunge', 'Exercise', 'CheckIn'] as const) expect(sessionRoutes[name].component).toBeDefined();
   });
 });
 
@@ -196,7 +196,9 @@ describe('Home, training day', () => {
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Editor');
     await fireEvent.press(screen.getByLabelText("Edit today's session"));
     await fireEvent.press(screen.getByLabelText('Warm-up'));
-    expect(mockNav.navigate).toHaveBeenLastCalledWith('Parts');
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Parts', { part: 'warmup' });
+    await fireEvent.press(screen.getByLabelText('Cool-down'));
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Parts', { part: 'cooldown' });
     await fireEvent.press(screen.getByLabelText('Form check, 2 free left'));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Paywall');
     await fireEvent.press(screen.getByLabelText('Profile'));
@@ -215,8 +217,8 @@ describe('Home, training day', () => {
     await seed();
     await render(<HomeScreen />);
     await screen.findByText('Push 15');
-    await fireEvent.press(screen.getByLabelText('Full body 15, 15 min · Easy'));
-    expect(mockNav.navigate).toHaveBeenLastCalledWith('Plan', { readyMadeId: 'full-body-15' });
+    await fireEvent.press(screen.getByLabelText('Full body starter, 15 min · Easy'));
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Plan', { readyMadeId: 'full_body_starter' });
     await fireEvent.press(screen.getByLabelText(/^Desk reset/));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Desk');
     await fireEvent.press(screen.getByLabelText('See all'));
@@ -397,7 +399,7 @@ describe('WeekPlan', () => {
     await fireEvent.press(screen.getByLabelText(/: Push 15, Today/));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Plan', { planDayId: '1-0' });
     await fireEvent.press(screen.getAllByLabelText(/^Swap /)[0]!);
-    expect(mockNav.navigate).toHaveBeenLastCalledWith('Editor');
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Editor', { planDayId: '1-1' });
     await fireEvent.press(screen.getByLabelText('Why this plan'));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Why');
     await fireEvent.press(screen.getByLabelText('Change mix'));
@@ -494,7 +496,7 @@ describe('Plan', () => {
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Player');
     expect(useSessionStore.getState().status).toBe('active');
     await fireEvent.press(screen.getByLabelText('Edit'));
-    expect(mockNav.navigate).toHaveBeenLastCalledWith('Editor');
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Editor', { planDayId: '1-0' });
     await fireEvent.press(screen.getByLabelText('Why this plan'));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Why');
     await fireEvent.press(screen.getByLabelText('Warm-up and cool-down'));
@@ -524,13 +526,14 @@ describe('Plan', () => {
     expect(today).toBeTruthy();
   });
 
-  it('shows a ready-made plan by id', async () => {
-    mockRoute = { params: { readyMadeId: 'yoga-flow' } };
+  it('shows a ready-made plan by id, with its moves', async () => {
+    await seed();
+    mockRoute = { params: { readyMadeId: 'core_glutes_15' } };
     await render(<PlanScreen />);
-    expect(await screen.findByText('Yoga flow')).toBeTruthy();
+    expect(await screen.findByText('Core and glutes 15')).toBeTruthy();
     expect(screen.getByText('Ready-made plan')).toBeTruthy();
-    await fireEvent.press(screen.getByLabelText('Back to home'));
-    expect(mockNav.navigate).toHaveBeenCalledWith('Main');
+    expect(screen.getByText('5 moves')).toBeTruthy();
+    expect(screen.getByLabelText('Start now')).toBeTruthy();
   });
 
   it('says so when the day cannot be found', async () => {

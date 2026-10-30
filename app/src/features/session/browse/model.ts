@@ -243,23 +243,22 @@ export function skippedFor(
   }
 }
 
-// ---- Ready-made plans (labels only; the moves come with the Library) ----
+// ---- Ready-made plans on Home (ids are the content pack's plan ids; titles and meta match it) ----
 
 export interface ReadyMade {
   id: string;
   title: string;
   meta: string;
   icon: string;
-  route?: 'Desk';
 }
 export const READY_MADE: readonly ReadyMade[] = [
-  { id: 'full-body-15', title: 'Full body 15', meta: `15 min ${DOT} Easy`, icon: 'accessibility_new' },
-  { id: 'abs-core', title: 'Abs and core', meta: `15 min ${DOT} Medium`, icon: 'sports_gymnastics' },
-  { id: 'beginner-hiit', title: 'Beginner HIIT', meta: `15 min ${DOT} Medium`, icon: 'bolt' },
-  { id: 'yoga-flow', title: 'Yoga flow', meta: `15 min ${DOT} Easy`, icon: 'self_improvement' },
-  { id: 'dance-cardio', title: 'Dance cardio', meta: `15 min ${DOT} Medium`, icon: 'music_note' },
-  { id: 'morning-stretch', title: 'Morning stretch', meta: `15 min ${DOT} Easy`, icon: 'wb_twilight' },
-  { id: 'desk-reset', title: 'Desk reset', meta: `4 min ${DOT} Quiet ${DOT} Easy`, icon: 'chair', route: 'Desk' },
+  { id: 'full_body_starter', title: 'Full body starter', meta: `15 min ${DOT} Easy`, icon: 'accessibility_new' },
+  { id: 'core_glutes_15', title: 'Core and glutes 15', meta: `15 min ${DOT} Easy`, icon: 'sports_gymnastics' },
+  { id: 'cardio_burst', title: 'Cardio burst', meta: `15 min ${DOT} Medium`, icon: 'bolt' },
+  { id: 'yoga_flow_15', title: 'Yoga flow 15', meta: `15 min ${DOT} Medium`, icon: 'self_improvement' },
+  { id: 'dance_cardio_15', title: 'Dance cardio 15', meta: `15 min ${DOT} Easy`, icon: 'music_note' },
+  { id: 'gentle_morning', title: 'Gentle morning', meta: `15 min ${DOT} Easy`, icon: 'wb_twilight' },
+  { id: 'desk_reset', title: 'Desk reset', meta: `4 min ${DOT} Quiet ${DOT} Easy`, icon: 'chair' },
 ];
 
 export interface BodyPartTile {

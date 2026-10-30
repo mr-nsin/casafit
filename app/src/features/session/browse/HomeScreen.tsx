@@ -52,6 +52,9 @@ import {
   weekdayIndex,
 } from './model';
 import { Page, useBackOrHome, useBrowseNav, type Nav } from './Page';
+import { openReadyMade } from './actions';
+import { contentFlags, isSafePlan } from './library';
+import { loadContent } from '../../../content';
 
 const firstName = (name: string | null | undefined): string => (name ?? '').trim().split(/\s+/)[0] ?? '';
 
@@ -176,11 +179,11 @@ function TodayCard({ row, doneToday, resumeShown, onStart }: { row: PlanDayRow; 
           <>
             <SessionSegmentBar warm={mins.warm} work={mins.work} cool={mins.cool} height={32} />
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-              <TextButton label="Warm-up" onPress={() => nav.navigate('Parts')} />
+              <TextButton label="Warm-up" onPress={() => nav.navigate('Parts', { part: 'warmup' })} />
               <Text variant="bodySmall" color="opc" tabular>
                 {mins.total} min total
               </Text>
-              <TextButton label="Cool-down" onPress={() => nav.navigate('Parts')} />
+              <TextButton label="Cool-down" onPress={() => nav.navigate('Parts', { part: 'cooldown' })} />
             </View>
           </>
         ) : null}
@@ -469,14 +472,14 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
       <SectionRow title="Ready-made plans" action="See all" onAction={() => nav.navigate('Library')} />
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.s }} style={{ marginHorizontal: -space.l }} testID="ready-made">
         <View style={{ width: space.s }} />
-        {READY_MADE.map((p) => (
+        {READY_MADE.filter((p) => isSafePlan(loadContent(), p.id, contentFlags(data.profile))).map((p) => (
           <Tile
             key={p.id}
             icon={p.icon}
             title={p.title}
             meta={p.meta}
             width={148}
-            onPress={() => (p.route ? nav.navigate(p.route) : nav.navigate('Plan', { readyMadeId: p.id }))}
+            onPress={() => openReadyMade(nav, p.id, data)}
           />
         ))}
         <View style={{ width: space.s }} />

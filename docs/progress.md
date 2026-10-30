@@ -15,7 +15,7 @@ Last updated: 30 October 2026 (Home and plan slice) · `main` after the bottom-s
 
 ## Next up
 
-0. Home and plan slice B: Library, BodyPart, Editor, Picker, Parts, Lunge, Exercise, CheckIn (Home links to them already and lands on placeholders). Then the Player polish list under Pending frontend.
+0. Player polish list under Pending frontend, then the settings lane (Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount).
 1. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
 2. Wave 2 lane `session`: Home and plan surfaces. The Workout tab is still a placeholder.
 3. Wave 2 lane `settings`: Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount.
@@ -37,6 +37,7 @@ Last updated: 30 October 2026 (Home and plan slice) · `main` after the bottom-s
 | App to API | App defaults to `http://localhost:5080` (override with `EXPO_PUBLIC_API_BASE_URL`); `adb reverse tcp:5080 tcp:5080` for the emulator. Signed in on the emulator through Welcome, Age, Verify, code entry and Goals. Fixed a missing icon on the Goals screen (`target` is not in the icon set; now `gps_fixed`) | 29 Oct |
 | Onboarding pass | Goals, About you, Building and Week one verified on the emulator against the local API. Fixed the plan reason ending in a bare "4 normal." (now "Your week mixes 4 normal.") | 30 Oct |
 | Home and plan | Workout tab is now the real Home (training day, rest day, resume, comeback, hide calories), plus WeekPlan, Why and Plan detail, registered in the session lane. 587 tests pass. Verified on the emulator: Home, My plan, Why this plan, Plan detail, Start session into the Player | 30 Oct |
+| Home and plan, slice B | Library (16 real plans, filters, hidden-for-your-knees note), BodyPart (builds and starts a 15-minute session), Editor and Picker (swap, add, remove, reorder; saved to the plan day), Parts, Lunge, Exercise and CheckIn registered. 654 tests pass. Verified on the emulator: Library, Editor, Picker, and a saved swap (Squat to Chair squat) showing in Plan detail | 30 Oct |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
@@ -60,6 +61,8 @@ Nothing running. Next lanes start from the **Next up** list.
 | P1 | Plan detail: the Bird dog row shows a dash instead of an icon; a ready-made plan (`readyMadeId`) is a title card only until Library lands |
 | P1 | Day zero for the week is taken from `plan.updatedAt`, while progress treats dayIndex as Monday = 0. Persist a plan start date and make both agree |
 | P1 | Home: weekly myth card not built (Learn lane has no weekly pick); comeback week is not rebuilt with the engine's comebackInput; WeekPlan shows only the current week |
+| P1 | Slice B deferred: Exercise "Try 30 seconds" (store has no single-move mode), drag to reorder (up and down buttons only), yoga body-part sessions often cannot be built (catalogue has 5 yoga work moves), some ready-made plans run over 15:00 in the Editor. Editor "Save" goes back rather than to the Player |
+| P1 | Resume card showed "11 of 15 min done" after an emulator restart; check the active-time clock is not counting time while the app is closed |
 | P1 | Code entry: the six boxes show focus but the keyboard does not open until a box is tapped (autofocus) |
 | P1 | Audit every icon name against the glyph set. Names are fine today, but `ads_click` rendered as "?" even though it is a valid name, so check new icons on a device. A node check is in this session's history; turn it into a test |
 | P1 | App icon and splash are still the Expo defaults |
@@ -96,7 +99,7 @@ Nothing running. Next lanes start from the **Next up** list.
 | `profile.sex` values | Allowed set |
 | Nutrition numbers | Invented by the engine; need dietitian sign-off |
 | Content review | Foods, exclusions, myth sources, chamach size |
-| API host | Final choice |
+| API host | Decided: Railway for beta, Cloud Run asia-south1 (Mumbai) for launch. Record in decisions.md |
 | Windows long paths | `LongPathsEnabled` is a user-only admin change; removes the need for most build workarounds |
 
 ## Build and run notes (Windows)

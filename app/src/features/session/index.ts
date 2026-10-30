@@ -11,12 +11,16 @@ import { CompleteScreen } from './screens/CompleteScreen';
 import { DeskScreen } from './screens/DeskScreen';
 import { HomeRestScreen, HomeScreen } from './browse/HomeScreen';
 import { PlanScreen, WeekPlanScreen, WhyScreen } from './browse/PlanScreens';
+import { BodyPartScreen, ExerciseScreen, LibraryScreen } from './browse/LibraryScreens';
+import { EditorScreen, LungeScreen, PartsScreen, PickerScreen } from './browse/EditScreens';
+import { CheckInScreen } from './browse/CheckInScreen';
 import type { SessionRouteName } from './hooks';
 import { useSessionStore, type StartOptions } from './store';
 import type { SessionPlan } from './types';
 
 export { PlayerScreen, YogaScreen, DanceScreen };
 export { HomeScreen, HomeRestScreen, WeekPlanScreen, WhyScreen, PlanScreen };
+export { LibraryScreen, BodyPartScreen, ExerciseScreen, EditorScreen, PickerScreen, PartsScreen, LungeScreen, CheckInScreen };
 export { RestScreen, PausedScreen, EndSessionScreen, FeelScreen, SessionSettingsScreen, CompleteScreen, DeskScreen };
 
 export interface SessionRouteEntry {
@@ -37,7 +41,9 @@ const sheet: NativeStackNavigationOptions = {
  * Names are keys of RootStackParamList. Yoga and Dance are the same store and stage with a
  * different layout; Player switches to them automatically from the plan style.
  */
-export type BrowseRouteName = 'HomeRest' | 'WeekPlan' | 'Why' | 'Plan';
+export type BrowseRouteName =
+  | 'HomeRest' | 'WeekPlan' | 'Why' | 'Plan'
+  | 'Library' | 'BodyPart' | 'Editor' | 'Picker' | 'Parts' | 'Lunge' | 'Exercise' | 'CheckIn';
 
 const page: NativeStackNavigationOptions = { headerShown: false };
 
@@ -46,6 +52,14 @@ export const sessionRoutes: Record<SessionRouteName | BrowseRouteName, SessionRo
   WeekPlan: { component: WeekPlanScreen, options: page },
   Why: { component: WhyScreen, options: page },
   Plan: { component: PlanScreen, options: page },
+  Library: { component: LibraryScreen, options: page },
+  BodyPart: { component: BodyPartScreen, options: page },
+  Editor: { component: EditorScreen, options: page },
+  Picker: { component: PickerScreen, options: sheet },
+  Parts: { component: PartsScreen, options: page },
+  Lunge: { component: LungeScreen, options: page },
+  Exercise: { component: ExerciseScreen, options: page },
+  CheckIn: { component: CheckInScreen, options: page },
   Player: { component: PlayerScreen, options: stage },
   Yoga: { component: YogaScreen, options: stage },
   Dance: { component: DanceScreen, options: stage },

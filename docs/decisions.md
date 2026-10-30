@@ -136,3 +136,5 @@ A short, dated log of design and technical decisions. Add a row at the top. Keep
 - **Decision:** three tabs — Workout, Nutrition, Progress — on the bottom bar.
 - **Why:** Material 3 asks for 3 to 5 destinations; Steps and Learn fit under Workout, Progress deserves its own place.
 - **See:** the Material 3 screens in `project/`.
+
+- 2026-10-30 · API hosting: Railway for the beta (simple Docker deploy, Postgres and Redis add-ons, Singapore region), Google Cloud Run asia-south1 (Mumbai) for launch so data stays in India. The API is a stateless container, so the move is a change of host and connection strings.

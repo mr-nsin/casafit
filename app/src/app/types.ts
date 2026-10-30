@@ -42,9 +42,11 @@ export type RootStackParamList = {
   Rest: undefined;
   Paused: undefined;
   EndSession: undefined;
-  Editor: undefined;
-  Picker: { slot?: number } | undefined;
-  Parts: undefined;
+  /** `planDayId` is 'week-day' (default today). `addExerciseId` appends a move when the editor opens. */
+  Editor: { planDayId?: string; addExerciseId?: string } | undefined;
+  /** With `stepId` the picked move replaces that step; without it the move is added. */
+  Picker: { slot?: number; stepId?: string } | undefined;
+  Parts: { part?: 'warmup' | 'work' | 'cooldown' } | undefined;
   Lunge: { excludedExerciseId?: string } | undefined;
   Complete: undefined;
   Yoga: undefined;

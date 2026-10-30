@@ -31,7 +31,6 @@ import { startSession } from '../index';
 import { usePlanData, useSkipped } from './hooks';
 import {
   DOT,
-  READY_MADE,
   WEEKDAY_LONG,
   WEEKDAY_SHORT,
   answerRows,
@@ -48,6 +47,7 @@ import {
   workSteps,
 } from './model';
 import { Page, useBackOrHome, useBrowseNav, type Nav } from './Page';
+import { ReadyMadePlanView } from './LibraryScreens';
 
 function useStartDay(nav: Nav) {
   return (row: PlanDayRow | undefined) => {
@@ -135,7 +135,7 @@ export function WeekPlanScreen() {
                   <Icon name={rest ? 'bedtime' : 'chevron_right'} color={isToday ? 'opc' : 'osv'} />
                 </View>
               ) : (
-                <IconButton icon="swap_horiz" label={`Swap ${full}`} onPress={() => nav.navigate('Editor')} />
+                <IconButton icon="swap_horiz" label={`Swap ${full}`} onPress={() => nav.navigate('Editor', { planDayId: planDayKey(row!.planWeek, row!.dayIndex) })} />
               )}
             </View>
           );
@@ -220,26 +220,7 @@ export function PlanScreen() {
   const skipped = useSkipped(data.plan, data.profile);
   const params = route.params;
 
-  // Ready-made plans are labels until the Library lane ships their moves.
-  if (params?.readyMadeId) {
-    const rm = READY_MADE.find((p) => p.id === params.readyMadeId);
-    return (
-      <Page topBar={{ leading: 'back', onLeading: back }}>
-        <Card tone="pc" style={{ gap: space.s }}>
-          <Text variant="label" color="opc">
-            Ready-made plan
-          </Text>
-          <Text variant="display" color="opc">
-            {rm?.title ?? 'Ready-made plan'}
-          </Text>
-          {rm ? <Text color="opc">{rm.meta}</Text> : null}
-        </Card>
-        {/* TODO(library): list the moves and offer "Add to my plan" once the Library lane has the catalogue of ready-made plans. */}
-        <InfoNote icon="info" text="The moves for this plan are on their way. Today's plan is ready on Home." />
-        <FilledButton label="Back to home" onPress={() => nav.navigate('Main')} />
-      </Page>
-    );
-  }
+  if (params?.readyMadeId) return <ReadyMadePlanView id={params.readyMadeId} data={data} back={back} />;
 
   if (data.loading) return <Page topBar={{ leading: 'back', onLeading: back }}><View /></Page>;
   if (!data.plan || !data.clock) return <NoPlan back={back} />;
@@ -271,7 +252,7 @@ export function PlanScreen() {
       footer={
         session ? (
           <View style={{ flexDirection: 'row', gap: space.s }}>
-            <TonalButton label="Edit" onPress={() => nav.navigate('Editor')} style={{ flex: 1 }} />
+            <TonalButton label="Edit" onPress={() => nav.navigate('Editor', { planDayId: planDayKey(row.planWeek, row.dayIndex) })} style={{ flex: 1 }} />
             <FilledButton label="Start session" leadingIcon="play_arrow" onPress={() => startDay(row)} style={{ flex: 2 }} />
           </View>
         ) : undefined
