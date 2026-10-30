@@ -17,9 +17,8 @@ Last updated: 30 October 2026 (Home and plan slice) · `main` after the bottom-s
 
 0. Wave 2 form-check and Pro lane (camera permission, camera denied, form check, live check, form result, no credits, paywall, manage Pro, Pro welcome). Re-check vision-camera and Nitro on RN 0.88 first.
 1. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
-2. Wave 2 lane `session`: Home and plan surfaces. The Workout tab is still a placeholder.
-3. Wave 2 lane `settings`: Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount.
-4. Fix the status bar contrast (below) and add the app icon.
+2. App icon and splash (still Expo defaults), then the gap and empty states and Maestro end-to-end flows.
+3. Backend: real SMS, Play Integrity, refresh-token revocation, connect hosting (Railway beta).
 
 ## Done
 
