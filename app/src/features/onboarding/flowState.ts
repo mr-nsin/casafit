@@ -1,11 +1,14 @@
-// Small in-memory store for what Verify and Building learned, so WelcomeBack and WeekOne can read it.
+// Small in-memory store for what sign-in and Building learned, so WelcomeBack and WeekOne can read it.
 // Nothing here is persisted (the plan itself is in Op-SQLite) and nothing here is sent anywhere.
 
 import { create } from 'zustand';
+import type { AuthProvider } from '@casafit/shared';
 import type { Plan } from '../../engine';
 
 type Outcome = {
+  /** Masked email, for example n***@gmail.com. */
   masked: string | null;
+  provider: AuthProvider | null;
   isNewAccount: boolean | null;
   freeChecksRemaining: number | null;
   /** The plan Building just made. WeekOne falls back to the saved rows when this is null. */
@@ -18,7 +21,7 @@ type State = Outcome & {
   reset: () => void;
 };
 
-const empty: Outcome = { masked: null, isNewAccount: null, freeChecksRemaining: null, plan: null, fellBackToNormal: false };
+const empty: Outcome = { masked: null, provider: null, isNewAccount: null, freeChecksRemaining: null, plan: null, fellBackToNormal: false };
 
 export const useVerifyOutcome = create<State>((set) => ({
   ...empty,

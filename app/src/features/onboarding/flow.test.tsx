@@ -1,5 +1,6 @@
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 
+import { fakeSession } from '../../services/auth';
 import { useAuth } from '../../state/auth';
 import { emptyDraft, useOnboarding } from '../../state/onboardingDraft';
 import { getRepositories } from '../../state/storage';
@@ -47,7 +48,7 @@ describe('first run, three styles, a health flag', () => {
     await view.unmount();
 
     // Verify is covered in verify.test.tsx; it resets the stack to Goals once signed in.
-    useAuth.setState({ session: { accessToken: 'a', refreshToken: 'r', verifiedAt: Date.now() } });
+    useAuth.setState({ session: fakeSession() });
 
     // Goals
     view = await render(<R.Goals.component />);

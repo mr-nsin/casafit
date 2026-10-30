@@ -1,102 +1,134 @@
-// Verify talks to POST /v1/auth/code and POST /v1/auth/verify through the existing api client.
-// This file turns every documented response into one small result the screen can render.
+// Sign-in for the Verify screen: email one-time code or Google / Apple / Facebook, all through the AuthProvider.
+// Supabase creates the session; GET /v1/me then creates (or finds) the account on our server.
+// This file turns every outcome into one small result the screen can render.
 
-import type { SendCodeResponse, VerifyCodeResponse } from '@casafit/shared';
-import { normaliseEmail, normalisePhoneE164 } from '@casafit/shared';
-import { ApiError, NetworkError, api } from '../../api/client';
-import { useAuth } from '../../state/auth';
+import { maskEmail, normaliseEmail } from '@casafit/shared';
+import type { AuthProvider as ProviderName } from '@casafit/shared';
 
-export type Channel = 'phone' | 'email';
-export type Identifier = { channel: Channel; value: string };
+import { fetchMe } from '../../api/auth';
+import { getAuth, RESEND_COOLDOWN_S, type AuthSession, type SocialProvider } from '../../services/auth';
 
-export function normaliseIdentifier(
-  channel: Channel,
-  raw: string,
-  cc = '+91',
-): { ok: true; value: string } | { ok: false; error: string } {
+export { RESEND_COOLDOWN_S };
+
+/** How long an emailed code is good for. Matches the Supabase "Email OTP expiration" setting (default 3600 s). */
+export const CODE_LIFETIME_S = 3600;
+
+export function validateEmail(raw: string): { ok: true; value: string } | { ok: false; error: string } {
   try {
-    if (channel === 'phone') {
-      const v = normalisePhoneE164(raw, cc);
-      if (!/^\+\d{10,15}$/.test(v)) return { ok: false, error: 'Enter a valid mobile number.' };
-      return { ok: true, value: v };
-    }
-    const v = normaliseEmail(raw);
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return { ok: false, error: 'Enter a valid email address.' };
-    return { ok: true, value: v };
-  } catch (e) {
-    const m = (e as Error).message;
+    return { ok: true, value: normaliseEmail(raw) };
+  } catch {
+    return { ok: false, error: 'Enter a valid email address.' };
+  }
+}
+
+/**
+ * Google everywhere, Facebook everywhere, Apple on iOS only. App Store rules ask for Sign in with Apple when other
+ * social sign-in is offered, and Apple on Android needs the web flow with little benefit for Android phones.
+ */
+export function socialProvidersFor(os: string): SocialProvider[] {
+  return os === 'ios' ? ['google', 'apple', 'facebook'] : ['google', 'facebook'];
+}
+
+export const PROVIDER_LABEL: Record<SocialProvider, string> = { google: 'Google', apple: 'Apple', facebook: 'Facebook' };
+
+export type SendResult =
+  | { kind: 'sent'; resendInSeconds: number }
+  | { kind: 'throttled'; resendInSeconds: number }
+  | { kind: 'invalid' }
+  | { kind: 'unavailable' }
+  | { kind: 'offline' }
+  | { kind: 'error' };
+
+export async function sendCode(email: string): Promise<SendResult> {
+  const r = await getAuth().sendEmailCode(email);
+  if (r.ok) return { kind: 'sent', resendInSeconds: RESEND_COOLDOWN_S };
+  switch (r.reason) {
+    case 'rate_limited':
+      return { kind: 'throttled', resendInSeconds: r.retryAfterS ?? RESEND_COOLDOWN_S };
+    case 'invalid_email':
+      return { kind: 'invalid' };
+    case 'unavailable':
+      return { kind: 'unavailable' };
+    case 'offline':
+      return { kind: 'offline' };
+    default:
+      return { kind: 'error' };
+  }
+}
+
+/** What the screen needs after a successful sign-in. `isNewAccount` is null when /v1/me could not be reached. */
+export type SignedIn = {
+  kind: 'ok';
+  isNewAccount: boolean | null;
+  masked: string | null;
+  provider: ProviderName | null;
+  freeChecksRemaining: number | null;
+};
+
+export type VerifyFailure = 'wrong' | 'expired' | 'rate_limited';
+export type VerifyResult =
+  | SignedIn
+  | { kind: 'failed'; reason: VerifyFailure }
+  | { kind: 'unavailable' }
+  | { kind: 'offline' }
+  | { kind: 'error' };
+
+/**
+ * Create the account on the server (first authenticated request) and read what we show afterwards.
+ * Signing in already worked, so a network failure here is not an error: the person continues, and the
+ * account is created on the next request.
+ */
+export async function completeSignIn(session: AuthSession): Promise<SignedIn> {
+  try {
+    const me = await fetchMe();
     return {
-      ok: false,
-      error: m.includes('Disposable')
-        ? 'Use a regular email address, not a temporary one.'
-        : channel === 'phone'
-          ? 'Enter a valid mobile number.'
-          : 'Enter a valid email address.',
+      kind: 'ok',
+      isNewAccount: !me.plan && !me.onboarded,
+      masked: me.emailMasked,
+      provider: me.provider,
+      freeChecksRemaining: me.freeChecksRemaining,
+    };
+  } catch {
+    return {
+      kind: 'ok',
+      isNewAccount: null,
+      masked: session.email ? maskEmail(session.email) : null,
+      provider: session.method === 'dev' ? null : session.method,
+      freeChecksRemaining: null,
     };
   }
 }
 
-const body = (id: Identifier) => (id.channel === 'phone' ? { phone: id.value } : { email: id.value });
-
-export type SendResult =
-  | { kind: 'sent'; resendInSeconds: number; attemptsLeft: number }
-  | { kind: 'throttled'; resendInSeconds: number; limitReached: boolean }
-  | { kind: 'invalid' }
-  | { kind: 'attestation_failed' }
-  | { kind: 'offline' }
-  | { kind: 'error' };
-
-export const RESEND_WINDOW_S = 30;
-
-/**
- * The server answers 200 for a fresh send and for a throttled one. Throttled is recognised by
- * attemptsLeftThisHour 0 (hour limit reached) or by a wait shorter than the full resend window.
- */
-export async function sendCode(id: Identifier): Promise<SendResult> {
-  try {
-    const r = await api<SendCodeResponse>('/auth/code', { method: 'POST', body: JSON.stringify(body(id)) });
-    if (r.attemptsLeftThisHour === 0 && r.resendInSeconds > 0) {
-      return { kind: 'throttled', resendInSeconds: r.resendInSeconds, limitReached: true };
-    }
-    if (r.resendInSeconds < RESEND_WINDOW_S) {
-      return { kind: 'throttled', resendInSeconds: r.resendInSeconds, limitReached: false };
-    }
-    return { kind: 'sent', resendInSeconds: r.resendInSeconds, attemptsLeft: r.attemptsLeftThisHour };
-  } catch (e) {
-    if (e instanceof NetworkError) return { kind: 'offline' };
-    if (e instanceof ApiError) {
-      if (e.status === 400) return { kind: 'invalid' };
-      if (e.status === 403) return { kind: 'attestation_failed' };
-    }
-    return { kind: 'error' };
+/** `sentAt` lets a code the server calls wrong be reported as expired once its lifetime has passed. */
+export async function verifyCode(email: string, code: string, sentAt: number, now: number): Promise<VerifyResult> {
+  const r = await getAuth().verifyEmailCode(email, code);
+  if (r.ok) return completeSignIn(r.session);
+  switch (r.reason) {
+    case 'wrong':
+      return { kind: 'failed', reason: now - sentAt > CODE_LIFETIME_S * 1000 ? 'expired' : 'wrong' };
+    case 'expired':
+    case 'rate_limited':
+      return { kind: 'failed', reason: r.reason };
+    case 'offline':
+      return { kind: 'offline' };
+    case 'unavailable':
+      return { kind: 'unavailable' };
+    default:
+      return { kind: 'error' };
   }
 }
 
-export type VerifyFailure = 'wrong' | 'expired' | 'no_tries_left';
-export type VerifyResult =
-  | { kind: 'ok'; isNewAccount: boolean; freeChecksRemaining: number }
-  | { kind: 'failed'; reason: VerifyFailure }
-  | { kind: 'invalid' }
-  | { kind: 'offline' }
-  | { kind: 'error' };
+export type SocialResult = SignedIn | { kind: 'cancelled' } | { kind: 'unavailable' } | { kind: 'offline' } | { kind: 'error' };
 
-export async function verifyCode(id: Identifier, code: string): Promise<VerifyResult> {
-  try {
-    const r = await api<VerifyCodeResponse>('/auth/verify', {
-      method: 'POST',
-      body: JSON.stringify({ ...body(id), code }),
-    });
-    await useAuth.getState().save(r);
-    return { kind: 'ok', isNewAccount: r.isNewAccount, freeChecksRemaining: r.freeChecksRemaining };
-  } catch (e) {
-    if (e instanceof NetworkError) return { kind: 'offline' };
-    if (e instanceof ApiError) {
-      if (e.status === 401) {
-        const c = (e.body as { code?: string } | null)?.code;
-        return { kind: 'failed', reason: c === 'expired' || c === 'no_tries_left' ? c : 'wrong' };
-      }
-      if (e.status === 400) return { kind: 'invalid' };
-    }
-    return { kind: 'error' };
-  }
+export async function signInWithSocial(provider: SocialProvider): Promise<SocialResult> {
+  const r = await getAuth().signInWithOAuth(provider);
+  if (r.ok) return completeSignIn(r.session);
+  return { kind: r.reason };
+}
+
+export async function signInAsDev(): Promise<SocialResult> {
+  const auth = getAuth();
+  const r = (await auth.signInAsDev?.()) ?? { ok: false as const, reason: 'unavailable' as const };
+  if (r.ok) return completeSignIn(r.session);
+  return { kind: r.reason };
 }

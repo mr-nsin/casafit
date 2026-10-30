@@ -1,8 +1,12 @@
-// Verify (with the otperror states), Offline, WelcomeBack.
+// Sign in (Verify route, with the otperror states), Offline, WelcomeBack.
+// Sign-in is Supabase Auth: an emailed 6-digit code, or Google, Apple or Facebook. See ../authFlow.ts.
 
 import { useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
+import { maskEmail } from '@casafit/shared';
+
+import { getAuth, describeSignIn, EMAIL_CODE_LENGTH, type SocialProvider } from '../../../services/auth';
 import { useAuth } from '../../../state/auth';
 import { useOnboarding } from '../../../state/onboardingDraft';
 import { getRepositories, hasRepositories } from '../../../state/storage';
@@ -13,44 +17,49 @@ import {
   IconBadge,
   Icon,
   OtpField,
+  OutlinedButton,
   StatusBanner,
-  Tabs,
   Text,
   TextButton,
   TextField,
+  TonalButton,
   space,
 } from '../../../ui';
 import { Layout, useBack, useOnboardingNav } from '../Layout';
 import { getOnboardingDeps } from '../deps';
 import { useVerifyOutcome } from '../flowState';
-import { formatClock, maskIdentifier } from '../logic';
+import { formatClock } from '../logic';
 import {
-  normaliseIdentifier,
+  PROVIDER_LABEL,
   sendCode,
+  signInAsDev,
+  signInWithSocial,
+  socialProvidersFor,
+  validateEmail,
   verifyCode,
-  type Channel,
-  type Identifier,
+  type SignedIn,
   type VerifyFailure,
 } from '../authFlow';
 
 const MAX_TRIES = 3;
 
-type Props = { route?: { params?: { phone?: string; email?: string } } };
+type Props = { route?: { params?: { email?: string } } };
+type Working = 'email' | SocialProvider | 'dev' | null;
 
 export function VerifyScreen({ route }: Props) {
   const nav = useOnboardingNav();
   const back = useBack('Welcome');
-  const params = route?.params;
-  const [channel, setChannel] = useState<Channel>(params?.email ? 'email' : 'phone');
-  const [raw, setRaw] = useState(params?.phone ?? params?.email ?? '');
+  const auth = getAuth();
+  const [raw, setRaw] = useState(route?.params?.email ?? '');
   const [fieldError, setFieldError] = useState<string | undefined>();
-  const [id, setId] = useState<Identifier | null>(null); // set once a code has been sent
-  const [sending, setSending] = useState(false);
+  const [email, setEmail] = useState<string | null>(null); // set once a code has been sent
+  const [sentAt, setSentAt] = useState(0);
+  const [working, setWorking] = useState<Working>(null);
   const [verifying, setVerifying] = useState(false);
   const [code, setCode] = useState('');
   const [failure, setFailure] = useState<VerifyFailure | null>(null);
   const [tries, setTries] = useState(0);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{ text: string; tone: 'warning' | 'neutral' } | null>(null);
   const [cooldown, setCooldown] = useState(0);
   const busy = useRef(false);
 
@@ -61,139 +70,222 @@ export function VerifyScreen({ route }: Props) {
   }, [cooldown > 0]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const goOffline = () => nav.navigate('Offline');
+  const warn = (text: string) => setNotice({ text, tone: 'warning' });
 
-  async function send(target: Identifier) {
+  function backToEmail() {
+    setEmail(null);
+    setCode('');
+    setFailure(null);
+    setTries(0);
+    setNotice(null);
+  }
+
+  /** Remember what we learned and route: new accounts to the questions, returning ones to Welcome back. */
+  async function proceed(r: SignedIn) {
+    useVerifyOutcome.getState().set({
+      masked: r.masked,
+      provider: r.provider,
+      isNewAccount: r.isNewAccount,
+      freeChecksRemaining: r.freeChecksRemaining,
+    });
+    // The stack is reset so Back never returns to sign-in (D4).
+    const hasPlan = hasRepositories() && !!(await getRepositories().plan.get());
+    const adult = useOnboarding.getState().draft.confirmed18;
+    const name = r.isNewAccount ? (adult ? 'Goals' : 'Age') : hasPlan ? 'WelcomeBack' : adult ? 'Goals' : 'Age';
+    nav.reset({ index: 0, routes: [{ name }] });
+  }
+
+  async function send(target: string) {
     if (busy.current) return;
     busy.current = true;
-    setSending(true);
+    setWorking('email');
     setNotice(null);
     try {
       if (!(await getOnboardingDeps().isOnline())) return goOffline();
       const r = await sendCode(target);
       switch (r.kind) {
         case 'sent':
-          setId(target);
+          setEmail(target);
+          setSentAt(getOnboardingDeps().now());
           setCode('');
           setFailure(null);
           setTries(0);
           setCooldown(r.resendInSeconds);
           break;
         case 'throttled':
-          setId(target);
+          setEmail(target);
           setCooldown(r.resendInSeconds);
-          setNotice(
-            r.limitReached
-              ? `You have asked for 5 codes this hour. Try again in ${Math.ceil(r.resendInSeconds / 60)} min.`
-              : `A code was sent a moment ago. You can ask again in ${formatClock(r.resendInSeconds)}.`,
-          );
+          setNotice({
+            text: `A code was sent a moment ago. You can ask again in ${formatClock(r.resendInSeconds)}.`,
+            tone: 'warning',
+          });
           break;
         case 'invalid':
-          setFieldError(channel === 'phone' ? 'Enter a valid mobile number.' : 'Enter a valid email address.');
+          setFieldError('Enter a valid email address.');
           break;
-        case 'attestation_failed':
-          setNotice('We could not check this device. Update CasaFit from the store and try again.');
+        case 'unavailable':
+          warn('Email sign-in is not available right now. Please try again later.');
           break;
         case 'offline':
           return goOffline();
         default:
-          setNotice('Something went wrong sending the code. Try again in a moment.');
+          warn('Something went wrong sending the code. Try again in a moment.');
       }
     } finally {
       busy.current = false;
-      setSending(false);
+      setWorking(null);
     }
   }
 
   function onSendPress() {
-    const n = normaliseIdentifier(channel, raw);
+    const n = validateEmail(raw);
     if (!n.ok) return setFieldError(n.error);
     setFieldError(undefined);
-    void send({ channel, value: n.value });
+    void send(n.value);
   }
 
   async function onCode(v: string) {
     setCode(v);
     if (failure === 'wrong') setFailure(null);
-    if (v.length !== 6 || !id || verifying) return;
+    if (v.length !== EMAIL_CODE_LENGTH || !email || verifying) return;
     setVerifying(true);
-    const r = await verifyCode(id, v);
+    const r = await verifyCode(email, v, sentAt, getOnboardingDeps().now());
     setVerifying(false);
-    if (r.kind === 'ok') {
-      useVerifyOutcome.getState().set({
-        masked: maskIdentifier(id.channel, id.value),
-        isNewAccount: r.isNewAccount,
-        freeChecksRemaining: r.freeChecksRemaining,
-      });
-      // The stack is reset so Back never returns to Verify (D4).
-      const hasPlan = hasRepositories() && !!(await getRepositories().plan.get());
-      const adult = useOnboarding.getState().draft.confirmed18;
-      const name = r.isNewAccount ? (adult ? 'Goals' : 'Age') : hasPlan ? 'WelcomeBack' : adult ? 'Goals' : 'Age';
-      nav.reset({ index: 0, routes: [{ name }] });
-    } else if (r.kind === 'failed') {
-      setFailure(r.reason);
-      if (r.reason === 'wrong') setTries((n) => n + 1);
-    } else if (r.kind === 'offline') {
-      goOffline();
-    } else {
-      setNotice('Something went wrong checking the code. Try again.');
+    if (r.kind === 'ok') return proceed(r);
+    if (r.kind === 'failed') {
+      if (r.reason === 'rate_limited') warn('Too many tries. Wait a minute, then try again.');
+      else {
+        setFailure(r.reason);
+        if (r.reason === 'wrong') setTries((n) => n + 1);
+      }
+    } else if (r.kind === 'offline') goOffline();
+    else if (r.kind === 'unavailable') warn('Email sign-in is not available right now. Please try again later.');
+    else warn('Something went wrong checking the code. Try again.');
+  }
+
+  async function onSocial(provider: SocialProvider | 'dev') {
+    if (busy.current) return;
+    busy.current = true;
+    setWorking(provider);
+    setNotice(null);
+    try {
+      if (provider !== 'dev' && !(await getOnboardingDeps().isOnline())) return goOffline();
+      const r = provider === 'dev' ? await signInAsDev() : await signInWithSocial(provider);
+      if (r.kind === 'ok') return await proceed(r);
+      const label = provider === 'dev' ? 'the dev account' : PROVIDER_LABEL[provider];
+      if (r.kind === 'cancelled') setNotice({ text: 'Sign-in was cancelled. Nothing was changed.', tone: 'neutral' });
+      else if (r.kind === 'offline') goOffline();
+      else if (r.kind === 'unavailable') warn(`Signing in with ${label} is not available right now. Try email instead.`);
+      else warn(`We could not finish signing in with ${label}. Try again, or use email.`);
+    } finally {
+      busy.current = false;
+      setWorking(null);
     }
   }
 
   const triesLeft = Math.max(0, MAX_TRIES - tries);
-  const locked = failure === 'no_tries_left' || (failure === 'wrong' && triesLeft === 0);
-  const otpState = failure === 'wrong' || failure === 'expired' || locked ? 'error' : 'idle';
-  const label = id ? (id.channel === 'phone' ? id.value : id.value) : '';
+  const locked = failure === 'wrong' && triesLeft === 0;
+  const otpState = failure === 'wrong' || failure === 'expired' ? 'error' : 'idle';
+  const providers = socialProvidersFor(Platform.OS);
+  const anyBusy = working !== null || verifying;
 
   return (
     <Layout
-      topBar={{ leading: 'back', onLeading: id ? () => { setId(null); setCode(''); setFailure(null); setNotice(null); } : back }}
+      topBar={{ leading: 'back', onLeading: email ? backToEmail : back }}
       footer={
-        id ? (
-          <FilledButton label="Verify and continue" loading={verifying} disabled={code.length !== 6 || locked} onPress={() => void onCode(code)} />
+        !auth.configured ? undefined : email ? (
+          <FilledButton
+            label="Verify and continue"
+            loading={verifying}
+            disabled={code.length !== EMAIL_CODE_LENGTH || locked}
+            onPress={() => void onCode(code)}
+          />
         ) : (
-          <FilledButton label="Send code" loading={sending} disabled={!raw.trim()} onPress={onSendPress} />
+          <FilledButton
+            label="Continue with email"
+            leadingIcon="mail"
+            loading={working === 'email'}
+            disabled={!raw.trim() || (anyBusy && working !== 'email')}
+            onPress={onSendPress}
+          />
         )
       }
     >
-      <Text variant="headline">{id ? 'Enter the code' : channel === 'phone' ? 'Verify your number' : 'Verify your email'}</Text>
-      {!id ? (
+      <Text variant="headline" accessibilityRole="header">
+        {email ? 'Check your email' : 'Sign in or create an account'}
+      </Text>
+
+      {!auth.configured ? (
+        <StatusBanner variant="info" icon="info">
+          Sign in is not set up on this build. Nothing is wrong with your phone. Try again with an updated version of CasaFit.
+        </StatusBanner>
+      ) : !email ? (
         <>
-          <Tabs
-            items={[
-              { value: 'phone', label: 'Phone' },
-              { value: 'email', label: 'Email' },
-            ]}
-            selected={channel}
-            onSelect={(c) => {
-              setChannel(c as Channel);
-              setRaw('');
+          <Text color="osv">We email you a 6-digit code. There is no password to remember.</Text>
+          <TextField
+            label="Email address"
+            value={raw}
+            onChange={(v) => {
+              setRaw(v);
               setFieldError(undefined);
             }}
-          />
-          <TextField
-            label={channel === 'phone' ? 'Mobile number' : 'Email address'}
-            value={raw}
-            onChange={setRaw}
-            keyboardType={channel === 'phone' ? 'phone-pad' : 'email-address'}
-            autoComplete={channel === 'phone' ? 'tel' : 'email'}
+            keyboardType="email-address"
+            autoComplete="email"
+            textContentType="emailAddress"
+            autoCapitalize="none"
+            autoCorrect={false}
+            returnKeyType="send"
+            onSubmitEditing={onSendPress}
             error={fieldError}
-            helper={channel === 'phone' ? '+91 is added if you leave the country code off' : undefined}
-            testID="verify-identifier"
+            testID="verify-email"
           />
+
+          <View style={{ gap: space.s }}>
+            <Text color="osv" style={{ textAlign: 'center' }}>or</Text>
+            {providers.map((p) => (
+              <OutlinedButton
+                key={p}
+                label={`Continue with ${PROVIDER_LABEL[p]}`}
+                loading={working === p}
+                disabled={anyBusy && working !== p}
+                onPress={() => void onSocial(p)}
+                testID={`verify-${p}`}
+              />
+            ))}
+            {auth.signInAsDev ? (
+              <TonalButton
+                label="Continue as the local dev user"
+                loading={working === 'dev'}
+                disabled={anyBusy && working !== 'dev'}
+                onPress={() => void onSocial('dev')}
+                testID="verify-dev"
+              />
+            ) : null}
+          </View>
+
           <View style={{ flexDirection: 'row', gap: space.s, alignItems: 'center' }}>
             <Icon name="verified_user" color="osv" />
             <Text variant="bodySmall" color="osv" style={{ flex: 1 }}>
-              We use this only to verify you and keep your free form checks yours.
+              We use your email only to sign you in and keep your free form checks yours.
             </Text>
             <TextButton label="Privacy notice" onPress={() => getOnboardingDeps().openPrivacyNotice()} />
           </View>
         </>
       ) : (
         <>
-          <Text color="osv">Code sent to {label}</Text>
-          <OtpField length={6} value={code} onChange={(v) => void onCode(v)} state={otpState} autoRead />
+          <Text color="osv">We sent a code to {maskEmail(email)}</Text>
+          <OtpField
+            length={EMAIL_CODE_LENGTH}
+            value={code}
+            onChange={(v) => void onCode(v)}
+            state={otpState}
+            errorText={null}
+            autoFocus
+          />
           {failure === 'wrong' && !locked ? (
-            <StatusBanner variant="error">That code is not right. {triesLeft} {triesLeft === 1 ? 'try' : 'tries'} left.</StatusBanner>
+            <StatusBanner variant="error">
+              That code is not right, or it has expired. {triesLeft} {triesLeft === 1 ? 'try' : 'tries'} left.
+            </StatusBanner>
           ) : null}
           {failure === 'expired' ? <StatusBanner variant="error">That code has expired. Ask for a new one.</StatusBanner> : null}
           {locked ? (
@@ -206,20 +298,12 @@ export function VerifyScreen({ route }: Props) {
               Resend code in {formatClock(cooldown)}
             </Text>
           ) : (
-            <TextButton label="Resend code" onPress={() => void send(id)} />
+            <TextButton label="Resend code" loading={working === 'email'} onPress={() => void send(email)} />
           )}
-          <TextButton
-            label="Wrong number? Change it"
-            onPress={() => {
-              setId(null);
-              setCode('');
-              setFailure(null);
-              setNotice(null);
-            }}
-          />
+          <TextButton label="Wrong email? Change it" onPress={backToEmail} />
         </>
       )}
-      {notice ? <StatusBanner variant="warning">{notice}</StatusBanner> : null}
+      {notice ? <StatusBanner variant={notice.tone === 'warning' ? 'warning' : 'neutral'}>{notice.text}</StatusBanner> : null}
     </Layout>
   );
 }
@@ -258,13 +342,14 @@ export function OfflineScreen() {
         <IconBadge icon="cloud_off" size={160} />
         <Text variant="headline" accessibilityRole="header">Connect to start</Text>
         <Text color="osv" style={{ textAlign: 'center' }}>
-          CasaFit checks your number once. After that your workouts run with no connection.
+          CasaFit signs you in once, with a code sent to your email or with Google, Apple or Facebook. After that your workouts run
+          with no connection.
         </Text>
       </View>
       <StatusBanner variant="neutral" icon="wifi_off">
         {still ? 'Still no internet connection. Try again when you are back online.' : 'No internet connection right now.'}
       </StatusBanner>
-      <BottomSheet visible={why} title="Why we verify once" onDismiss={() => setWhy(false)}>
+      <BottomSheet visible={why} title="Why we ask you to sign in" onDismiss={() => setWhy(false)}>
         <Text>
           Your free form checks and your plan belong to your account, so a new phone or a reinstall brings them back. We only need the
           internet for this one step.
@@ -289,7 +374,7 @@ export function WelcomeBackScreen() {
       <View style={{ alignItems: 'center', gap: space.m, paddingTop: space.xxxl }}>
         <IconBadge icon="waving_hand" size={96} shape="squircle" />
         <Text variant="headline" accessibilityRole="header">{name ? `Welcome back, ${name}` : 'Welcome back'}</Text>
-        {outcome.masked ? <Text color="osv">{outcome.masked}</Text> : null}
+        {outcome.masked || outcome.provider ? <Text color="osv">{describeSignIn(outcome.provider, outcome.masked)}</Text> : null}
       </View>
       <ChecklistItem state="done" label="Your plan and progress are on this phone" />
       <ChecklistItem state="done" label="Your saved meals and food log are here" />

@@ -1,5 +1,6 @@
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 
+import { fakeSession } from '../../services/auth';
 import { useAuth } from '../../state/auth';
 import { useConsent } from '../../state/consent';
 import { useOnboarding } from '../../state/onboardingDraft';
@@ -38,7 +39,7 @@ describe('Splash', () => {
   });
   it('goes to Goals with a session and no plan', async () => {
     jest.useFakeTimers();
-    useAuth.setState({ session: { accessToken: 'a', refreshToken: 'r', verifiedAt: Date.now() } });
+    useAuth.setState({ session: fakeSession() });
     await render(<SplashScreen />);
     await act(async () => void jest.advanceTimersByTime(1500));
     expect(mockNav.reset).toHaveBeenCalledWith({ index: 0, routes: [{ name: 'Goals' }] });
@@ -73,7 +74,7 @@ describe('Age', () => {
     expect(screen.getByLabelText('Continue').props.accessibilityState.disabled).toBe(true);
   });
   it('skips Verify when already signed in', async () => {
-    useAuth.setState({ session: { accessToken: 'a', refreshToken: 'r', verifiedAt: Date.now() } });
+    useAuth.setState({ session: fakeSession() });
     await useOnboarding.getState().update({ birthYear: 1990, confirmed18: true });
     await render(<AgeScreen />);
     await press('Continue');
@@ -96,13 +97,13 @@ describe('Offline', () => {
 });
 
 describe('WelcomeBack', () => {
-  it('shows the masked number, free checks and resets to Main', async () => {
-    useVerifyOutcome.getState().set({ masked: '+91 98*** **210' });
+  it('shows how you signed in, free checks and resets to Main', async () => {
+    useVerifyOutcome.getState().set({ masked: 'p***@x.com', provider: 'google' });
     useAuth.setState({ freeChecksRemaining: 1 });
     await getRepositories().profile.save({ name: 'Priya' });
     await render(<WelcomeBackScreen />);
     await waitFor(() => expect(screen.getByText('Welcome back, Priya')).toBeTruthy());
-    expect(screen.getByText('+91 98*** **210')).toBeTruthy();
+    expect(screen.getByText('Signed in with Google as p***@x.com')).toBeTruthy();
     expect(screen.getByLabelText(/1 of 2 free form check left/)).toBeTruthy();
     await press('Go to my home screen');
     expect(mockNav.reset).toHaveBeenCalledWith({ index: 0, routes: [{ name: 'Main' }] });
@@ -253,7 +254,7 @@ describe('Building and WeekOne', () => {
     expect((await repos.profile.get())?.onboarded).toBe(true);
     expect(await repos.onboardingDraft.load()).toBeNull();
     // D3: nothing about health or pain reaches the server.
-    expect(sync).toHaveBeenCalledWith({ goal: 'body_part', stylesBitmask: 1, daysPerWeek: 4, experience: 'on_and_off', variant: 'standard' });
+    expect(sync).toHaveBeenCalledWith({ goal: 'body_part', styles: 1, days: 4, experience: 'on_and_off', variant: 'standard' });
     expect(JSON.stringify(sync.mock.calls)).not.toMatch(/knee|pain|health/i);
   });
 

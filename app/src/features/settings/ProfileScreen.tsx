@@ -6,6 +6,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../app/types';
 import type { PlanRow } from '../../db/repositories';
+import { describeSignIn } from '../../services/auth';
 import { useAuth } from '../../state/auth';
 import { Avatar, Chip, ListRow, StatTile, Text, space, useEntrance } from '../../ui';
 import { Page } from './Page';
@@ -33,7 +34,7 @@ export function ProfileScreen() {
   const nav = useNavigation<Nav>();
   const { profile, plan } = useProfileData();
   const stats = useProfileStats();
-  const { freeChecksRemaining, pro } = useAuth();
+  const { freeChecksRemaining, pro, account } = useAuth();
   const pop = useEntrance();
   const name = profile?.name?.trim();
 
@@ -51,6 +52,11 @@ export function ProfileScreen() {
         <Text variant="headline" accessibilityRole="header">
           {name || 'Your profile'}
         </Text>
+        {account ? (
+          <Text variant="bodySmall" color="osv" style={{ textAlign: 'center' }}>
+            {describeSignIn(account.provider, account.emailMasked)}
+          </Text>
+        ) : null}
         <Chip
           role="button"
           icon="photo_camera"

@@ -393,15 +393,15 @@ export function toServerPlan(
   plan: Pick<Plan, 'variant'>,
 ): {
   goal: 'stay_fit' | 'body_part' | 'gentler';
-  stylesBitmask: number;
-  daysPerWeek: number;
+  styles: number;
+  days: number;
   experience: Experience;
   variant: PlanVariant;
 } {
   return {
     goal: plan.variant === 'gentler' ? 'gentler' : input.goal,
-    stylesBitmask: input.styles.reduce((a, s) => a | STYLE_BITS[s], 0),
-    daysPerWeek: input.daysPerWeek,
+    styles: input.styles.reduce((a, s) => a | STYLE_BITS[s], 0),
+    days: input.daysPerWeek,
     experience: input.experience ?? 'new',
     variant: plan.variant,
   };

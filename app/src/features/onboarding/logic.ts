@@ -124,19 +124,6 @@ export function healthIntro(flags: readonly HealthFlag[]): string {
   return `You told us about ${list}. We start slower so your body can settle in.`;
 }
 
-/** Phones keep the first 2 and last 3 national digits; emails keep the first letter. */
-export function maskIdentifier(kind: 'phone' | 'email', normalised: string): string {
-  if (kind === 'email') {
-    const [local = '', domain = ''] = normalised.split('@');
-    return `${local.slice(0, 1)}***@${domain}`;
-  }
-  const digits = normalised.replace(/^\+/, '');
-  if (digits.length < 8) return normalised;
-  const cc = digits.length > 10 ? `+${digits.slice(0, digits.length - 10)} ` : '';
-  const national = digits.slice(-10);
-  return `${cc}${national.slice(0, 2)}*** **${national.slice(-3)}`;
-}
-
 export function formatClock(s: number): string {
   const m = Math.floor(s / 60);
   return `${m}:${String(s % 60).padStart(2, '0')}`;

@@ -21,7 +21,7 @@ export type RootStackParamList = {
   Splash: undefined;
   Welcome: undefined;
   Age: undefined;
-  Verify: { phone?: string; email?: string } | undefined;
+  Verify: { email?: string } | undefined;
   Offline: undefined;
   WelcomeBack: undefined;
   Goals: undefined;

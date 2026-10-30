@@ -12,17 +12,26 @@ import { getRepositories } from '../../state/storage';
 import { emptyDraft, useOnboarding } from '../../state/onboardingDraft';
 import { getSettingsDeps } from './deps';
 
-export type AccountResult = { ok: true } | { ok: false; reason: 'offline' | 'signed_out' | 'server' };
+type FailReason = 'offline' | 'signed_out' | 'server' | 'identity';
+export type AccountResult = { ok: true } | { ok: false; reason: FailReason };
 
-export const failureMessage = (what: 'export' | 'delete', reason: 'offline' | 'signed_out' | 'server'): string => {
+export const failureMessage = (what: 'export' | 'delete', reason: FailReason): string => {
+  if (reason === 'identity') {
+    return 'Your plan, logs and free checks are deleted from our servers. We could not remove your sign-in just now, so nothing is final yet. Try again in a moment to finish. Your data on this phone is kept until then.';
+  }
   const kept = what === 'delete' ? 'Nothing was deleted, and your data is still here. ' : 'Nothing was changed. ';
   if (reason === 'offline') return `You are offline. ${kept}Connect to the internet and try again.`;
   if (reason === 'signed_out') return `You need to be signed in for this. ${kept}Sign in again and retry.`;
   return `We could not reach our servers just now. ${kept}Please try again in a moment.`;
 };
 
-const classify = (e: unknown): 'offline' | 'signed_out' | 'server' =>
-  e instanceof NetworkError ? 'offline' : e instanceof ApiError && e.status === 401 ? 'signed_out' : 'server';
+const classify = (e: unknown): FailReason => {
+  if (e instanceof NetworkError) return 'offline';
+  if (e instanceof ApiError && e.status === 401) return 'signed_out';
+  // The API deleted the data but Supabase would not delete the user. Repeating the request retries only that part.
+  if (e instanceof ApiError && e.status === 502 && (e.body as { code?: string } | null)?.code === 'identity_delete_failed') return 'identity';
+  return 'server';
+};
 
 /** Server copy plus what only lives on this phone, as one JSON file for the share sheet. */
 export async function exportMyData(): Promise<AccountResult> {

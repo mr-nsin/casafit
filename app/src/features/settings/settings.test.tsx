@@ -9,6 +9,7 @@ import {
   setNotificationService,
   type FakeNotificationService,
 } from '../../services/notifications';
+import { createFakeAuth, fakeSession, setAuth } from '../../services/auth';
 import { useAuth } from '../../state/auth';
 import { useConsent } from '../../state/consent';
 import { defaultPreferences, usePreferences } from '../../state/preferences';
@@ -88,7 +89,7 @@ beforeEach(async () => {
   mockRoute = {};
   usePreferences.setState({ ...defaultPreferences(), hydrated: true });
   useConsent.setState({ latest: {}, hydrated: false });
-  useAuth.setState({ session: { accessToken: 'a', refreshToken: 'r', verifiedAt: Date.now() }, freeChecksRemaining: 2, pro: { active: false, expiresAt: null } });
+  useAuth.setState({ session: fakeSession(), account: { email: 'priya@gmail.com', emailMasked: 'p***@gmail.com', provider: 'google' }, freeChecksRemaining: 2, pro: { active: false, expiresAt: null } });
 });
 afterEach(() => {
   configureSettingsDeps(null);
@@ -213,11 +214,20 @@ describe('Settings', () => {
     await waitFor(async () => expect((await db.repos.profile.get())?.stepGoal).toBe(7500));
   });
 
+  it('shows how you are signed in, with the masked email', async () => {
+    await render(<SettingsScreen />);
+    expect(screen.getByText('Signed in with Google as p***@gmail.com')).toBeTruthy();
+  });
+
   it('signs out, keeps local data and returns to Welcome', async () => {
     await seedPlan(db);
+    const fake = createFakeAuth({ session: fakeSession() });
+    setAuth(fake);
     await render(<SettingsScreen />);
     await tap(/^Sign out/);
     await tap('Sign out');
+    await waitFor(() => expect(fake.signOutCalls).toBe(1));
+    setAuth(null);
     await waitFor(() => expect(mockNav.reset).toHaveBeenCalledWith({ index: 0, routes: [{ name: 'Welcome' }] }));
     expect(useAuth.getState().session).toBeNull();
     expect((await db.repos.profile.get())?.name).toBe('Priya');
@@ -383,6 +393,11 @@ describe('Privacy', () => {
 });
 
 describe('Profile', () => {
+  it('shows how you are signed in', async () => {
+    await render(<ProfileScreen />);
+    expect(await screen.findByText('Signed in with Google as p***@gmail.com')).toBeTruthy();
+  });
+
   it('shows stats from the session log, the plan, and the entitlement chip', async () => {
     await seedPlan(db);
     const now = Date.now();
@@ -526,6 +541,22 @@ describe('DeleteAccount', () => {
     expect(useAuth.getState().session).toBeNull();
     expect(usePreferences.getState().showCalories).toBe(true);
     expect(notif.cancelled).toBe(1);
+  });
+
+  it('502 identity_delete_failed: says the data is gone, offers a retry, and keeps the phone signed in', async () => {
+    await seedPlan(db);
+    api.mockRejectedValue(new ApiError(502, { code: 'identity_delete_failed' }));
+    await render(<DeleteAccountScreen />);
+    await tap('Delete everything');
+    expect(await screen.findByText(/deleted from our servers\. We could not remove your sign-in just now/)).toBeTruthy();
+    expect(mockNav.reset).not.toHaveBeenCalled();
+    expect(useAuth.getState().session).not.toBeNull();
+    // The retry repeats DELETE /me, which only retries the identity part on the server.
+    api.mockResolvedValue(null);
+    await tap('Try again');
+    await waitFor(() => expect(mockNav.reset).toHaveBeenCalled());
+    expect(api).toHaveBeenLastCalledWith('/me', { method: 'DELETE' });
+    expect(await db.repos.profile.get()).toBeNull();
   });
 
   it('offline: shows a clear retry message and keeps every bit of data', async () => {

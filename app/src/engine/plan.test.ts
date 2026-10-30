@@ -292,14 +292,14 @@ describe('gentler plan', () => {
     const payload = toServerPlan(input, buildPlan(input, index));
     expect(payload).toEqual({
       goal: 'gentler',
-      stylesBitmask: 5,
-      daysPerWeek: 4,
+      styles: 5,
+      days: 4,
       experience: 'on_and_off',
       variant: 'gentler',
     });
     expect(JSON.stringify(payload)).not.toMatch(/knees|pregnancy|painAreas|healthFlags/);
     const std = baseInput({ goal: 'body_part', bodyParts: ['core'], styles: ['yoga'], experience: null });
-    expect(toServerPlan(std, buildPlan(std, index))).toMatchObject({ goal: 'body_part', stylesBitmask: 2, experience: 'new', variant: 'standard' });
+    expect(toServerPlan(std, buildPlan(std, index))).toMatchObject({ goal: 'body_part', styles: 2, experience: 'new', variant: 'standard' });
   });
 });
 

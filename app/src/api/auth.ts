@@ -1,24 +1,19 @@
-import { useMutation } from '@tanstack/react-query';
-import type { SendCodeRequest, SendCodeResponse, VerifyCodeRequest, VerifyCodeResponse } from '@casafit/shared';
-import { api } from './client';
-import { useAuth } from '@/state/auth';
+import { useQuery } from '@tanstack/react-query';
+import type { MeResponse } from '@casafit/shared';
 
-export function useSendCode() {
-  return useMutation<SendCodeResponse, Error, SendCodeRequest>({
-    mutationFn: (body) => api('/auth/code', { method: 'POST', body: JSON.stringify(body) }),
-  });
+import { useAuth } from '@/state/auth';
+import { api } from './client';
+
+/**
+ * GET /v1/me. The first authenticated request creates the account on the server, so this is also what
+ * "finishes" a sign-in. The summary and entitlements are cached in the auth store.
+ */
+export async function fetchMe(): Promise<MeResponse> {
+  const me = await api<MeResponse>('/me');
+  await useAuth.getState().applyMe(me);
+  return me;
 }
 
-export function useVerifyCode() {
-  const save = useAuth((s) => s.save);
-  return useMutation<VerifyCodeResponse, Error, VerifyCodeRequest>({
-    mutationFn: async (body) => {
-      const res = await api<VerifyCodeResponse>('/auth/verify', {
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-      await save(res);
-      return res;
-    },
-  });
+export function useMe(enabled = true) {
+  return useQuery<MeResponse, Error>({ queryKey: ['me'], queryFn: fetchMe, enabled });
 }

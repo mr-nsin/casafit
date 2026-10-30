@@ -54,7 +54,7 @@ describe('bootstrap', () => {
 
   it('queues the plan with an idempotency key and flushes it', async () => {
     const res = await bootstrap(fakeIO());
-    const body = { goal: 'stay_fit', stylesBitmask: 1, daysPerWeek: 4, experience: 'new', variant: 'standard' } as const;
+    const body = { goal: 'stay_fit', styles: 1, days: 4, experience: 'new', variant: 'standard' } as const;
     await getOnboardingDeps().syncPlan(body);
     await res.flushQueue();
     expect(sent).toHaveLength(1);
@@ -64,7 +64,7 @@ describe('bootstrap', () => {
 
   it('keeps the plan queued while offline', async () => {
     const res = await bootstrap(fakeIO({ send: async () => { throw new Error('offline'); } }));
-    await getOnboardingDeps().syncPlan({ goal: 'gentler', stylesBitmask: 1, daysPerWeek: 3, experience: 'new', variant: 'gentler' });
+    await getOnboardingDeps().syncPlan({ goal: 'gentler', styles: 1, days: 3, experience: 'new', variant: 'gentler' });
     await res.flushQueue();
     expect((await res.queue.pending()).length).toBe(1);
   });

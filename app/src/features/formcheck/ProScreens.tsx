@@ -149,7 +149,7 @@ export function PaywallScreen() {
       <View style={{ gap: space.l }}>
         <BenefitRow icon="photo_camera" title="Unlimited form checks" body="Squat, push-up, plank and lunge. On your phone." />
         <BenefitRow icon="lock" title="Still private" body="Pro checks never record or upload anything." />
-        <BenefitRow icon="restore" title="Restores on any phone" body="Verify your number and Pro is back." />
+        <BenefitRow icon="restore" title="Restores on any phone" body="Sign in with your email and Pro is back." />
       </View>
 
       <View accessibilityRole="radiogroup" accessibilityLabel="Plans" style={{ gap: space.s }}>

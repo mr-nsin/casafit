@@ -1,29 +1,87 @@
 {
-  "$comment": "Shared vectors for identifier normalisation. The app (shared/src/identifiers.ts) and the api (CasaFit.Application/Auth/IdentifierNormaliser.cs) must both pass these. expected null means the input is rejected. Rules: docs/data-model.md section 1.",
-  "phone": [
-    { "input": "9876543210", "expected": "+919876543210" },
-    { "input": "98765 43210", "expected": "+919876543210" },
-    { "input": "(987) 654-3210", "expected": "+919876543210" },
-    { "input": "+919876543210", "expected": "+919876543210" },
-    { "input": "+91 98765 43210", "expected": "+919876543210" },
-    { "input": "+14155552671", "expected": "+14155552671" },
-    { "input": "  9876543210  ", "expected": "+919876543210" },
-    { "input": "98765", "expected": null },
-    { "input": "919876543210", "expected": null },
-    { "input": "", "expected": null }
-  ],
+  "$comment": "Shared vectors for email handling. 'email' vectors are the canonical form (plus-tags and Gmail dots stripped): the app (shared/src/identifiers.ts canonicalEmail) and the api (CasaFit.Application/Auth/EmailIdentity.cs) must both pass them. expected null means the input is not an email address; the canonical check only runs the non-null ones. 'normalise' vectors are what the app sends to Supabase (trim and lower-case only). Rules: docs/data-model.md section 1.",
   "email": [
-    { "input": "Asha@Example.com", "expected": "asha@example.com" },
-    { "input": "  asha@example.com  ", "expected": "asha@example.com" },
-    { "input": "asha+gym@example.com", "expected": "asha@example.com" },
-    { "input": "a.s.h.a@gmail.com", "expected": "asha@gmail.com" },
-    { "input": "A.Sha+tag@GMAIL.com", "expected": "asha@gmail.com" },
-    { "input": "a.sha@example.com", "expected": "a.sha@example.com" },
-    { "input": "x@mailinator.com", "expected": null },
-    { "input": "x@yopmail.com", "expected": null },
-    { "input": "no-at-sign", "expected": null },
-    { "input": "@example.com", "expected": null },
-    { "input": "asha@", "expected": null },
-    { "input": "", "expected": null }
+    {
+      "input": "Asha@Example.com",
+      "expected": "asha@example.com"
+    },
+    {
+      "input": "  asha@example.com  ",
+      "expected": "asha@example.com"
+    },
+    {
+      "input": "asha+gym@example.com",
+      "expected": "asha@example.com"
+    },
+    {
+      "input": "a.s.h.a@gmail.com",
+      "expected": "asha@gmail.com"
+    },
+    {
+      "input": "A.Sha+tag@GMAIL.com",
+      "expected": "asha@gmail.com"
+    },
+    {
+      "input": "a.sha@example.com",
+      "expected": "a.sha@example.com"
+    },
+    {
+      "input": "no-at-sign",
+      "expected": null
+    },
+    {
+      "input": "@example.com",
+      "expected": null
+    },
+    {
+      "input": "asha@",
+      "expected": null
+    },
+    {
+      "input": "",
+      "expected": null
+    }
+  ],
+  "normalise": [
+    {
+      "input": "Asha@Example.com",
+      "expected": "asha@example.com"
+    },
+    {
+      "input": "  asha@example.com  ",
+      "expected": "asha@example.com"
+    },
+    {
+      "input": "asha+gym@example.com",
+      "expected": "asha+gym@example.com"
+    },
+    {
+      "input": "A.Sha@GMAIL.com",
+      "expected": "a.sha@gmail.com"
+    },
+    {
+      "input": "no-at-sign",
+      "expected": null
+    },
+    {
+      "input": "@example.com",
+      "expected": null
+    },
+    {
+      "input": "asha@",
+      "expected": null
+    },
+    {
+      "input": "asha@example",
+      "expected": null
+    },
+    {
+      "input": "a sha@example.com",
+      "expected": null
+    },
+    {
+      "input": "",
+      "expected": null
+    }
   ]
 }

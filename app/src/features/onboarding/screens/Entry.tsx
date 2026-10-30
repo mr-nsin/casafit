@@ -64,14 +64,24 @@ export function SplashScreen() {
 
 export function WelcomeScreen() {
   const nav = useOnboardingNav();
+  const ended = useAuth((s) => s.sessionEnded);
+  const go = (to: 'Age' | 'Verify') => {
+    useAuth.getState().clearSessionEnded();
+    nav.navigate(to);
+  };
   return (
     <Layout
       scroll={false}
       background={<BlobBackground variant="a" />}
       footer={
         <>
-          <FilledButton label="Get my 15-minute plan" trailingIcon="arrow_forward" onPress={() => nav.navigate('Age')} />
-          <TextButton label="Log in" onPress={() => nav.navigate('Verify')} />
+          {ended ? (
+            <StatusBanner variant="info" icon="info">
+              Your sign-in ended, so please sign in again. Your plan and logs are still on this phone.
+            </StatusBanner>
+          ) : null}
+          <FilledButton label="Get my 15-minute plan" trailingIcon="arrow_forward" onPress={() => go('Age')} />
+          <TextButton label="Log in" onPress={() => go('Verify')} />
         </>
       }
     >

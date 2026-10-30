@@ -68,7 +68,10 @@ export type TextFieldProps = {
   placeholder?: string;
   secure?: boolean;
   testID?: string;
-} & Pick<TextInputProps, 'autoComplete' | 'maxLength' | 'onFocus'>;
+} & Pick<
+  TextInputProps,
+  'autoComplete' | 'maxLength' | 'onFocus' | 'autoCapitalize' | 'autoCorrect' | 'autoFocus' | 'textContentType' | 'returnKeyType' | 'onSubmitEditing'
+>;
 
 export function TextField({ label, value, onChange, keyboardType, error, helper, optional, suffix, placeholder, secure, testID, ...rest }: TextFieldProps) {
   const t = useTokens();
@@ -179,12 +182,18 @@ export function OtpField({
   onChange,
   state = 'idle',
   autoRead,
+  autoFocus,
+  errorText,
 }: {
   length?: number;
   value: string;
   onChange: (v: string) => void;
   state?: 'idle' | 'error' | 'filled';
   autoRead?: boolean;
+  /** Open the keyboard as soon as the field mounts. */
+  autoFocus?: boolean;
+  /** Text under the boxes in the error state. Pass null when the screen shows its own message. */
+  errorText?: string | null;
 }) {
   const t = useTokens();
   const ref = useRef<React.ComponentRef<typeof TextInput>>(null);
@@ -227,12 +236,13 @@ export function OtpField({
         textContentType="oneTimeCode"
         autoComplete={autoRead ? 'sms-otp' : 'off'}
         maxLength={length}
+        autoFocus={autoFocus}
         accessibilityLabel="One-time code input"
         style={{ position: 'absolute', opacity: 0, width: 1, height: 1 }}
       />
-      {state === 'error' ? (
+      {state === 'error' && errorText !== null ? (
         <Text variant="label" color="er" accessibilityRole="alert" style={{ marginTop: space.xs }}>
-          That code did not match. Check it and try again.
+          {errorText ?? 'That code did not match. Check it and try again.'}
         </Text>
       ) : null}
     </View>

@@ -15,7 +15,7 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 const CONFIRM_BODY =
   'This removes your plan, food log, step history, session logs and free-check balance from CasaFit, on this phone and on our servers. It cannot be undone. ' +
-  'We keep a scrambled code of your number for 180 days so deleting does not reset free checks. ' +
+  'We keep a scrambled code of your email for 180 days so deleting does not reset free checks. ' +
   'Your store subscription is not cancelled: do that in the Play Store or App Store. You can export your data first.';
 
 export function DeleteAccountScreen() {

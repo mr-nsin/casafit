@@ -5,7 +5,7 @@ import { contentToCatalogue } from './catalogue';
 import { draftToPlanInput } from './buildAndSave';
 import { emptyDraft } from '../../state/onboardingDraft';
 import {
-  birthYearOptions, canContinueAge, defaultMix, healthIntro, maskIdentifier, nextAfterAbout, nextAfterMix, parseHeight, parseWeight,
+  birthYearOptions, canContinueAge, defaultMix, healthIntro, nextAfterAbout, nextAfterMix, parseHeight, parseWeight,
 } from './logic';
 import { rootRouteLanes } from '../../app/routes';
 
@@ -30,9 +30,7 @@ describe('logic', () => {
     expect(parseHeight('500').error).toBeTruthy();
     expect(parseWeight('62.5')).toEqual({ value: 62.5 });
   });
-  it('masks identifiers and words the health intro', () => {
-    expect(maskIdentifier('phone', '+919876543210')).toBe('+91 98*** **210');
-    expect(maskIdentifier('email', 'priya@x.com')).toBe('p***@x.com');
+  it('words the health intro', () => {
     expect(healthIntro(['heart_bp', 'recent_surgery'])).toContain('your heart or blood pressure and your recent surgery');
   });
 });

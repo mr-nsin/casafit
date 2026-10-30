@@ -69,7 +69,7 @@ docker compose up --build
 curl http://localhost:5080/healthz
 ```
 
-Edit the `Supabase__*` values in `docker-compose.yml` first, or the API cannot verify tokens. Without Docker for the api, with Postgres running on localhost:
+Edit the `Supabase__*` values in `docker-compose.yml` first, or the API cannot verify tokens. To try the app against this API with no Supabase project, mint a dev token with `node api/tools/mint-dev-token.mjs` (HS256, compose secret, `dev@casafit.test`, 7 days) and set it as `EXPO_PUBLIC_DEV_AUTH_TOKEN` in `app/.env.local` (see `app/README.md`). Without Docker for the api, with Postgres running on localhost:
 
 ```bash
 cd api

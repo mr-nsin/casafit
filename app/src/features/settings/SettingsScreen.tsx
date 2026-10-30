@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../app/types';
+import { describeSignIn } from '../../services/auth';
 import { useAuth } from '../../state/auth';
 import { usePreferences } from '../../state/preferences';
 import {
@@ -39,7 +40,7 @@ export function SettingsScreen() {
   const showCalories = usePreferences((s) => s.showCalories);
   const setShowCalories = usePreferences((s) => s.setShowCalories);
   const notifications = usePreferences((s) => s.notifications);
-  const { freeChecksRemaining, pro } = useAuth();
+  const { freeChecksRemaining, pro, account } = useAuth();
   const exporter = useDataExport();
   const [goalOpen, setGoalOpen] = useState(false);
   const [goal, setGoal] = useState(7000);
@@ -110,6 +111,12 @@ export function SettingsScreen() {
 
       <View>
         <SectionHeader title="Privacy and account" />
+        <ListRow
+          icon="account_circle"
+          title="Account"
+          subtitle={account ? describeSignIn(account.provider, account.emailMasked) : 'Signed in'}
+          trailing={null}
+        />
         <ListRow icon="verified_user" title="Privacy and data" subtitle="Permissions, notice" onPress={() => nav.navigate('Privacy')} />
         <ListRow
           icon="download"
@@ -152,7 +159,7 @@ export function SettingsScreen() {
         visible={signOutOpen}
         icon="logout"
         title="Sign out?"
-        body="Your plan and logs stay on this phone. Sign in again with your number to pick up where you left off."
+        body="Your plan and logs stay on this phone. Sign in again with your email, Google, Apple or Facebook to pick up where you left off."
         onDismiss={() => setSignOutOpen(false)}
         actions={[
           { label: 'Stay signed in', onPress: () => setSignOutOpen(false), variant: 'tonal' },

@@ -9,8 +9,9 @@ import { contentToCatalogue } from './catalogue';
 /** What the server may receive (D3). Health flags and pain areas are never in it. */
 export interface ServerPlanBody {
   goal: 'stay_fit' | 'body_part' | 'gentler';
-  stylesBitmask: number;
-  daysPerWeek: number;
+  /** Bitmask: 1 normal, 2 yoga, 4 dance. */
+  styles: number;
+  days: number;
   experience: 'new' | 'on_and_off' | 'regular';
   variant: 'standard' | 'gentler';
 }
