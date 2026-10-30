@@ -4,6 +4,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../../app/types';
 import { dark, radius, space, type } from '../../../theme';
+import { Icon } from '../../../ui';
 import { Btn, InfoNote, Screen, TopBar } from '../components';
 import { useSessionScreen } from '../hooks';
 import { useSessionStore } from '../store';
@@ -37,9 +38,7 @@ export function PausedScreen() {
       />
       <View style={{ alignItems: 'center', marginTop: space.xl }}>
         <View style={{ width: 96, height: 96, borderRadius: 48, backgroundColor: dark.pc, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ color: dark.opc, fontSize: 40, fontWeight: '800' }} importantForAccessibility="no">
-            II
-          </Text>
+          <Icon name="pause" size={48} color="opc" />
         </View>
         <Text style={[type.display, { color: dark.on, marginTop: space.l }]} accessibilityRole="header" accessibilityLiveRegion="polite">
           Paused
@@ -50,7 +49,7 @@ export function PausedScreen() {
             style={{ backgroundColor: dark.c4, borderRadius: radius.round, paddingHorizontal: space.l, paddingVertical: space.s, marginTop: space.m }}
           >
             <Text style={[type.bodySmall, { color: dark.on, fontVariant: ['tabular-nums'] }]}>
-              {`${v.step.name} . ${formatClock(v.segmentRemainingMs)} left`}
+              {`${v.step.name} · ${formatClock(v.segmentRemainingMs)} left`}
             </Text>
           </View>
         ) : null}

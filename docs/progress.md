@@ -15,7 +15,7 @@ Last updated: 30 October 2026 (Home and plan slice) · `main` after the bottom-s
 
 ## Next up
 
-0. Player polish list under Pending frontend, then the settings lane (Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount).
+0. The settings lane (Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount).
 1. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
 2. Wave 2 lane `session`: Home and plan surfaces. The Workout tab is still a placeholder.
 3. Wave 2 lane `settings`: Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount.
@@ -38,6 +38,7 @@ Last updated: 30 October 2026 (Home and plan slice) · `main` after the bottom-s
 | Onboarding pass | Goals, About you, Building and Week one verified on the emulator against the local API. Fixed the plan reason ending in a bare "4 normal." (now "Your week mixes 4 normal.") | 30 Oct |
 | Home and plan | Workout tab is now the real Home (training day, rest day, resume, comeback, hide calories), plus WeekPlan, Why and Plan detail, registered in the session lane. 587 tests pass. Verified on the emulator: Home, My plan, Why this plan, Plan detail, Start session into the Player | 30 Oct |
 | Home and plan, slice B | Library (16 real plans, filters, hidden-for-your-knees note), BodyPart (builds and starts a 15-minute session), Editor and Picker (swap, add, remove, reorder; saved to the plan day), Parts, Lunge, Exercise and CheckIn registered. 654 tests pass. Verified on the emulator: Library, Editor, Picker, and a saved swap (Squat to Chair squat) showing in Plan detail | 30 Oct |
+| Player polish | Light status bar on the dark Player family screens, real icons for close, tune, previous, next, pause and check, a large move icon on the stage card, middle dots in captions, Bird dog row icon (holds had a dash icon; all 66 moves now tested against the glyph set), require cycle between session index and browse screens removed. Resume time fix: a tick gap over 10 s is treated as the app not running, so a restored or frozen process no longer credits dead time. 661 tests pass. Verified on the emulator | 30 Oct |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
@@ -57,12 +58,10 @@ Nothing running. Next lanes start from the **Next up** list.
 | P1 | On-device pass through every built screen (only Welcome seen so far) |
 | P1 | Status bar: dark icons now show on light screens (React Native `StatusBar` set from the app theme in `App.tsx`). My earlier "still white" result came from stale Metro code, not the fix. Still to check on a dark-theme device |
 | P1 | Week one: the cool-down segment of the session bar is nearly invisible on the tonal card (`sc` on `pc`); the 2/11/2 split also has no labels on warm-up and cool-down. Check contrast |
-| P1 | Player screen (verified on device) needs polish: status bar text is dark on the dark screen (clock unreadable); close, previous, next and menu show plain characters (X, <, >, =, v) instead of icons; the move illustration is a placeholder bar; caption reads "Work . 14:56" with a full stop instead of a middle dot |
-| P1 | Plan detail: the Bird dog row shows a dash instead of an icon; a ready-made plan (`readyMadeId`) is a title card only until Library lands |
 | P1 | Day zero for the week is taken from `plan.updatedAt`, while progress treats dayIndex as Monday = 0. Persist a plan start date and make both agree |
 | P1 | Home: weekly myth card not built (Learn lane has no weekly pick); comeback week is not rebuilt with the engine's comebackInput; WeekPlan shows only the current week |
+| P1 | Player stage card shows a static icon; the two-frame move demo (design's `fa/fb` crossfade) is not built and needs illustration assets |
 | P1 | Slice B deferred: Exercise "Try 30 seconds" (store has no single-move mode), drag to reorder (up and down buttons only), yoga body-part sessions often cannot be built (catalogue has 5 yoga work moves), some ready-made plans run over 15:00 in the Editor. Editor "Save" goes back rather than to the Player |
-| P1 | Resume card showed "11 of 15 min done" after an emulator restart; check the active-time clock is not counting time while the app is closed |
 | P1 | Code entry: the six boxes show focus but the keyboard does not open until a box is tapped (autofocus) |
 | P1 | Audit every icon name against the glyph set. Names are fine today, but `ads_click` rendered as "?" even though it is a valid name, so check new icons on a device. A node check is in this session's history; turn it into a test |
 | P1 | App icon and splash are still the Expo defaults |

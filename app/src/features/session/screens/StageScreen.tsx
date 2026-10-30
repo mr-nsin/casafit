@@ -9,6 +9,7 @@ import { dark, space, type } from '../../../theme';
 import { BigTimer, Btn, IconBtn, InfoNote, RadioGroup, RUNG_OPTIONS, Screen, SegmentedProgress, Stage, TimerRing, TopBar } from '../components';
 import { getSessionDeps } from '../deps';
 import { useSessionScreen, type SessionRouteName } from '../hooks';
+import { exerciseIcon } from '../icons';
 import { useSessionStore } from '../store';
 import type { Rung } from '../types';
 import { formatClock } from '../view';
@@ -44,6 +45,8 @@ const COPY: Record<Variant, { unit: string; options: { value: Rung; label: strin
   },
 };
 
+const variantStyle = (v: Variant) => ({ style: v === 'normal' ? ('normal' as const) : v });
+
 export function StageScreen({ variant, route }: { variant: Variant; route: SessionRouteName }) {
   const nav = useNavigation<Nav>();
   const v = useSessionScreen(route);
@@ -70,8 +73,8 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
       ? `Beat ${info.bpm}`
       : v.kind === 'transition'
         ? 'Up next'
-        : `Set ${v.set} of ${v.sets}${v.side ? ` . ${v.side === 'R' ? 'Right' : 'Left'} side` : ''}`;
-  const sub = `${kindWord} . ${formatClock(v.sessionRemainingMs)} left`;
+        : `Set ${v.set} of ${v.sets}${v.side ? ` · ${v.side === 'R' ? 'Right' : 'Left'} side` : ''}`;
+  const sub = `${kindWord} · ${formatClock(v.sessionRemainingMs)} left`;
   const options = variant === 'dance' && quiet ? copy.options.map((o) => (o.value === 1 ? { ...o, disabled: true } : o)) : copy.options;
   const unitProgress = `${copy.unit} ${v.moveNumber} of ${v.moveCount}`;
   const header = v.phase === 'work' ? unitProgress : v.moveLabel;
@@ -87,12 +90,12 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
         title={header}
         subtitle={v.title}
         onClose={end}
-        trailing={<IconBtn label="Edit session" glyph="=" onPress={() => nav.navigate('Editor')} />}
+        trailing={<IconBtn label="Edit session" icon="tune" onPress={() => nav.navigate('Editor')} />}
       />
       <SegmentedProgress segments={v.progress} label={`Session progress, ${header}`} />
       <ScrollView contentContainerStyle={{ paddingBottom: space.l }} showsVerticalScrollIndicator={false}>
         <Stage
-          name={step.name}
+          icon={info?.icon ?? exerciseIcon(variantStyle(variant))}
           description={info?.alt ?? `${step.name} demonstration`}
           pill={pill}
           height={variant === 'yoga' ? 240 : 220}
@@ -128,9 +131,9 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
         <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s, marginBottom: space.m }]}>{copy.caption}</Text>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.xl }}>
-          <IconBtn label="Previous move" glyph="<" tone="tonal" size={56} onPress={() => act().previous()} />
-          <IconBtn label="Pause" glyph="II" tone="filled" size={variant === 'normal' ? 96 : 80} onPress={() => act().pause('user')} />
-          <IconBtn label="Next move" glyph=">" tone="tonal" size={56} onPress={() => act().skipMove()} />
+          <IconBtn label="Previous move" icon="skip_previous" tone="tonal" size={56} onPress={() => act().previous()} />
+          <IconBtn label="Pause" icon="pause" tone="filled" size={variant === 'normal' ? 96 : 80} onPress={() => act().pause('user')} />
+          <IconBtn label="Next move" icon="skip_next" tone="tonal" size={56} onPress={() => act().skipMove()} />
         </View>
 
         {variant === 'normal' ? (

@@ -27,7 +27,7 @@ import {
   useTokens,
 } from '../../../ui';
 import { getSessionDeps } from '../deps';
-import { startSession } from '../index';
+import { startSession } from '../start';
 import { usePlanData, useSkipped } from './hooks';
 import {
   DOT,
@@ -46,6 +46,7 @@ import {
   weekdayIndex,
   workSteps,
 } from './model';
+import { DEFAULT_MOVE_ICON } from '../icons';
 import { Page, useBackOrHome, useBrowseNav, type Nav } from './Page';
 import { ReadyMadePlanView } from './LibraryScreens';
 
@@ -284,7 +285,7 @@ export function PlanScreen() {
               return (
                 <ListRow
                   key={m.id}
-                  icon={m.mode === 'hold' ? 'horizontal_rule' : 'sports_gymnastics'}
+                  icon={content.exercise(m.exerciseId)?.icon ?? DEFAULT_MOVE_ICON}
                   title={m.name}
                   subtitle={cue ?? undefined}
                   trailing={`${m.sets} × ${m.workS}s`}

@@ -63,7 +63,7 @@ export function RestScreen() {
         <View style={{ backgroundColor: dark.c3, borderRadius: radius.l, padding: space.l, marginTop: space.xl }}>
           <Text style={[type.label, { color: dark.osv }]}>Up next</Text>
           <Text style={[type.title, { color: dark.on }]}>{next.name}</Text>
-          <Text style={[type.bodySmall, { color: dark.osv }]}>{`Set ${next.set} of ${next.sets} . ${next.workS} sec`}</Text>
+          <Text style={[type.bodySmall, { color: dark.osv }]}>{`Set ${next.set} of ${next.sets} · ${next.workS} sec`}</Text>
         </View>
       ) : null}
       <View style={{ flex: 1 }} />

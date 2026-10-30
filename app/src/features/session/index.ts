@@ -15,8 +15,6 @@ import { BodyPartScreen, ExerciseScreen, LibraryScreen } from './browse/LibraryS
 import { EditorScreen, LungeScreen, PartsScreen, PickerScreen } from './browse/EditScreens';
 import { CheckInScreen } from './browse/CheckInScreen';
 import type { SessionRouteName } from './hooks';
-import { useSessionStore, type StartOptions } from './store';
-import type { SessionPlan } from './types';
 
 export { PlayerScreen, YogaScreen, DanceScreen };
 export { HomeScreen, HomeRestScreen, WeekPlanScreen, WhyScreen, PlanScreen };
@@ -81,18 +79,4 @@ export { deriveView, formatClock } from './view';
 export type { SessionView } from './view';
 export type * from './types';
 
-/** Start a session from the plan. The caller then navigates to `stageRouteFor(plan.style)`. */
-export function startSession(plan: SessionPlan, opts?: StartOptions) {
-  useSessionStore.getState().start(plan, opts);
-  return plan.style === 'yoga' ? ('Yoga' as const) : plan.style === 'dance' ? ('Dance' as const) : ('Player' as const);
-}
-
-/** For Home's Resume card (D13): loads a saved session if one is inside its 24 h window. */
-export async function loadResumableSession(): Promise<{ title: string; minutesDone: number } | null> {
-  const store = useSessionStore.getState();
-  await store.expireStale();
-  const ok = await store.restoreFromSnapshot();
-  if (!ok) return null;
-  const s = useSessionStore.getState();
-  return { title: s.plan?.title ?? '', minutesDone: Math.floor(s.activeMs / 60000) };
-}
+export { startSession, loadResumableSession } from './start';

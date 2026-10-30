@@ -145,6 +145,8 @@ export interface ExerciseInfo {
   /** Two-frame SVG loop (D17). */
   demoFrames?: string[];
   alt?: string;
+  /** Material icon name for the move (see icons.ts). */
+  icon?: string;
   breath?: { inS: number; outS: number };
   bpm?: number;
   /** Voice clip source per language. */

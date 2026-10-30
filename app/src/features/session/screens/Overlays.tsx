@@ -7,7 +7,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../../app/types';
 import { dark, radius, space, type } from '../../../theme';
-import { Btn, InfoNote, RadioGroup, styles as base } from '../components';
+import { Icon } from '../../../ui';
+import { Btn, DarkScope, InfoNote, RadioGroup, styles as base } from '../components';
 import { useSessionView } from '../hooks';
 import { movesDone, useSessionStore } from '../store';
 import type { FeelValue } from '../types';
@@ -17,16 +18,18 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 function Scrim({ children, align }: { children: React.ReactNode; align: 'center' | 'bottom' }) {
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.6)',
-        justifyContent: align === 'center' ? 'center' : 'flex-end',
-        padding: align === 'center' ? space.xl : 0,
-      }}
-    >
-      {children}
-    </View>
+    <DarkScope>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'rgba(0,0,0,0.6)',
+          justifyContent: align === 'center' ? 'center' : 'flex-end',
+          padding: align === 'center' ? space.xl : 0,
+        }}
+      >
+        {children}
+      </View>
+    </DarkScope>
   );
 }
 
@@ -178,7 +181,7 @@ export function SessionSettingsScreen() {
             onPress={() => nav.goBack()}
             style={[base.iconBtn, { width: 48, height: 48 }]}
           >
-            <Text style={{ color: dark.on, fontSize: 18, fontWeight: '700' }}>X</Text>
+            <Icon name="close" size={24} color="on" />
           </Pressable>
         </View>
         <SettingRow title="Voice coach" sub="Cues and count-ins, screen off too" value={prefs.voice} onChange={(voice) => set({ voice })} />

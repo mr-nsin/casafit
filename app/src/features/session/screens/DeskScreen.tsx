@@ -88,8 +88,8 @@ export function DeskScreen({ moves = DESK_MOVES }: { moves?: readonly DeskMove[]
 
   return (
     <Screen>
-      <TopBar title={`Move ${pos.index + 1} of ${moves.length}`} subtitle="Desk reset . 4 min" onClose={finish} closeLabel="Close" />
-      <Stage name={pos.move.name} description={`${pos.move.name}, seated`} pill="Quiet . no sweat" />
+      <TopBar title={`Move ${pos.index + 1} of ${moves.length}`} subtitle="Desk reset · 4 min" onClose={finish} closeLabel="Close" />
+      <Stage icon="chair" description={`${pos.move.name}, seated`} pill="Quiet · no sweat" />
       <Text style={[type.headline, { color: dark.on, fontSize: 28 }]} accessibilityRole="header">
         {pos.move.name}
       </Text>

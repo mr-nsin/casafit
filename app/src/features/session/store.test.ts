@@ -1,5 +1,5 @@
 import { locate, totalMs } from './locate';
-import { movesDone, RESUME_WINDOW_MS } from './store';
+import { MAX_TICK_GAP_MS, movesDone, RESUME_WINDOW_MS } from './store';
 import { createHarness, makePlan } from './testkit';
 import { deriveView, effOf, formatClock } from './view';
 import { getSessionDeps } from './deps';
@@ -21,17 +21,13 @@ describe('session timeline', () => {
     expect(v.sessionRemainingMs).toBe(870_000);
   });
 
-  it('survives long gaps between ticks (backgrounding) with no drift', () => {
+  it('keeps position when ticks arrive late but within the gap limit', () => {
     const h = createHarness();
     h.store.getState().start(plan());
-    h.clock.advance(125_000); // no tick for 125 s
+    h.clock.advance(MAX_TICK_GAP_MS - 1000);
     h.store.getState().tick();
-    const v = deriveView(h.store.getState(), h.clock.now());
-    // 120 s warm-up + 5 s into the first transition
-    expect(v.phase).toBe('work');
-    expect(v.kind).toBe('transition');
-    expect(v.segmentRemainingMs).toBe(7000);
-    expect(formatClock(v.segmentRemainingMs)).toBe('0:07');
+    expect(h.store.getState().status).toBe('active');
+    expect(deriveView(h.store.getState(), h.clock.now()).elapsedMs).toBe(MAX_TICK_GAP_MS - 1000);
   });
 
   it('walks transition, work, rest through a move', () => {
@@ -312,8 +308,12 @@ describe('cues', () => {
   it('only the latest start cue plays after a long gap', () => {
     const h = createHarness();
     h.store.getState().start(plan());
+    h.advance(25_000);
     const before = h.cues.length;
-    h.advance(400_000);
+    // One late tick (9 s, inside the gap limit) that skips over a whole segment boundary.
+    h.clock.advance(MAX_TICK_GAP_MS - 1000);
+    h.store.getState().tick();
+    expect(h.store.getState().status).toBe('active');
     expect(h.cues.length - before).toBe(1);
   });
 });
@@ -339,5 +339,51 @@ describe('keep awake and services', () => {
     expect(locate(eff, 899_999)?.seg.index).toBe(eff.length - 1);
     expect(locate(eff, 900_000)).toBeNull();
     expect(getSessionDeps().clock.now()).toBe(h.clock.now());
+  });
+});
+
+describe('active time', () => {
+  it('does not count time while the app was not running (frozen process, emulator restore)', () => {
+    const h = createHarness();
+    h.store.getState().start(plan());
+    h.advance(60_000);
+    // The process is frozen for 11 minutes; the first tick afterwards sees the jump.
+    h.clock.advance(11 * 60_000);
+    h.store.getState().tick();
+    const s = h.store.getState();
+    expect(s.status).toBe('paused');
+    expect(s.pausedReason).toBe('background');
+    expect(s.activeMs).toBe(60_000);
+    expect(s.positionMs).toBe(60_000);
+  });
+
+  it('counts only active time across a snapshot and a restore much later', async () => {
+    const h = createHarness();
+    h.store.getState().start(plan());
+    h.advance(90_000);
+    h.store.getState().pause('user');
+    h.store.getState().reset();
+    h.clock.advance(5 * 3600_000); // app closed for five hours
+    expect(await h.store.getState().restoreFromSnapshot()).toBe(true);
+    const s = h.store.getState();
+    expect(s.status).toBe('paused');
+    expect(s.activeMs).toBe(90_000);
+    h.clock.advance(60_000); // still paused: nothing accrues
+    h.store.getState().tick();
+    expect(h.store.getState().activeMs).toBe(90_000);
+    h.store.getState().resume();
+    h.advance(30_000);
+    h.store.getState().pause('user');
+    expect(h.store.getState().activeMs).toBe(120_000);
+  });
+
+  it('restores an active snapshot (process killed) with only the time saved before the kill', async () => {
+    const h = createHarness();
+    h.store.getState().start(plan());
+    h.advance(20_000);
+    h.store.getState().reset();
+    h.clock.advance(11 * 60_000);
+    expect(await h.store.getState().restoreFromSnapshot()).toBe(true);
+    expect(Math.floor(h.store.getState().activeMs / 60000)).toBe(0);
   });
 });

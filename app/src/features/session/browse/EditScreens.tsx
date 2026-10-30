@@ -54,7 +54,7 @@ import {
   type PlanStep,
   type SessionPlan,
 } from '../../../engine';
-import { startSession } from '../index';
+import { startSession } from '../start';
 import { usePlanData, type PlanData } from './hooks';
 import { EDIT_MESSAGES, clock, isDirty, moveWork, persistSession, useEditDraft } from './editing';
 import { contentFlags, exerciseName, getCatalogueIndex } from './library';

@@ -29,6 +29,11 @@ import {
 
 export const RESUME_WINDOW_MS = 24 * 60 * 60 * 1000;
 export const SNAPSHOT_EVERY_MS = 5000;
+/**
+ * A longer silence than this between two ticks means the app was not running (process frozen,
+ * emulator restored, device asleep). That time is not exercise: pause and credit none of it.
+ */
+export const MAX_TICK_GAP_MS = 10_000;
 export const MAX_EXTRA_REST_MS = 90_000;
 /** Sessions under this length skip the Feel prompt (PRD). */
 export const FEEL_MIN_SESSION_S = 8 * 60;
@@ -68,6 +73,8 @@ export interface SessionState {
   formChecks: number;
   firedCues: Record<string, true>;
   lastSnapshotMono: number;
+  /** Clock reading at the last tick or (re)start while active; 0 when unset. */
+  lastTickMono: number;
   logged: boolean;
 }
 
@@ -130,6 +137,7 @@ const initial = (): SessionState => ({
   formChecks: 0,
   firedCues: {},
   lastSnapshotMono: 0,
+  lastTickMono: 0,
   logged: false,
 });
 
@@ -298,6 +306,7 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
           plan,
           timeline,
           anchorMono: now,
+          lastTickMono: now,
           startedAt: d.clock.wall(),
           planWeek: opts.planWeek ?? 1,
           planDay: opts.planDay ?? 0,
@@ -313,6 +322,21 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
         if (s.status !== 'active' || !s.timeline || !s.plan) return;
         const d = deps();
         const now = d.clock.now();
+        if (s.lastTickMono > 0 && now - s.lastTickMono > MAX_TICK_GAP_MS) {
+          // The app was not running. Count active time only up to the last tick we saw.
+          d.cues.stop();
+          d.keepAwake.deactivate();
+          set({
+            ...freeze(s.lastTickMono),
+            status: 'paused',
+            pausedReason: 'background',
+            resumeBy: d.clock.wall() + RESUME_WINDOW_MS,
+            lastTickMono: 0,
+          });
+          void persist(true);
+          return;
+        }
+        set({ lastTickMono: now });
         const eff = effOf(s);
         const total = totalMs(eff);
         const pos = positionAt(s, now);
@@ -387,7 +411,7 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
           return;
         }
         d.keepAwake.activate();
-        set({ status: 'active', anchorMono: d.clock.now(), pausedReason: null });
+        set({ status: 'active', anchorMono: d.clock.now(), lastTickMono: d.clock.now(), pausedReason: null });
         void persist(true);
       },
 

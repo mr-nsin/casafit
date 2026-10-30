@@ -3,10 +3,13 @@
 // until the ui lane's shared components are merged; swap them then.
 
 import { useState, type ReactNode } from 'react';
+import { StatusBar } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Pressable, StyleSheet, Text, View, type PressableProps, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
 import { dark, radius, space, type } from '../../theme';
+import { Icon, UIProvider } from '../../ui';
 import type { ProgressSegment } from './view';
 import type { Rung } from './types';
 
@@ -36,27 +39,51 @@ export function FocusPressable({
   );
 }
 
+/**
+ * Light status-bar content while a dark screen is focused. The declarative StatusBar stack
+ * restores the app default (ThemedStatusBar) when this unmounts or the screen loses focus.
+ */
+export function ScreenStatusBar() {
+  const focused = useIsFocused();
+  return focused ? <StatusBar barStyle="light-content" /> : null;
+}
+
+/** Forces the dark UI-kit palette so kit icons match the dark Player family. */
+export function DarkScope({ children }: { children: ReactNode }) {
+  return (
+    <UIProvider scheme="dark">
+      <ScreenStatusBar />
+      {children}
+    </UIProvider>
+  );
+}
+
 export function Screen({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
-  return <View style={[styles.screen, style]}>{children}</View>;
+  return (
+    <DarkScope>
+      <View style={[styles.screen, style]}>{children}</View>
+    </DarkScope>
+  );
 }
 
 export function IconBtn({
   label,
-  glyph,
+  icon,
   onPress,
   size = 48,
   tone = 'plain',
   disabled,
 }: {
   label: string;
-  glyph: string;
+  /** Material icon name from the UI kit, for example close or skip_next. */
+  icon: string;
   onPress: () => void;
   size?: number;
   tone?: 'plain' | 'tonal' | 'filled';
   disabled?: boolean;
 }) {
   const bg = tone === 'filled' ? tk.p : tone === 'tonal' ? tk.c4 : 'transparent';
-  const fg = tone === 'filled' ? tk.op : tk.on;
+  const fgKey = tone === 'filled' ? 'op' : 'on';
   return (
     <FocusPressable
       accessibilityRole="button"
@@ -71,9 +98,7 @@ export function IconBtn({
         focused && styles.focus,
       ]}
     >
-      <Text style={{ color: fg, fontSize: Math.round(size * 0.42), fontWeight: '700' }} importantForAccessibility="no">
-        {glyph}
-      </Text>
+      <Icon name={icon} size={Math.round(size * 0.5)} color={fgKey} />
     </FocusPressable>
   );
 }
@@ -135,7 +160,7 @@ export function TopBar({
 }) {
   return (
     <View style={styles.topBar}>
-      {onClose ? <IconBtn label={closeLabel} glyph="X" onPress={onClose} /> : <View style={{ width: 48 }} />}
+      {onClose ? <IconBtn label={closeLabel} icon="close" onPress={onClose} /> : <View style={{ width: 48 }} />}
       <View style={styles.topTitle} accessibilityRole="header">
         <Text style={[type.label, { color: tk.p }]}>{title}</Text>
         {subtitle ? (
@@ -171,13 +196,11 @@ function overall(segments: ProgressSegment[]): number {
   return segments.reduce((a, s) => a + s.weight * s.fill, 0) / w;
 }
 
-/** Placeholder for the two-frame demo loop (D17). The ui lane's ExerciseIllustration replaces it. */
-export function Stage({ name, description, pill, height = 220 }: { name: string; description: string; pill?: string; height?: number }) {
+/** Stage card: a large calm icon for the move's kind, with an optional pill. */
+export function Stage({ icon, description, pill, height = 220 }: { icon: string; description: string; pill?: string; height?: number }) {
   return (
     <View style={[styles.stage, { height }]} accessible accessibilityRole="image" accessibilityLabel={description}>
-      <Text style={[type.display, { color: tk.otc }]} importantForAccessibility="no">
-        {name.slice(0, 1)}
-      </Text>
+      <Icon name={icon} size={Math.round(height * 0.5)} color="otc" />
       {pill ? (
         <View style={styles.pill}>
           <Text style={[type.label, { color: tk.on }]}>{pill}</Text>
@@ -278,8 +301,8 @@ export function RadioGroup<T extends string | number>({
               focused && styles.focus,
             ]}
           >
+            {selected ? <Icon name="check" size={16} color="opc" /> : null}
             <Text style={[type.bodySmall, { color: selected ? tk.opc : tk.on, fontWeight: selected ? '700' : '500' }]}>
-              {selected ? 'v ' : ''}
               {o.label}
             </Text>
           </FocusPressable>
@@ -315,6 +338,6 @@ export const styles = StyleSheet.create({
   stage: { backgroundColor: tk.tc, borderRadius: radius.xl, alignItems: 'center', justifyContent: 'center', marginBottom: space.l },
   pill: { position: 'absolute', bottom: space.m, backgroundColor: tk.c1, borderRadius: radius.round, paddingHorizontal: space.l, paddingVertical: space.s },
   radioRow: { flexDirection: 'row', gap: space.s },
-  radio: { flex: 1, minHeight: 48, borderRadius: radius.m, alignItems: 'center', justifyContent: 'center', paddingHorizontal: space.s },
+  radio: { flex: 1, minHeight: 48, borderRadius: radius.m, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: space.xs, paddingHorizontal: space.s },
   note: { backgroundColor: tk.c3, borderRadius: radius.l, padding: space.l },
 });

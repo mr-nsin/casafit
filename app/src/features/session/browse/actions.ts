@@ -3,7 +3,7 @@
 
 import { loadContent } from '../../../content';
 import { getSessionDeps } from '../deps';
-import { startSession } from '../index';
+import { startSession } from '../start';
 import type { PlanData } from './hooks';
 import { buildPartSession, restrictionsOf, sessionFromReadyMade, type PartStyle } from './library';
 import type { Nav } from './Page';

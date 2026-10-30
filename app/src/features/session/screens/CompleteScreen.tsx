@@ -5,6 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../../app/types';
 import { dark, radius, space, type } from '../../../theme';
+import { Icon } from '../../../ui';
 import { Btn, IconBtn, RadioGroup, Screen } from '../components';
 import { useSessionRouting } from '../hooks';
 import { movesDone, useSessionStore } from '../store';
@@ -50,14 +51,12 @@ export function CompleteScreen() {
   return (
     <Screen>
       <View style={{ flexDirection: 'row' }}>
-        <IconBtn label="Close" glyph="X" onPress={() => void leave('home')} />
+        <IconBtn label="Close" icon="close" onPress={() => void leave('home')} />
       </View>
       <ScrollView contentContainerStyle={{ gap: space.l, paddingBottom: space.l }}>
         <View style={{ alignItems: 'center', gap: space.s }}>
           <View style={{ width: 96, height: 96, borderRadius: 48, backgroundColor: dark.pc, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ color: dark.opc, fontSize: 44, fontWeight: '800' }} importantForAccessibility="no">
-              v
-            </Text>
+            <Icon name="check" size={52} color="opc" />
           </View>
           <Text style={[type.display, { color: dark.on }]} accessibilityRole="header">
             Session done

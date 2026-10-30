@@ -12,7 +12,7 @@ import { effOf } from './view';
 import { configureSessionDeps } from './deps';
 
 const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn() };
-jest.mock('@react-navigation/native', () => ({ useNavigation: () => mockNav }));
+jest.mock('@react-navigation/native', () => ({ useNavigation: () => mockNav, useIsFocused: () => true }));
 
 beforeEach(() => {
   jest.useFakeTimers();
@@ -32,11 +32,37 @@ function setup(style: 'normal' | 'yoga' | 'dance' = 'normal') {
 /** Advance the fake clock and the render interval together. */
 async function elapse(h: ReturnType<typeof createHarness>, ms: number) {
   await act(async () => {
-    h.clock.advance(ms);
-    h.store.getState().tick();
+    // Tick each second so a long step never looks like a frozen app.
+    for (let left = ms; left > 0; left -= 1000) {
+      h.clock.advance(Math.min(1000, left));
+      h.store.getState().tick();
+    }
     jest.advanceTimersByTime(250);
   });
 }
+
+describe('Player controls', () => {
+  it('draw real icons, not characters, with labelled 44 px targets', async () => {
+    setup();
+    await render(<PlayerScreen />);
+    for (const [label, icon] of [
+      ['End session', 'close'],
+      ['Edit session', 'tune'],
+      ['Previous move', 'skip-previous'],
+      ['Pause', 'pause'],
+      ['Next move', 'skip-next'],
+    ] as const) {
+      const btn = screen.getByLabelText(label);
+      expect(btn).toBeTruthy();
+      expect(screen.getByText(`MaterialIcons:${icon}`)).toBeTruthy();
+    }
+    expect(screen.queryByText('X')).toBeNull();
+    expect(screen.queryByText('II')).toBeNull();
+    // The selected intensity shows a check icon instead of a "v".
+    expect(screen.getByText('MaterialIcons:check')).toBeTruthy();
+    expect(screen.queryByText(/^v /)).toBeNull();
+  });
+});
 
 describe('Player', () => {
   it('shows the move, the countdown and the move count', async () => {
@@ -144,7 +170,7 @@ describe('Rest', () => {
     expect(screen.getByText('0:12')).toBeTruthy();
     expect(screen.getByLabelText('12 seconds of rest left')).toBeTruthy();
     expect(screen.getByText('Up next')).toBeTruthy();
-    expect(screen.getByText('Set 2 of 2 . 40 sec')).toBeTruthy();
+    expect(screen.getByText('Set 2 of 2 · 40 sec')).toBeTruthy();
     await fireEvent.press(screen.getByLabelText('Skip rest'));
     expect(h.store.getState().status).toBe('active');
     const eff = effOf(h.store.getState());
@@ -168,7 +194,7 @@ describe('Paused', () => {
     await act(async () => { h.store.getState().pause('call'); });
     await render(<PausedScreen />);
     expect(screen.getByText('Paused')).toBeTruthy();
-    expect(screen.getByText('Move 0 . 0:28 left')).toBeTruthy();
+    expect(screen.getByText('Move 0 · 0:28 left')).toBeTruthy();
     expect(screen.getByText('Paused for a call.')).toBeTruthy();
     expect(screen.getByText(/next 24 hours/)).toBeTruthy();
     await fireEvent.press(screen.getByLabelText('Resume'));

@@ -55,6 +55,7 @@ import {
   type LibraryFilter,
   type PartStyle,
 } from './library';
+import { exerciseIcon } from '../icons';
 import { cap, phaseMinutes, workSteps } from './model';
 import { Page, useBrowseNav, useBackOrHome } from './Page';
 import { getSessionDeps } from '../deps';
@@ -292,7 +293,7 @@ export function ExerciseScreen() {
     >
       <Card tone="tc" radiusSize={28} style={{ alignItems: 'center', gap: space.m }}>
         <View accessible accessibilityRole="image" accessibilityLabel={content.t(ex.demo.altKey)} style={{ alignItems: 'center', gap: space.s }}>
-          <Icon name="sports_gymnastics" size={72} color="otc" />
+          <Icon name={exerciseIcon(ex)} size={72} color="otc" />
           <Text variant="bodySmall" color="otc" style={{ textAlign: 'center' }}>
             {content.t(ex.demo.altKey)}
           </Text>

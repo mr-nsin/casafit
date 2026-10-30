@@ -29,7 +29,7 @@ import {
   useTokens,
 } from '../../../ui';
 import { addDays, localDateKey } from '../../../engine';
-import { startSession, loadResumableSession } from '../index';
+import { startSession, loadResumableSession } from '../start';
 import { useSessionStore } from '../store';
 import { usePlanData, useTodayExtras, type PlanData } from './hooks';
 import {

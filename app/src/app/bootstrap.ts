@@ -23,6 +23,7 @@ import { useConsent } from '../state/consent';
 import { useOnboarding } from '../state/onboardingDraft';
 import { usePreferences } from '../state/preferences';
 import { setRepositories } from '../state/storage';
+import { exerciseIcon } from '../features/session/icons';
 
 /** Everything bootstrap touches outside this file. Defaults are the real thing. */
 export interface BootstrapIO {
@@ -91,6 +92,7 @@ function contentPort(content: () => Content): ContentPort {
         id: ex.id,
         cue: c.t(ex.cueKey),
         alt: c.t(ex.demo.altKey),
+        icon: exerciseIcon(ex),
         breath: ex.breath,
         bpm: ex.bpm,
         voiceClips: ex.voiceClips,

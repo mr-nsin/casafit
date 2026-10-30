@@ -161,8 +161,11 @@ export function createHarness(opts: { start?: number } = {}) {
     getSnapshot: () => snapshot,
     /** Move the clock and run the ticker once, like the 4 Hz interval would. */
     advance(ms: number) {
-      clock.advance(ms);
-      store.getState().tick();
+      // Tick every second, as the interval does, so no single gap looks like a dead app.
+      for (let left = ms; left > 0; left -= 1000) {
+        clock.advance(Math.min(1000, left));
+        store.getState().tick();
+      }
     },
   };
 }

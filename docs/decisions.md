@@ -138,3 +138,4 @@ A short, dated log of design and technical decisions. Add a row at the top. Keep
 - **See:** the Material 3 screens in `project/`.
 
 - 2026-10-30 · API hosting: Railway for the beta (simple Docker deploy, Postgres and Redis add-ons, Singapore region), Google Cloud Run asia-south1 (Mumbai) for launch so data stays in India. The API is a stateless container, so the move is a change of host and connection strings.
+- 2026-10-30 · Session clock: a gap of more than 10 s between ticks (`MAX_TICK_GAP_MS`) is treated as the app not running. Time is credited only up to the last tick and the session pauses with reason `background`. Stops a frozen or restored process from counting dead time as exercise.
