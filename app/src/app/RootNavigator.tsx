@@ -7,6 +7,7 @@ import { nutritionRoutes } from '../features/nutrition';
 import { onboardingRoutes } from '../features/onboarding';
 import { progressRoutes } from '../features/progress';
 import { sessionRoutes } from '../features/session';
+import { settingsRoutes } from '../features/settings';
 import { stepsRoutes } from '../features/steps';
 import { PlaceholderScreen } from './PlaceholderScreen';
 import { implementedRootRoutes, rootRouteLanes } from './routes';
@@ -29,6 +30,7 @@ export const laneRoutes: Partial<Record<Exclude<RootRouteName, 'Main'>, RouteEnt
   ...stepsRoutes,
   ...learnRoutes,
   ...progressStack,
+  ...settingsRoutes,
 };
 
 const implemented: ReadonlySet<string> = new Set<string>(implementedRootRoutes);

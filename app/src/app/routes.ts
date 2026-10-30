@@ -121,4 +121,6 @@ export const implementedRootRoutes = [
   // steps, learn, progress
   'Steps', 'StepsPermission', 'Reverse', 'ReverseTimer', 'Learn', 'Myth', 'Concepts',
   'ProgressEmpty', 'Recap',
+  // settings
+  'Settings', 'Notify', 'Language', 'Privacy', 'Profile', 'EditProfile', 'Help', 'DeleteAccount',
 ] as const satisfies readonly Exclude<RootRouteName, 'Main'>[];

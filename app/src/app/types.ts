@@ -93,7 +93,8 @@ export type RootStackParamList = {
   Privacy: undefined;
   Profile: undefined;
   EditProfile: undefined;
-  Help: undefined;
+  /** `open` is a FAQ id to expand first (the privacy notice link uses 'privacy'). */
+  Help: { open?: string } | undefined;
   DeleteAccount: undefined;
 };
 
