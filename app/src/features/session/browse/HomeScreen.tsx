@@ -30,7 +30,8 @@ import {
 } from '../../../ui';
 import { addDays, localDateKey } from '../../../engine';
 import { startSession, loadResumableSession } from '../start';
-import { useSessionStore } from '../store';
+import { isFinished, useSessionStore } from '../store';
+import { mythOfTheWeek } from '../../learn/model';
 import { usePlanData, useTodayExtras, type PlanData } from './hooks';
 import {
   BODY_PART_TILES,
@@ -45,6 +46,7 @@ import {
   formatCount,
   isComeback,
   isKneeFriendly,
+  localDate,
   parseSession,
   phaseMinutes,
   planDayKey,
@@ -55,6 +57,7 @@ import { Page, useBackOrHome, useBrowseNav, type Nav } from './Page';
 import { openReadyMade } from './actions';
 import { contentFlags, isSafePlan } from './library';
 import { loadContent } from '../../../content';
+import { getSessionDeps } from '../deps';
 
 const firstName = (name: string | null | undefined): string => (name ?? '').trim().split(/\s+/)[0] ?? '';
 
@@ -62,6 +65,8 @@ interface Resume {
   title: string;
   minutesDone: number;
   budgetMin: number;
+  /** Nothing left to play, but never saved to the week. Offer to save it instead of resuming. */
+  finished: boolean;
 }
 
 /** A saved session inside its 24 hour window, or null. Re-read each time Home gets focus. */
@@ -74,7 +79,8 @@ function useResume(): [Resume | null, () => void] {
       void (async () => {
         const st = useSessionStore.getState();
         // A session that is already live in memory is shown as it is; never overwrite it from disk.
-        const r = st.status === 'paused' && st.plan ? { title: st.plan.title, minutesDone: Math.floor(st.activeMs / 60000) } : await loadResumableSession();
+        const inMemory = st.plan && !st.trial && !st.logged && (st.status === 'paused' || st.status === 'complete');
+        const r = inMemory ? { title: st.plan!.title, minutesDone: Math.floor(st.activeMs / 60000), finished: isFinished(st) } : await loadResumableSession();
         if (!live) return;
         const plan = useSessionStore.getState().plan;
         setResume(r ? { ...r, budgetMin: Math.max(1, Math.round((plan?.budgetS ?? 900) / 60)) } : null);
@@ -226,6 +232,68 @@ function ResumeCard({ resume, onResume, onDiscard }: { resume: Resume; onResume:
         We keep it for 24 hours. Discarding does not affect your week.
       </Text>
     </Card>
+  );
+}
+
+function SaveCard({ resume, onSave, onDiscard, busy }: { resume: Resume; onSave: () => void; onDiscard: () => void; busy: boolean }) {
+  return (
+    <Card tone="sc" style={{ gap: space.m }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.s }}>
+        <Icon name="check_circle" size={20} color="osc" />
+        <Text variant="label" color="osc">
+          Finished session
+        </Text>
+      </View>
+      <Text variant="title" color="osc" accessibilityRole="header">
+        Save your session
+      </Text>
+      <Text color="osc" tabular>
+        {resume.title} {DOT} {resume.minutesDone} min done
+      </Text>
+      <View style={{ flexDirection: 'row', gap: space.s, alignItems: 'center' }}>
+        <FilledButton label="Save session" leadingIcon="check" onPress={onSave} disabled={busy} style={{ flex: 1 }} />
+        <TextButton label="Discard" onPress={onDiscard} disabled={busy} />
+      </View>
+      <Text variant="bodySmall" color="osc">
+        You finished this one, so it can count toward your week. Discarding is fine too.
+      </Text>
+    </Card>
+  );
+}
+
+function MythCard() {
+  const nav = useBrowseNav();
+  const t = useTokens();
+  const today = localDate(getSessionDeps().clock.wall());
+  let content: ReturnType<typeof loadContent> | null = null;
+  try {
+    content = loadContent();
+  } catch {
+    content = null;
+  }
+  const myth = content ? mythOfTheWeek(content.myths ?? [], today) : null;
+  if (!content || !myth) return null;
+  const title = content.t(myth.titleKey);
+  return (
+    <Touchable
+      label={`Myth of the week: ${title}`}
+      onPress={() => nav.navigate('Myth', { mythId: myth.id })}
+      minSize={64}
+      style={{ minHeight: 64, borderRadius: radius.l, backgroundColor: t.c3, padding: space.m, flexDirection: 'row', alignItems: 'center', gap: space.m }}
+    >
+      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: t.tc, alignItems: 'center', justifyContent: 'center' }}>
+        <Icon name="lightbulb" size={22} color="otc" />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text variant="label" color="osv">
+          Myth of the week
+        </Text>
+        <Text variant="labelStrong" numberOfLines={2}>
+          {title}
+        </Text>
+      </View>
+      <Icon name="chevron_right" color="osv" />
+    </Touchable>
   );
 }
 
@@ -402,10 +470,12 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
   const clock = data.clock!;
   const plan = data.plan!;
   const [resume, refreshResume] = useResume();
+  const [saving, setSaving] = useState(false);
   const done = completedDates(data.logs, data.tz);
   const row = data.rows.find((r) => r.dayIndex === clock.dayIndex)!;
   const comeback = isComeback(data.logs, clock.today, data.tz);
   const doneToday = done.has(clock.today) && !resume;
+  const resumeOffered = !!resume && !resume.finished;
   const workouts = data.rows.filter((r) => r.kind === 'workout');
   const nth = workouts.filter((r) => r.dayIndex <= row.dayIndex).length;
   const name = firstName(data.profile?.name);
@@ -453,7 +523,35 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
           <TextButton label="Full plan" onPress={() => nav.navigate('WeekPlan')} />
         </View>
       )}
-      {resume ? (
+      {resume?.finished ? (
+        <SaveCard
+          resume={resume}
+          busy={saving}
+          onSave={() => {
+            setSaving(true);
+            void useSessionStore
+              .getState()
+              .saveFinished()
+              .then(() => {
+                useSessionStore.getState().reset();
+                refreshResume();
+                void data.reload();
+              })
+              .finally(() => setSaving(false));
+          }}
+          onDiscard={() => {
+            setSaving(true);
+            void useSessionStore
+              .getState()
+              .discardFinished()
+              .then(() => {
+                useSessionStore.getState().reset();
+                refreshResume();
+              })
+              .finally(() => setSaving(false));
+          }}
+        />
+      ) : resume ? (
         <ResumeCard
           resume={resume}
           onResume={() => nav.navigate('Paused')}
@@ -468,7 +566,7 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
           }}
         />
       ) : null}
-      <TodayCard row={row} doneToday={doneToday} resumeShown={!!resume} onStart={start} />
+      <TodayCard row={row} doneToday={doneToday} resumeShown={resumeOffered} onStart={start} />
       <SectionRow title="Ready-made plans" action="See all" onAction={() => nav.navigate('Library')} />
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.s }} style={{ marginHorizontal: -space.l }} testID="ready-made">
         <View style={{ width: space.s }} />
@@ -490,7 +588,7 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
       </Text>
       <BodyPartGrid focus={plan.bodyParts} />
       <TodaySoFar today={clock.today} stepGoal={data.profile?.stepGoal ?? 7000} />
-      {/* TODO(learn): "Myth of the week" card. The Learn lane has no weekly-pick selector yet. */}
+      <MythCard />
     </Page>
   );
 }

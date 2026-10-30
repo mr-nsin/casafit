@@ -14,9 +14,17 @@ import { useSessionStore } from '../store';
 import { createHarness, makePlan } from '../testkit';
 import { HomeRestScreen, HomeScreen } from './HomeScreen';
 import { PlanScreen, WeekPlanScreen, WhyScreen } from './PlanScreens';
+import { loadContent } from '../../../content';
+import { isoWeek, mythOfTheWeek } from '../../learn/model';
 import { READY_MADE, WEEKDAY_LONG, answerRows, dayIcon, completedDates, dayKindFor, isComeback, localDate, parsePlanDayKey, phaseMinutes, planClock, planDayKey, weekdayIndex } from './model';
 
-const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn(), canGoBack: jest.fn(() => true) };
+let mockNoMyths = false;
+jest.mock('../../../content', () => {
+  const actual = jest.requireActual('../../../content');
+  return { ...actual, loadContent: (...a: unknown[]) => { const c = actual.loadContent(...a); return mockNoMyths ? { ...c, myths: [] } : c; } };
+});
+
+const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn(), popTo: jest.fn(), canGoBack: jest.fn(() => true) };
 let mockRoute: { params?: Record<string, unknown> } = {};
 jest.mock('@react-navigation/native', () => {
   const React = require('react');
@@ -323,6 +331,88 @@ describe('Home, resume', () => {
   });
 });
 
+describe('Home, finished but not saved', () => {
+  async function finishOne() {
+    harness.store.getState().start(makePlan({ title: 'Push 15' }), { planWeek: 1, planDay: 0 });
+    harness.advance(900_000);
+    expect(harness.store.getState().status).toBe('complete');
+    harness.store.getState().reset(); // the app was closed before Complete was left
+    expect(harness.getSnapshot()).not.toBeNull();
+  }
+
+  it('offers to save instead of resuming a session with no time left', async () => {
+    await seed();
+    configureSessionDeps({ clock: harness.clock });
+    await finishOne();
+    await render(<HomeScreen />);
+    expect(await screen.findByText('Save your session')).toBeTruthy();
+    expect(screen.queryByText('Resume your session')).toBeNull();
+    expect(screen.queryByText(/15 of 15 min/)).toBeNull();
+    expect(screen.getByText(/Push 15 · 15 min done/)).toBeTruthy();
+    expect(screen.getByText('Today')).toBeTruthy();
+    expect(screen.getByLabelText('Start')).toBeTruthy();
+    expect(screen.queryByText(/missed|failed|gave up/i)).toBeNull();
+  });
+
+  it('Save session logs it once and the card goes away', async () => {
+    await seed();
+    configureSessionDeps({ clock: harness.clock });
+    await finishOne();
+    await render(<HomeScreen />);
+    await fireEvent.press(await screen.findByLabelText('Save session'));
+    await waitFor(() => expect(screen.queryByText('Save your session')).toBeNull());
+    expect(harness.logs).toHaveLength(1);
+    expect(harness.logs[0]).toMatchObject({ status: 'complete', felt: null });
+    expect(harness.getSnapshot()).toBeNull();
+    expect(useSessionStore.getState().status).toBe('idle');
+  });
+
+  it('Discard removes the card, logs nothing and clears the snapshot', async () => {
+    await seed();
+    configureSessionDeps({ clock: harness.clock });
+    await finishOne();
+    await render(<HomeScreen />);
+    await fireEvent.press(await screen.findByLabelText('Discard'));
+    await waitFor(() => expect(screen.queryByText('Save your session')).toBeNull());
+    expect(harness.logs).toHaveLength(0);
+    expect(harness.getSnapshot()).toBeNull();
+  });
+});
+
+describe('Home, myth of the week', () => {
+  it('picks one myth per ISO week, the same all week', () => {
+    const myths = loadContent().myths;
+    expect(isoWeek('2026-01-01')).toBe(1);
+    expect(isoWeek('2024-12-30')).toBe(1);
+    expect(isoWeek('2026-12-31')).toBe(53);
+    expect(mythOfTheWeek(myths, '2026-10-26')?.id).toBe(mythOfTheWeek(myths, '2026-11-01')?.id);
+    expect(mythOfTheWeek(myths, '2026-10-26')?.id).not.toBe(mythOfTheWeek(myths, '2026-11-02')?.id);
+    expect(mythOfTheWeek([], '2026-10-26')).toBeNull();
+  });
+
+  it("shows this week's myth and opens the Myth screen", async () => {
+    const today = await seed();
+    const content = loadContent();
+    const myth = mythOfTheWeek(content.myths, today)!;
+    await render(<HomeScreen />);
+    expect(await screen.findByText('Myth of the week')).toBeTruthy();
+    await fireEvent.press(screen.getByLabelText(`Myth of the week: ${content.t(myth.titleKey)}`));
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Myth', { mythId: myth.id });
+  });
+
+  it('is hidden when the content has no myths', async () => {
+    await seed();
+    mockNoMyths = true;
+    try {
+      await render(<HomeScreen />);
+      await screen.findByText('Push 15');
+      expect(screen.queryByText('Myth of the week')).toBeNull();
+    } finally {
+      mockNoMyths = false;
+    }
+  });
+});
+
 describe('Home, comeback', () => {
   it('welcomes the user back after 7 or more days away, with no count of missed days', async () => {
     const today = await seed();
@@ -419,6 +509,60 @@ describe('WeekPlan', () => {
     expect(mockNav.goBack).toHaveBeenCalled();
   });
 
+  const enabled = (label: string) =>
+    waitFor(() => {
+      const b = screen.getByLabelText(label);
+      if (b.props.accessibilityState?.disabled) throw new Error('not ready');
+      return b;
+    });
+
+  it('steps to the next week when its rows exist, and Start today is only for this week', async () => {
+    await seed();
+    const rows = await db.repos.plan.days(1);
+    await db.repos.plan.replaceDays(2, rows.map((r) => ({ ...r, planWeek: 2 })));
+    await render(<WeekPlanScreen />);
+    await screen.findByText('Week 1');
+    expect(screen.getByLabelText('Previous week').props.accessibilityState.disabled).toBe(true);
+    await fireEvent.press(await enabled('Next week'));
+    expect(await screen.findByText('Week 2')).toBeTruthy();
+    expect(screen.queryByLabelText('Start today')).toBeNull();
+    expect(screen.getAllByLabelText(/^Swap /).length).toBeGreaterThan(0);
+    await fireEvent.press(screen.getAllByLabelText(/^Swap /)[0]!);
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Editor', { planDayId: '2-0' });
+    await fireEvent.press(screen.getByLabelText('This week'));
+    expect(await screen.findByText('Week 1')).toBeTruthy();
+    expect(screen.getByLabelText('Start today')).toBeTruthy();
+  });
+
+  it('shows an earlier week for reading only, and opens its days without Edit or Start', async () => {
+    await seed();
+    const rows = await db.repos.plan.days(1);
+    await db.repos.plan.replaceDays(2, rows.map((r) => ({ ...r, planWeek: 2 })));
+    await db.repos.plan.save({ goal: 'stay_fit', bodyParts: [], styles: ['normal'], mix: {}, daysPerWeek: 4, experience: 'on_and_off', variant: 'standard', weekNumber: 2, engineVersion: 'x' });
+    await render(<WeekPlanScreen />);
+    await screen.findByText('Week 2');
+    await fireEvent.press(await enabled('Previous week'));
+    expect(await screen.findByText('Week 1')).toBeTruthy();
+    expect(screen.getByText('This week is behind you, so it is for reading only.')).toBeTruthy();
+    expect(screen.queryAllByLabelText(/^Swap /)).toHaveLength(0);
+    expect(screen.queryByLabelText('Start today')).toBeNull();
+    expect(screen.queryByLabelText('Change mix')).toBeNull();
+    await fireEvent.press(screen.getByLabelText(/: Push 15/));
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Plan', { planDayId: '1-0' });
+  });
+
+  it('Plan opens a day from an earlier week with no Edit or Start', async () => {
+    await seed();
+    const rows = await db.repos.plan.days(1);
+    await db.repos.plan.replaceDays(2, rows.map((r) => ({ ...r, planWeek: 2 })));
+    await db.repos.plan.save({ goal: 'stay_fit', bodyParts: [], styles: ['normal'], mix: {}, daysPerWeek: 4, experience: 'on_and_off', variant: 'standard', weekNumber: 2, engineVersion: 'x' });
+    mockRoute = { params: { planDayId: '1-0' } };
+    await render(<PlanScreen />);
+    expect(await screen.findByText('Push 15')).toBeTruthy();
+    expect(screen.queryByLabelText('Edit')).toBeNull();
+    expect(screen.queryByLabelText('Start session')).toBeNull();
+  });
+
   it('asks for a plan when there is none', async () => {
     await seed({ plan: false });
     await render(<WeekPlanScreen />);
@@ -496,7 +640,7 @@ describe('Plan', () => {
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Player');
     expect(useSessionStore.getState().status).toBe('active');
     await fireEvent.press(screen.getByLabelText('Edit'));
-    expect(mockNav.navigate).toHaveBeenLastCalledWith('Editor', { planDayId: '1-0' });
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Editor', { planDayId: '1-0', from: 'plan' });
     await fireEvent.press(screen.getByLabelText('Why this plan'));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Why');
     await fireEvent.press(screen.getByLabelText('Warm-up and cool-down'));

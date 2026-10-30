@@ -1,3 +1,4 @@
+using CasaFit.Application.Accounts;
 using CasaFit.Application.Auth;
 using CasaFit.Application.Common;
 using CasaFit.Application.Common.Idempotency;

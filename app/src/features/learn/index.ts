@@ -21,4 +21,4 @@ export const learnRoutes: Record<LearnRouteName, LearnRouteEntry> = {
 };
 
 export { configureLearnContent } from './LearnScreens';
-export { reviewInfo, ctaTarget, longDate } from './model';
+export { reviewInfo, ctaTarget, longDate, isoWeek, mythOfTheWeek } from './model';

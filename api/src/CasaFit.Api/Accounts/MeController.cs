@@ -9,7 +9,7 @@ namespace CasaFit.Api.Accounts;
 [Route("v1/me")]
 public sealed class MeController(AccountService accounts, SyncService sync) : ControllerBase
 {
-    /// <summary>Account summary: plan, free checks, Pro state.</summary>
+    /// <summary>Account summary: email (and a masked form), sign-in provider, plan, free checks, Pro state. Creates the account on the first call.</summary>
     [HttpGet]
     [ProducesResponseType<MeResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
@@ -34,12 +34,16 @@ public sealed class MeController(AccountService accounts, SyncService sync) : Co
     [ProducesResponseType<ExportResponse>(StatusCodes.Status200OK)]
     public Task<ExportResponse> Export(CancellationToken ct) => accounts.ExportAsync(User.AccountId(), ct);
 
-    /// <summary>Delete the account. A hash of the identifier is kept for 180 days so deletion does not restore free checks.</summary>
+    /// <summary>
+    /// Delete the account and the Supabase user. Hashes of the email and user id are kept for 180 days so deletion does
+    /// not restore free checks. 502 (code identity_delete_failed) means local data is gone but the Supabase user is not: retry.
+    /// </summary>
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status502BadGateway)]
     public async Task<IActionResult> Delete(CancellationToken ct)
     {
-        await accounts.DeleteAsync(User.AccountId(), ct);
+        await accounts.DeleteAsync(User.ExternalId(), ct);
         return NoContent();
     }
 

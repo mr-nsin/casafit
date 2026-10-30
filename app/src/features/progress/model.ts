@@ -1,12 +1,27 @@
 // Pure progress maths. Everything is derived from session_log, step_summary and the plan;
 // nothing here is stored as truth.
 
-import { activeSeconds, addDays, completedDaysFromLogs, computeStreak, localDateKey, parseDate, type SessionLogLite } from '../../engine';
+import { activeSeconds, addDays, completedDaysFromLogs, computeStreak, diffDays, localDateKey, parseDate, type SessionLogLite } from '../../engine';
 import type { PlanDayRow, PlanRow, SessionLog, StepSummary } from '../../db/repositories';
 
 /** Monday = 0 ... Sunday = 6. */
 export const mondayIndex = (date: string): number => (new Date(parseDate(date)).getUTCDay() + 6) % 7;
 export const startOfWeek = (date: string): string => addDays(date, -mondayIndex(date));
+
+/**
+ * Day zero rule (shared with Home and WeekPlan): plan day 0 is the local date the plan was made
+ * (`plan.updatedAt`, written once when onboarding builds the plan) and the week rolls on from there,
+ * so a plan made on a Wednesday has day 0 on Wednesday. `planStart` is that date. Without one
+ * (no plan) the old Monday = 0 reading is kept.
+ */
+export const planStartKey = (plan: Pick<PlanRow, 'updatedAt'> | null, tz: number): string | null => (plan ? localDateKey(plan.updatedAt, tz) : null);
+
+/** Plan day index (0 to 6) that a calendar date falls on. */
+export function dayIndexOn(date: string, planStart: string | null | undefined): number {
+  if (!planStart) return mondayIndex(date);
+  return (((diffDays(planStart, date) % 7) + 7) % 7);
+}
+
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
 export const dayName = (i: number): (typeof DAYS)[number] => DAYS[i]!;
 
@@ -22,11 +37,11 @@ export function toLite(logs: readonly SessionLog[], tz: number): SessionLogLite[
  * always planned, so training on a rest day never breaks anything. Without a plan only
  * completed days count, and the streak is simply the run of those days.
  */
-export function plannedDays(opts: { today: string; completed: readonly string[]; currentWeekDays: readonly PlanDayRow[]; firstLogDate: string | null }): string[] {
+export function plannedDays(opts: { today: string; completed: readonly string[]; currentWeekDays: readonly PlanDayRow[]; firstLogDate: string | null; planStart?: string | null }): string[] {
   const pattern = new Set(opts.currentWeekDays.filter((d) => d.kind === 'workout').map((d) => d.dayIndex));
   const out = new Set(opts.completed);
   if (pattern.size > 0 && opts.firstLogDate) {
-    for (let d = opts.firstLogDate; d <= opts.today; d = addDays(d, 1)) if (pattern.has(mondayIndex(d))) out.add(d);
+    for (let d = opts.firstLogDate; d <= opts.today; d = addDays(d, 1)) if (pattern.has(dayIndexOn(d, opts.planStart))) out.add(d);
   }
   return [...out].sort();
 }
@@ -54,12 +69,14 @@ export function computeProgress(opts: {
   steps: readonly StepSummary[];
   plan: PlanRow | null;
   currentWeekDays: readonly PlanDayRow[];
+  /** Local date of plan day 0, from `planStartKey`. Omit for Monday = 0. */
+  planStart?: string | null;
 }): ProgressView {
   const { today } = opts;
   const lite = toLite(opts.logs, opts.tz);
   const completed = completedDaysFromLogs(lite);
   const firstLog = lite.length ? lite.map((l) => l.date).sort()[0]! : null;
-  const planned = plannedDays({ today, completed, currentWeekDays: opts.currentWeekDays, firstLogDate: firstLog });
+  const planned = plannedDays({ today, completed, currentWeekDays: opts.currentWeekDays, firstLogDate: firstLog, planStart: opts.planStart });
   const s = computeStreak({ plannedDays: planned, completedDays: completed, today });
 
   const monday = startOfWeek(today);
@@ -131,6 +148,8 @@ export function computeRecap(opts: {
   steps: readonly StepSummary[];
   plan: PlanRow | null;
   currentWeekDays: readonly PlanDayRow[];
+  /** Local date of plan day 0, from `planStartKey`. Omit for Monday = 0. */
+  planStart?: string | null;
 }): RecapView {
   const start = recapWeekStart(opts.today);
   const end = addDays(start, 6);
@@ -155,7 +174,7 @@ export function computeRecap(opts: {
   const headline = quiet ? 'A quiet week, and that is fine' : strong ? (weekNumber === 1 ? 'A strong first week' : 'A strong week') : 'You showed up';
   const restDayMoves =
     isCurrentWeek &&
-    opts.currentWeekDays.some((d) => d.kind !== 'workout' && (byDate.get(addDays(start, d.dayIndex)) ?? 0) >= 3000);
+    opts.currentWeekDays.some((d) => d.kind !== 'workout' && dates.some((date) => dayIndexOn(date, opts.planStart) === d.dayIndex && (byDate.get(date) ?? 0) >= 3000));
   const body = quiet
     ? 'Rest is part of the plan. Your next session is whenever you are ready.'
     : `${strong ? 'You kept to your plan' : 'Every session counts'}${restDayMoves ? ' and moved on rest days too' : ''}.`;

@@ -30,9 +30,14 @@ namespace CasaFit.Infrastructure.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("EmailNorm")
+                    b.Property<string>("Email")
                         .HasMaxLength(320)
                         .HasColumnType("character varying(320)");
+
+                    b.Property<string>("ExternalId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<int>("FreeChecksRemaining")
                         .HasColumnType("integer");
@@ -45,10 +50,6 @@ namespace CasaFit.Infrastructure.Persistence.Migrations
                     b.Property<bool>("Onboarded")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("PhoneE164")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
                     b.Property<bool>("ProActive")
                         .HasColumnType("boolean");
 
@@ -58,12 +59,17 @@ namespace CasaFit.Infrastructure.Persistence.Migrations
                     b.Property<DateTimeOffset?>("ProExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EmailNorm")
+                    b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("PhoneE164")
+                    b.HasIndex("ExternalId")
                         .IsUnique();
 
                     b.ToTable("account", (string)null);
@@ -153,43 +159,6 @@ namespace CasaFit.Infrastructure.Persistence.Migrations
                     b.HasIndex("ExpiresAt");
 
                     b.ToTable("account_identifier_hash", (string)null);
-                });
-
-            modelBuilder.Entity("CasaFit.Domain.Auth.OtpAttempt", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("AccountId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Channel")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<byte[]>("IdentifierHash")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("Kind")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
-
-                    b.Property<bool>("Success")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("IdentifierHash", "CreatedAt");
-
-                    b.ToTable("otp_attempt", (string)null);
                 });
 
             modelBuilder.Entity("CasaFit.Domain.Entitlements.FormCheckEvent", b =>
@@ -343,14 +312,6 @@ namespace CasaFit.Infrastructure.Persistence.Migrations
                         .HasForeignKey("CasaFit.Domain.Accounts.Plan", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("CasaFit.Domain.Auth.OtpAttempt", b =>
-                {
-                    b.HasOne("CasaFit.Domain.Accounts.Account", null)
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("CasaFit.Domain.Entitlements.FormCheckEvent", b =>

@@ -9,6 +9,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../app/types';
 import { getSessionDeps } from './deps';
 import { useSessionStore, type SessionStatus } from './store';
+import { TRIAL_DONE, TRIAL_STOPPED, useTrialNotice } from './trial';
 import { deriveView, type SessionView } from './view';
 
 export type SessionRouteName =
@@ -78,15 +79,24 @@ export function useSessionRouting(current: SessionRouteName): void {
     return s.status === 'active' ? deriveView(s, getSessionDeps().clock.now()).kind : null;
   });
   const style = useSessionStore((s) => s.plan?.style ?? 'normal');
+  const trial = useSessionStore((s) => s.trial);
   const target = routeForView({ status, kind, style });
   useEffect(() => {
+    // A 30-second trial never goes to Complete or Home: it goes back to the Exercise screen it came from.
+    if (trial && (status === 'complete' || status === 'ended')) {
+      useTrialNotice.getState().set(status === 'complete' ? TRIAL_DONE : TRIAL_STOPPED);
+      useSessionStore.getState().reset();
+      if (nav.canGoBack()) nav.goBack();
+      else nav.reset({ index: 0, routes: [{ name: 'Main' }] });
+      return;
+    }
     if (!target || target === current) return;
     if (target === 'Main') {
       nav.reset({ index: 0, routes: [{ name: 'Main' }] });
       return;
     }
     nav.replace(target);
-  }, [target, current, nav]);
+  }, [target, current, nav, trial, status]);
 }
 
 /** Pause on background or other interruptions. */

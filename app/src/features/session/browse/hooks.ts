@@ -73,6 +73,28 @@ export function usePlanData(): PlanData {
   return { ...state, reload };
 }
 
+/**
+ * Plan days for a week other than the current one (the current week's rows are already in `usePlanData`).
+ * `rows` is null until loaded. `hasPrev` and `hasNext` say whether rows exist for the neighbouring weeks.
+ */
+export function useWeekRows(week: number | null, reloadKey?: unknown): { rows: PlanDayRow[] | null; hasPrev: boolean; hasNext: boolean } {
+  const [state, setState] = useState<{ week: number | null; rows: PlanDayRow[] | null; hasPrev: boolean; hasNext: boolean }>({ week: null, rows: null, hasPrev: false, hasNext: false });
+  useEffect(() => {
+    if (week === null || !hasRepositories()) return undefined;
+    let live = true;
+    const repos = getRepositories();
+    void Promise.all([repos.plan.days(week), week > 1 ? repos.plan.days(week - 1) : Promise.resolve([]), repos.plan.days(week + 1)])
+      .then(([cur, prev, next]) => {
+        if (live) setState({ week, rows: cur, hasPrev: prev.length > 0, hasNext: next.length > 0 });
+      })
+      .catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, [week, reloadKey]);
+  return state.week === week ? state : { rows: null, hasPrev: false, hasNext: false };
+}
+
 export interface TodayExtras {
   steps: StepSummary | null;
   food: { kcal: number; proteinG: number; entries: number } | null;

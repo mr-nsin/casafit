@@ -7,7 +7,8 @@ import { setRepositories } from '../../../state/storage';
 import { useAuth } from '../../../state/auth';
 import { useVerifyOutcome } from '../../onboarding/flowState';
 import { useSessionStore } from '../store';
-import { createHarness } from '../testkit';
+import { createHarness, makePlan } from '../testkit';
+import { TRIAL_DONE, useTrialNotice } from '../trial';
 import { HomeScreen } from './HomeScreen';
 import { PlanScreen } from './PlanScreens';
 import { BodyPartScreen, ExerciseScreen, LibraryScreen } from './LibraryScreens';
@@ -15,7 +16,7 @@ import { LIBRARY_FILTERS, contentFlags, flagPhrase, libraryPlans, moveMeta, part
 import { READY_MADE, parseSession } from './model';
 import { seedPlan, type TestDb } from './testkit';
 
-const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn(), canGoBack: jest.fn(() => true) };
+const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn(), popTo: jest.fn(), canGoBack: jest.fn(() => true) };
 let mockRoute: { params?: Record<string, unknown> } = {};
 jest.mock('@react-navigation/native', () => {
   const React = require('react');
@@ -47,13 +48,14 @@ jest.mock('../../../ui/useMotion', () => {
 });
 
 let db: TestDb;
+let harness: ReturnType<typeof createHarness>;
 const content = loadContent();
 const knee = contentFlags({ painAreas: ['knees'], healthFlags: [] });
 
 beforeEach(async () => {
   db = await createTestDb();
   setRepositories(db.repos);
-  createHarness();
+  harness = createHarness();
   Object.values(mockNav).forEach((f) => f.mockClear());
   mockNav.canGoBack.mockReturnValue(true);
   mockRoute = {};
@@ -348,6 +350,47 @@ describe('Exercise', () => {
       await fireEvent.press(await screen.findByLabelText(/^Harder: /));
       expect(mockNav.navigate).toHaveBeenLastCalledWith('Exercise', { exerciseId: harder.id });
     }
+  });
+
+  it('Try 30 seconds starts a one-move trial and opens the player', async () => {
+    await seedPlan(db, { painAreas: [] });
+    mockRoute = { params: { exerciseId: 'glute_bridge' } };
+    await render(<ExerciseScreen />);
+    await fireEvent.press(await screen.findByLabelText('Try 30 seconds'));
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Player');
+    const st = useSessionStore.getState();
+    expect(st.trial).toBe(true);
+    expect(st.status).toBe('active');
+    expect(st.timeline!.totalS).toBe(30);
+    expect(st.plan!.steps.map((x) => x.exerciseId)).toEqual(['glute_bridge']);
+    expect(harness.getSnapshot()).toBeNull();
+  });
+
+  it('Try 30 seconds is off for a move hidden from the user, and never replaces a session in progress', async () => {
+    await seedPlan(db);
+    mockRoute = { params: { exerciseId: 'lunge' } };
+    const first = await render(<ExerciseScreen />);
+    expect((await screen.findByLabelText('Try 30 seconds')).props.accessibilityState.disabled).toBe(true);
+    await first.unmount();
+
+    mockRoute = { params: { exerciseId: 'glute_bridge' } };
+    useSessionStore.getState().start(makePlan({ title: 'Push 15' }));
+    useSessionStore.getState().pause('user');
+    await render(<ExerciseScreen />);
+    await fireEvent.press(await screen.findByLabelText('Try 30 seconds'));
+    expect(screen.getByText('Finish or save your current session first, then try this move.')).toBeTruthy();
+    expect(useSessionStore.getState().plan?.title).toBe('Push 15');
+    expect(useSessionStore.getState().trial).toBe(false);
+  });
+
+  it('shows a kind message when a trial ends and leaves it behind when the screen closes', async () => {
+    await seedPlan(db, { painAreas: [] });
+    mockRoute = { params: { exerciseId: 'glute_bridge' } };
+    useTrialNotice.getState().set(TRIAL_DONE);
+    const r = await render(<ExerciseScreen />);
+    expect(await screen.findByText('Nice work. That was 30 seconds.')).toBeTruthy();
+    await r.unmount();
+    expect(useTrialNotice.getState().message).toBeNull();
   });
 
   it('saves to favourites and remembers it', async () => {

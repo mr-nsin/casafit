@@ -18,13 +18,14 @@ public class PlatformEndpointsTests(ApiFactory factory)
     }
 
     [Fact]
-    public async Task OpenApi_document_is_served_anonymously_and_lists_the_auth_endpoints()
+    public async Task OpenApi_document_is_served_anonymously_and_lists_the_endpoints_and_no_auth_routes()
     {
         var res = await factory.CreateClient().GetAsync("/openapi/v1.json");
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         var json = await res.Content.ReadAsStringAsync();
-        Assert.Contains("/v1/auth/code", json);
-        Assert.Contains("/v1/auth/verify", json);
+        Assert.Contains("/v1/me", json);
+        Assert.Contains("/v1/content/packs/{name}", json);
+        Assert.DoesNotContain("/v1/auth/", json);
     }
 
     [Fact]
@@ -39,7 +40,7 @@ public class PlatformEndpointsTests(ApiFactory factory)
     {
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<CasaFitDbContext>();
-        var account = new Account { Id = Guid.NewGuid(), CreatedAt = DateTimeOffset.UtcNow, PhoneE164 = "+910000" + Random.Shared.Next(100000, 999999) };
+        var account = new Account { Id = Guid.NewGuid(), CreatedAt = DateTimeOffset.UtcNow, ExternalId = Guid.NewGuid().ToString() };
         db.Accounts.Add(account);
         await db.SaveChangesAsync();
 

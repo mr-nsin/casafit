@@ -5,7 +5,7 @@ import { createTestDb } from '../../db/testing/nodeSqliteDriver';
 import { setRepositories } from '../../state/storage';
 import { computeProgress, computeRecap, plannedDays, recapWeekStart, progressRoutes } from '.';
 import { ProgressScreen, ProgressEmptyScreen, RecapScreen } from './ProgressScreens';
-import { mondayIndex } from './model';
+import { dayIndexOn, mondayIndex, planStartKey } from './model';
 
 const mockNav = { navigate: jest.fn(), goBack: jest.fn(), replace: jest.fn() };
 jest.mock('@react-navigation/native', () => ({ useNavigation: () => mockNav }));
@@ -91,6 +91,26 @@ describe('progress model', () => {
   });
 });
 
+describe('day zero', () => {
+  it('maps dates to plan days from the plan start, and falls back to Monday = 0 without one', () => {
+    expect(dayIndexOn('2026-10-28', '2026-10-28')).toBe(0);
+    expect(dayIndexOn('2026-11-03', '2026-10-28')).toBe(6);
+    expect(dayIndexOn('2026-11-04', '2026-10-28')).toBe(0);
+    expect(dayIndexOn('2026-10-27', '2026-10-28')).toBe(6);
+    expect(dayIndexOn('2026-10-26', null)).toBe(0);
+    expect(planStartKey(plan({ updatedAt: noon('2026-10-28') }), 0)).toBe('2026-10-28');
+    expect(planStartKey(null, 0)).toBeNull();
+  });
+
+  it('plannedDays follows a plan made on a Wednesday: day 0 is Wednesday', () => {
+    // Workouts on plan days 0, 2, 4, 6 are Wed, Fri, Sun, Tue.
+    const p = plannedDays({ today: '2026-10-30', completed: [], currentWeekDays: weekDays, firstLogDate: '2026-10-28', planStart: '2026-10-28' });
+    expect(p).toEqual(['2026-10-28', '2026-10-30']);
+    const q = plannedDays({ today: '2026-11-03', completed: [], currentWeekDays: weekDays, firstLogDate: '2026-10-31', planStart: '2026-10-28' });
+    expect(q).toEqual(['2026-11-01', '2026-11-03']);
+  });
+});
+
 describe('recap model', () => {
   it('covers the week just ended unless today is Sunday', () => {
     expect(recapWeekStart('2026-10-28')).toBe('2026-10-19');
@@ -149,7 +169,10 @@ describe('screens', () => {
   });
 
   it('Progress tab shows streak, week, heat map and totals after a session', async () => {
+    // The plan is made on a Monday, so plan day 0 is Monday and the fixture's pattern reads as Mon, Wed, Fri, Sun.
+    jest.setSystemTime(noon('2026-10-26'));
     await db.repos.plan.save({ goal: 'stay_fit', bodyParts: [], styles: ['normal'], mix: {}, daysPerWeek: 4, experience: 'new', variant: 'standard', weekNumber: 1, engineVersion: '1' });
+    jest.setSystemTime(noon(TODAY));
     await db.repos.plan.replaceDays(1, weekDays);
     for (const d of ['2026-10-23', '2026-10-25', '2026-10-26']) await db.repos.sessionLog.insert(log(d));
     await db.repos.steps.upsert({ onDate: '2026-10-26', steps: 6240, briskMinutes: 0, source: 'pedometer', updatedAt: 0 });

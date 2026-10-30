@@ -11,6 +11,9 @@ public sealed class EfAccountStore(CasaFitDbContext db) : IAccountStore
     public Task<Account?> GetAsync(Guid accountId, CancellationToken ct) =>
         db.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Id == accountId, ct);
 
+    public Task<Account?> FindByExternalIdAsync(string externalId, CancellationToken ct) =>
+        db.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.ExternalId == externalId, ct);
+
     public Task<Plan?> GetPlanAsync(Guid accountId, CancellationToken ct) =>
         db.Plans.AsNoTracking().FirstOrDefaultAsync(p => p.AccountId == accountId, ct);
 
@@ -119,7 +122,7 @@ public sealed class EfAccountStore(CasaFitDbContext db) : IAccountStore
             }
         }
         await db.SaveChangesAsync(ct);
-        // Cascade deletes plan, consents, events, sessions, food and steps. OTP attempts keep only a null account id.
+        // Cascade deletes plan, consents, events, sessions, food and steps. 
         await db.Accounts.Where(a => a.Id == accountId).ExecuteDeleteAsync(ct);
         await tx.CommitAsync(ct);
     }

@@ -1,12 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Security.Cryptography;
 using System.Text;
 using CasaFit.Application.Auth;
 using CasaFit.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace CasaFit.IntegrationTests;
 
@@ -31,6 +29,7 @@ public class MeEndpointsTests(ApiFactory factory)
         var body = await TestUser.Json(res);
         Assert.Equal(2, body.GetProperty("freeChecksRemaining").GetInt32());
         Assert.False(body.GetProperty("onboarded").GetBoolean());
+        Assert.Equal(user.Email, body.GetProperty("email").GetString());
         Assert.False(body.GetProperty("pro").GetProperty("active").GetBoolean());
         Assert.Equal(System.Text.Json.JsonValueKind.Null, body.GetProperty("plan").ValueKind);
     }
@@ -115,31 +114,59 @@ public class MeEndpointsTests(ApiFactory factory)
     }
 
     [Fact]
-    public async Task Delete_removes_the_account_and_keeps_the_hash_so_signing_up_again_restores_no_credits()
+    public async Task Delete_removes_local_data_and_the_supabase_user_and_keeps_hashes_so_signing_up_again_restores_no_credits()
     {
-        var user = await TestUser.SignInAsync(factory);
+        var user = await TestUser.SignInAsync(factory, email: "Dele.Te+x@gmail.com");
         await user.Client.PutAsJsonAsync("/v1/me/plan", GoodPlan);
 
         var del = await user.Client.DeleteAsync("/v1/me");
         Assert.Equal(HttpStatusCode.NoContent, del.StatusCode);
+        Assert.Contains(user.Sub, factory.IdentityAdmin.Deleted);
 
-        // The old token no longer works for the account.
-        Assert.Equal(HttpStatusCode.Unauthorized, (await user.Client.GetAsync("/v1/me")).StatusCode);
+        // The old token is still cryptographically valid, but it must not bring the account back.
+        var after = await user.Client.GetAsync("/v1/me");
+        Assert.Equal(HttpStatusCode.Unauthorized, after.StatusCode);
+        Assert.Equal("account_deleted", (await TestUser.Json(after)).GetProperty("code").GetString());
 
+        var pepper = Encoding.UTF8.GetBytes(ApiFactory.Pepper);
         using (var scope = factory.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<CasaFitDbContext>();
             Assert.False(await db.Accounts.AnyAsync(a => a.Id == user.Id));
+            Assert.False(await db.Accounts.AnyAsync(a => a.ExternalId == user.Sub));
             Assert.False(await db.Plans.AnyAsync(p => p.AccountId == user.Id));
-            var hash = PhoneHash(user.Phone);
-            var row = await db.DeletedIdentifierHashes.SingleAsync(h => h.Hash == hash);
+            var emailHash = IdentifierHasher.ForEmail(pepper, "delete@gmail.com");
+            var row = await db.DeletedIdentifierHashes.SingleAsync(h => h.Hash == emailHash);
             Assert.Equal(180, Math.Round((row.ExpiresAt - row.DeletedAt).TotalDays));
+            Assert.True(await db.DeletedIdentifierHashes.AnyAsync(h => h.Hash == IdentifierHasher.ForExternalId(pepper, user.Sub)));
         }
 
-        // Sign up again with the same phone: a new account with no free checks.
-        var again = await SignUpAgainAsync(user.Phone);
-        Assert.True(again.GetProperty("isNewAccount").GetBoolean());
-        Assert.Equal(0, again.GetProperty("freeChecksRemaining").GetInt32());
+        // Sign up again with the same address (a new Supabase user): a new account with no free checks.
+        var again = await TestUser.SignInAsync(factory, email: "dele.te@gmail.com");
+        var me = await TestUser.Json(await again.Client.GetAsync("/v1/me"));
+        Assert.NotEqual(user.Id, again.Id);
+        Assert.Equal(0, me.GetProperty("freeChecksRemaining").GetInt32());
+    }
+
+    [Fact]
+    public async Task Delete_when_supabase_fails_is_a_502_problem_not_a_silent_success_and_a_retry_finishes_it()
+    {
+        var user = await TestUser.SignInAsync(factory);
+        factory.IdentityAdmin.Fail = true;
+        HttpResponseMessage failed;
+        try { failed = await user.Client.DeleteAsync("/v1/me"); }
+        finally { factory.IdentityAdmin.Fail = false; }
+
+        Assert.Equal(HttpStatusCode.BadGateway, failed.StatusCode);
+        Assert.Equal("application/problem+json", failed.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("identity_delete_failed", (await TestUser.Json(failed)).GetProperty("code").GetString());
+        Assert.DoesNotContain(user.Sub, factory.IdentityAdmin.Deleted);
+
+        // Local data is already gone; the retry repeats the Supabase call and succeeds.
+        using (var scope = factory.Services.CreateScope())
+            Assert.False(await scope.ServiceProvider.GetRequiredService<CasaFitDbContext>().Accounts.AnyAsync(a => a.Id == user.Id));
+        Assert.Equal(HttpStatusCode.NoContent, (await user.Client.DeleteAsync("/v1/me")).StatusCode);
+        Assert.Contains(user.Sub, factory.IdentityAdmin.Deleted);
     }
 
     [Fact]
@@ -244,22 +271,5 @@ public class MeEndpointsTests(ApiFactory factory)
     {
         var res = await factory.CreateClient().PostAsJsonAsync(path, new { });
         Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
-    }
-
-    private static byte[] PhoneHash(string phone) => HMACSHA256.HashData(
-        Encoding.UTF8.GetBytes("integration-test-pepper-0123456789"), Encoding.UTF8.GetBytes("+91" + phone));
-
-    /// <summary>The 30 second resend lock is real time, so plant a known code straight in the OTP store.</summary>
-    private async Task<System.Text.Json.JsonElement> SignUpAgainAsync(string phone)
-    {
-        var pepper = Encoding.UTF8.GetBytes("integration-test-pepper-0123456789");
-        var key = Convert.ToHexString(PhoneHash(phone));
-        var codeHash = HMACSHA256.HashData(pepper, Encoding.UTF8.GetBytes($"{key}:123456"));
-        await factory.Services.GetRequiredService<IOtpStore>().SaveCodeAsync(key, codeHash, TimeSpan.FromMinutes(5), default);
-
-        var client = factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-        var res = await client.PostAsJsonAsync("/v1/auth/verify", new { phone, code = "123456" });
-        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
-        return await TestUser.Json(res);
     }
 }

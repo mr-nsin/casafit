@@ -11,6 +11,7 @@ namespace CasaFit.Application.Accounts;
 
 public sealed class AccountService(
     IAccountStore store,
+    IIdentityAdmin identity,
     IOptions<AuthOptions> auth,
     TimeProvider clock,
     ILogger<AccountService> log)
@@ -25,7 +26,8 @@ public sealed class AccountService(
         var account = await RequireAsync(accountId, ct);
         var plan = await store.GetPlanAsync(accountId, ct);
         return new MeResponse(
-            account.Id, account.Locale, account.Onboarded, account.CreatedAt,
+            account.Id, account.Email, EmailIdentity.Mask(account.Email), account.Provider,
+            account.Locale, account.Onboarded, account.CreatedAt,
             account.FreeChecksRemaining,
             EntitlementRules.ProOf(account.ProActive, account.ProExpiresAt, clock.GetUtcNow()),
             plan is null ? null : ToResponse(plan));
@@ -75,7 +77,7 @@ public sealed class AccountService(
         log.LogInformation("Exported data for account {AccountId}", accountId);
         return new ExportResponse(
             clock.GetUtcNow(),
-            new ExportAccount(account.Id, account.PhoneE164, account.EmailNorm, account.Locale, account.Onboarded, account.CreatedAt),
+            new ExportAccount(account.Id, account.Email, account.Provider, account.Locale, account.Onboarded, account.CreatedAt),
             plan is null ? null : ToResponse(plan),
             consents.Select(ToResponse).ToList(),
             sessions.Select(s => new SessionEntry
@@ -88,30 +90,39 @@ public sealed class AccountService(
     }
 
     /// <summary>
-    /// Deletes the account and personal rows, and keeps only an HMAC of each identifier for 180 days so that
-    /// signing up again with the same phone or email does not restore the free checks. Deleting twice is a no-op.
+    /// Deletes the local account and personal rows, keeps only an HMAC of the email and of the Supabase user id for
+    /// 180 days (so signing up again does not restore free checks and a live token cannot re-create the account),
+    /// then deletes the Supabase user. Local data goes first. If the Supabase call fails this throws a 502 problem
+    /// and the client retries the same request: the retry skips the local part and repeats the Supabase call.
     /// </summary>
-    public async Task DeleteAsync(Guid accountId, CancellationToken ct)
+    public async Task DeleteAsync(string externalId, CancellationToken ct)
     {
-        var account = await store.GetAsync(accountId, ct);
-        if (account is null) return;
-
-        var now = clock.GetUtcNow();
-        var hashes = new List<DeletedIdentifierHash>();
-        foreach (var identifier in new[] { account.PhoneE164, account.EmailNorm })
+        var account = await store.FindByExternalIdAsync(externalId, ct);
+        if (account is not null)
         {
-            if (string.IsNullOrEmpty(identifier)) continue;
-            hashes.Add(new DeletedIdentifierHash
-            {
-                Hash = IdentifierHasher.Hash(_pepper, identifier),
-                DeletedAt = now,
-                ExpiresAt = now + DeletedHashRetention,
-            });
+            var now = clock.GetUtcNow();
+            var hashes = new List<DeletedIdentifierHash> { Tombstone(IdentifierHasher.ForExternalId(_pepper, externalId), now) };
+            if (!string.IsNullOrEmpty(account.Email))
+                hashes.Add(Tombstone(IdentifierHasher.ForEmail(_pepper, account.Email), now));
+
+            await store.DeleteAsync(account.Id, hashes, ct);
+            log.LogInformation("Deleted account {AccountId}", account.Id);
         }
 
-        await store.DeleteAsync(accountId, hashes, ct);
-        log.LogInformation("Deleted account {AccountId}", accountId);
+        try
+        {
+            await identity.DeleteUserAsync(externalId, ct);
+        }
+        catch (IdentityAdminException ex)
+        {
+            log.LogError(ex, "Supabase user delete failed for account {AccountId}", account?.Id);
+            throw new DomainException(AuthStatus.BadGateway, "identity_delete_failed",
+                "Your CasaFit data is deleted, but your sign-in record could not be removed yet. Try again in a moment.");
+        }
     }
+
+    private static DeletedIdentifierHash Tombstone(byte[] hash, DateTimeOffset now) =>
+        new() { Hash = hash, DeletedAt = now, ExpiresAt = now + DeletedHashRetention };
 
     private async Task<Account> RequireAsync(Guid accountId, CancellationToken ct) =>
         await store.GetAsync(accountId, ct)

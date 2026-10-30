@@ -6,7 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Constants from 'expo-constants';
 
 import type { PlanRow, Profile } from '../../db/repositories';
-import { computeProgress } from '../progress';
+import { computeProgress, planStartKey } from '../progress';
 import { deviceTzOffsetMin, todayKey } from '../../services/step-counter';
 import { getRepositories, hasRepositories } from '../../state/storage';
 import { exportMyData, failureMessage } from './account';
@@ -88,7 +88,7 @@ export function useProfileStats(): ProfileStats | null {
       void Promise.all([repos.sessionLog.list(), repos.plan.get()])
         .then(async ([logs, plan]) => {
           const currentWeekDays = plan ? await repos.plan.days(plan.weekNumber) : [];
-          const view = computeProgress({ today: todayKey(now, tz), tz, logs, microActiveS: 0, steps: [], plan, currentWeekDays });
+          const view = computeProgress({ today: todayKey(now, tz), tz, logs, microActiveS: 0, steps: [], plan, currentWeekDays, planStart: planStartKey(plan, tz) });
           const done = logs.filter((l) => l.status === 'complete');
           if (live) setStats({ streak: view.streak, sessions: done.length, minutes: Math.round(done.reduce((a, l) => a + l.durationS, 0) / 60) });
         })

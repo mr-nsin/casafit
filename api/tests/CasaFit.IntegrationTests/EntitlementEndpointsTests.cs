@@ -212,37 +212,24 @@ public class EntitlementEndpointsTests(ApiFactory factory)
         Assert.Equal(1, (await TestUser.Json(res)).GetProperty("foodPack").GetInt32());
     }
 
-    [Fact]
-    public async Task Refresh_returns_a_new_working_pair()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("wrong-secret")]
+    [InlineData("Bearer " + ApiFactory.WebhookSecret)]
+    public async Task Webhook_with_a_missing_or_wrong_header_is_401_problem_json_even_with_a_bad_body(string? header)
     {
-        var user = await TestUser.SignInAsync(factory);
-        var anon = factory.CreateClient();
-
-        var res = await anon.PostAsJsonAsync("/v1/auth/refresh", new { refreshToken = user.RefreshToken });
-
-        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
-        var access = (await TestUser.Json(res)).GetProperty("accessToken").GetString()!;
-        var client = factory.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new("Bearer", access);
-        Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/v1/me")).StatusCode);
+        var res = await WebhookClient(header).PostAsync("/v1/webhooks/revenuecat",
+            new StringContent("{}", Encoding.UTF8, "application/json"));
+        Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
+        Assert.Equal("application/problem+json", res.Content.Headers.ContentType?.MediaType);
     }
 
     [Fact]
-    public async Task Refresh_rejects_an_access_token_garbage_and_a_deleted_account()
+    public async Task Webhook_with_the_exact_secret_is_accepted()
     {
-        var user = await TestUser.SignInAsync(factory);
-        var anon = factory.CreateClient();
-
-        // An access token has the wrong audience.
-        Assert.Equal(HttpStatusCode.Unauthorized,
-            (await anon.PostAsJsonAsync("/v1/auth/refresh", new { refreshToken = user.AccessToken })).StatusCode);
-        Assert.Equal(HttpStatusCode.Unauthorized,
-            (await anon.PostAsJsonAsync("/v1/auth/refresh", new { refreshToken = "not-a-token" })).StatusCode);
-        Assert.Equal(HttpStatusCode.BadRequest,
-            (await anon.PostAsJsonAsync("/v1/auth/refresh", new { refreshToken = "" })).StatusCode);
-
-        await user.Client.DeleteAsync("/v1/me");
-        Assert.Equal(HttpStatusCode.Unauthorized,
-            (await anon.PostAsJsonAsync("/v1/auth/refresh", new { refreshToken = user.RefreshToken })).StatusCode);
+        var res = await WebhookClient(ApiFactory.WebhookSecret).PostAsync("/v1/webhooks/revenuecat",
+            Event(TestUser.Key(), "TEST", Guid.NewGuid(), 1000));
+        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
     }
 }

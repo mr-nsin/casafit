@@ -1,23 +1,24 @@
-# Local stack: api + Postgres 16 + Redis 7.   docker compose up --build   (run from api/)
+# Local stack: api + Postgres 16.   docker compose up --build   (run from api/)
 # The api listens on http://localhost:5080. Secrets here are for local use only.
 services:
   api:
-    build: .
+    build:
+      context: ..            # repo root: the image copies app/assets/content
+      dockerfile: api/Dockerfile
     ports:
       - "5080:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__Default: "Host=postgres;Port=5432;Database=casafit;Username=casafit;Password=casafit"
-      Redis__Url: "redis://redis:6379"
-      Jwt__Secret: "local-compose-jwt-secret-0123456789abcdef"
+      # Replace with your Supabase project values. The JWT secret is optional when the project signs with asymmetric keys (JWKS).
+      Supabase__Url: "https://your-project.supabase.co"
+      Supabase__JwtSecret: "local-compose-supabase-jwt-secret-0123456789"
+      Supabase__ServiceRoleKey: "local-compose-service-role-key"
       Auth__Pepper: "local-compose-pepper-0123456789"
-      Sms__Provider: "log"
-      Attestation__Provider: "dev"
+      RevenueCat__WebhookSecret: "local-compose-revenuecat-webhook-secret"
       Database__MigrateOnStartup: "true"
     depends_on:
       postgres:
-        condition: service_healthy
-      redis:
         condition: service_healthy
 
   postgres:
@@ -32,16 +33,6 @@ services:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U casafit -d casafit"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-
-  redis:
-    image: redis:7
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 10

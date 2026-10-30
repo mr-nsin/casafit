@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using CasaFit.Application.Accounts;
 using CasaFit.Application.Auth;
 
 namespace CasaFit.Application.Entitlements;

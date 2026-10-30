@@ -76,12 +76,26 @@ export interface SessionState {
   /** Clock reading at the last tick or (re)start while active; 0 when unset. */
   lastTickMono: number;
   logged: boolean;
+  /** When a finished session was restored from a snapshot: the time it was last saved, so the log keeps its own day. 0 otherwise. */
+  restoredAt: number;
+  /** Single-move mode ("Try 30 seconds"): one move, never logged, never snapshotted. */
+  trial: boolean;
+}
+
+/** True when nothing is left to play: the session is complete, or the position is at the end. */
+export function isFinished(s: Pick<SessionState, 'status' | 'plan' | 'timeline' | 'positionMs' | 'extras' | 'rungBySet'>): boolean {
+  if (!s.plan) return false;
+  if (s.status === 'complete') return true;
+  if (!s.timeline || (s.status !== 'paused' && s.status !== 'confirm_end')) return false;
+  return s.positionMs >= totalMs(effOf(s as SessionState));
 }
 
 export interface StartOptions {
   planWeek?: number;
   planDay?: number;
   prefs?: Partial<SessionPrefs>;
+  /** Run as a single-move trial (see `startTrial`). */
+  trial?: boolean;
 }
 
 export interface SessionActions {
@@ -104,6 +118,10 @@ export interface SessionActions {
   setPrefs(patch: Partial<SessionPrefs>): void;
   /** Writes the complete log once, clears the snapshot. */
   finalizeComplete(felt: Felt | null): Promise<void>;
+  /** Logs a restored session that had already finished but was never saved, then clears the snapshot. */
+  saveFinished(): Promise<void>;
+  /** Drops a restored finished session without logging it. */
+  discardFinished(): Promise<void>;
   restoreFromSnapshot(): Promise<boolean>;
   expireStale(): Promise<void>;
   reset(): void;
@@ -139,6 +157,8 @@ const initial = (): SessionState => ({
   lastSnapshotMono: 0,
   lastTickMono: 0,
   logged: false,
+  restoredAt: 0,
+  trial: false,
 });
 
 // ---- Snapshot (de)serialisation ----
@@ -213,7 +233,7 @@ function buildLog(s: SessionState, now: number, status: 'complete' | 'unfinished
     warmupSkipped: s.plan!.steps.some((x) => x.phase === 'warmup' && s.skipped.includes(x.id)),
     formChecks: s.formChecks,
     quiet: s.prefs.quiet,
-    completedAt: deps.clock.wall(),
+    completedAt: status === 'complete' && s.restoredAt > 0 ? s.restoredAt : deps.clock.wall(),
   };
 }
 
@@ -249,7 +269,8 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
 
     const persist = (force = false): Promise<void> => {
       const s = get();
-      if (!s.plan || s.status === 'idle' || s.status === 'ended') return Promise.resolve();
+      // A 30-second trial never leaves a snapshot behind, so Home never offers to resume it.
+      if (!s.plan || s.trial || s.status === 'idle' || s.status === 'ended') return Promise.resolve();
       const d = deps();
       const mono = d.clock.now();
       if (!force && mono - s.lastSnapshotMono < SNAPSHOT_EVERY_MS) return Promise.resolve();
@@ -312,6 +333,7 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
           planDay: opts.planDay ?? 0,
           prefs: { ...DEFAULT_PREFS, ...opts.prefs },
           resumeBy: d.clock.wall() + RESUME_WINDOW_MS,
+          trial: !!opts.trial,
         });
         get().tick();
         void persist(true);
@@ -564,6 +586,7 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
         const now = d.clock.now();
         const row = buildLog(s, now, 'unfinished', null);
         set({ status: 'ended', outcome: 'discarded', resumeTo: null });
+        if (s.trial) return;
         await d.snapshot.clear();
         if (row.durationS >= MIN_LOGGED_S) await d.sessionLog.insert(row);
       },
@@ -595,12 +618,26 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
 
       async finalizeComplete(felt) {
         const s = get();
-        if (!s.plan || s.status !== 'complete' || s.logged) return;
+        if (!s.plan || s.status !== 'complete' || s.logged || s.trial) return;
         const d = deps();
         set({ logged: true });
         const row = buildLog(s, d.clock.now(), 'complete', felt);
         await d.sessionLog.insert(row);
         await d.snapshot.clear();
+      },
+
+      async saveFinished() {
+        const s = get();
+        if (!s.plan || s.trial || !isFinished(s)) return;
+        if (s.status !== 'complete') set({ status: 'complete', positionMs: totalMs(effOf(s)), resumeTo: null });
+        // Same path as the Complete screen. No feel answer was given, so none is stored.
+        await get().finalizeComplete(null);
+      },
+
+      async discardFinished() {
+        const s = get();
+        if (!s.plan || !isFinished(s)) return;
+        await deps().snapshot.clear();
       },
 
       async restoreFromSnapshot() {
@@ -644,6 +681,8 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
         const st = get();
         const loc = locate(effOf(st), body.positionMs);
         if (loc) set({ firedCues: { [`s${loc.seg.index}`]: true } });
+        // A finished session keeps the day it finished, if it is saved later.
+        if (isFinished(get())) set({ restoredAt: row.snapshotAt });
         return true;
       },
 

@@ -238,7 +238,9 @@ export function EditorScreen() {
     try {
       await persistSession(getRepositories(), draft.week, draft.dayIndex, session);
       useEditDraft.getState().clear();
-      back();
+      // Opened from plan detail: land there again, whatever sits between (Picker, Exercise, Lunge).
+      if (params?.from === 'plan' && key) nav.popTo('Plan', { planDayId: key });
+      else back();
     } catch {
       setNotice('We could not save that. Your changes are still here.');
       setSaving(false);

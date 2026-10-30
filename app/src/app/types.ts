@@ -43,7 +43,7 @@ export type RootStackParamList = {
   Paused: undefined;
   EndSession: undefined;
   /** `planDayId` is 'week-day' (default today). `addExerciseId` appends a move when the editor opens. */
-  Editor: { planDayId?: string; addExerciseId?: string } | undefined;
+  Editor: { planDayId?: string; addExerciseId?: string; from?: 'plan' } | undefined;
   /** With `stepId` the picked move replaces that step; without it the move is added. */
   Picker: { slot?: number; stepId?: string } | undefined;
   Parts: { part?: 'warmup' | 'work' | 'cooldown' } | undefined;

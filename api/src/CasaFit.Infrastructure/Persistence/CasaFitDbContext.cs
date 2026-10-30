@@ -9,7 +9,6 @@ namespace CasaFit.Infrastructure.Persistence;
 public sealed class CasaFitDbContext(DbContextOptions<CasaFitDbContext> options) : DbContext(options)
 {
     public DbSet<Account> Accounts => Set<Account>();
-    public DbSet<OtpAttempt> OtpAttempts => Set<OtpAttempt>();
     public DbSet<FormCheckEvent> FormCheckEvents => Set<FormCheckEvent>();
     public DbSet<DeletedIdentifierHash> DeletedIdentifierHashes => Set<DeletedIdentifierHash>();
     public DbSet<Plan> Plans => Set<Plan>();
@@ -26,22 +25,12 @@ public sealed class CasaFitDbContext(DbContextOptions<CasaFitDbContext> options)
             e.ToTable("account");
             e.HasKey(x => x.Id);
             e.Property(x => x.Id).ValueGeneratedNever();
-            e.Property(x => x.PhoneE164).HasMaxLength(20);
-            e.Property(x => x.EmailNorm).HasMaxLength(320);
+            e.Property(x => x.ExternalId).HasMaxLength(128).IsRequired();
+            e.Property(x => x.Email).HasMaxLength(320);
+            e.Property(x => x.Provider).HasMaxLength(16).IsRequired();
             e.Property(x => x.Locale).HasMaxLength(16);
-            e.HasIndex(x => x.PhoneE164).IsUnique();
-            e.HasIndex(x => x.EmailNorm).IsUnique();
-        });
-
-        b.Entity<OtpAttempt>(e =>
-        {
-            e.ToTable("otp_attempt");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).ValueGeneratedNever();
-            e.Property(x => x.Channel).HasConversion<string>().HasMaxLength(16);
-            e.Property(x => x.Kind).HasConversion<string>().HasMaxLength(16);
-            e.HasOne<Account>().WithMany().HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.SetNull);
-            e.HasIndex(x => new { x.IdentifierHash, x.CreatedAt });
+            e.HasIndex(x => x.ExternalId).IsUnique();
+            e.HasIndex(x => x.Email).IsUnique();
         });
 
         b.Entity<FormCheckEvent>(e =>

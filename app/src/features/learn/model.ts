@@ -37,6 +37,22 @@ export function reviewInfo(card: { reviewStatus: 'pending' | 'reviewed'; reviewe
 export const sortedMyths = (m: readonly Myth[]): Myth[] => [...m].sort((a, b) => a.order - b.order);
 export const sortedConcepts = (c: readonly Concept[]): Concept[] => [...c].sort((a, b) => a.order - b.order);
 
+/** ISO 8601 week number (1 to 53) of a 'YYYY-MM-DD' date. Weeks start on Monday. */
+export function isoWeek(date: string): number {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+  if (!m) return 1;
+  const d = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = Date.UTC(d.getUTCFullYear(), 0, 1);
+  return Math.ceil(((d.getTime() - yearStart) / 86_400_000 + 1) / 7);
+}
+
+/** One myth per ISO week, the same all week, stepping through the list in order. Null when there are none. */
+export function mythOfTheWeek(myths: readonly Myth[], date: string): Myth | null {
+  const list = sortedMyths(myths);
+  return list.length ? list[(isoWeek(date) - 1) % list.length]! : null;
+}
+
 export function nextOf<T extends { id: string }>(list: readonly T[], id: string): T | null {
   const i = list.findIndex((x) => x.id === id);
   return i >= 0 && i < list.length - 1 ? list[i + 1]! : null;

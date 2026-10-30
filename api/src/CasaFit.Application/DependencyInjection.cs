@@ -10,8 +10,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddAuthModule(this IServiceCollection services)
     {
-        services.AddScoped<AuthService>();
-        services.AddScoped<RefreshService>();
+        services.AddScoped<AccountProvisioner>();
         return services;
     }
 

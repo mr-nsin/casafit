@@ -1,0 +1,12 @@
+# Build context is the repo root (docker build -f api/Dockerfile .). Ignore everything, then allow what the image needs.
+*
+!api/Directory.Build.props
+!api/Directory.Packages.props
+!api/src/**
+!app/assets/content/exercises.json
+!app/assets/content/plans.json
+!app/assets/content/foods.json
+!app/assets/content/learn.json
+!app/assets/content/manifest.json
+**/bin/
+**/obj/

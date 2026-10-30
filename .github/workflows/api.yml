@@ -1,0 +1,46 @@
+name: api
+
+on:
+  push:
+    branches: [main]
+    paths: ["api/**", "shared/fixtures/**", ".github/workflows/api.yml"]
+  pull_request:
+    paths: ["api/**", "shared/fixtures/**", ".github/workflows/api.yml"]
+
+concurrency:
+  group: api-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore CasaFit.sln
+
+      - name: Build (warnings are errors)
+        run: dotnet build CasaFit.sln --no-restore -c Release
+
+      - name: Unit tests
+        run: dotnet test tests/CasaFit.UnitTests --no-build -c Release --logger "trx;LogFileName=unit.trx"
+
+      # Testcontainers starts Postgres 16 on the runner's Docker. No Supabase is needed: tokens are signed with a test secret.
+      - name: Integration tests
+        run: dotnet test tests/CasaFit.IntegrationTests --no-build -c Release --logger "trx;LogFileName=integration.trx"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-test-results
+          path: api/tests/**/TestResults/*.trx
+          if-no-files-found: ignore

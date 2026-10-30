@@ -7,6 +7,7 @@ namespace CasaFit.Application.Accounts;
 public interface IAccountStore
 {
     Task<Account?> GetAsync(Guid accountId, CancellationToken ct);
+    Task<Account?> FindByExternalIdAsync(string externalId, CancellationToken ct);
     Task<Plan?> GetPlanAsync(Guid accountId, CancellationToken ct);
 
     /// <summary>Creates or replaces the plan, keeps the week number, and marks the account onboarded.</summary>

@@ -1,9 +1,0 @@
-**/bin/
-**/obj/
-**/TestResults/
-tests/
-.env
-.env.*
-!.env.example
-*.md
-openapi.json

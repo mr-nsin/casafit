@@ -21,5 +21,5 @@ export const progressRoutes: Record<ProgressRouteName, ProgressRouteEntry> = {
   Recap: { component: RecapScreen, options: { headerShown: false } },
 };
 
-export { computeProgress, computeRecap, recapWeekStart, plannedDays } from './model';
+export { computeProgress, computeRecap, recapWeekStart, plannedDays, planStartKey, dayIndexOn } from './model';
 export type { ProgressView, RecapView } from './model';

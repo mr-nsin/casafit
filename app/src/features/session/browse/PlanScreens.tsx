@@ -1,6 +1,6 @@
 // WeekPlan, Why and Plan (plan detail). All read the local plan; none writes.
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useRoute, type RouteProp } from '@react-navigation/native';
 
@@ -26,9 +26,10 @@ import {
   space,
   useTokens,
 } from '../../../ui';
+import { addDays } from '../../../engine';
 import { getSessionDeps } from '../deps';
 import { startSession } from '../start';
-import { usePlanData, useSkipped } from './hooks';
+import { usePlanData, useSkipped, useWeekRows } from './hooks';
 import {
   DOT,
   WEEKDAY_LONG,
@@ -81,34 +82,50 @@ export function WeekPlanScreen() {
   const t = useTokens();
   const data = usePlanData();
   const startDay = useStartDay(nav);
+  // 0 is the week the plan is on; -1 is the week before, +1 the week after. Only weeks with saved rows can be stepped to.
+  const [shift, setShift] = useState(0);
+  const week = data.plan ? data.plan.weekNumber + shift : null;
+  const other = useWeekRows(week, data.rows);
   if (data.loading) return <Page topBar={{ leading: 'back', onLeading: back }}><View /></Page>;
   if (!data.plan || !data.clock) return <NoPlan back={back} />;
 
-  const { clock, plan, rows } = data;
+  const { clock, plan } = data;
+  const rows = shift === 0 ? data.rows : (other.rows ?? []);
+  const hasPrev = other.rows ? other.hasPrev : false;
+  const hasNext = other.rows ? other.hasNext : false;
+  const past = shift < 0;
+  const dates = clock.dates.map((d) => addDays(d, shift * 7));
   const summary = weekSummary(rows);
   const stepGoal = data.profile?.stepGoal ?? 7000;
   const todayRow = rows.find((r) => r.dayIndex === clock.dayIndex);
+  const weekLabel = `Week ${plan.weekNumber + shift}`;
 
   return (
     <Page
       topBar={{ title: 'My plan', leading: 'back', onLeading: back, trailingText: { label: 'Why this plan', onPress: () => nav.navigate('Why') } }}
       footer={
-        <View style={{ flexDirection: 'row', gap: space.s }}>
-          <TonalButton label="Change mix" onPress={() => nav.navigate('Mix')} style={{ flex: 1 }} />
-          <FilledButton label="Start today" leadingIcon="play_arrow" onPress={() => startDay(todayRow)} style={{ flex: 1 }} disabled={!parseSession(todayRow)} />
-        </View>
+        shift === 0 ? (
+          <View style={{ flexDirection: 'row', gap: space.s }}>
+            <TonalButton label="Change mix" onPress={() => nav.navigate('Mix')} style={{ flex: 1 }} />
+            <FilledButton label="Start today" leadingIcon="play_arrow" onPress={() => startDay(todayRow)} style={{ flex: 1 }} disabled={!parseSession(todayRow)} />
+          </View>
+        ) : undefined
       }
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.s }}>
-        <Badge label={`Week ${plan.weekNumber}`} tone="pc" />
+        <IconButton icon="chevron_left" label="Previous week" onPress={() => setShift((n) => n - 1)} disabled={!hasPrev} />
+        <Badge label={weekLabel} tone="pc" />
+        <IconButton icon="chevron_right" label="Next week" onPress={() => setShift((n) => n + 1)} disabled={!hasNext} />
+        {shift !== 0 ? <TextButton label="This week" onPress={() => setShift(0)} /> : null}
       </View>
       <Text color="osv" tabular>
         {summary.workouts} workouts {DOT} {summary.minutes} minutes{summary.mix ? ` ${DOT} ${summary.mix}` : ''}
       </Text>
+      {past ? <Text variant="bodySmall" color="osv">This week is behind you, so it is for reading only.</Text> : null}
       <View style={{ gap: space.s }}>
-        {clock.dates.map((date, i) => {
+        {dates.map((date, i) => {
           const row = rows.find((r) => r.dayIndex === i);
-          const isToday = i === clock.dayIndex;
+          const isToday = shift === 0 && i === clock.dayIndex;
           const rest = !row || row.kind === 'rest';
           const day = WEEKDAY_SHORT[weekdayIndex(date)]!;
           const full = WEEKDAY_LONG[weekdayIndex(date)]!;
@@ -131,7 +148,7 @@ export function WeekPlanScreen() {
                   {sub}
                 </Text>
               </Touchable>
-              {rest || isToday ? (
+              {rest || isToday || past ? (
                 <View style={{ width: 48, alignItems: 'center' }}>
                   <Icon name={rest ? 'bedtime' : 'chevron_right'} color={isToday ? 'opc' : 'osv'} />
                 </View>
@@ -142,9 +159,11 @@ export function WeekPlanScreen() {
           );
         })}
       </View>
-      <Text variant="bodySmall" color="osv">
-        Weeks 2 and 3 are built when you get there, from how week {plan.weekNumber} felt.
-      </Text>
+      {shift === 0 && !hasNext ? (
+        <Text variant="bodySmall" color="osv">
+          Weeks 2 and 3 are built when you get there, from how week {plan.weekNumber} felt.
+        </Text>
+      ) : null}
     </Page>
   );
 }
@@ -220,16 +239,22 @@ export function PlanScreen() {
   const startDay = useStartDay(nav);
   const skipped = useSkipped(data.plan, data.profile);
   const params = route.params;
+  // A day from another week (stepped to in WeekPlan) is read from its own saved rows.
+  const dayKey = parsePlanDayKey(params?.planDayId);
+  const otherWeek = useWeekRows(dayKey && data.plan && dayKey.week !== data.plan.weekNumber ? dayKey.week : null, data.rows);
 
   if (params?.readyMadeId) return <ReadyMadePlanView id={params.readyMadeId} data={data} back={back} />;
 
   if (data.loading) return <Page topBar={{ leading: 'back', onLeading: back }}><View /></Page>;
   if (!data.plan || !data.clock) return <NoPlan back={back} />;
 
-  const key = parsePlanDayKey(params?.planDayId);
+  const key = dayKey;
+  const weekShift = key ? key.week - data.plan.weekNumber : 0;
+  const pool = weekShift === 0 ? data.rows : (otherWeek.rows ?? []);
   const row = key
-    ? data.rows.find((r) => r.planWeek === key.week && r.dayIndex === key.dayIndex)
+    ? pool.find((r) => r.planWeek === key.week && r.dayIndex === key.dayIndex)
     : data.rows.find((r) => r.dayIndex === data.clock!.dayIndex);
+  if (!row && weekShift !== 0 && !otherWeek.rows) return <Page topBar={{ leading: 'back', onLeading: back }}><View /></Page>;
   if (!row) {
     return (
       <Page topBar={{ leading: 'back', onLeading: back }}>
@@ -239,10 +264,12 @@ export function PlanScreen() {
   }
 
   const session = parseSession(row);
-  const isToday = row.dayIndex === data.clock.dayIndex;
+  const isToday = weekShift === 0 && row.dayIndex === data.clock.dayIndex;
+  const readOnly = weekShift < 0;
   const moves = workSteps(session);
   const mins = phaseMinutes(session);
-  const date = data.clock.dates[row.dayIndex];
+  const baseDate = data.clock.dates[row.dayIndex];
+  const date = baseDate ? addDays(baseDate, weekShift * 7) : undefined;
   const label = isToday ? "Today's plan" : `${date ? WEEKDAY_LONG[weekdayIndex(date)] : 'Planned'}'s plan`;
   const content = getSessionDeps().content;
   const skip = skipped[0];
@@ -251,9 +278,9 @@ export function PlanScreen() {
     <Page
       topBar={{ leading: 'back', onLeading: back }}
       footer={
-        session ? (
+        session && !readOnly ? (
           <View style={{ flexDirection: 'row', gap: space.s }}>
-            <TonalButton label="Edit" onPress={() => nav.navigate('Editor', { planDayId: planDayKey(row.planWeek, row.dayIndex) })} style={{ flex: 1 }} />
+            <TonalButton label="Edit" onPress={() => nav.navigate('Editor', { planDayId: planDayKey(row.planWeek, row.dayIndex), from: 'plan' })} style={{ flex: 1 }} />
             <FilledButton label="Start session" leadingIcon="play_arrow" onPress={() => startDay(row)} style={{ flex: 2 }} />
           </View>
         ) : undefined

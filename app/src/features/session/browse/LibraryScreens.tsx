@@ -7,6 +7,9 @@ import { useRoute, type RouteProp } from '@react-navigation/native';
 
 import type { RootStackParamList } from '../../../app/types';
 import { loadContent } from '../../../content';
+import { startTrial } from '../start';
+import { useSessionStore } from '../store';
+import { useTrialNotice } from '../trial';
 import { getRepositories, hasRepositories } from '../../../state/storage';
 import {
   Badge,
@@ -221,6 +224,9 @@ export function ExerciseScreen() {
   const content = loadContent();
   const ex = content.exercise(route.params?.exerciseId ?? '');
   const [saved, setSaved] = useState(false);
+  const trialNote = useTrialNotice((s) => s.message);
+  // The message is for the one visit that follows a trial; clear it when the screen is left.
+  useEffect(() => () => useTrialNotice.getState().set(null), []);
 
   useEffect(() => {
     if (!ex || !hasRepositories()) return undefined;
@@ -262,6 +268,17 @@ export function ExerciseScreen() {
     }
   };
 
+  const tryIt = () => {
+    const st = useSessionStore.getState();
+    // Never replace a session the user has in progress.
+    if (st.plan && (st.status === 'active' || st.status === 'paused' || st.status === 'confirm_end') && !st.trial) {
+      useTrialNotice.getState().set('Finish or save your current session first, then try this move.');
+      return;
+    }
+    useTrialNotice.getState().set(null);
+    nav.navigate(startTrial({ id: ex.id, name: exerciseName(content, ex), style: ex.style, mode: ex.mode, formCheckable: ex.formCheckable, lowImpact: ex.lowImpact }));
+  };
+
   const rung = (label: string, icon: string, target: typeof easier, none: string) => (
     <Touchable
       label={target ? `${label}: ${exerciseName(content, target)}` : `${label}: ${none}`}
@@ -289,7 +306,12 @@ export function ExerciseScreen() {
         onLeading: back,
         trailing: [{ icon: saved ? 'bookmark' : 'bookmark_border', label: saved ? 'Remove from favourites' : 'Save to favourites', onPress: toggle }],
       }}
-      footer={<FilledButton label="Add to today" leadingIcon="add" disabled={!canAdd} onPress={() => nav.navigate('Editor', { addExerciseId: ex.id })} />}
+      footer={
+        <View style={{ flexDirection: 'row', gap: space.s }}>
+          <TonalButton label="Try 30 seconds" leadingIcon="timer" disabled={blocked.length > 0} onPress={tryIt} style={{ flex: 1 }} />
+          <FilledButton label="Add to today" leadingIcon="add" disabled={!canAdd} onPress={() => nav.navigate('Editor', { addExerciseId: ex.id })} style={{ flex: 1 }} />
+        </View>
+      }
     >
       <Card tone="tc" radiusSize={28} style={{ alignItems: 'center', gap: space.m }}>
         <View accessible accessibilityRole="image" accessibilityLabel={content.t(ex.demo.altKey)} style={{ alignItems: 'center', gap: space.s }}>
@@ -314,6 +336,7 @@ export function ExerciseScreen() {
         <Badge label="No equipment" tone="c4" />
         {kneeFriendly ? <Badge label="Knee-friendly" tone="tc" /> : null}
       </View>
+      {trialNote ? <InfoNote icon="info" text={trialNote} /> : null}
       {blocked.length ? <InfoNote icon="block" tone="erc" text={`Hidden from your plan for your ${flagPhrase(blocked)}.`} /> : null}
       {caution.length ? <InfoNote icon="info" text={`Go gently if your ${flagPhrase(caution)} bother you. Stop if a move hurts.`} /> : null}
       <View style={{ gap: space.s }}>

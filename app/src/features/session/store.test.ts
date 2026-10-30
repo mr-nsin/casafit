@@ -1,5 +1,6 @@
 import { locate, totalMs } from './locate';
-import { MAX_TICK_GAP_MS, movesDone, RESUME_WINDOW_MS } from './store';
+import { MAX_TICK_GAP_MS, isFinished, movesDone, RESUME_WINDOW_MS } from './store';
+import { startTrial, trialPlan } from './start';
 import { createHarness, makePlan } from './testkit';
 import { deriveView, effOf, formatClock } from './view';
 import { getSessionDeps } from './deps';
@@ -385,5 +386,92 @@ describe('active time', () => {
     h.clock.advance(11 * 60_000);
     expect(await h.store.getState().restoreFromSnapshot()).toBe(true);
     expect(Math.floor(h.store.getState().activeMs / 60000)).toBe(0);
+  });
+});
+
+describe('finished but never saved', () => {
+  it('a restored complete session is finished; saving logs it once on the day it finished and clears the snapshot', async () => {
+    const h = createHarness();
+    h.store.getState().start(plan(), { planWeek: 1, planDay: 2 });
+    h.advance(900_000);
+    expect(h.store.getState().status).toBe('complete');
+    const finishedAt = h.clock.wall();
+    h.store.getState().reset(); // the app was closed on the Complete screen
+    h.clock.advance(6 * 3600_000);
+    expect(await h.store.getState().restoreFromSnapshot()).toBe(true);
+    expect(isFinished(h.store.getState())).toBe(true);
+    await h.store.getState().saveFinished();
+    await h.store.getState().saveFinished();
+    expect(h.logs).toHaveLength(1);
+    expect(h.logs[0]).toMatchObject({ status: 'complete', felt: null, planDay: 2, durationS: 900 });
+    expect(Math.abs(h.logs[0]!.completedAt - finishedAt)).toBeLessThan(5000);
+    expect(h.getSnapshot()).toBeNull();
+  });
+
+  it('a paused snapshot with no time left counts as finished and saves as complete', async () => {
+    const h = createHarness();
+    h.store.getState().start(plan());
+    h.advance(899_000);
+    h.store.getState().pause('user');
+    h.store.setState({ positionMs: 900_000 });
+    await h.store.getState().requestEnd();
+    await h.store.getState().saveForLater();
+    h.store.getState().reset();
+    expect(await h.store.getState().restoreFromSnapshot()).toBe(true);
+    expect(h.store.getState().status).toBe('paused');
+    expect(isFinished(h.store.getState())).toBe(true);
+    await h.store.getState().saveFinished();
+    expect(h.logs[0]).toMatchObject({ status: 'complete' });
+  });
+
+  it('discarding clears the snapshot and logs nothing; a session with time left is not finished', async () => {
+    const h = createHarness();
+    h.store.getState().start(plan());
+    h.advance(900_000);
+    h.store.getState().reset();
+    await h.store.getState().restoreFromSnapshot();
+    await h.store.getState().discardFinished();
+    expect(h.logs).toHaveLength(0);
+    expect(h.getSnapshot()).toBeNull();
+    h.store.getState().start(plan());
+    h.advance(100_000);
+    h.store.getState().pause('user');
+    expect(isFinished(h.store.getState())).toBe(false);
+    await h.store.getState().saveFinished();
+    expect(h.logs).toHaveLength(0);
+  });
+});
+
+describe('single-move trial', () => {
+  const ex = { id: 'squat', name: 'Squat', style: 'normal' as const, mode: 'timed' as const, formCheckable: true };
+
+  it('is one 30-second move, never snapshotted, never logged', async () => {
+    const h = createHarness();
+    const plan30 = trialPlan(ex);
+    expect(plan30.steps).toHaveLength(1);
+    expect(startTrial(ex)).toBe('Player');
+    expect(h.store.getState().timeline!.totalS).toBe(30);
+    expect(h.store.getState().trial).toBe(true);
+    h.advance(10_000);
+    h.store.getState().pause('user');
+    expect(h.getSnapshot()).toBeNull();
+    h.store.getState().resume();
+    h.advance(21_000);
+    expect(h.store.getState().status).toBe('complete');
+    await h.store.getState().finalizeComplete('about_right');
+    expect(h.logs).toHaveLength(0);
+    expect(h.getSnapshot()).toBeNull();
+  });
+
+  it('ending a trial logs nothing, and a normal session after it is a normal session', async () => {
+    const h = createHarness();
+    startTrial(ex);
+    h.advance(20_000);
+    await h.store.getState().endWithoutSaving();
+    expect(h.logs).toHaveLength(0);
+    h.store.getState().start(plan());
+    expect(h.store.getState().trial).toBe(false);
+    expect(h.store.getState().timeline!.totalS).toBe(900);
+    expect(h.getSnapshot()).not.toBeNull();
   });
 });

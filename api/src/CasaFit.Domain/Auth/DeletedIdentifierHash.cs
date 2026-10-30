@@ -2,7 +2,8 @@ namespace CasaFit.Domain.Auth;
 
 /// <summary>
 /// Written when an account is deleted, so the free-check loophole stays closed without keeping the raw identifier.
-/// Expires 180 days after deletion (docs/data-model.md section 1).
+/// Holds an HMAC of the normalised email and of the Supabase user id. Expires 180 days after deletion
+/// (docs/data-model.md section 1).
 /// </summary>
 public sealed class DeletedIdentifierHash
 {

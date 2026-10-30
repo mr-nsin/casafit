@@ -1,3 +1,4 @@
+using CasaFit.Application.Accounts;
 using CasaFit.Application.Auth;
 
 namespace CasaFit.Application.Entitlements;

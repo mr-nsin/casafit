@@ -27,16 +27,13 @@ public sealed class RevenueCatWebhookService(
     private static readonly HashSet<string> Activating =
         ["INITIAL_PURCHASE", "RENEWAL", "PRODUCT_CHANGE", "UNCANCELLATION", "NON_RENEWING_PURCHASE"];
 
-    /// <summary>Accepts "Bearer secret" or the bare secret. Fixed-time comparison. Fails closed when no secret is set.</summary>
+    /// <summary>The Authorization header must equal RevenueCat__WebhookSecret exactly. Fixed-time comparison. Fails closed when no secret is set.</summary>
     public bool IsAuthentic(string? authorizationHeader)
     {
         var secret = options.Value.WebhookSecret;
         if (string.IsNullOrEmpty(secret) || string.IsNullOrEmpty(authorizationHeader)) return false;
 
-        var presented = authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)
-            ? authorizationHeader[7..]
-            : authorizationHeader;
-        var a = SHA256.HashData(Encoding.UTF8.GetBytes(presented));
+        var a = SHA256.HashData(Encoding.UTF8.GetBytes(authorizationHeader));
         var b = SHA256.HashData(Encoding.UTF8.GetBytes(secret));
         return CryptographicOperations.FixedTimeEquals(a, b);
     }

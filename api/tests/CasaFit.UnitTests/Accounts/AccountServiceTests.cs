@@ -25,53 +25,83 @@ public class AccountServiceTests
     }
 
     private readonly IAccountStore _store = Substitute.For<IAccountStore>();
+    private readonly IIdentityAdmin _identity = Substitute.For<IIdentityAdmin>();
     private readonly AccountService _sut;
+    private const string Sub = "11111111-2222-3333-4444-555555555555";
 
     public AccountServiceTests() =>
-        _sut = new AccountService(_store, Options.Create(new AuthOptions { Pepper = Pepper }), new FixedClock(), NullLogger<AccountService>.Instance);
+        _sut = new AccountService(_store, _identity, Options.Create(new AuthOptions { Pepper = Pepper }), new FixedClock(), NullLogger<AccountService>.Instance);
 
     private static byte[] Hash(string v) => HMACSHA256.HashData(Encoding.UTF8.GetBytes(Pepper), Encoding.UTF8.GetBytes(v));
 
     [Fact]
-    public async Task Delete_keeps_an_hmac_of_each_identifier_for_180_days()
+    public async Task Delete_keeps_an_hmac_of_the_email_and_the_user_id_for_180_days_then_deletes_the_supabase_user()
     {
-        _store.GetAsync(Id, Arg.Any<CancellationToken>())
-            .Returns(new Account { Id = Id, PhoneE164 = "+919876543210", EmailNorm = "a@example.com" });
+        _store.FindByExternalIdAsync(Sub, Arg.Any<CancellationToken>())
+            .Returns(new Account { Id = Id, ExternalId = Sub, Email = "A.sha+gym@gmail.com" });
         IReadOnlyCollection<DeletedIdentifierHash>? saved = null;
         await _store.DeleteAsync(Id, Arg.Do<IReadOnlyCollection<DeletedIdentifierHash>>(h => saved = h), Arg.Any<CancellationToken>());
 
-        await _sut.DeleteAsync(Id, default);
+        await _sut.DeleteAsync(Sub, default);
 
         Assert.NotNull(saved);
         Assert.Equal(2, saved!.Count);
-        Assert.Contains(saved, h => h.Hash.SequenceEqual(Hash("+919876543210")));
-        Assert.Contains(saved, h => h.Hash.SequenceEqual(Hash("a@example.com")));
+        Assert.Contains(saved, h => h.Hash.SequenceEqual(Hash("asha@gmail.com")));
+        Assert.Contains(saved, h => h.Hash.SequenceEqual(Hash("sub:" + Sub)));
         Assert.All(saved, h =>
         {
             Assert.Equal(Now, h.DeletedAt);
             Assert.Equal(Now.AddDays(180), h.ExpiresAt);
         });
+        await _identity.Received(1).DeleteUserAsync(Sub, Arg.Any<CancellationToken>());
     }
 
     [Fact]
     public async Task Delete_stores_no_raw_identifier()
     {
-        _store.GetAsync(Id, Arg.Any<CancellationToken>()).Returns(new Account { Id = Id, PhoneE164 = "+919876543210" });
+        _store.FindByExternalIdAsync(Sub, Arg.Any<CancellationToken>()).Returns(new Account { Id = Id, ExternalId = Sub, Email = "a@example.com" });
         IReadOnlyCollection<DeletedIdentifierHash>? saved = null;
         await _store.DeleteAsync(Id, Arg.Do<IReadOnlyCollection<DeletedIdentifierHash>>(h => saved = h), Arg.Any<CancellationToken>());
 
-        await _sut.DeleteAsync(Id, default);
+        await _sut.DeleteAsync(Sub, default);
 
-        var raw = Encoding.UTF8.GetBytes("+919876543210");
+        var raw = Encoding.UTF8.GetBytes("a@example.com");
         Assert.All(saved!, h => Assert.False(h.Hash.SequenceEqual(raw)));
     }
 
     [Fact]
-    public async Task Deleting_an_account_that_is_already_gone_does_nothing()
+    public async Task A_failed_supabase_delete_is_a_502_problem_after_the_local_data_is_gone()
     {
-        _store.GetAsync(Id, Arg.Any<CancellationToken>()).Returns((Account?)null);
-        await _sut.DeleteAsync(Id, default);
+        _store.FindByExternalIdAsync(Sub, Arg.Any<CancellationToken>()).Returns(new Account { Id = Id, ExternalId = Sub });
+        _identity.DeleteUserAsync(Sub, Arg.Any<CancellationToken>()).Returns(Task.FromException(new IdentityAdminException("boom")));
+
+        var ex = await Assert.ThrowsAsync<DomainException>(() => _sut.DeleteAsync(Sub, default));
+
+        Assert.Equal(502, ex.Status);
+        Assert.Equal("identity_delete_failed", ex.Code);
+        await _store.Received(1).DeleteAsync(Id, Arg.Any<IReadOnlyCollection<DeletedIdentifierHash>>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Deleting_when_the_local_account_is_already_gone_still_retries_the_supabase_delete()
+    {
+        _store.FindByExternalIdAsync(Sub, Arg.Any<CancellationToken>()).Returns((Account?)null);
+
+        await _sut.DeleteAsync(Sub, default);
+
         await _store.DidNotReceiveWithAnyArgs().DeleteAsync(default, default!, default);
+        await _identity.Received(1).DeleteUserAsync(Sub, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Me_returns_the_email_a_masked_email_and_the_provider()
+    {
+        _store.GetAsync(Id, Arg.Any<CancellationToken>())
+            .Returns(new Account { Id = Id, ExternalId = Sub, Email = "nitin@gmail.com", Provider = "google" });
+        var me = await _sut.GetMeAsync(Id, default);
+        Assert.Equal("nitin@gmail.com", me.Email);
+        Assert.Equal("n***@gmail.com", me.EmailMasked);
+        Assert.Equal("google", me.Provider);
     }
 
     [Fact]
@@ -210,37 +240,4 @@ public class PlanValidationTests
     [InlineData("""{"goal":"stay_fit","styles":1,"days":4,"experience":"pro","variant":"v1"}""")]
     [InlineData("""{"goal":"stay_fit","styles":1,"days":4,"experience":"new","variant":"Bad Variant!"}""")]
     public void Out_of_range_values_are_rejected(string json) => Assert.False(_v.Validate(Parse(json)).IsValid);
-}
-
-public class RefreshServiceTests
-{
-    private readonly ITokenService _tokens = Substitute.For<ITokenService>();
-    private readonly IAccountStore _accounts = Substitute.For<IAccountStore>();
-
-    [Fact]
-    public async Task A_valid_refresh_token_returns_a_new_pair()
-    {
-        var id = Guid.NewGuid();
-        _tokens.ValidateRefreshAsync("r").Returns(id);
-        _tokens.Issue(id).Returns(new TokenPair("a2", "r2"));
-        _accounts.GetAsync(id, Arg.Any<CancellationToken>()).Returns(new Account { Id = id });
-
-        var pair = await new RefreshService(_tokens, _accounts).RefreshAsync(new RefreshRequest { RefreshToken = "r" }, default);
-
-        Assert.Equal("a2", pair.AccessToken);
-    }
-
-    [Fact]
-    public async Task An_invalid_token_or_deleted_account_is_401()
-    {
-        _tokens.ValidateRefreshAsync("bad").Returns((Guid?)null);
-        var sut = new RefreshService(_tokens, _accounts);
-        var ex = await Assert.ThrowsAsync<DomainException>(() => sut.RefreshAsync(new RefreshRequest { RefreshToken = "bad" }, default));
-        Assert.Equal("invalid_refresh", ex.Code);
-
-        var id = Guid.NewGuid();
-        _tokens.ValidateRefreshAsync("gone").Returns(id);
-        _accounts.GetAsync(id, Arg.Any<CancellationToken>()).Returns((Account?)null);
-        await Assert.ThrowsAsync<DomainException>(() => sut.RefreshAsync(new RefreshRequest { RefreshToken = "gone" }, default));
-    }
 }

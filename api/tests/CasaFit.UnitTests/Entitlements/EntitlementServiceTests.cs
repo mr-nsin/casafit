@@ -158,7 +158,7 @@ public class EntitlementServiceTests
 
     [Theory]
     [InlineData("s3cret", true)]
-    [InlineData("Bearer s3cret", true)]
+    [InlineData("Bearer s3cret", false)]
     [InlineData("wrong", false)]
     [InlineData("", false)]
     [InlineData(null, false)]

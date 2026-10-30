@@ -17,7 +17,7 @@ import { getCatalogueIndex } from './library';
 import { localDate, parseSession, workSteps } from './model';
 import { seedPlan, DAY_MS, type TestDb } from './testkit';
 
-const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn(), canGoBack: jest.fn(() => true) };
+const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn(), popTo: jest.fn(), canGoBack: jest.fn(() => true) };
 let mockRoute: { params?: Record<string, unknown> } = {};
 jest.mock('@react-navigation/native', () => {
   const React = require('react');
@@ -158,6 +158,18 @@ describe('Editor', () => {
     expect(workSteps(saved).map((x) => x.id)).not.toContain(a!.id);
     expect((await db.repos.plan.days(1)).find((r) => r.dayIndex === 0)!.overridden).toBe(true);
     expect(useEditDraft.getState().draft).toBeNull();
+  });
+
+  it('Save returns to plan detail when the editor was opened from a plan, and goes back otherwise', async () => {
+    await seedPlan(db);
+    mockRoute = { params: { planDayId: '1-0', from: 'plan' } };
+    await render(<EditorScreen />);
+    const s = await todaySession();
+    await fireEvent.press(await screen.findByLabelText(`Remove ${workSteps(s)[0]!.name}`));
+    await fireEvent.press(screen.getByLabelText('Save to my plan'));
+    await waitFor(() => expect(mockNav.popTo).toHaveBeenCalledWith('Plan', { planDayId: '1-0' }));
+    expect(mockNav.goBack).not.toHaveBeenCalled();
+    expect(mockNav.replace).not.toHaveBeenCalled();
   });
 
   it('keeps at least three moves, and says so plainly', async () => {

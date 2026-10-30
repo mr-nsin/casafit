@@ -1,55 +1,40 @@
 using CasaFit.Domain.Accounts;
-using CasaFit.Domain.Auth;
 
 namespace CasaFit.Application.Auth;
 
-public sealed record OtpRecord(byte[] CodeHash, int Tries);
-
-public sealed record SendWindow(int Count, int SecondsLeft);
-
-/// <summary>Short-lived OTP state: codes, try counters, resend lock and hourly send counter. Redis in production.</summary>
-public interface IOtpStore
+/// <summary>What we read from a verified Supabase access token.</summary>
+public sealed record ExternalIdentity(string ExternalId, string? Email, string Provider)
 {
-    Task<SendWindow> GetSendWindowAsync(string key, CancellationToken ct);
-    Task<int> IncrementSendCountAsync(string key, CancellationToken ct);
+    public static readonly string[] Providers = ["email", "google", "apple", "facebook"];
 
-    /// <summary>Returns 0 when the lock was taken, otherwise the seconds until the next send is allowed.</summary>
-    Task<int> TryAcquireResendLockAsync(string key, TimeSpan duration, CancellationToken ct);
-
-    Task SaveCodeAsync(string key, byte[] codeHash, TimeSpan ttl, CancellationToken ct);
-    Task<OtpRecord?> GetCodeAsync(string key, CancellationToken ct);
-    Task<int> IncrementTriesAsync(string key, CancellationToken ct);
-    Task DeleteCodeAsync(string key, CancellationToken ct);
+    /// <summary>Unknown or missing providers (phone, github and so on) are stored as email.</summary>
+    public static string NormaliseProvider(string? provider)
+    {
+        var p = provider?.Trim().ToLowerInvariant();
+        return p is not null && Providers.Contains(p) ? p : "email";
+    }
 }
 
-/// <summary>Delivers the code. Real vendors (MSG91, Gupshup, Resend) plug in here; dev uses a fake.</summary>
-public interface IOtpSender
-{
-    Task SendAsync(IdentifierKind kind, string destination, string code, CancellationToken ct);
-}
-
-/// <summary>Play Integrity / App Attest check run before any OTP send.</summary>
-public interface IAttestationVerifier
-{
-    Task<bool> VerifyAsync(string? token, CancellationToken ct);
-}
+/// <summary>Outcome of provisioning: the account id, or a tombstone when the user deleted the account.</summary>
+public sealed record ProvisionResult(Guid? AccountId, bool Deleted);
 
 public interface IAuthStore
 {
-    Task<Account?> FindAccountAsync(IdentifierKind kind, string normalised, CancellationToken ct);
+    /// <summary>
+    /// Finds the account by Supabase id, or creates it. Safe under concurrent first requests: the loser of the
+    /// unique-index race reads the winner's row. Refreshes email and provider when the token carries new values.
+    /// </summary>
+    Task<Account> GetOrCreateByExternalIdAsync(ExternalIdentity identity, int freeChecks, CancellationToken ct);
 
-    /// <summary>Creates the account, or returns the existing one if a concurrent request won the race.</summary>
-    Task<(Account Account, bool Created)> GetOrCreateAccountAsync(
-        IdentifierKind kind, string normalised, int freeChecks, CancellationToken ct);
-
+    Task<Account?> FindByExternalIdAsync(string externalId, CancellationToken ct);
     Task<bool> IsDeletedIdentifierAsync(byte[] hash, CancellationToken ct);
-    Task RecordOtpAttemptAsync(OtpAttempt attempt, CancellationToken ct);
 }
 
-public interface ITokenService
+/// <summary>Supabase admin API. Real client in Infrastructure; a fake in tests.</summary>
+public interface IIdentityAdmin
 {
-    TokenPair Issue(Guid accountId);
-
-    /// <summary>Returns the account id inside a valid, unexpired refresh token, otherwise null.</summary>
-    Task<Guid?> ValidateRefreshAsync(string refreshToken);
+    /// <summary>Deletes the Supabase user. A user that no longer exists counts as deleted. Throws <see cref="IdentityAdminException"/> on failure.</summary>
+    Task DeleteUserAsync(string externalId, CancellationToken ct);
 }
+
+public sealed class IdentityAdminException(string message, Exception? inner = null) : Exception(message, inner);

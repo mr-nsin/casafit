@@ -1,13 +1,24 @@
 namespace CasaFit.Domain.Accounts;
 
-/// <summary>One person. Holds either a phone, an email, or both. See docs/data-model.md section 1.</summary>
+/// <summary>
+/// One person. Identity lives in Supabase Auth: <see cref="ExternalId"/> is the Supabase user id (the JWT sub claim).
+/// See docs/data-model.md section 1.
+/// </summary>
 public sealed class Account
 {
     public const int FreeChecksForLife = 2;
 
     public Guid Id { get; set; }
-    public string? PhoneE164 { get; set; }
-    public string? EmailNorm { get; set; }
+
+    /// <summary>Supabase user id (sub claim). Unique.</summary>
+    public string ExternalId { get; set; } = "";
+
+    /// <summary>Lower-cased email from the token. Unique when present.</summary>
+    public string? Email { get; set; }
+
+    /// <summary>email, google, apple or facebook (from app_metadata.provider).</summary>
+    public string Provider { get; set; } = "email";
+
     public DateTimeOffset CreatedAt { get; set; }
     public string Locale { get; set; } = "en-IN";
     public bool Onboarded { get; set; }

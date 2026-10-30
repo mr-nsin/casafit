@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { addDays } from '../../engine';
 import { getRepositories } from '../../state/storage';
 import { deviceTzOffsetMin, todayKey } from '../../services/step-counter';
-import { computeProgress, computeRecap, type ProgressView, type RecapView } from './model';
+import { computeProgress, computeRecap, planStartKey, type ProgressView, type RecapView } from './model';
 
 async function load(back: number) {
   const repos = getRepositories();
@@ -18,7 +18,7 @@ async function load(back: number) {
     repos.plan.get(),
   ]);
   const currentWeekDays = plan ? await repos.plan.days(plan.weekNumber) : [];
-  return { today, tz, logs, microActiveS, steps, plan, currentWeekDays };
+  return { today, tz, logs, microActiveS, steps, plan, currentWeekDays, planStart: planStartKey(plan, tz) };
 }
 
 export function useProgress(): { loading: boolean; view: ProgressView | null } {

@@ -33,14 +33,13 @@ public sealed class EntitlementsController(EntitlementService entitlements, Reve
 
     /// <summary>RevenueCat server-to-server event. Authenticated by the shared secret in the Authorization header.</summary>
     [AllowAnonymous]
+    [RevenueCatSecret]
     [HttpPost("v1/webhooks/revenuecat")]
     [Consumes("application/json")]
     [ProducesResponseType<WebhookAck>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> RevenueCat(RevenueCatWebhookRequest request, CancellationToken ct)
     {
-        if (!webhook.IsAuthentic(Request.Headers.Authorization.FirstOrDefault()))
-            return Problem(statusCode: StatusCodes.Status401Unauthorized, title: "Webhook not authenticated.");
         return Ok(await webhook.HandleAsync(request.Event!, ct));
     }
 }

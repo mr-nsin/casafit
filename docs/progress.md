@@ -2,7 +2,7 @@
 
 **The single source of truth for what is done, what is pending and what comes next.** Read it at the start of every session and before picking up work. Update it in the same commit as the work, every time something is completed, started, blocked or decided.
 
-Last updated: 30 October 2026 (form-check and Pro lane) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
+Last updated: 30 October 2026 (Supabase auth backend, session leftovers) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
 
 ## How to keep this file current
 
@@ -15,10 +15,11 @@ Last updated: 30 October 2026 (form-check and Pro lane) · `main` after the bott
 
 ## Next up
 
-0. Native `casafit-pose` Nitro module (MediaPipe Pose Landmarker, spike `docs/plans/spikes/pose.md`) so the live check reads real landmarks. Until then the live check runs on a dev-only simulated source.
-1. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
-2. App icon and splash (still Expo defaults), then the gap and empty states and Maestro end-to-end flows.
-3. Backend: real SMS, Play Integrity, refresh-token revocation, connect hosting (Railway beta).
+0. App sign-in rewrite for Supabase (email code plus Google, Apple, Facebook): Welcome, Verify, auth state and API client. The app does not type-check against `shared/` until this lands.
+1. Native `casafit-pose` Nitro module (MediaPipe Pose Landmarker, spike `docs/plans/spikes/pose.md`) so the live check reads real landmarks. Until then the live check runs on a dev-only simulated source.
+2. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
+3. App icon and splash (still Expo defaults), then the gap and empty states and Maestro end-to-end flows.
+4. Create the Supabase project (providers, redirect URL), Railway project and RevenueCat webhook secret; Play Integrity once Google Play credentials exist.
 
 ## Done
 
@@ -40,6 +41,8 @@ Last updated: 30 October 2026 (form-check and Pro lane) · `main` after the bott
 | Player polish | Light status bar on the dark Player family screens, real icons for close, tune, previous, next, pause and check, a large move icon on the stage card, middle dots in captions, Bird dog row icon (holds had a dash icon; all 66 moves now tested against the glyph set), require cycle between session index and browse screens removed. Resume time fix: a tick gap over 10 s is treated as the app not running, so a restored or frozen process no longer credits dead time. 661 tests pass. Verified on the emulator | 30 Oct |
 | Settings lane | Settings, Notify, Language, Privacy, Profile, EditProfile, Help and DeleteAccount built and registered. Hide calories reaches Home and Nutrition; reminders are scheduled as local notifications; Download my data and Delete my account call the backend and fail kindly offline (nothing is wiped unless the server confirms). 701 tests pass. Verified on the emulator: Profile, Settings, the delete dialog (cancelled). Fixed an invalid icon on Profile and added a test that checks every literal icon name in the app against the glyph set | 30 Oct |
 | Form check and Pro | CameraPermission, FormCheck, LiveCheck, FormResult, CameraDenied, NoCredits, Paywall, ManagePro, ProWelcome built and registered; Player "Check form" goes through the gate (permission, then balance). Pure-TS rep engine for squat, push-up, plank and lunge with tests; purchases port over RevenueCat with a fake; consume uses one idempotency key per attempt, queued offline, no spend before rep 3. 827 tests pass. Verified on the emulator: real Android camera prompt, FormCheck, LiveCheck with the simulated squat set (counted at rep 3), FormResult, Paywall with no store key (calm "not available on this build" state). Fixed on device: light status bar on the dark camera screens, spacing of the credit chip, "Move 1 1 of 6 done" copy on Rest | 30 Oct |
+| Session leftovers | Save-your-session card for a finished but unlogged session (no more "15 of 15 Resume"), plan day zero from `plan.updatedAt` shared by Home, WeekPlan and progress, weekly myth card on Home, WeekPlan previous and next week (past read-only), Exercise "Try 30 seconds" single-move mode, Editor Save returns to Plan detail. 849 tests pass | 30 Oct |
+| Backend: Supabase identity | Email and social sign-in move to Supabase Auth. The API validates Supabase JWTs (HS256 secret or JWKS), creates the account on first request (ExternalId, Email, Provider), `GET /v1/me` returns email, masked email and provider, `DELETE /v1/me` also deletes the Supabase user through `IIdentityAdmin`. Phone, SMS, OTP, refresh endpoints and Redis removed. RevenueCat webhook needs the `Authorization` header to equal `RevenueCat__WebhookSecret`. Content packs at `GET /v1/content/packs/{name}` with ETag. OpenAPI and `shared/` types updated, GitHub workflows `api.yml` and `app.yml`, `api/railway.json` and README deploy steps added. 105 unit and 74 integration tests pass | 30 Oct |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
@@ -60,12 +63,9 @@ Nothing running. Next lanes start from the **Next up** list.
 | P1 | On-device pass through every built screen (only Welcome seen so far) |
 | P1 | Status bar: dark icons now show on light screens (React Native `StatusBar` set from the app theme in `App.tsx`). My earlier "still white" result came from stale Metro code, not the fix. Still to check on a dark-theme device |
 | P1 | Week one: the cool-down segment of the session bar is nearly invisible on the tonal card (`sc` on `pc`); the 2/11/2 split also has no labels on warm-up and cool-down. Check contrast |
-| P1 | Day zero for the week is taken from `plan.updatedAt`, while progress treats dayIndex as Monday = 0. Persist a plan start date and make both agree |
-| P1 | Home: weekly myth card not built (Learn lane has no weekly pick); comeback week is not rebuilt with the engine's comebackInput; WeekPlan shows only the current week |
 | P1 | Player stage card shows a static icon; the two-frame move demo (design's `fa/fb` crossfade) is not built and needs illustration assets |
 | P1 | Slice B deferred: Exercise "Try 30 seconds" (store has no single-move mode), drag to reorder (up and down buttons only), yoga body-part sessions often cannot be built (catalogue has 5 yoga work moves), some ready-made plans run over 15:00 in the Editor. Editor "Save" goes back rather than to the Player |
 | P1 | Settings deferred: masked phone number and "since" date need `GET /v1/me`; no avatar photo (no image picker); only the locale is saved, no translations or i18next yet; consent changes are stored locally, not sent to `POST /v1/me/consents`; edited pain areas are not pushed to `PUT /v1/me/plan`; reminder text does not refresh when the plan changes until Notify is saved again; Chat opens an email link; the native notification path is only unit-tested against a fake |
-| P1 | A completed session whose snapshot was never logged shows as "Resume your session 15 of 15 min" on Home; offer to save it instead. (Earlier "11 of 15 min" reports were real: the emulator sat on the Player screen while I worked) |
 | P2 | Settings bottom bar uses a different Workout icon from the tab bar |
 | P1 | Code entry: the six boxes show focus but the keyboard does not open until a box is tapped (autofocus) |
 | P2 | Icon audit: done as `app/src/ui/iconNames.test.ts` for literal names. Names built at run time are still only checked where a screen test does it. Original note: audit every icon name against the glyph set. Names are fine today, but `ads_click` rendered as "?" even though it is a valid name, so check new icons on a device. A node check is in this session's history; turn it into a test |
@@ -76,13 +76,11 @@ Nothing running. Next lanes start from the **Next up** list.
 
 | Pri | Item |
 |---|---|
-| P1 | Real SMS (MSG91 or 2Factor with DLT registration) |
-| P1 | Play Integrity and App Attest |
-| P1 | Refresh-token revocation |
-| P1 | Content endpoints (stub only) and background jobs |
-| P1 | Connect Supabase, Upstash, Cloudflare R2 |
+| P1 | Play Integrity and App Attest (needs Google Play credentials) |
+| P1 | Background jobs; content pack publishing pipeline (server serves the bundled packs today)
+| P1 | Create and connect the Supabase project (email code, Google, Apple, Facebook); R2 later. Upstash dropped for beta (rate limiting is in process, per instance) |
 | P1 | CI and deployment; first host is Railway for beta |
-| P1 | Regenerate `shared/` types (refund shape, consume path `/v1/entitlements/form-check/consume`); add `RevenueCat__WebhookSecret` to `.env.example` |
+| P1 | `shared/` still has phone helpers (`identifiers.ts`, fixtures) and `upsertPlanRequest` does not match the API (API rejects ageYears, health, pain with 400); fix with the app auth rewrite
 | P2 | Security review; Cloud Run asia-south1 for launch |
 
 ### Docs and housekeeping
@@ -96,8 +94,7 @@ Nothing running. Next lanes start from the **Next up** list.
 
 | Decision | Options or note |
 |---|---|
-| Webhook auth | Static header or IP allowlist |
-| Refresh tokens | Add revocation now or later |
+| Webhook auth | Decided: static `Authorization` header equal to `RevenueCat__WebhookSecret` |
 | Icons | Add the Material Symbols font dependency |
 | Yoga and dance timing | 5 slots of 2:12 |
 | `profile.sex` values | Allowed set |

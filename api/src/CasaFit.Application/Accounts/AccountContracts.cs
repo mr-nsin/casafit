@@ -1,6 +1,5 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using CasaFit.Application.Auth;
 
 namespace CasaFit.Application.Accounts;
 
@@ -24,8 +23,13 @@ public sealed record UpsertPlanRequest
 public sealed record PlanResponse(
     string Goal, int Styles, int Days, string Experience, string Variant, int WeekNumber, DateTimeOffset UpdatedAt);
 
+public sealed record ProState(bool Active, DateTimeOffset? ExpiresAt);
+
 public sealed record MeResponse(
     Guid Id,
+    string? Email,
+    string? EmailMasked,
+    string Provider,
     string Locale,
     bool Onboarded,
     DateTimeOffset CreatedAt,
@@ -89,7 +93,7 @@ public sealed record SyncFoodRequest
 /// <summary>Received is the batch size, Stored the rows written or updated, Clamped the sessions whose duration was adjusted.</summary>
 public sealed record SyncResponse(int Received, int Stored, int Clamped);
 
-public sealed record ExportAccount(Guid Id, string? Phone, string? Email, string Locale, bool Onboarded, DateTimeOffset CreatedAt);
+public sealed record ExportAccount(Guid Id, string? Email, string Provider, string Locale, bool Onboarded, DateTimeOffset CreatedAt);
 
 /// <summary>
 /// Everything we hold about the account. Returned inline for now; a signed download URL needs object storage (see open questions).

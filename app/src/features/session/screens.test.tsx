@@ -9,9 +9,11 @@ import { RestScreen } from './screens/RestScreen';
 import { DanceScreen, PlayerScreen, YogaScreen } from './screens/Stages';
 import { createHarness, makePlan } from './testkit';
 import { effOf } from './view';
+import { startTrial } from './start';
+import { TRIAL_DONE, TRIAL_STOPPED, useTrialNotice } from './trial';
 import { configureSessionDeps } from './deps';
 
-const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn() };
+const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn(), canGoBack: jest.fn(() => true) };
 jest.mock('@react-navigation/native', () => ({ useNavigation: () => mockNav, useIsFocused: () => true }));
 
 beforeEach(() => {
@@ -267,6 +269,39 @@ describe('Feel and SessionSettings', () => {
     await fireEvent(screen.getByLabelText('Voice coach'), 'valueChange', false);
     await fireEvent.press(screen.getByLabelText('30 s'));
     expect(h.store.getState().prefs).toMatchObject({ quiet: true, voice: false, restS: 30 });
+  });
+});
+
+describe('Single-move trial', () => {
+  const ex = { id: 'squat', name: 'Squat', style: 'normal' as const, mode: 'timed' as const };
+
+  it('goes back to the previous screen with a kind message when the 30 seconds end', async () => {
+    const h = createHarness();
+    startTrial(ex);
+    await render(<PlayerScreen />);
+    await elapse(h, 31_000);
+    expect(mockNav.goBack).toHaveBeenCalledTimes(1);
+    expect(mockNav.replace).not.toHaveBeenCalled();
+    expect(mockNav.reset).not.toHaveBeenCalled();
+    expect(useTrialNotice.getState().message).toBe(TRIAL_DONE);
+    expect(h.store.getState().status).toBe('idle');
+    expect(h.logs).toHaveLength(0);
+    useTrialNotice.getState().set(null);
+  });
+
+  it('goes back with a gentle message when the user ends it early, and logs nothing', async () => {
+    const h = createHarness();
+    startTrial(ex);
+    await render(<PlayerScreen />);
+    await elapse(h, 10_000);
+    await act(async () => {
+      h.store.getState().requestEnd();
+      await h.store.getState().endWithoutSaving();
+    });
+    expect(mockNav.goBack).toHaveBeenCalledTimes(1);
+    expect(useTrialNotice.getState().message).toBe(TRIAL_STOPPED);
+    expect(h.logs).toHaveLength(0);
+    useTrialNotice.getState().set(null);
   });
 });
 

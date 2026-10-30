@@ -1,9 +1,13 @@
 // Pure helpers for the browse and plan screens (Home, HomeRest, WeekPlan, Why, Plan).
 // No React and no navigation here, so every rule is easy to test.
 //
-// The saved plan has no start date. Onboarding builds day 0 as the day the plan was made
-// (D19) and rolls seven days from there, so the start date is read from `plan.updatedAt`.
-// After day 6 the week repeats from its first day until the plan is rebuilt.
+// Day zero rule (Home, WeekPlan and Progress all follow it). The plan table has no separate start
+// date column, but `plan.updatedAt` is written once, when onboarding builds the plan (D19), so its
+// local date IS the start date: plan day 0 falls on that date and the week rolls on from there (a
+// plan made on a Wednesday has day 0 on Wednesday). After day 6 the week repeats from its first day
+// until the plan is rebuilt. Progress reads the same date through `planStartKey` and maps a calendar
+// date to a plan day with `dayIndexOn`, instead of assuming Monday = 0. Rebuilding the plan restarts
+// day 0 on the rebuild day.
 
 import type { DayKind } from '../../../ui';
 import type { PlanDayRow, PlanRow, Profile, SessionLog } from '../../../db/repositories';

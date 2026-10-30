@@ -2,6 +2,8 @@ using System.Threading.RateLimiting;
 using CasaFit.Api.Common;
 using CasaFit.Application;
 using CasaFit.Application.Auth;
+using CasaFit.Application.Content;
+
 using CasaFit.Infrastructure;
 using CasaFit.Infrastructure.Auth;
 using CasaFit.Infrastructure.Persistence;
@@ -31,13 +33,14 @@ builder.Services.Configure<ForwardedHeadersOptions>(o =>
 });
 
 builder.Services.AddControllers(o => o.Filters.Add<ValidationFilter>());
-builder.Services.AddValidatorsFromAssemblyContaining<SendCodeRequestValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CasaFit.Application.Accounts.UpsertPlanRequestValidator>();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 
 builder.Services.AddAuthModule();
 builder.Services.AddPlatformModules();
 builder.Services.AddAuthInfrastructure(builder.Configuration);
+builder.Services.AddOptions<ContentOptions>().Bind(builder.Configuration.GetSection(ContentOptions.Section));
 
 builder.Services.AddOpenApi(o => o.AddDocumentTransformer<BearerSecurityTransformer>());
 
@@ -45,17 +48,24 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
 builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
-    .Configure<IOptions<JwtOptions>>((bearer, jwt) =>
+    .Configure<IOptions<SupabaseOptions>, SupabaseSigningKeys>((bearer, supabase, keys) =>
     {
-        var o = jwt.Value;
         bearer.MapInboundClaims = false;
         bearer.TokenValidationParameters = new()
         {
-            ValidIssuer = o.Issuer,
-            ValidAudience = o.Audience, // refresh tokens carry a different audience and are rejected here
-            IssuerSigningKey = o.SigningKey,
+            ValidateIssuer = true,
+            ValidIssuer = supabase.Value.Issuer,
+            ValidateAudience = true,
+            ValidAudience = SupabaseOptions.Audience,
+            ValidateLifetime = true,
+            RequireExpirationTime = true,
+            RequireSignedTokens = true,
+            ValidateIssuerSigningKey = true,
+            ValidAlgorithms = SupabaseSigningKeys.AllowedAlgorithms,
+            IssuerSigningKeyResolver = keys.Resolve,
             ClockSkew = TimeSpan.FromSeconds(30),
         };
+        bearer.Events = new JwtBearerEvents { OnTokenValidated = SupabaseClaims.ProvisionAsync };
     });
 builder.Services.AddAuthorization(o =>
 {
@@ -66,10 +76,12 @@ builder.Services.AddAuthorization(o =>
 builder.Services.AddRateLimiter(o =>
 {
     o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    var perMinute = builder.Configuration.GetValue("RateLimit:AuthPerMinute", 30);
-    o.AddPolicy("auth", ctx => RateLimitPartition.GetFixedWindowLimiter(
-        ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-        _ => new FixedWindowRateLimiterOptions { PermitLimit = perMinute, Window = TimeSpan.FromMinutes(1) }));
+    // One fixed window per client address across every endpoint (Supabase handles sign-in limits itself).
+    var perMinute = builder.Configuration.GetValue("RateLimit:PerMinute", 240);
+    o.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions { PermitLimit = perMinute, Window = TimeSpan.FromMinutes(1) }));
 });
 
 builder.Services.AddHealthChecks();
