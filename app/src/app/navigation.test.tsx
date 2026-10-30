@@ -70,6 +70,16 @@ describe('route map', () => {
     }
   });
 
+  it('registers the nine form-check and Pro routes as real screens', () => {
+    const names = ['CameraPermission', 'FormCheck', 'LiveCheck', 'FormResult', 'CameraDenied', 'NoCredits', 'Paywall', 'ManagePro', 'ProWelcome'] as const;
+    for (const n of names) {
+      expect(implementedRootRoutes).toContain(n);
+      expect(rootRouteLanes[n]).toBe('formcheck-pro');
+      expect(laneRoutes[n]!.component).not.toBe(PlaceholderScreen);
+      expect(placeholderRoutes).not.toContain(n);
+    }
+  });
+
   it('wires the lane tab roots', () => {
     expect(nutritionTab).toBeDefined();
     expect(progressRoutes.Progress.component).toBeDefined();

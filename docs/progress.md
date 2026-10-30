@@ -2,7 +2,7 @@
 
 **The single source of truth for what is done, what is pending and what comes next.** Read it at the start of every session and before picking up work. Update it in the same commit as the work, every time something is completed, started, blocked or decided.
 
-Last updated: 30 October 2026 (Home and plan slice) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
+Last updated: 30 October 2026 (form-check and Pro lane) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
 
 ## How to keep this file current
 
@@ -15,7 +15,7 @@ Last updated: 30 October 2026 (Home and plan slice) · `main` after the bottom-s
 
 ## Next up
 
-0. Wave 2 form-check and Pro lane (camera permission, camera denied, form check, live check, form result, no credits, paywall, manage Pro, Pro welcome). Re-check vision-camera and Nitro on RN 0.88 first.
+0. Native `casafit-pose` Nitro module (MediaPipe Pose Landmarker, spike `docs/plans/spikes/pose.md`) so the live check reads real landmarks. Until then the live check runs on a dev-only simulated source.
 1. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
 2. App icon and splash (still Expo defaults), then the gap and empty states and Maestro end-to-end flows.
 3. Backend: real SMS, Play Integrity, refresh-token revocation, connect hosting (Railway beta).
@@ -39,6 +39,7 @@ Last updated: 30 October 2026 (Home and plan slice) · `main` after the bottom-s
 | Home and plan, slice B | Library (16 real plans, filters, hidden-for-your-knees note), BodyPart (builds and starts a 15-minute session), Editor and Picker (swap, add, remove, reorder; saved to the plan day), Parts, Lunge, Exercise and CheckIn registered. 654 tests pass. Verified on the emulator: Library, Editor, Picker, and a saved swap (Squat to Chair squat) showing in Plan detail | 30 Oct |
 | Player polish | Light status bar on the dark Player family screens, real icons for close, tune, previous, next, pause and check, a large move icon on the stage card, middle dots in captions, Bird dog row icon (holds had a dash icon; all 66 moves now tested against the glyph set), require cycle between session index and browse screens removed. Resume time fix: a tick gap over 10 s is treated as the app not running, so a restored or frozen process no longer credits dead time. 661 tests pass. Verified on the emulator | 30 Oct |
 | Settings lane | Settings, Notify, Language, Privacy, Profile, EditProfile, Help and DeleteAccount built and registered. Hide calories reaches Home and Nutrition; reminders are scheduled as local notifications; Download my data and Delete my account call the backend and fail kindly offline (nothing is wiped unless the server confirms). 701 tests pass. Verified on the emulator: Profile, Settings, the delete dialog (cancelled). Fixed an invalid icon on Profile and added a test that checks every literal icon name in the app against the glyph set | 30 Oct |
+| Form check and Pro | CameraPermission, FormCheck, LiveCheck, FormResult, CameraDenied, NoCredits, Paywall, ManagePro, ProWelcome built and registered; Player "Check form" goes through the gate (permission, then balance). Pure-TS rep engine for squat, push-up, plank and lunge with tests; purchases port over RevenueCat with a fake; consume uses one idempotency key per attempt, queued offline, no spend before rep 3. 827 tests pass. Verified on the emulator: real Android camera prompt, FormCheck, LiveCheck with the simulated squat set (counted at rep 3), FormResult, Paywall with no store key (calm "not available on this build" state). Fixed on device: light status bar on the dark camera screens, spacing of the credit chip, "Move 1 1 of 6 done" copy on Rest | 30 Oct |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
@@ -53,7 +54,8 @@ Nothing running. Next lanes start from the **Next up** list.
 |---|---|
 | P0 | Wave 2 session lane: Home (all variants), WeekPlan, Why, Library, BodyPart, Plan, Editor, Picker, Parts, Lunge, Exercise, CheckIn |
 | P0 | Wave 2 settings lane: Settings, Notify, Language, Privacy, Profile, EditProfile, Help, DeleteAccount |
-| P1 | Form-check and Pro lane: camera, live check, result, camdenied, nocredits, paywall, managepro. Re-check the vision-camera and Nitro spikes on RN 0.88 |
+| P1 | Form check deferred: native `casafit-pose` module and frame-processor glue (live skeleton is a static guide today, no real landmarks, no bad-form detection); `<Camera>` preview is opt-in with `EXPO_PUBLIC_CAMERA_PREVIEW=1` and untested; spoken cues (TTS); `Purchases.logIn(accountId)`; store disclosure links on Paywall (Terms, Privacy); trial wording; masked phone on ManagePro; recovery of attempts left in `counted` after a crash; RevenueCat key (`EXPO_PUBLIC_REVENUECAT_KEY`) and products not configured; pain gating map (knees: lunge, wrists: push-up) needs sign-off |
+| P1 | "Check form" only appears on moves with the ids squat, pushup, plank, lunge (no ready-made plan screen shows it for chair squat or reverse lunge); check whether plans should offer a form-check move. Hold variant screens (plank) were not checked on device |
 | P1 | Gap and empty states, Maestro end-to-end flows |
 | P1 | On-device pass through every built screen (only Welcome seen so far) |
 | P1 | Status bar: dark icons now show on light screens (React Native `StatusBar` set from the app theme in `App.tsx`). My earlier "still white" result came from stale Metro code, not the fix. Still to check on a dark-theme device |

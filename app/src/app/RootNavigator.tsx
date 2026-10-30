@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { ComponentType } from 'react';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
+import { formCheckRoutes } from '../features/formcheck';
 import { learnRoutes } from '../features/learn';
 import { nutritionRoutes } from '../features/nutrition';
 import { onboardingRoutes } from '../features/onboarding';
@@ -26,6 +27,7 @@ const { Progress: _progressTab, ...progressStack } = progressRoutes;
 export const laneRoutes: Partial<Record<Exclude<RootRouteName, 'Main'>, RouteEntry>> = {
   ...onboardingRoutes,
   ...sessionRoutes,
+  ...formCheckRoutes,
   ...nutritionRoutes,
   ...stepsRoutes,
   ...learnRoutes,

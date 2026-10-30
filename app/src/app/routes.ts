@@ -116,6 +116,8 @@ export const implementedRootRoutes = [
   'HomeRest', 'WeekPlan', 'Why', 'Library', 'BodyPart', 'Plan', 'Editor', 'Picker', 'Parts', 'Lunge', 'Exercise', 'CheckIn',
   'Player', 'Yoga', 'Dance', 'Rest', 'Paused', 'Complete', 'Desk', 'EndSession', 'Feel',
   'SessionSettings',
+  // form check and Pro
+  'CameraPermission', 'FormCheck', 'LiveCheck', 'FormResult', 'CameraDenied', 'NoCredits', 'Paywall', 'ManagePro', 'ProWelcome',
   // nutrition
   'NutriProfile', 'NutriPlan', 'FoodSearch', 'Meal', 'FoodEmpty',
   // steps, learn, progress

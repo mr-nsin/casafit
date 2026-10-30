@@ -4,6 +4,7 @@
 import { ApiError, api } from '../api/client';
 import { openAppDatabase, type Repositories, type SqlDriver } from '../db';
 import { buildTimeline } from '../engine';
+import { configureFormCheckDeps } from '../features/formcheck';
 import { configureNutritionDeps } from '../features/nutrition';
 import { configureOnboardingDeps, type ServerPlanBody } from '../features/onboarding';
 import { configureSessionDeps, startSession, type ContentPort, type SessionPlan } from '../features/session';
@@ -185,6 +186,14 @@ export async function bootstrap(overrides: Partial<BootstrapIO> = {}): Promise<B
   });
 
   configureNutritionDeps({ repos: () => repos, content: io.content });
+
+  configureFormCheckDeps({
+    async enqueue(req) {
+      await queue.enqueue(req);
+    },
+    flush: flushQueue,
+    repos: () => repos,
+  });
 
   try {
     setStepCounter(io.stepCounter());

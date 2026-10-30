@@ -6,6 +6,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../../app/types';
 import { dark, space, type } from '../../../theme';
+import { resolveFormCheckEntry } from '../../formcheck/gate';
 import { BigTimer, Btn, IconBtn, InfoNote, RadioGroup, RUNG_OPTIONS, Screen, SegmentedProgress, Stage, TimerRing, TopBar } from '../components';
 import { getSessionDeps } from '../deps';
 import { useSessionScreen, type SessionRouteName } from '../hooks';
@@ -153,7 +154,8 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
               kind="tonal"
               onPress={() => {
                 act().pause('camera');
-                nav.navigate('CameraPermission');
+                // Permission, then balance: CameraPermission, CameraDenied, NoCredits or FormCheck.
+                void resolveFormCheckEntry().then((route) => nav.navigate(route));
               }}
             />
           </View>

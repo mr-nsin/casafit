@@ -28,7 +28,7 @@ export function RestScreen() {
   const act = useSessionStore.getState;
   const secs = Math.ceil(v.segmentRemainingMs / 1000);
   const next = v.upNext;
-  const done = v.set >= v.sets ? `${v.moveLabel.replace(/ of .*/, '')} ${v.moveNumber} of ${v.moveCount} done` : `Set ${v.set} of ${v.sets} done`;
+  const done = v.set >= v.sets ? `Move ${v.moveNumber} of ${v.moveCount} done` : `Set ${v.set} of ${v.sets} done`;
 
   return (
     <Screen>
