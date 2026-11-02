@@ -18,6 +18,7 @@ import {
   StatusBanner,
   Text,
   TextButton,
+  Touchable,
   radius,
   space,
   useTokens,
@@ -33,10 +34,13 @@ import {
   type ProPlan,
   type UnavailableReason,
 } from '../../services/purchases';
+import { useAuth } from '../../state/auth';
+import { meResponse } from '@casafit/shared';
 import { Page } from './components';
 import { getFormCheckDeps } from './deps';
 import { useEntitlements, useProStatus } from './entitlements';
 import { resolveFormCheckEntry } from './gate';
+import { PRIVACY_URL, TERMS_URL } from './links';
 import { useBackOrHome, useEntitlementsLoaded, useFormNav } from './hooks';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -149,7 +153,7 @@ export function PaywallScreen() {
       <View style={{ gap: space.l }}>
         <BenefitRow icon="photo_camera" title="Unlimited form checks" body="Squat, push-up, plank and lunge. On your phone." />
         <BenefitRow icon="lock" title="Still private" body="Pro checks never record or upload anything." />
-        <BenefitRow icon="restore" title="Restores on any phone" body="Sign in with your email and Pro is back." />
+        <BenefitRow icon="restore" title="Restores on any phone" body="Sign in with your account and Pro is back." />
       </View>
 
       <View accessibilityRole="radiogroup" accessibilityLabel="Plans" style={{ gap: space.s }}>
@@ -193,7 +197,51 @@ export function PaywallScreen() {
       <Text variant="label" color="osv">
         {"Renews automatically until you cancel it in your store's subscription settings."}
       </Text>
+      <DisclosureLinks />
     </Page>
+  );
+}
+
+/** Terms and Privacy, as real links (the stores ask for them next to any subscription). */
+export function DisclosureLinks() {
+  const t = useTokens();
+  const [failed, setFailed] = useState(false);
+  const open = async (url: string) => {
+    setFailed(false);
+    try {
+      await getFormCheckDeps().openUrl(url);
+    } catch {
+      setFailed(true);
+    }
+  };
+  const link = (label: string, a11y: string, url: string) => (
+    <Touchable
+      role="link"
+      label={a11y}
+      accessibilityHint="Opens in your browser"
+      onPress={() => void open(url)}
+      style={{ justifyContent: 'center', paddingHorizontal: space.s }}
+    >
+      <Text variant="label" color="p" style={{ textDecorationLine: 'underline', textDecorationColor: t.p }}>
+        {label}
+      </Text>
+    </Touchable>
+  );
+  return (
+    <View style={{ gap: space.xs }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
+        {link('Terms', 'Terms of use', TERMS_URL)}
+        <Text variant="label" color="osv" accessibilityElementsHidden importantForAccessibility="no">
+          ·
+        </Text>
+        {link('Privacy', 'Privacy policy', PRIVACY_URL)}
+      </View>
+      {failed ? (
+        <Text variant="label" color="osv">
+          We could not open that page. Check your connection and try again.
+        </Text>
+      ) : null}
+    </View>
   );
 }
 
@@ -216,6 +264,21 @@ export function ManageProScreen() {
   const info = ent.pro;
   const offline = ent.offline;
   const t = useTokens();
+  // The masked email from GET /v1/me. The cached one shows first, so offline still works.
+  const emailMasked = useAuth((a) => a.account?.emailMasked ?? null);
+  useEffect(() => {
+    let live = true;
+    getFormCheckDeps()
+      .api<unknown>('/me')
+      .then((raw) => {
+        const me = meResponse.safeParse(raw);
+        if (live && me.success) return useAuth.getState().applyMe(me.data);
+      })
+      .catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, []);
 
   const openStore = async () => {
     try {
@@ -281,7 +344,11 @@ export function ManageProScreen() {
 
       <View style={{ gap: space.l }}>
         <BenefitRow icon="photo_camera" title="Unlimited form checks" body={`${ent.proChecksThisMonth} ${ent.proChecksThisMonth === 1 ? 'check' : 'checks'} used this month · still on this phone`} />
-        <BenefitRow icon="devices" title="Works on any phone you verify" body="Verify the same number or email and Pro comes back." />
+        <BenefitRow
+          icon="devices"
+          title="Works on any phone you sign in on"
+          body={emailMasked ? `Signed in as ${emailMasked}. Sign in again on a new phone and Pro comes back.` : 'Sign in again on a new phone and Pro comes back.'}
+        />
       </View>
 
       {note?.kind === 'restored' ? <StatusBanner variant="status">Pro restored.</StatusBanner> : null}
@@ -362,7 +429,7 @@ export function ProWelcomeScreen() {
       <View style={{ gap: space.m }}>
         {[
           ['photo_camera', 'Unlimited form checks, still on your phone'],
-          ['devices', 'Comes back on any phone you verify'],
+          ['devices', 'Comes back on any phone you sign in on'],
           ['cancel', 'Cancel any time in two taps'],
         ].map(([icon, text]) => (
           <Card key={text} tone="c3">

@@ -136,6 +136,42 @@ async function spendFree(attemptId: string, key: string, exercise: FormExercise)
   }
 }
 
+/**
+ * Crash recovery. An attempt left in `counted` reached rep 3 (the check counts) but the app died
+ * before the spend was recorded. On the next start we finish the spend with the attempt's own
+ * idempotency key, so the server never charges it twice: Pro skips it, a free check is consumed
+ * (or queued offline), and nothing is refunded because the count point was reached
+ * (docs/plans/screens/camera-pro-nutrition.md, idempotency rules). Never throws.
+ * Returns how many attempts it settled.
+ */
+export async function recoverCountedAttempts(): Promise<number> {
+  const d = getFormCheckDeps();
+  let stuck: Awaited<ReturnType<ReturnType<typeof d.repos>['formCheck']['listByState']>>;
+  try {
+    stuck = await d.repos().formCheck.listByState('counted');
+  } catch {
+    return 0;
+  }
+  const inFlight = useFormCheck.getState().attemptId;
+  let settled = 0;
+  for (const a of stuck) {
+    if (a.id === inFlight) continue;
+    try {
+      const ent = useEntitlements.getState();
+      if (!ent.hydrated) await ent.hydrate();
+      if (currentProStatus().active) {
+        await d.repos().formCheck.setState(a.id, 'spent', { spentAt: d.now() });
+      } else {
+        await spendFree(a.id, a.idempotencyKey, a.exercise as FormExercise);
+      }
+      settled += 1;
+    } catch {
+      /* try again on the next start; the attempt stays counted */
+    }
+  }
+  return settled;
+}
+
 export const useFormCheck = create<FormCheckState>((set, get) => {
   async function onCounted(): Promise<void> {
     const l = live;

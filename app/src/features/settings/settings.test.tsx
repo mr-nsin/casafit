@@ -11,7 +11,10 @@ import {
 } from '../../services/notifications';
 import { createFakeAuth, fakeSession, setAuth } from '../../services/auth';
 import { useAuth } from '../../state/auth';
-import { useConsent } from '../../state/consent';
+import { setConsentSyncer, useConsent } from '../../state/consent';
+import { configureOnboardingDeps } from '../onboarding/deps';
+import { applyReminders, refreshReminders } from './reminders';
+import { consentBody, planBody, queueConsent } from './serverSync';
 import { defaultPreferences, usePreferences } from '../../state/preferences';
 import { setRepositories } from '../../state/storage';
 import { seedPlan } from '../session/browse/testkit';
@@ -277,19 +280,27 @@ describe('Notify', () => {
     notif.promptAnswer = 'denied';
     await render(<NotifyScreen />);
     await tap(/^Allow reminders at 7:30 am/);
-    expect(await screen.findByText(/switched off for CasaFit/)).toBeTruthy();
+    expect(await screen.findByText(/Notifications are off for CasaFit/)).toBeTruthy();
     expect(usePreferences.getState().notifications.enabled).toBe(false);
     expect(notif.scheduled).toHaveLength(0);
     expect(mockNav.goBack).not.toHaveBeenCalled();
-    await tap('Open phone settings');
+    await tap('Open Settings to allow');
     expect(notif.settingsOpened).toBe(1);
   });
 
   it('shows the settings link on arrival when permission was already refused', async () => {
     notif.permission = 'denied';
     await render(<NotifyScreen />);
-    expect(await screen.findByText(/switched off for CasaFit/)).toBeTruthy();
+    expect(await screen.findByText(/Notifications are off for CasaFit/)).toBeTruthy();
+    expect(screen.getByText(/Your phone is blocking them/)).toBeTruthy();
     expect(notif.prompts).toBe(0);
+    // Toggles are disabled, the primary action opens system settings, and the time stays editable and saved.
+    expect(screen.getByRole('switch', { name: 'Sunday recap' }).props.accessibilityState.disabled).toBe(true);
+    expect(screen.queryByLabelText(/^Allow reminders at/)).toBeNull();
+    await tap('6:00 pm');
+    expect(usePreferences.getState().notifications.time).toBe('18:00');
+    await tap('Open Settings to allow');
+    expect(notif.settingsOpened).toBe(1);
   });
 
   it('offers Save without a second prompt once allowed, and can turn reminders off', async () => {
@@ -593,6 +604,85 @@ describe('DeleteAccount', () => {
     await tap('Export my data first');
     expect(await screen.findByText(/You are offline\. Nothing was changed\./)).toBeTruthy();
     expect(screen.getByText('Delete your account?')).toBeTruthy();
+  });
+});
+
+describe('server copies of settings changes', () => {
+  afterEach(() => {
+    setConsentSyncer(null);
+    configureOnboardingDeps({ async syncPlan() {} });
+  });
+
+  it('maps consents to the API types and queues one per change, keyed by the record id', async () => {
+    const enqueue = jest.fn(async () => undefined);
+    setConsentSyncer((rec, latest) => queueConsent(enqueue as never, rec, latest));
+    await useConsent.getState().record('analytics', true, 'privacy_screen');
+    await useConsent.getState().record('steps', true, 'privacy_screen');
+    await useConsent.getState().record('camera', true, 'privacy_screen');
+    await useConsent.getState().record('health_answers', false, 'privacy_screen');
+    expect(enqueue).toHaveBeenCalledTimes(3);
+    const calls = enqueue.mock.calls as unknown as [Record<string, unknown>][];
+    expect(calls[0]![0]).toMatchObject({ method: 'POST', path: '/me/consents', body: { type: 'analytics', granted: true } });
+    expect(calls[1]![0]).toMatchObject({ body: { type: 'health_sync', granted: true } });
+    // Health answers off while steps is still on: health sync stays on.
+    expect(calls[2]![0]).toMatchObject({ body: { type: 'health_sync', granted: true } });
+    expect(calls[0]![0].idempotencyKey).toBe(useConsent.getState().latest.analytics?.id);
+    expect((calls[0]![0].body as { policyVersion: string }).policyVersion).toMatch(/^[A-Za-z0-9._-]{1,32}$/);
+  });
+
+  it('a failing syncer never undoes the local choice', async () => {
+    setConsentSyncer(async () => {
+      throw new Error('offline');
+    });
+    await useConsent.getState().record('analytics', true, 'privacy_screen');
+    expect(useConsent.getState().has('analytics')).toBe(true);
+    expect((await db.repos.consent.latest()).analytics?.granted).toBe(true);
+  });
+
+  it('consentBody skips the camera and maps terms to privacy_notice', () => {
+    const rec = { id: 'x', purpose: 'camera', granted: true, noticeVersion: 'v1', at: 1, source: 'privacy_screen' } as never;
+    expect(consentBody(rec, {})).toBeNull();
+    expect(consentBody({ ...(rec as object), purpose: 'terms_privacy' } as never, {})).toMatchObject({ type: 'privacy_notice' });
+  });
+
+  it('planBody follows the strict plan schema and never carries pain areas', async () => {
+    await seedPlan(db);
+    const plan = await db.repos.plan.get();
+    expect(planBody(plan)).toEqual({ goal: 'stay_fit', styles: 1, days: 4, experience: 'on_and_off', variant: 'standard' });
+    expect(planBody({ ...plan!, daysPerWeek: 2 })).toBeNull();
+    expect(planBody(null)).toBeNull();
+  });
+
+  it('saving changed pain areas queues the plan; unchanged pain areas do not', async () => {
+    await seedPlan(db);
+    const syncPlan = jest.fn(async () => undefined);
+    configureOnboardingDeps({ syncPlan });
+    await render(<EditProfileScreen />);
+    await waitFor(() => expect(screen.getByLabelText('Name').props.value).toBe('Priya'));
+    await fireEvent.press(screen.getByText('Save changes'));
+    await waitFor(() => expect(mockNav.goBack).toHaveBeenCalled());
+    expect(syncPlan).not.toHaveBeenCalled();
+    mockNav.goBack.mockClear();
+    await fireEvent.press(screen.getByRole('checkbox', { name: 'Back' }));
+    await fireEvent.press(screen.getByText('Save changes'));
+    await waitFor(() => expect(syncPlan).toHaveBeenCalledTimes(1));
+    const body = (syncPlan.mock.calls as unknown as [Record<string, unknown>][])[0]![0];
+    expect(Object.keys(body).sort()).toEqual(['days', 'experience', 'goal', 'styles', 'variant']);
+  });
+
+  it('refreshReminders reschedules with the plan title, and does nothing while reminders are off', async () => {
+    await seedPlan(db);
+    await refreshReminders();
+    expect(notif.scheduled).toHaveLength(0);
+    usePreferences.setState({ notifications: { enabled: true, time: '07:30', sundayRecap: true } });
+    await refreshReminders();
+    expect(notif.scheduled).toHaveLength(1);
+    const title = (await db.repos.plan.days(1)).find((d) => d.kind === 'workout')!.title;
+    expect(JSON.stringify(notif.scheduled[0])).toContain(`${title} is ready`);
+    await db.repos.plan.replaceDays(1, (await db.repos.plan.days(1)).map((d) => ({ ...d, title: d.kind === 'workout' ? 'Brand new day' : d.title })));
+    await refreshReminders();
+    expect(JSON.stringify(notif.scheduled.at(-1))).toContain('Brand new day is ready');
+    await applyReminders(null);
   });
 });
 

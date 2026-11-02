@@ -42,6 +42,7 @@ export interface RcCustomerInfo {
 }
 export interface RcModule {
   configure(c: { apiKey: string }): void;
+  logIn(appUserID: string): Promise<{ customerInfo: RcCustomerInfo; created: boolean }>;
   getOfferings(): Promise<{ current: { availablePackages: RcPackage[] } | null }>;
   purchasePackage(p: RcPackage): Promise<{ customerInfo: RcCustomerInfo }>;
   restorePurchases(): Promise<RcCustomerInfo>;
@@ -117,6 +118,7 @@ export function createRevenueCatPurchases(opts: { apiKey?: string | null; now?: 
 
   return {
     configured: !!key,
+    logIn: (accountId) => wrap(async (m) => mapCustomerInfo((await m.logIn(accountId)).customerInfo, now(), prices)),
     getOfferings: () =>
       wrap(async (m): Promise<Offerings> => {
         const o = await m.getOfferings();

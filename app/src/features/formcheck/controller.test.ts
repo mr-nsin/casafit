@@ -6,7 +6,7 @@ import { setRepositories } from '../../state/storage';
 import { useAuth } from '../../state/auth';
 import { configureFormCheckDeps } from './deps';
 import { useEntitlements } from './entitlements';
-import { useFormCheck } from './controller';
+import { recoverCountedAttempts, useFormCheck } from './controller';
 
 jest.mock('expo-secure-store', () => ({
   getItemAsync: jest.fn(async () => null),
@@ -257,5 +257,68 @@ describe('closing', () => {
     await useFormCheck.getState().start();
     await feed(lungeSequence({ reps: 3 }));
     expect(JSON.parse(api.mock.calls[0]![1].body).exercise).toBe('lunge');
+  });
+});
+
+describe('recoverCountedAttempts', () => {
+  const stuck = async (id: string, key: string, exercise = 'squat') => {
+    await db.repos.formCheck.create({ id, idempotencyKey: key, exercise, state: 'counted', startedAt: NOW - 1000, spentAt: null, wouldHaveBeenCharged: false });
+  };
+
+  it('does nothing when nothing is stuck', async () => {
+    expect(await recoverCountedAttempts()).toBe(0);
+    expect(api).not.toHaveBeenCalled();
+  });
+
+  it('finishes the spend with the same idempotency key and marks it spent', async () => {
+    await stuck('a1', 'key-1');
+    api.mockResolvedValue({ ok: true, freeChecksRemaining: 1 });
+    expect(await recoverCountedAttempts()).toBe(1);
+    expect(api).toHaveBeenCalledTimes(1);
+    expect(api.mock.calls[0]![0]).toBe('/entitlements/form-check/consume');
+    expect(api.mock.calls[0]![1].headers['Idempotency-Key']).toBe('key-1');
+    expect(JSON.parse(api.mock.calls[0]![1].body)).toEqual({ idempotencyKey: 'key-1', exercise: 'squat' });
+    expect(await db.repos.formCheck.get('a1')).toMatchObject({ state: 'spent', spentAt: NOW });
+    expect(useEntitlements.getState().freeChecks).toBe(1);
+    // A second start finds nothing left, so a retry can never double spend.
+    api.mockClear();
+    expect(await recoverCountedAttempts()).toBe(0);
+    expect(api).not.toHaveBeenCalled();
+  });
+
+  it('offline: queues the same key for later and keeps the local spend', async () => {
+    await stuck('a1', 'key-1');
+    api.mockRejectedValue(new NetworkError());
+    expect(await recoverCountedAttempts()).toBe(1);
+    expect(enqueue).toHaveBeenCalledWith(expect.objectContaining({ idempotencyKey: 'key-1', path: '/entitlements/form-check/consume' }));
+    expect(await db.repos.formCheck.get('a1')).toMatchObject({ state: 'spent_local' });
+    expect(useEntitlements.getState().freeChecks).toBe(1);
+  });
+
+  it('no credit left on the server: keeps the result, charges nothing more', async () => {
+    await stuck('a1', 'key-1');
+    api.mockResolvedValue({ ok: false, reason: 'no_credits', freeChecksRemaining: 0 });
+    await recoverCountedAttempts();
+    expect(await db.repos.formCheck.get('a1')).toMatchObject({ state: 'spent_local', wouldHaveBeenCharged: true });
+  });
+
+  it('Pro: marks it spent without calling the server', async () => {
+    await stuck('a1', 'key-1');
+    useEntitlements.setState({
+      pro: { active: true, plan: 'pro_yearly', expiresAt: NOW + 86_400_000 * 300, willRenew: true, billingIssue: false, trial: false, priceString: null, verifiedAt: NOW },
+    });
+    expect(await recoverCountedAttempts()).toBe(1);
+    expect(api).not.toHaveBeenCalled();
+    expect(await db.repos.formCheck.get('a1')).toMatchObject({ state: 'spent' });
+  });
+
+  it('leaves armed, spent and cancelled attempts alone, and handles several stuck ones', async () => {
+    await db.repos.formCheck.create({ id: 'x', idempotencyKey: 'kx', exercise: 'squat', state: 'armed', startedAt: NOW, spentAt: null, wouldHaveBeenCharged: false });
+    await stuck('a1', 'key-1');
+    await stuck('a2', 'key-2', 'lunge');
+    api.mockResolvedValue({ ok: true, freeChecksRemaining: 1 });
+    expect(await recoverCountedAttempts()).toBe(2);
+    expect(await db.repos.formCheck.get('x')).toMatchObject({ state: 'armed' });
+    expect(JSON.parse(api.mock.calls[1]![1].body).exercise).toBe('lunge');
   });
 });

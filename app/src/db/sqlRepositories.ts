@@ -504,6 +504,16 @@ export function createSqlRepositories(d: SqlDriver): Repositories {
     },
   };
 
+  const mapAttempt = (r: Row): FormCheckAttempt => ({
+    id: r.id as string,
+    idempotencyKey: r.idempotency_key as string,
+    exercise: r.exercise as string,
+    state: r.state as FormCheckAttempt['state'],
+    startedAt: r.started_at as number,
+    spentAt: r.spent_at as number | null,
+    wouldHaveBeenCharged: b(r.would_have_been_charged),
+  });
+
   const formCheck: Repositories['formCheck'] = {
     async create(a) {
       await d.run(
@@ -514,17 +524,11 @@ export function createSqlRepositories(d: SqlDriver): Repositories {
     },
     async get(id) {
       const r = await getOne<Row>(d, 'SELECT * FROM form_check_attempt WHERE id = ?', [id]);
-      if (!r) return null;
-      const a: FormCheckAttempt = {
-        id: r.id as string,
-        idempotencyKey: r.idempotency_key as string,
-        exercise: r.exercise as string,
-        state: r.state as FormCheckAttempt['state'],
-        startedAt: r.started_at as number,
-        spentAt: r.spent_at as number | null,
-        wouldHaveBeenCharged: b(r.would_have_been_charged),
-      };
-      return a;
+      return r ? mapAttempt(r) : null;
+    },
+    async listByState(state) {
+      const rows = await d.all<Row>('SELECT * FROM form_check_attempt WHERE state = ? ORDER BY started_at', [state]);
+      return rows.map(mapAttempt);
     },
     async setState(id, state, extra) {
       await d.run(

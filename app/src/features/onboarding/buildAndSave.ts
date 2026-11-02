@@ -23,7 +23,7 @@ export function draftToPlanInput(d: OnboardingDraft, startDate: string, thisYear
   };
 }
 
-function dayRow(week: number, day: Plan['days'][number]): PlanDayRow {
+export function dayRow(week: number, day: Plan['days'][number]): PlanDayRow {
   const kind: PlanDayRow['kind'] =
     day.kind === 'training' ? 'workout' : day.restSuggestion === 'walk' ? 'walk' : day.restSuggestion === 'stretch' ? 'stretch' : 'rest';
   return {

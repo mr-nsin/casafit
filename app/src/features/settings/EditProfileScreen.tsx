@@ -12,10 +12,14 @@ import { Avatar, ChipGroup, FilledButton, InfoNote, SectionLabel, Text, TextFiel
 import { SEX_OPTIONS, parseHeight, parseWeight } from '../onboarding/logic';
 import { Page } from './Page';
 import { useBusy, useProfileData } from './hooks';
+import { getRepositories } from '../../state/storage';
+import { refreshReminders } from './reminders';
+import { pushPlanMetadata } from './serverSync';
 import { PAIN_AREAS, initials, parseBirthYear } from './model';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type PainChoice = PainArea | 'none';
+const sameSet = (a: readonly string[], b: readonly string[]) => a.length === b.length && a.every((x) => b.includes(x));
 
 export function EditProfileScreen() {
   const nav = useNavigation<Nav>();
@@ -56,6 +60,7 @@ export function EditProfileScreen() {
       const next = { born: b.error, height: h.error, weight: w.error };
       setErrors(next);
       if (next.born || next.height || next.weight) return;
+      const painChanged = !sameSet(profile?.painAreas ?? [], pain);
       await save({
         name: name.trim() || null,
         birthYear: b.value,
@@ -64,6 +69,13 @@ export function EditProfileScreen() {
         sex,
         painAreas: pain,
       });
+      if (painChanged) {
+        // Pain areas stay on the phone (the API rejects them); the plan metadata is queued again
+        // and the reminder text follows the plan. Neither waits on the network.
+        const plan = await getRepositories().plan.get();
+        void pushPlanMetadata(plan);
+        void refreshReminders();
+      }
       back();
     });
 

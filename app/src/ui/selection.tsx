@@ -295,6 +295,7 @@ export function ToggleRow({
   value,
   onChange,
   a11yLabel,
+  disabled = false,
 }: {
   icon?: IconName;
   title: string;
@@ -302,6 +303,7 @@ export function ToggleRow({
   value: boolean;
   onChange: (v: boolean) => void;
   a11yLabel?: string;
+  disabled?: boolean;
 }) {
   const t = useTokens();
   return (
@@ -309,6 +311,7 @@ export function ToggleRow({
       role="switch"
       label={a11yLabel ?? title}
       checked={value}
+      disabled={disabled}
       onPress={() => onChange(!value)}
       minSize={64}
       style={{ minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: space.l, paddingVertical: space.s }}
@@ -325,6 +328,7 @@ export function ToggleRow({
       <Switch
         value={value}
         onValueChange={onChange}
+        disabled={disabled}
         accessible={false}
         trackColor={{ true: t.p, false: t.sv }}
         thumbColor={value ? t.op : t.ol}

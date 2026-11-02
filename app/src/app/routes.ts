@@ -98,8 +98,8 @@ export const tabLabels: Record<TabRouteName, string> = {
 };
 
 /** MaterialIcons glyph names (stopgap; W0-ui replaces the tab bar with Material Symbols Rounded). */
-export const tabIcons: Record<TabRouteName, 'self-improvement' | 'restaurant' | 'bar-chart'> = {
-  Workout: 'self-improvement',
+export const tabIcons: Record<TabRouteName, 'sports-gymnastics' | 'restaurant' | 'bar-chart'> = {
+  Workout: 'sports-gymnastics',
   Nutrition: 'restaurant',
   Progress: 'bar-chart',
 };

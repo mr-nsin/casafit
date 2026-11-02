@@ -46,3 +46,4 @@ export { resolveFormCheckEntry, resolveCredits } from './gate';
 export type { FormCheckEntry } from './gate';
 export { useFormCheck } from './controller';
 export { useEntitlements } from './entitlements';
+export { recoverCountedAttempts } from './controller';

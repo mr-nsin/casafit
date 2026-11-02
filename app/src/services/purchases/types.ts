@@ -51,6 +51,11 @@ export class PurchasesUnavailableError extends Error {
 export interface PurchasesPort {
   /** False when no RevenueCat key is set: every call then rejects with reason 'unconfigured'. */
   readonly configured: boolean;
+  /**
+   * Links store purchases to the CasaFit account id (RevenueCat app user id), so Pro follows the
+   * account to a new phone and the webhook can find it. Returns the account's Pro info.
+   */
+  logIn(accountId: string): Promise<ProInfo>;
   getOfferings(): Promise<Offerings>;
   purchase(pkg: StorePackage): Promise<PurchaseOutcome>;
   restore(): Promise<ProInfo>;

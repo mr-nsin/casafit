@@ -4,7 +4,7 @@
 import { ApiError, api } from '../api/client';
 import { openAppDatabase, type Repositories, type SqlDriver } from '../db';
 import { buildTimeline } from '../engine';
-import { configureFormCheckDeps } from '../features/formcheck';
+import { configureFormCheckDeps, recoverCountedAttempts } from '../features/formcheck';
 import { configureNutritionDeps } from '../features/nutrition';
 import { configureOnboardingDeps, type ServerPlanBody } from '../features/onboarding';
 import { configureSessionDeps, startSession, type ContentPort, type SessionPlan } from '../features/session';
@@ -20,7 +20,9 @@ import {
 } from '../services/offline-queue';
 import { createPlatformStepCounter, setStepCounter, type StepCounterService } from '../services/step-counter';
 import { useAuth } from '../state/auth';
-import { useConsent } from '../state/consent';
+import { refreshReminders } from '../features/settings/reminders';
+import { queueConsent } from '../features/settings/serverSync';
+import { setConsentSyncer, useConsent } from '../state/consent';
 import { useOnboarding } from '../state/onboardingDraft';
 import { usePreferences } from '../state/preferences';
 import { setRepositories } from '../state/storage';
@@ -140,6 +142,12 @@ export async function bootstrap(overrides: Partial<BootstrapIO> = {}): Promise<B
     }
   };
 
+  // Consent changes: the local record is the truth; the server copy is queued and retried.
+  setConsentSyncer(async (rec, latest) => {
+    await queueConsent((req) => queue.enqueue(req), rec, latest);
+    void flushQueue();
+  });
+
   configureOnboardingDeps({
     isOnline: io.isOnline,
     async syncPlan(body: ServerPlanBody) {
@@ -202,5 +210,9 @@ export async function bootstrap(overrides: Partial<BootstrapIO> = {}): Promise<B
   }
 
   void flushQueue();
+  // Keep the reminder text in step with the saved plan (it may have changed since it was scheduled).
+  void refreshReminders();
+  // A check that reached rep 3 right before a crash still has to be spent (idempotent, same key).
+  void recoverCountedAttempts();
   return { repos, queue, flushQueue };
 }

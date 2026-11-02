@@ -72,6 +72,7 @@ describe('revenuecat port', () => {
     const listeners = new Set<(i: unknown) => void>();
     return {
       configure: jest.fn(),
+      logIn: jest.fn(async () => ({ created: false, customerInfo: { entitlements: { active: { pro: { expirationDate: '2027-10-14T00:00:00Z', willRenew: true, productIdentifier: 'casafit_year', billingIssueDetectedAt: null, periodType: 'NORMAL' } } } } })),
       getOfferings: jest.fn(async () => ({
         current: {
           availablePackages: [
@@ -99,6 +100,17 @@ describe('revenuecat port', () => {
     await expect(p.getOfferings()).rejects.toMatchObject({ reason: 'unconfigured' });
     await expect(p.restore()).rejects.toBeInstanceOf(PurchasesUnavailableError);
     expect(load).not.toHaveBeenCalled();
+  });
+
+  it('logs in with the account id and maps the returned Pro info; unconfigured rejects', async () => {
+    const m = rcModule();
+    const p = createRevenueCatPurchases({ apiKey: 'k', now: () => NOW, load: () => m as never });
+    await expect(p.logIn('acc-1')).resolves.toMatchObject({ active: true, plan: 'pro_yearly' });
+    expect(m.logIn).toHaveBeenCalledWith('acc-1');
+    await expect(createRevenueCatPurchases({ apiKey: null }).logIn('x')).rejects.toMatchObject({ reason: 'unconfigured' });
+    const fake = createFakePurchases({ info: freeProInfo(NOW) });
+    await fake.logIn('acc-2');
+    expect(fake.loggedInAs).toBe('acc-2');
   });
 
   it('maps offerings to store price strings and drops unknown packages', async () => {

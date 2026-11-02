@@ -45,6 +45,7 @@ let db: Awaited<ReturnType<typeof createTestDb>>;
 let purchases: FakePurchases;
 const api = jest.fn();
 const openSettings = jest.fn(async () => undefined);
+const openUrl = jest.fn(async (_url: string) => undefined);
 let source: PoseSource;
 let push: (f: PoseFrame) => void;
 let permission: CameraPermissionPort = createDevCameraPermission('undetermined');
@@ -75,6 +76,8 @@ beforeEach(async () => {
     path === '/me/entitlements' ? { freeChecksRemaining: 2, pro: { active: false, expiresAt: null } } : { ok: true, freeChecksRemaining: 1 },
   );
   openSettings.mockClear();
+  openUrl.mockReset();
+  openUrl.mockResolvedValue(undefined);
   permission = createDevCameraPermission('granted');
   source = { kind: 'simulated', available: true, start: (cb) => (push = cb), stop: jest.fn() };
   purchases = createFakePurchases({ info: freeProInfo(NOW) });
@@ -84,6 +87,7 @@ beforeEach(async () => {
     repos: () => db.repos,
     now: () => NOW,
     openSettings,
+    openUrl,
     poseSource: () => source,
     permission: () => permission,
   });
@@ -574,6 +578,63 @@ describe('Paywall', () => {
     purchases.info = pro();
     await render(<PaywallScreen />);
     await waitFor(() => expect(mockNav.replace).toHaveBeenCalledWith('ManagePro'));
+  });
+});
+
+describe('Paywall store disclosure', () => {
+  it('shows Terms and Privacy as accessible links that open the pages', async () => {
+    await render(<PaywallScreen />);
+    await settle();
+    const terms = screen.getByRole('link', { name: 'Terms of use' });
+    const privacy = screen.getByRole('link', { name: 'Privacy policy' });
+    expect(terms.props.accessibilityHint).toBe('Opens in your browser');
+    await fireEvent.press(terms);
+    await fireEvent.press(privacy);
+    expect(openUrl).toHaveBeenNthCalledWith(1, expect.stringMatching(/^https:\/\/.*terms/));
+    expect(openUrl).toHaveBeenNthCalledWith(2, expect.stringMatching(/^https:\/\/.*privacy/));
+  });
+
+  it('says so kindly when a link cannot open', async () => {
+    openUrl.mockRejectedValue(new Error('no browser'));
+    await render(<PaywallScreen />);
+    await settle();
+    await press('Terms of use');
+    expect(screen.getByText(/could not open that page/)).toBeTruthy();
+  });
+});
+
+describe('ManagePro masked email', () => {
+  const meBody = {
+    id: '3f1c1f0e-3f1c-4f1c-8f1c-3f1c1f0e3f1c',
+    email: 'priya@gmail.com',
+    emailMasked: 'p***@gmail.com',
+    provider: 'google',
+    locale: 'en-IN',
+    onboarded: true,
+    createdAt: '2026-10-01T00:00:00+00:00',
+    freeChecksRemaining: 2,
+    pro: { active: false, expiresAt: null },
+    plan: null,
+  };
+  const showPro = async () => {
+    useEntitlements.setState({ pro: pro() });
+    purchases.info = pro();
+    await render(<ManageProScreen />);
+    await settle();
+  };
+
+  it('reads the masked email from GET /v1/me and never mentions a phone number', async () => {
+    api.mockImplementation(async (path: string) => (path === '/me' ? meBody : { freeChecksRemaining: 2, pro: { active: false, expiresAt: null } }));
+    await showPro();
+    expect(screen.getByText(/Signed in as p\*\*\*@gmail\.com/)).toBeTruthy();
+    expect(screen.queryByText(/phone number|same number/i)).toBeNull();
+  });
+
+  it('falls back to the cached email offline', async () => {
+    useAuth.setState({ account: { email: null, emailMasked: 'c***@mail.com', provider: 'email' } });
+    api.mockRejectedValue(new Error('offline'));
+    await showPro();
+    expect(screen.getByText(/Signed in as c\*\*\*@mail\.com/)).toBeTruthy();
   });
 });
 

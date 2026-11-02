@@ -56,6 +56,7 @@ export function NotifyScreen() {
 
   const done = () => (nav.canGoBack() ? nav.goBack() : nav.navigate('Main'));
   const alreadyOn = saved.enabled && perm === 'granted';
+  const denied = perm === 'denied';
   const title = `${workoutTitle ?? 'Your workout'} is ready`;
 
   const allow = () =>
@@ -110,7 +111,11 @@ export function NotifyScreen() {
         selected={[time]}
         onChange={([v]) => {
           if (v === 'other') openPicker();
-          else if (v) setTime(v);
+          else if (v) {
+            setTime(v);
+            // Blocked by the phone: keep the chosen time so reminders can start once allowed.
+            if (denied) void setNotifications({ time: v });
+          }
         }}
       />
 
@@ -123,25 +128,40 @@ export function NotifyScreen() {
         </Animated.View>
       </View>
 
-      <ToggleRow icon="insights" title="Sunday recap" subtitle="Your week in one card, inside this nudge" value={sunday} onChange={setSunday} />
+      <ToggleRow
+        icon="insights"
+        title="Sunday recap"
+        subtitle="Your week in one card, inside this nudge"
+        value={sunday}
+        onChange={setSunday}
+        disabled={denied}
+      />
 
-      {perm === 'denied' ? (
+      {denied ? (
         <StatusBanner variant="info" icon="notifications_off">
           <View style={{ gap: space.xs }}>
-            <Text>Notifications are switched off for CasaFit on this phone. That is fine. You can turn them on in your phone settings whenever you like.</Text>
-            <TextButton label="Open phone settings" onPress={() => void getNotificationService().openSystemSettings()} />
+            <Text variant="label">Notifications are off for CasaFit.</Text>
+            <Text>Your phone is blocking them. Your time is saved, and reminders start as soon as you allow them.</Text>
           </View>
         </StatusBanner>
       ) : null}
       {error ? <StatusBanner variant="error">{error}</StatusBanner> : null}
 
       <View style={{ gap: space.s, paddingTop: space.s }}>
-        <FilledButton
-          label={alreadyOn ? 'Save' : `Allow reminders at ${formatTime(time)}`}
-          leadingIcon={alreadyOn ? 'check' : 'notifications_active'}
-          loading={busy}
-          onPress={() => void allow()}
-        />
+        {denied ? (
+          <FilledButton
+            label="Open Settings to allow"
+            leadingIcon="open_in_new"
+            onPress={() => void getNotificationService().openSystemSettings()}
+          />
+        ) : (
+          <FilledButton
+            label={alreadyOn ? 'Save' : `Allow reminders at ${formatTime(time)}`}
+            leadingIcon={alreadyOn ? 'check' : 'notifications_active'}
+            loading={busy}
+            onPress={() => void allow()}
+          />
+        )}
         {alreadyOn ? <TextButton label="Turn reminders off" onPress={() => void turnOff()} /> : null}
         <TextButton label="Not now" onPress={done} />
       </View>

@@ -29,6 +29,8 @@ export interface FormCheckDeps {
   /** A uuid: attempt ids and idempotency keys. */
   newId: () => string;
   openSettings: () => Promise<void>;
+  /** Opens a web link (Terms, Privacy) in the system browser. */
+  openUrl: (url: string) => Promise<void>;
   poseSource: PoseSourceFactory;
   permission: () => CameraPermissionPort;
 }
@@ -41,6 +43,7 @@ const defaults = (): FormCheckDeps => ({
   now: () => Date.now(),
   newId,
   openSettings: () => Linking.openSettings(),
+  openUrl: (url) => Linking.openURL(url),
   poseSource: (e) => getPoseSource(e),
   permission: getCameraPermission,
 });

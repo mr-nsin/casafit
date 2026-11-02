@@ -6,6 +6,13 @@ import { getRepositories } from './storage';
 /** Bump when the privacy notice text changes. Stored with each record as evidence. */
 export const NOTICE_VERSION = '2026-10-v1';
 
+/** Called after each local record is saved. The app shell uses it to queue the server copy. */
+export type ConsentSyncer = (rec: ConsentRecord, latest: Partial<Record<ConsentPurpose, ConsentRecord>>) => void | Promise<void>;
+let syncer: ConsentSyncer | null = null;
+export function setConsentSyncer(fn: ConsentSyncer | null): void {
+  syncer = fn;
+}
+
 type State = {
   latest: Partial<Record<ConsentPurpose, ConsentRecord>>;
   hydrated: boolean;
@@ -36,6 +43,12 @@ export const useConsent = create<State>((set, get) => ({
     };
     await getRepositories().consent.append(rec);
     set({ latest: { ...get().latest, [purpose]: rec } });
+    // The phone stays the source of truth: a failed server copy never undoes or blocks the choice.
+    try {
+      await syncer?.(rec, get().latest);
+    } catch {
+      /* queued sends retry on their own */
+    }
     return rec;
   },
   // No record means no consent: every purpose starts off, nothing is pre-ticked (D2).

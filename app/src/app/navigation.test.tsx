@@ -14,7 +14,7 @@ import { nutritionTab } from '../features/nutrition';
 import { progressRoutes } from '../features/progress';
 import { bootstrap } from './bootstrap';
 import { laneRoutes, placeholderRoutes, RootNavigator, type InitialRoute } from './RootNavigator';
-import { implementedRootRoutes, rootRouteLanes, tabRouteLanes } from './routes';
+import { implementedRootRoutes, rootRouteLanes, tabIcons, tabRouteLanes } from './routes';
 
 // Every route named in docs/plans/implementation.md section 1, minus the three
 // that live in tabs or on the Main container (Home, Nutrition, Progress).
@@ -49,6 +49,10 @@ async function renderNav(initialRouteName: InitialRoute) {
 describe('route map', () => {
   it('covers every route in the plan', () => {
     expect(Object.keys(rootRouteLanes).sort()).toEqual([...sectionOneRoutes].sort());
+  });
+
+  it('uses the design Workout icon on the tab bar, the same one the Settings bottom bar shows', () => {
+    expect(tabIcons.Workout).toBe('sports-gymnastics');
   });
 
   it('has the three tabs', () => {

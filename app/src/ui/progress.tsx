@@ -112,30 +112,77 @@ export function SegmentedProgress({ segments, label, height = 12 }: { segments: 
   );
 }
 
-/** 2 min warm-up, 11 min work, 2 min cool-down. */
-export function SessionSegmentBar({ warm = 2, work = 11, cool = 2, height = 32, showLabels = true }: { warm?: number; work?: number; cool?: number; height?: number; showLabels?: boolean }) {
+/**
+ * 2 min warm-up, 11 min work, 2 min cool-down.
+ * `onTonal` is for a bar that sits on a primary-container card (Week one): the cool-down colour is
+ * nearly the same as that card, so the end segments get their own contrast colours and an outline.
+ * `captions` names the warm-up and cool-down under the bar (they are too narrow to hold a name).
+ */
+export function SessionSegmentBar({
+  warm = 2,
+  work = 11,
+  cool = 2,
+  height = 32,
+  showLabels = true,
+  onTonal = false,
+  captions = false,
+}: {
+  warm?: number;
+  work?: number;
+  cool?: number;
+  height?: number;
+  showLabels?: boolean;
+  onTonal?: boolean;
+  captions?: boolean;
+}) {
   const t = useTokens();
   const parts: { label: string; min: number; bg: string; fg: ColorKey }[] = [
     { label: 'Warm-up', min: warm, bg: t.tc, fg: 'otc' },
     { label: 'Work', min: work, bg: t.p, fg: 'op' },
-    { label: 'Cool-down', min: cool, bg: t.sc, fg: 'osc' },
+    onTonal ? { label: 'Cool-down', min: cool, bg: t.s, fg: 'os' } : { label: 'Cool-down', min: cool, bg: t.sc, fg: 'osc' },
   ];
   return (
     <View
       accessible
       accessibilityRole="image"
       accessibilityLabel={`${warm} minutes warm-up, ${work} minutes work, ${cool} minutes cool-down`}
-      style={{ flexDirection: 'row', gap: 4, height }}
+      style={{ gap: space.xs }}
     >
-      {parts.map((p) => (
-        <View key={p.label} style={{ flex: p.min, backgroundColor: p.bg, borderRadius: radius.m, alignItems: 'center', justifyContent: 'center' }}>
-          {showLabels && p.min >= 4 ? (
-            <Text variant="label" color={p.fg} tabular>
-              {p.label} {p.min} min
-            </Text>
-          ) : null}
+      <View style={{ flexDirection: 'row', gap: 4, height }}>
+        {parts.map((p) => (
+          <View
+            key={p.label}
+            style={{
+              flex: p.min,
+              backgroundColor: p.bg,
+              borderRadius: radius.m,
+              alignItems: 'center',
+              justifyContent: 'center',
+              ...(onTonal ? { borderWidth: 1, borderColor: t.opc } : null),
+            }}
+          >
+            {showLabels && p.min >= 4 ? (
+              <Text variant="label" color={p.fg} tabular>
+                {p.label} {p.min} min
+              </Text>
+            ) : onTonal || captions ? (
+              <Text variant="label" color={p.fg} tabular>
+                {p.min}
+              </Text>
+            ) : null}
+          </View>
+        ))}
+      </View>
+      {captions ? (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text variant="label" color={onTonal ? 'opc' : 'osv'} tabular>
+            Warm-up {warm} min
+          </Text>
+          <Text variant="label" color={onTonal ? 'opc' : 'osv'} tabular>
+            Cool-down {cool} min
+          </Text>
         </View>
-      ))}
+      ) : null}
     </View>
   );
 }

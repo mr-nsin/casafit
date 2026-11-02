@@ -162,7 +162,7 @@ export function WeekOneScreen() {
       <Card tone="pc">
         <Text variant="title" color="opc">{session?.title ?? 'Today'}</Text>
         <Text color="opc" tabular>{formatClock(totalS)}</Text>
-        <SessionSegmentBar warm={2} work={11} cool={2} height={32} />
+        <SessionSegmentBar warm={2} work={11} cool={2} height={32} onTonal captions />
         <Text variant="bodySmall" color="opc" tabular>{moves.length} moves</Text>
         {moves.map((m, i) => (
           <Text key={m.id} color="opc">{i + 1}. {m.name}</Text>

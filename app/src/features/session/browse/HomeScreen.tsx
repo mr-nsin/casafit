@@ -1,7 +1,7 @@
 // Workout tab: Home (training day, resume, comeback) and HomeRest (rest day).
 // One decision for today, then optional paths. Everything is read locally.
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Animated, ScrollView, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -10,6 +10,7 @@ import { useAuth } from '../../../state/auth';
 import { usePreferences, useShowCalories } from '../../../state/preferences';
 import {
   Card,
+  ConfirmDialog,
   EmptyState,
   FilledButton,
   FormCheckChip,
@@ -19,6 +20,7 @@ import {
   ProgressBar,
   ProgressRing,
   SessionSegmentBar,
+  StatusBanner,
   Text,
   TextButton,
   Touchable,
@@ -55,6 +57,7 @@ import {
 } from './model';
 import { Page, useBackOrHome, useBrowseNav, type Nav } from './Page';
 import { openReadyMade } from './actions';
+import { comebackRebuildPending, rebuildComebackWeek } from './comeback';
 import { contentFlags, isSafePlan } from './library';
 import { loadContent } from '../../../content';
 import { getSessionDeps } from '../deps';
@@ -471,6 +474,9 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
   const plan = data.plan!;
   const [resume, refreshResume] = useResume();
   const [saving, setSaving] = useState(false);
+  const [easeAsk, setEaseAsk] = useState(false);
+  const [easeState, setEaseState] = useState<'idle' | 'working' | 'done' | 'failed'>('idle');
+  const [easePending, setEasePending] = useState(false);
   const done = completedDates(data.logs, data.tz);
   const row = data.rows.find((r) => r.dayIndex === clock.dayIndex)!;
   const comeback = isComeback(data.logs, clock.today, data.tz);
@@ -479,6 +485,29 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
   const workouts = data.rows.filter((r) => r.kind === 'workout');
   const nth = workouts.filter((r) => r.dayIndex <= row.dayIndex).length;
   const name = firstName(data.profile?.name);
+  const lastSessionAt = data.logs.reduce<number | null>((m, l) => (m === null || l.completedAt > m ? l.completedAt : m), null);
+  useEffect(() => {
+    if (!comeback) return undefined;
+    let live = true;
+    void comebackRebuildPending(lastSessionAt).then((p) => live && setEasePending(p));
+    return () => {
+      live = false;
+    };
+  }, [comeback, lastSessionAt]);
+  const ease = async () => {
+    setEaseAsk(false);
+    setEaseState('working');
+    try {
+      const r = await rebuildComebackWeek();
+      if (r.ok) {
+        setEasePending(false);
+        setEaseState('done');
+        await data.reload();
+      } else setEaseState('failed');
+    } catch {
+      setEaseState('failed');
+    }
+  };
   const title = comeback ? (name ? `Welcome back, ${name}` : 'Welcome back') : name ? `Let's move, ${name}` : "Let's move";
 
   const start = () => {
@@ -508,9 +537,28 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
             Good to see you
           </Text>
           <Text color="otc">Start where you are. One session today is plenty.</Text>
+          {easePending && easeState !== 'done' ? (
+            <TextButton label="Make this week a bit lighter" onPress={() => setEaseAsk(true)} disabled={easeState === 'working'} />
+          ) : null}
         </Card>
       ) : null}
-      {/* TODO(comeback): rebuild the week one rung easier with engine comebackInput() once the plan lane exposes a rebuild call. */}
+      {easeState === 'done' ? (
+        <StatusBanner variant="status">Done. Your week starts today and is a little lighter.</StatusBanner>
+      ) : null}
+      {easeState === 'failed' ? (
+        <StatusBanner variant="info">We could not lighten the week just now. Your plan is unchanged, and today's session is still there.</StatusBanner>
+      ) : null}
+      <ConfirmDialog
+        visible={easeAsk}
+        icon="spa"
+        title="Ease back in?"
+        body="We will rebuild this week one step gentler, with a day less, starting today. Your finished sessions stay. Any changes you made to this week's plan will be reset."
+        onDismiss={() => setEaseAsk(false)}
+        actions={[
+          { label: 'Keep my plan', onPress: () => setEaseAsk(false), variant: 'tonal' },
+          { label: 'Make it lighter', onPress: () => void ease(), variant: 'filled' },
+        ]}
+      />
       {row.kind === 'workout' ? (
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Text tabular>

@@ -16,6 +16,8 @@ import { HomeRestScreen, HomeScreen } from './HomeScreen';
 import { PlanScreen, WeekPlanScreen, WhyScreen } from './PlanScreens';
 import { loadContent } from '../../../content';
 import { isoWeek, mythOfTheWeek } from '../../learn/model';
+import { configureOnboardingDeps } from '../../onboarding/deps';
+import { COMEBACK_KEY, rebuildComebackWeek } from './comeback';
 import { READY_MADE, WEEKDAY_LONG, answerRows, dayIcon, completedDates, dayKindFor, isComeback, localDate, parsePlanDayKey, phaseMinutes, planClock, planDayKey, weekdayIndex } from './model';
 
 let mockNoMyths = false;
@@ -430,6 +432,69 @@ describe('Home, comeback', () => {
     await db.repos.sessionLog.insert({ id: 'l1', planWeek: 1, planDay: 0, style: 'normal', status: 'complete', durationS: 900, movesDone: 5, movesPlanned: 5, felt: null, rungChanges: [], feelSignals: [], warmupSkipped: false, formChecks: 0, quiet: false, completedAt: Date.now() - 2 * DAY_MS });
     await render(<HomeScreen />);
     expect(await screen.findByText("Let's move, Priya")).toBeTruthy();
+  });
+});
+
+describe('Home, comeback rebuild', () => {
+  const gap = async (days = 9) => {
+    await db.repos.sessionLog.insert({ id: 'l1', planWeek: 1, planDay: 0, style: 'normal', status: 'complete', durationS: 900, movesDone: 5, movesPlanned: 5, felt: 'about_right', rungChanges: [], feelSignals: [], warmupSkipped: false, formChecks: 0, quiet: false, completedAt: Date.now() - days * DAY_MS });
+  };
+  const workouts = async () => (await db.repos.plan.days(1)).filter((r) => r.kind === 'workout').length;
+  afterEach(() => configureOnboardingDeps({ async syncPlan() {} }));
+
+  it('offers a lighter week, asks first, and leaves the plan alone if declined', async () => {
+    await seed();
+    await gap();
+    await render(<HomeScreen />);
+    await fireEvent.press(await screen.findByLabelText('Make this week a bit lighter'));
+    expect(screen.getByText('Ease back in?')).toBeTruthy();
+    expect(screen.queryByText(/missed|behind|failed|lazy/i)).toBeNull();
+    await fireEvent.press(screen.getByText('Keep my plan'));
+    expect((await db.repos.plan.get())?.daysPerWeek).toBe(4);
+    expect(await workouts()).toBe(4);
+    expect(await db.repos.prefs.get(COMEBACK_KEY)).toBeNull();
+  });
+
+  it('on confirm rebuilds the week one rung easier, starting today, and stops offering it', async () => {
+    await seed();
+    await gap();
+    const syncPlan = jest.fn(async () => undefined);
+    configureOnboardingDeps({ syncPlan });
+    await render(<HomeScreen />);
+    await fireEvent.press(await screen.findByLabelText('Make this week a bit lighter'));
+    await fireEvent.press(screen.getByText('Make it lighter'));
+    expect(await screen.findByText('Done. Your week starts today and is a little lighter.')).toBeTruthy();
+    expect((await db.repos.plan.get())?.daysPerWeek).toBe(3);
+    expect(await workouts()).toBe(3);
+    expect((await db.repos.plan.days(1)).find((r) => r.dayIndex === 0)?.status).toBe('today');
+    expect(screen.queryByLabelText('Make this week a bit lighter')).toBeNull();
+    expect(syncPlan).toHaveBeenCalledWith(expect.objectContaining({ days: 3, styles: 1 }));
+    // Finished sessions stay.
+    expect((await db.repos.sessionLog.list()).length).toBe(1);
+  });
+
+  it('is not offered again after it was done, and not offered without a gap', async () => {
+    await seed();
+    await gap();
+    await db.repos.prefs.set(COMEBACK_KEY, String(Date.now()));
+    await render(<HomeScreen />);
+    await screen.findByText('Welcome back, Priya');
+    expect(screen.queryByLabelText('Make this week a bit lighter')).toBeNull();
+  });
+
+  it('no gap, no offer', async () => {
+    await seed();
+    await db.repos.sessionLog.insert({ id: 'l2', planWeek: 1, planDay: 0, style: 'normal', status: 'complete', durationS: 900, movesDone: 5, movesPlanned: 5, felt: null, rungChanges: [], feelSignals: [], warmupSkipped: false, formChecks: 0, quiet: false, completedAt: Date.now() - DAY_MS });
+    await render(<HomeScreen />);
+    await screen.findByText("Let's move, Priya");
+    expect(screen.queryByLabelText('Make this week a bit lighter')).toBeNull();
+  });
+
+  it('rebuildComebackWeek never goes under 3 days and reports no plan calmly', async () => {
+    expect(await rebuildComebackWeek()).toEqual({ ok: false, reason: 'no_plan' });
+    await seed();
+    await db.repos.plan.save({ ...(await db.repos.plan.get())!, daysPerWeek: 3 });
+    expect(await rebuildComebackWeek()).toEqual({ ok: true, days: 3 });
   });
 });
 

@@ -177,7 +177,7 @@ export function NoCreditsScreen() {
         <Text variant="title" color="opc">
           Check your form as often as you like
         </Text>
-        {['Squat, push-up, plank and lunge', 'Still on this phone. Nothing is recorded.', 'Restores on any phone once you verify'].map((s) => (
+        {['Squat, push-up, plank and lunge', 'Still on this phone. Nothing is recorded.', 'Restores on any phone once you sign in'].map((s) => (
           <View key={s} style={{ flexDirection: 'row', gap: space.m }}>
             <Icon name="check_circle" size={20} color="opc" />
             <Text variant="bodySmall" color="opc" style={{ flex: 1 }}>
@@ -186,7 +186,7 @@ export function NoCreditsScreen() {
           </View>
         ))}
       </View>
-      <InfoRow icon="info" text="Using a new phone? Verify the same number or email and your account, plan and Pro come back." />
+      <InfoRow icon="info" text="Using a new phone? Sign in with the same account and your plan and Pro come back." />
     </Page>
   );
 }

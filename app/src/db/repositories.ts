@@ -272,6 +272,8 @@ export interface FormCheckAttempt {
 export interface FormCheckRepo {
   create(a: FormCheckAttempt): Promise<void>;
   get(id: string): Promise<FormCheckAttempt | null>;
+  /** Attempts in one state, oldest first. Used to recover attempts left in `counted` by a crash. */
+  listByState(state: FormCheckAttempt['state']): Promise<FormCheckAttempt[]>;
   setState(
     id: string,
     state: FormCheckAttempt['state'],

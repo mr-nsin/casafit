@@ -2,7 +2,7 @@
 
 **The single source of truth for what is done, what is pending and what comes next.** Read it at the start of every session and before picking up work. Update it in the same commit as the work, every time something is completed, started, blocked or decided.
 
-Last updated: 30 October 2026 (Supabase auth backend, session leftovers) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
+Last updated: 2 November 2026 (frontend leftovers: Notify denied, consent and plan sync, Pro, comeback) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
 
 ## How to keep this file current
 
@@ -44,6 +44,7 @@ Last updated: 30 October 2026 (Supabase auth backend, session leftovers) · `mai
 | Session leftovers | Save-your-session card for a finished but unlogged session (no more "15 of 15 Resume"), plan day zero from `plan.updatedAt` shared by Home, WeekPlan and progress, weekly myth card on Home, WeekPlan previous and next week (past read-only), Exercise "Try 30 seconds" single-move mode, Editor Save returns to Plan detail. 849 tests pass | 30 Oct |
 | Backend: Supabase identity | Email and social sign-in move to Supabase Auth. The API validates Supabase JWTs (HS256 secret or JWKS), creates the account on first request (ExternalId, Email, Provider), `GET /v1/me` returns email, masked email and provider, `DELETE /v1/me` also deletes the Supabase user through `IIdentityAdmin`. Phone, SMS, OTP, refresh endpoints and Redis removed. RevenueCat webhook needs the `Authorization` header to equal `RevenueCat__WebhookSecret`. Content packs at `GET /v1/content/packs/{name}` with ETag. OpenAPI and `shared/` types updated, GitHub workflows `api.yml` and `app.yml`, `api/railway.json` and README deploy steps added. 105 unit and 74 integration tests pass | 30 Oct |
 | App sign-in | Verify is now the sign-in step (email field, email code, Google, Apple on iOS, Facebook) through supabase-js with a SecureStore chunk adapter and PKCE; API client takes the token from the auth provider and refreshes once on 401; dev-only provider with `EXPO_PUBLIC_DEV_AUTH_TOKEN` and `api/tools/mint-dev-token.mjs`; masked email on Profile; sign out; delete handles `identity_delete_failed`; `shared/` phone helpers removed, plan upsert matches the API. 907 tests pass. Not run against a real Supabase project | 30 Oct |
+| Frontend leftovers | Notify permission-denied state; consents sent to `POST /v1/me/consents` (health_answers and steps map to `health_sync`; camera consent stays on the phone); pain-area edits queue `PUT /v1/me/plan` metadata; reminder text refreshes; tab bar Workout icon matches Settings; `Purchases.logIn(accountId)`; Paywall Terms and Privacy links; masked email on ManagePro; attempts stuck in `counted` after a crash are retried with their own idempotency key; Week one bar contrast and labels; Home "Make this week a bit lighter" comeback rebuild with confirm. 937 tests pass. Not yet checked on a device | 2 Nov |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
@@ -63,7 +64,7 @@ Nothing running. Next lanes start from the **Next up** list.
 | P1 | Gap and empty states, Maestro end-to-end flows |
 | P1 | On-device pass through every built screen (only Welcome seen so far) |
 | P1 | Status bar: dark icons now show on light screens (React Native `StatusBar` set from the app theme in `App.tsx`). My earlier "still white" result came from stale Metro code, not the fix. Still to check on a dark-theme device |
-| P1 | Week one: the cool-down segment of the session bar is nearly invisible on the tonal card (`sc` on `pc`); the 2/11/2 split also has no labels on warm-up and cool-down. Check contrast |
+| Done | Week one: the cool-down segment of the session bar is nearly invisible on the tonal card (`sc` on `pc`); the 2/11/2 split also has no labels on warm-up and cool-down. Check contrast |
 | P1 | Player stage card shows a static icon; the two-frame move demo (design's `fa/fb` crossfade) is not built and needs illustration assets |
 | P1 | Slice B deferred: Exercise "Try 30 seconds" (store has no single-move mode), drag to reorder (up and down buttons only), yoga body-part sessions often cannot be built (catalogue has 5 yoga work moves), some ready-made plans run over 15:00 in the Editor. Editor "Save" goes back rather than to the Player |
 | P1 | Settings deferred: masked phone number and "since" date need `GET /v1/me`; no avatar photo (no image picker); only the locale is saved, no translations or i18next yet; consent changes are stored locally, not sent to `POST /v1/me/consents`; edited pain areas are not pushed to `PUT /v1/me/plan`; reminder text does not refresh when the plan changes until Notify is saved again; Chat opens an email link; the native notification path is only unit-tested against a fake |

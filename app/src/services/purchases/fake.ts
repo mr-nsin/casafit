@@ -25,6 +25,9 @@ export interface FakePurchases extends PurchasesPort {
   restoreInfo: ProInfo | null;
   restoreError: UnavailableReason | null;
   info: ProInfo;
+  /** The account id passed to the last logIn. */
+  loggedInAs: string | null;
+  logInError: UnavailableReason | null;
   infoError: UnavailableReason | null;
   /** Pushes a CustomerInfo update to listeners. */
   emit(info: ProInfo): void;
@@ -49,7 +52,15 @@ export function createFakePurchases(init: { configured?: boolean; info: ProInfo 
     restoreInfo: null,
     restoreError: null,
     info: init.info,
+    loggedInAs: null,
+    logInError: null,
     infoError: null,
+    async logIn(accountId: string) {
+      fake.calls.push(`logIn:${accountId}`);
+      gate(fake.logInError);
+      fake.loggedInAs = accountId;
+      return fake.info;
+    },
     async getOfferings() {
       fake.calls.push('getOfferings');
       gate(fake.offeringsError);

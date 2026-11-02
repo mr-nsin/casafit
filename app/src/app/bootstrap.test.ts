@@ -4,6 +4,7 @@ import { getSessionDeps } from '../features/session';
 import { createFakeStepCounter, getStepCounter, setStepCounter } from '../services/step-counter';
 import { createFakeKeepAwake } from '../services/keep-awake';
 import { hasRepositories, setRepositories } from '../state/storage';
+import { useConsent, setConsentSyncer } from '../state/consent';
 import { usePreferences } from '../state/preferences';
 import { bootstrap, type BootstrapIO } from './bootstrap';
 
@@ -31,6 +32,7 @@ function fakeIO(over: Partial<BootstrapIO> = {}): Partial<BootstrapIO> {
 }
 
 afterEach(() => {
+  setConsentSyncer(null);
   setRepositories(null);
   setStepCounter(null);
   sent.length = 0;
@@ -60,6 +62,21 @@ describe('bootstrap', () => {
     expect(sent).toHaveLength(1);
     expect(sent[0]).toMatchObject({ path: '/me/plan', method: 'PUT', body });
     expect(sent[0]!.key.length).toBeGreaterThan(8);
+  });
+
+  it('queues a consent change for POST /me/consents and flushes it', async () => {
+    await bootstrap(fakeIO());
+    const rec = await useConsent.getState().record('analytics', true, 'privacy_screen');
+    await new Promise((r) => setTimeout(r, 20));
+    const hit = sent.find((x) => x.path === '/me/consents');
+    expect(hit).toMatchObject({ method: 'POST', key: rec.id, body: { type: 'analytics', granted: true } });
+  });
+
+  it('keeps a consent change queued while offline, and the local choice stands', async () => {
+    const res = await bootstrap(fakeIO({ send: async () => { throw new Error('offline'); } }));
+    await useConsent.getState().record('analytics', false, 'privacy_screen');
+    expect(useConsent.getState().has('analytics')).toBe(false);
+    expect((await res.queue.pending()).some((i) => i.path === '/me/consents')).toBe(true);
   });
 
   it('keeps the plan queued while offline', async () => {
