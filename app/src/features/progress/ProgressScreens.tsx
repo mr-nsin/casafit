@@ -31,9 +31,21 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 /** Progress tab root. Shows the empty state until the first session is logged. */
 export function ProgressScreen() {
-  const { view } = useProgress();
+  const { view, error, retry } = useProgress();
+  if (error) return <LoadError title="Progress" onRetry={retry} />;
   if (!view) return <Page top={<TopBar title="Progress" leading="none" />}>{null}</Page>;
   return view.empty ? <ProgressEmptyScreen /> : <ProgressBody view={view} />;
+}
+
+/** The phone could not read its own data. Calm, no blame, one way to try again. */
+export function LoadError({ title, onRetry, onClose }: { title: string; onRetry: () => void; onClose?: () => void }) {
+  return (
+    <Page top={onClose ? <TopBar leading="close" title={title} onLeading={onClose} /> : <TopBar title={title} leading="none" />}>
+      <EmptyState icon="info" title="We could not load this" body="Your sessions and steps are safe on this phone. Try again in a moment.">
+        <FilledButton label="Try again" leadingIcon="refresh" onPress={onRetry} />
+      </EmptyState>
+    </Page>
+  );
 }
 
 export function ProgressBody({ view }: { view: ProgressView }) {
@@ -116,7 +128,8 @@ export function ProgressEmptyScreen() {
 
 export function RecapScreen() {
   const nav = useNavigation<Nav>();
-  const { view } = useRecap();
+  const { view, error, retry } = useRecap();
+  if (error) return <LoadError title="Recap" onRetry={retry} onClose={() => nav.goBack()} />;
   if (!view) return <Page top={<TopBar leading="close" title="Recap" onLeading={() => nav.goBack()} />}>{null}</Page>;
   return (
     <Page

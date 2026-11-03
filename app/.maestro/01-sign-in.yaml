@@ -1,0 +1,6 @@
+# Welcome to Age to sign-in with the dev token.
+appId: app.casafit
+tags: [smoke, onboarding]
+---
+- runFlow: subflows/sign-in.yaml
+- assertVisible: "What do you want?"

@@ -178,6 +178,27 @@ describe('calorie hiding guard (D7)', () => {
     expect(screen.queryByText(/over|too much|failed/i)).toBeNull();
   });
 
+  it('Nutrition: explains where the calories went while they are hidden', async () => {
+    await seed();
+    await wrap(<NutritionScreen />);
+    await screen.findByText('Nutrition');
+    expect(screen.queryByText(/Calories are hidden on Home/)).toBeNull();
+    await fireEvent.press(screen.getByLabelText('Show calories'));
+    expect(await screen.findByText(/Calories are hidden on Home, meals, your food plan and search/)).toBeTruthy();
+  });
+
+  it('Nutrition: a failed read shows a calm retry, then recovers', async () => {
+    await seed();
+    const spy = jest.spyOn(repos.food, 'forDay').mockRejectedValueOnce(new Error('disk'));
+    await wrap(<NutritionScreen />);
+    expect(await screen.findByText('We could not load your food log')).toBeTruthy();
+    expect(screen.getByText(/safe on this phone/)).toBeTruthy();
+    await fireEvent.press(screen.getByLabelText('Try again'));
+    expect(await screen.findByText('Nutrition')).toBeTruthy();
+    expect(screen.queryByText('We could not load your food log')).toBeNull();
+    spy.mockRestore();
+  });
+
   it.each([
     ['NutriPlan', () => <NutriPlanScreen />],
     ['FoodSearch', () => <FoodSearchScreen />],

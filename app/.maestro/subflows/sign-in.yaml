@@ -1,0 +1,18 @@
+# Welcome, Age, then sign in with the local dev user (needs EXPO_PUBLIC_DEV_AUTH_TOKEN in app/.env.local at build time).
+appId: app.casafit
+---
+- runFlow: launch.yaml
+- tapOn: "Get my 15-minute plan"
+- assertVisible: "CasaFit is for adults"
+- tapOn: "Year of birth"
+- scrollUntilVisible:
+    element: "1990"
+    direction: DOWN
+- tapOn: "1990"
+- tapOn: "I confirm I am 18 or older."
+- tapOn: "Continue"
+- assertVisible: "Email address"
+- tapOn: "Continue as the local dev user"
+- extendedWaitUntil:
+    visible: "What do you want?"
+    timeout: 30000

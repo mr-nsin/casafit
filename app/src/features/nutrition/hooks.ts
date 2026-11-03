@@ -14,6 +14,8 @@ export const useNav = () => useNavigation<Nav>();
 
 export interface NutritionData {
   loaded: boolean;
+  /** The phone could not read its data. Show a retry; never a blank screen. */
+  error: boolean;
   profile: NutritionProfile | null;
   today: FoodEntry[];
   yesterday: FoodEntry[];
@@ -27,6 +29,7 @@ export function useNutritionData(): NutritionData {
   const nav = useNav();
   const [state, setState] = useState<Omit<NutritionData, 'reload'>>({
     loaded: false,
+    error: false,
     profile: null,
     today: [],
     yesterday: [],
@@ -35,15 +38,19 @@ export function useNutritionData(): NutritionData {
   });
   const alive = useRef(true);
   const reload = useCallback(async () => {
-    const r = getNutritionDeps().repos();
-    const [profile, today, yesterday, plan, saved] = await Promise.all([
-      r.nutrition.getProfile(),
-      r.food.forDay(todayKey()),
-      r.food.forDay(yesterdayKey()),
-      r.nutrition.activeMealPlan(),
-      r.nutrition.savedMeals(),
-    ]);
-    if (alive.current) setState({ loaded: true, profile, today, yesterday, plan, saved });
+    try {
+      const r = getNutritionDeps().repos();
+      const [profile, today, yesterday, plan, saved] = await Promise.all([
+        r.nutrition.getProfile(),
+        r.food.forDay(todayKey()),
+        r.food.forDay(yesterdayKey()),
+        r.nutrition.activeMealPlan(),
+        r.nutrition.savedMeals(),
+      ]);
+      if (alive.current) setState({ loaded: true, error: false, profile, today, yesterday, plan, saved });
+    } catch {
+      if (alive.current) setState((s) => ({ ...s, error: true }));
+    }
   }, []);
   useEffect(() => {
     alive.current = true;

@@ -104,7 +104,7 @@ export function StepsPermissionScreen() {
         body="Your phone needs a newer Health Connect to share steps with CasaFit. It is free from your app store."
         notes={[
           ['system_update', 'Install or update Health Connect, then return here.'],
-          ['sensors', 'Prefer not to? Use your phone step sensor instead. It counts only while CasaFit is open.'],
+          ['sensors', 'Prefer not to? Use your phone step sensor instead. It counts only while CasaFit is allowed to run.'],
         ]}
         primary={{ label: 'Get Health Connect', onPress: () => void getStepCounter().openSystemSettings() }}
         secondary={{ label: 'Use the step sensor instead', onPress: useSensor }}

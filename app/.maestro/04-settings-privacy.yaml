@@ -1,0 +1,16 @@
+# Open Settings and Privacy from Home. Uses "Look around first" so no session is needed.
+appId: app.casafit
+tags: [settings]
+---
+- runFlow: subflows/sign-in.yaml
+- runFlow: subflows/onboard.yaml
+- tapOn: "Look around first"
+- tapOn: "Profile"
+- tapOn: "Settings"
+- assertVisible: "Privacy and account"
+- scrollUntilVisible:
+    element: "Privacy and data"
+    direction: DOWN
+- tapOn: "Privacy and data"
+- assertVisible: "What you have allowed"
+- assertVisible: "Read the privacy notice"

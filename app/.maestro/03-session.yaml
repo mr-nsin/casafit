@@ -1,0 +1,9 @@
+# Start and finish a session, then land back on Home.
+appId: app.casafit
+tags: [session]
+---
+- runFlow: subflows/sign-in.yaml
+- runFlow: subflows/onboard.yaml
+- runFlow: subflows/session.yaml
+- assertVisible: "Profile"
+- assertVisible: "Nutrition"

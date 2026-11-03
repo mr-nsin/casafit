@@ -229,7 +229,9 @@ export function WeekBars({
         {values.map((v, i) => {
           const met = goal !== undefined && v >= goal;
           const bg = i === highlightIndex ? t.s : met ? t.p : t.pc;
-          return <View key={i} style={{ flex: 1, height: Math.max(4, (v / top) * height), backgroundColor: bg, borderRadius: radius.s }} />;
+          // The pale tonal bar is nearly invisible on the page (1.2:1), so it gets a darker edge.
+          const pale = bg === t.pc;
+          return <View key={i} style={{ flex: 1, height: Math.max(4, (v / top) * height), backgroundColor: bg, borderRadius: radius.s, borderWidth: pale ? 1.5 : 0, borderColor: t.s }} />;
         })}
       </View>
       <View style={{ flexDirection: 'row', gap: space.s, marginTop: space.xs }}>
@@ -268,7 +270,7 @@ export function Heatmap({ cells, summary }: { cells: number[]; summary: string }
   return (
     <View accessible accessibilityRole="image" accessibilityLabel={summary} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.xs }}>
       {cells.map((c, i) => (
-        <View key={i} style={{ width: `${100 / 7 - 1.6}%`, aspectRatio: 1, borderRadius: radius.s, backgroundColor: shade[Math.min(3, Math.max(0, c))] }} />
+        <View key={i} style={{ width: `${100 / 7 - 1.6}%`, aspectRatio: 1, borderRadius: radius.s, backgroundColor: shade[Math.min(3, Math.max(0, c))], borderWidth: c === 1 ? 1.5 : 0, borderColor: t.s }} />
       ))}
     </View>
   );

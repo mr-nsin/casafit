@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "scheme": "casafit",
     "userInterfaceStyle": "automatic",
+    "icon": "./assets/brand/icon.png",
     "ios": {
       "bundleIdentifier": "app.casafit",
       "supportsTablet": false,
@@ -16,17 +17,26 @@
     },
     "android": {
       "package": "app.casafit",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/brand/adaptive-foreground.png",
+        "monochromeImage": "./assets/brand/adaptive-monochrome.png",
+        "backgroundColor": "#9C4400"
+      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.ACTIVITY_RECOGNITION",
         "android.permission.POST_NOTIFICATIONS"
       ]
     },
+    "web": {
+      "favicon": "./assets/brand/favicon.png"
+    },
     "plugins": [
       "expo-dev-client",
       "expo-secure-store",
       "expo-localization",
       "expo-font",
+      ["expo-splash-screen", { "image": "./assets/brand/splash.png", "imageWidth": 200, "resizeMode": "contain", "backgroundColor": "#9C4400" }],
       "expo-audio",
       "expo-notifications",
       "react-native-health-connect",

@@ -2,7 +2,7 @@
 
 **The single source of truth for what is done, what is pending and what comes next.** Read it at the start of every session and before picking up work. Update it in the same commit as the work, every time something is completed, started, blocked or decided.
 
-Last updated: 2 November 2026 (frontend leftovers: Notify denied, consent and plan sync, Pro, comeback) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
+Last updated: 3 November 2026 (placeholder icon and splash, Maestro flows, gap and empty states) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
 
 ## How to keep this file current
 
@@ -18,7 +18,7 @@ Last updated: 2 November 2026 (frontend leftovers: Notify denied, consent and pl
 0. Create the Supabase project and give the app its URL and anon key (EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY); then check email code and Google sign-in on a device. A dev client rebuild is needed first (expo-web-browser).
 1. Native `casafit-pose` Nitro module (MediaPipe Pose Landmarker, spike `docs/plans/spikes/pose.md`) so the live check reads real landmarks. Until then the live check runs on a dev-only simulated source.
 2. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
-3. App icon and splash (still Expo defaults), then the gap and empty states and Maestro end-to-end flows.
+3. Real branding for icon and splash, then run the Maestro flows on the emulator and fix selectors.
 4. Create the Supabase project (providers, redirect URL), Railway project and RevenueCat webhook secret; Play Integrity once Google Play credentials exist.
 
 ## Done
@@ -45,6 +45,7 @@ Last updated: 2 November 2026 (frontend leftovers: Notify denied, consent and pl
 | Backend: Supabase identity | Email and social sign-in move to Supabase Auth. The API validates Supabase JWTs (HS256 secret or JWKS), creates the account on first request (ExternalId, Email, Provider), `GET /v1/me` returns email, masked email and provider, `DELETE /v1/me` also deletes the Supabase user through `IIdentityAdmin`. Phone, SMS, OTP, refresh endpoints and Redis removed. RevenueCat webhook needs the `Authorization` header to equal `RevenueCat__WebhookSecret`. Content packs at `GET /v1/content/packs/{name}` with ETag. OpenAPI and `shared/` types updated, GitHub workflows `api.yml` and `app.yml`, `api/railway.json` and README deploy steps added. 105 unit and 74 integration tests pass | 30 Oct |
 | App sign-in | Verify is now the sign-in step (email field, email code, Google, Apple on iOS, Facebook) through supabase-js with a SecureStore chunk adapter and PKCE; API client takes the token from the auth provider and refreshes once on 401; dev-only provider with `EXPO_PUBLIC_DEV_AUTH_TOKEN` and `api/tools/mint-dev-token.mjs`; masked email on Profile; sign out; delete handles `identity_delete_failed`; `shared/` phone helpers removed, plan upsert matches the API. 907 tests pass. Not run against a real Supabase project | 30 Oct |
 | Frontend leftovers | Notify permission-denied state; consents sent to `POST /v1/me/consents` (health_answers and steps map to `health_sync`; camera consent stays on the phone); pain-area edits queue `PUT /v1/me/plan` metadata; reminder text refreshes; tab bar Workout icon matches Settings; `Purchases.logIn(accountId)`; Paywall Terms and Privacy links; masked email on ManagePro; attempts stuck in `counted` after a crash are retried with their own idempotency key; Week one bar contrast and labels; Home "Make this week a bit lighter" comeback rebuild with confirm. 937 tests pass. Not yet checked on a device | 2 Nov |
+| Icon, Maestro, empty states | Placeholder app icon, adaptive and monochrome icons, splash and favicon (white house on `--p`, regenerate with `node app/tools/make-icons.mjs`; needs prebuild to show); Maestro flows in `app/.maestro` (sign-in, onboarding to Week one, session, Settings and Privacy; written, not yet run); Nutrition hidden-calories note and load error, Progress and Recap load error with retry and reload on focus, Manage Pro lapsed, cancelled, billing and trial variants, bar and heatmap contrast. 943 tests pass | 3 Nov |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
@@ -71,7 +72,7 @@ Nothing running. Next lanes start from the **Next up** list.
 | P2 | Settings bottom bar uses a different Workout icon from the tab bar |
 | P1 | Code entry: the six boxes show focus but the keyboard does not open until a box is tapped (autofocus) |
 | P2 | Icon audit: done as `app/src/ui/iconNames.test.ts` for literal names. Names built at run time are still only checked where a screen test does it. Original note: audit every icon name against the glyph set. Names are fine today, but `ads_click` rendered as "?" even though it is a valid name, so check new icons on a device. A node check is in this session's history; turn it into a test |
-| P1 | App icon and splash are still the Expo defaults |
+| P1 | Replace the placeholder icon and splash with real branding; run and fix the Maestro flows; Manage Pro trial "Day 3 of 7" (needs trial start in ProInfo) and billing help row; Home shows "Build my plan" when a plan read fails (should be an error with Try again) |
 | P2 | Material Symbols Rounded font (icons are MaterialIcons today) |
 
 ### Backend

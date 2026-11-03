@@ -1,0 +1,6 @@
+# Whole onboarding, from a clean install to the Week one screen.
+appId: app.casafit
+tags: [onboarding]
+---
+- runFlow: subflows/sign-in.yaml
+- runFlow: subflows/onboard.yaml

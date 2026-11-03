@@ -304,6 +304,33 @@ export function ManageProScreen() {
     }
   };
 
+  if (status.state === 'lapsed' && info) {
+    // m3-managepro-lapsed: calm, nothing lost, a way back.
+    const ended = info.expiresAt ? `Pro ended on ${formatDate(info.expiresAt)}.` : 'Pro has ended.';
+    return (
+      <Page topBar={{ title: 'CasaFit Pro', leading: 'back', onLeading: back }} footer={<FilledButton label="See Pro plans" leadingIcon="workspace_premium" onPress={() => nav.replace('Paywall')} />}>
+        <View testID="pro-lapsed" style={{ backgroundColor: t.sc, borderRadius: radius.xxl, padding: space.xl, gap: space.s }}>
+          <Badge label="Back on free" tone="pc" />
+          <Text variant="headline" color="osc" accessibilityRole="header">
+            Pro ended
+          </Text>
+          <Text color="osc">{`${ended} Everything you built is still here: sessions, plans, food and steps.`}</Text>
+        </View>
+        <View style={{ gap: space.l }}>
+          <BenefitRow icon="photo_camera" title={`${ent.freeChecks} free form ${ent.freeChecks === 1 ? 'check' : 'checks'} for life`} body="Counted from your first one" />
+          <BenefitRow icon="history" title="Your history is safe" body="Nothing was deleted" />
+        </View>
+        {note?.kind === 'restored' ? <StatusBanner variant="status">Pro restored.</StatusBanner> : null}
+        {note?.kind === 'none' ? <StatusBanner variant="plain">No purchase found for this store account.</StatusBanner> : null}
+        {note?.kind === 'error' ? <StatusBanner variant="error">We could not reach the store. Try again in a moment.</StatusBanner> : null}
+        <ListRow icon="restore" title="Restore purchase" onPress={offline || busy ? undefined : () => void restore()} />
+        <Text variant="bodySmall" color="osv">
+          Come back whenever you like. Your store shows the price, and you can pick monthly or yearly.
+        </Text>
+      </Page>
+    );
+  }
+
   if (!status.active || !info) {
     return (
       <Page topBar={{ title: 'CasaFit Pro', leading: 'back', onLeading: back }} footer={<FilledButton label="See Pro" onPress={() => nav.replace('Paywall')} />}>
@@ -316,16 +343,28 @@ export function ManageProScreen() {
   const until = info.expiresAt ? formatDate(info.expiresAt) : null;
   const detail =
     status.state === 'trial'
-      ? `Trial ends${until ? ` on ${until}` : ' soon'}`
+      ? `Trial ends${until ? ` on ${until}` : ' soon'}, then it renews at the store price for the plan you chose.`
       : status.state === 'active_cancelled'
-        ? `Pro until ${until ?? 'the end of this period'}. It will not renew.`
-        : `Renews${until ? ` on ${until}` : ''}${info.priceString ? ` · ${info.priceString}` : ''}`;
+        ? `You cancelled. Pro stays on until ${until ?? 'the end of this period'}, then you move to the free plan.`
+        : status.state === 'billing_issue'
+          ? `Your store could not take the payment. Pro stays on while it tries again${until ? ` until ${until}` : ''}.`
+          : `Renews${until ? ` on ${until}` : ''}${info.priceString ? ` · ${info.priceString}` : ''}`;
   const badge = status.state === 'trial' ? 'Trial' : status.state === 'active_cancelled' ? 'Ends soon' : status.state === 'billing_issue' ? 'Payment needed' : 'Active';
   const actionsOff = offline || busy;
   const other: ProPlan = info.plan === 'pro_monthly' ? 'pro_yearly' : 'pro_monthly';
 
+  const footer =
+    status.state === 'billing_issue' ? (
+      <FilledButton label="Fix payment in your store" leadingIcon="open_in_new" disabled={actionsOff} onPress={() => void openStore()} />
+    ) : status.state === 'active_cancelled' ? (
+      <FilledButton label="Turn renewal back on" leadingIcon="autorenew" disabled={actionsOff} onPress={() => void openStore()} />
+    ) : undefined;
+
   return (
-    <Page topBar={{ title: 'CasaFit Pro', leading: 'back', onLeading: back }}>
+    <Page topBar={{ title: 'CasaFit Pro', leading: 'back', onLeading: back }} footer={footer}>
+      {status.state === 'active_cancelled' ? (
+        <InfoRow icon="info" text="Changed your mind? Turn renewal back on in your store. You will not pay twice and nothing is lost." />
+      ) : null}
       {status.state === 'billing_issue' ? (
         <StatusBanner variant="warning">Update your payment method to keep Pro. The store will keep trying for a few days.</StatusBanner>
       ) : null}
@@ -356,10 +395,9 @@ export function ManageProScreen() {
       {note?.kind === 'error' ? <StatusBanner variant="error">We could not reach the store. Try again in a moment.</StatusBanner> : null}
 
       <View>
-        {status.state === 'billing_issue' ? <ListRow icon="credit_card" title="Update payment method" trailing="external" onPress={actionsOff ? undefined : () => void openStore()} /> : null}
         <ListRow icon="restore" title="Restore purchase" onPress={actionsOff ? undefined : () => void restore()} />
         <ListRow icon="swap_horiz" title={`Switch to ${PLAN_LABEL[other].toLowerCase()}`} subtitle="Changes at your next renewal" trailing="external" onPress={actionsOff ? undefined : () => void openStore()} />
-        {info.willRenew ? <ListRow icon="cancel" title="Cancel Pro" subtitle="Opens your store" trailing="external" onPress={actionsOff ? undefined : () => void openStore()} /> : null}
+        {info.willRenew ? <ListRow icon="cancel" title={status.state === 'trial' ? 'Cancel the trial' : 'Cancel Pro'} subtitle={status.state === 'trial' && until ? `Cancel before ${until} and you pay nothing` : 'Opens your store'} trailing="external" onPress={actionsOff ? undefined : () => void openStore()} /> : null}
       </View>
 
       <Text variant="bodySmall" color="osv">

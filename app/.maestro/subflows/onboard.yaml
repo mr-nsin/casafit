@@ -1,0 +1,18 @@
+# Goals, About you, Building, Week one. Assumes the local API is up (docker compose) and the user is on Goals.
+appId: app.casafit
+---
+- tapOn: "Stay fit, full body"
+- tapOn: "Normal"
+- tapOn: "Next: about you"
+- assertVisible: "About you"
+- tapOn: "Build my plan"
+- extendedWaitUntil:
+    visible: "Cooking up your week one"
+    timeout: 15000
+# The button is disabled until the plan is built; Maestro taps once it is enabled.
+- extendedWaitUntil:
+    enabled: "See my plan"
+    timeout: 60000
+- tapOn: "See my plan"
+- assertVisible: "Week one"
+- assertVisible: "Start today's session"

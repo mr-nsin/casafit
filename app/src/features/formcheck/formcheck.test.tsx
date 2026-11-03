@@ -665,20 +665,38 @@ describe('ManagePro', () => {
 
   it('cancelled: Pro until the date, will not renew, no cancel row', async () => {
     await show(pro({ willRenew: false }));
-    expect(screen.getByText('Pro until 14 October 2027. It will not renew.')).toBeTruthy();
+    expect(screen.getByText('You cancelled. Pro stays on until 14 October 2027, then you move to the free plan.')).toBeTruthy();
+    expect(screen.getByText(/Changed your mind\?/)).toBeTruthy();
     expect(screen.queryByLabelText(/Cancel Pro/)).toBeNull();
+    purchases.calls.length = 0;
+    await press('Turn renewal back on');
+    expect(purchases.calls).toContain('manage');
   });
 
   it('billing issue: asks to update the payment method', async () => {
     await show(pro({ billingIssue: true }));
     expect(screen.getByText(/Update your payment method/)).toBeTruthy();
-    await press(/Update payment method/);
+    expect(screen.getByText(/Pro stays on while it tries again until 14 October 2027/)).toBeTruthy();
+    await press('Fix payment in your store');
     expect(purchases.calls).toContain('manage');
   });
 
   it('trial shows the trial end', async () => {
     await show(pro({ trial: true }));
-    expect(screen.getByText('Trial ends on 14 October 2027')).toBeTruthy();
+    expect(screen.getByText(/Trial ends on 14 October 2027, then it renews at the store price/)).toBeTruthy();
+    expect(screen.getByLabelText(/Cancel the trial/)).toBeTruthy();
+    expect(screen.getByText('Cancel before 14 October 2027 and you pay nothing')).toBeTruthy();
+  });
+
+  it('lapsed: says Pro ended, keeps everything, offers restore and the plans', async () => {
+    await show(pro({ active: false, willRenew: false }));
+    expect(screen.getByText('Pro ended')).toBeTruthy();
+    expect(screen.getByText(/Pro ended on 14 October 2027\. Everything you built is still here/)).toBeTruthy();
+    expect(screen.getByText('Nothing was deleted')).toBeTruthy();
+    expect(screen.queryByText(/free plan/)).toBeNull();
+    await press(/Restore purchase/);
+    await press('See Pro plans');
+    expect(mockNav.replace).toHaveBeenCalledWith('Paywall');
   });
 
   it('offline: an "as of" note and the actions do nothing', async () => {

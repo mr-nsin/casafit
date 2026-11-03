@@ -1,0 +1,12 @@
+# Fresh install state, then open the dev client on the local Metro server.
+# For a release build that has no dev launcher, the openLink step is harmless: it just opens the app.
+appId: app.casafit
+---
+- launchApp:
+    clearState: true
+    clearKeychain: true
+    permissions: { all: allow }
+- openLink: casafit://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081
+- extendedWaitUntil:
+    visible: "Get my 15-minute plan"
+    timeout: 120000

@@ -1,0 +1,30 @@
+# Starts today's session from Week one and skips through every move to the finish screen.
+appId: app.casafit
+---
+- tapOn: "Start today's session"
+# Optional check-in or ready prompts: skip them if they show.
+- runFlow:
+    when:
+      visible: "Skip"
+    commands:
+      - tapOn: "Skip"
+- extendedWaitUntil:
+    visible: "Pause"
+    timeout: 20000
+- repeat:
+    while:
+      notVisible: "Session done"
+    times: 80
+    commands:
+      - runFlow:
+          when:
+            visible: "Skip rest"
+          commands:
+            - tapOn: "Skip rest"
+      - runFlow:
+          when:
+            visible: "Next move"
+          commands:
+            - tapOn: "Next move"
+- assertVisible: "Session done"
+- tapOn: "Done"

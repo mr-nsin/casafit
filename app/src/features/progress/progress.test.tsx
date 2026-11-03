@@ -168,6 +168,42 @@ describe('screens', () => {
     expect(mockNav.navigate).toHaveBeenCalledWith('Main', { screen: 'Workout' });
   });
 
+  it('Progress shows a calm retry when the phone cannot read its data, then recovers', async () => {
+    const spy = jest.spyOn(db.repos.sessionLog, 'list').mockRejectedValueOnce(new Error('disk'));
+    await render(<ProgressScreen />);
+    await settle();
+    expect(screen.getByText('We could not load this')).toBeTruthy();
+    expect(screen.getByText(/safe on this phone/)).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
+    await settle();
+    expect(screen.getByText('Your progress starts with session one')).toBeTruthy();
+    spy.mockRestore();
+  });
+
+  it('Recap shows the same retry', async () => {
+    const spy = jest.spyOn(db.repos.sessionLog, 'list').mockRejectedValueOnce(new Error('disk'));
+    await render(<RecapScreen />);
+    await settle();
+    expect(screen.getByText('We could not load this')).toBeTruthy();
+    spy.mockRestore();
+  });
+
+  it('reloads when the tab comes into focus, so a first session replaces the empty state', async () => {
+    let focus: () => void = () => undefined;
+    (mockNav as Record<string, unknown>).addListener = (_e: string, cb: () => void) => {
+      focus = cb;
+      return () => undefined;
+    };
+    await render(<ProgressScreen />);
+    await settle();
+    expect(screen.getByText('Your progress starts with session one')).toBeTruthy();
+    await db.repos.sessionLog.insert(log(TODAY));
+    await act(async () => focus());
+    await settle();
+    expect(screen.queryByText('Your progress starts with session one')).toBeNull();
+    delete (mockNav as Record<string, unknown>).addListener;
+  });
+
   it('Progress tab shows streak, week, heat map and totals after a session', async () => {
     // The plan is made on a Monday, so plan day 0 is Monday and the fixture's pattern reads as Mon, Wed, Fri, Sun.
     jest.setSystemTime(noon('2026-10-26'));

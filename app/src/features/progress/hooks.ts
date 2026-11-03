@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 import { addDays } from '../../engine';
 import { getRepositories } from '../../state/storage';
@@ -21,27 +22,44 @@ async function load(back: number) {
   return { today, tz, logs, microActiveS, steps, plan, currentWeekDays, planStart: planStartKey(plan, tz) };
 }
 
-export function useProgress(): { loading: boolean; view: ProgressView | null } {
-  const [view, setView] = useState<ProgressView | null>(null);
+type Loaded<V> = { loading: boolean; error: boolean; view: V | null; retry: () => void };
+
+/** Loads from the phone's database. A failed read shows a retry, never a blank screen. Reloads on focus. */
+function useLoaded<V>(back: number, build: (d: Awaited<ReturnType<typeof load>>) => V): Loaded<V> {
+  const nav = useNavigation();
+  const [view, setView] = useState<V | null>(null);
+  const [error, setError] = useState(false);
+  const [tick, setTick] = useState(0);
+  const retry = useCallback(() => {
+    setError(false);
+    setTick((n) => n + 1);
+  }, []);
   useEffect(() => {
     let alive = true;
-    void load(28).then((d) => alive && setView(computeProgress(d)));
+    load(back)
+      .then((d) => {
+        if (alive) setView(build(d));
+      })
+      .catch(() => {
+        if (alive) setError(true);
+      });
     return () => {
       alive = false;
     };
-  }, []);
-  return { loading: view === null, view };
-}
-
-export function useRecap(): { loading: boolean; view: RecapView | null } {
-  const [view, setView] = useState<RecapView | null>(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [back, tick]);
   useEffect(() => {
-    let alive = true;
-    void load(14).then((d) => alive && setView(computeRecap(d)));
-    return () => {
-      alive = false;
-    };
-  }, []);
-  return { loading: view === null, view };
+    // Coming back to the tab after a session or a walk: read again so the numbers are current.
+    const off = (nav as { addListener?: (e: string, cb: () => void) => () => void }).addListener?.('focus', () => setTick((n) => n + 1));
+    return off;
+  }, [nav]);
+  return { loading: view === null && !error, error, view, retry };
 }
 
+export function useProgress(): Loaded<ProgressView> {
+  return useLoaded(28, computeProgress);
+}
+
+export function useRecap(): Loaded<RecapView> {
+  return useLoaded(14, computeRecap);
+}

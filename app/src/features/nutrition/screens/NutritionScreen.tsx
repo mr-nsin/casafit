@@ -4,7 +4,10 @@ import { ScrollView, View } from 'react-native';
 import {
   BottomSheet,
   Card,
+  EmptyState,
   Fab,
+  FilledButton,
+  InfoNote,
   IconButton,
   ListRow,
   MacroBar,
@@ -42,6 +45,15 @@ export function NutritionScreen() {
     if (data.loaded && !data.profile) nav.navigate('NutriProfile');
   }, [data.loaded, data.profile, nav]);
 
+  if (!data.loaded && data.error) {
+    return (
+      <View style={{ flex: 1, backgroundColor: t.bg, padding: space.l }}>
+        <EmptyState icon="info" title="We could not load your food log" body="Your entries are safe on this phone. Try again in a moment.">
+          <FilledButton label="Try again" leadingIcon="refresh" onPress={() => void data.reload()} />
+        </EmptyState>
+      </View>
+    );
+  }
   if (!data.loaded) return <View style={{ flex: 1, backgroundColor: t.bg }} />;
 
   if (data.today.length === 0) {
@@ -76,6 +88,8 @@ export function NutritionScreen() {
           Nutrition
         </Text>
         <ToggleRow title="Show calories" subtitle="Turn off to track protein and portions only" value={show} onChange={(v) => void setShow(v)} />
+
+        {show ? null : <InfoNote icon="visibility_off" text="Calories are hidden on Home, meals, your food plan and search. Turn on Show calories above to see them again." />}
 
         <Card tone="c3">
           <View style={{ padding: space.l, gap: space.m }}>
