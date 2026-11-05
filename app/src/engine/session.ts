@@ -54,6 +54,13 @@ export interface SessionRequest {
   /** 3 to 8, default 5. */
   workSlots?: number;
   title?: string;
+  /**
+   * For styles with few moves (yoga, dance). When the one-move-per-ladder pool cannot fill the work
+   * slots, use every allowed move, repeat poses in a second round if it must, and top up a short
+   * warm-up or cool-down with gentle moves from the other bookend. Always 4 + slots + 4 steps, so the
+   * 2/11/2 timing never changes. Fails only when fewer than MIN_WORK_SLOTS distinct moves are allowed.
+   */
+  fillShort?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -221,14 +228,33 @@ function pickWork(
     if (ex && ex.style === req.style && ex.phase === 'work') pool.push(ex);
   }
 
+  // A style whose moves share one ladder (the bundled yoga and dance) resolves to a single move.
+  // With `fillShort`, every allowed move of the style joins the pool instead, one by id.
+  let spread = false;
+  if (req.fillShort && new Set(pool.map(familyOf)).size < slots) {
+    const every = index.all.filter((ex) => ex.phase === 'work' && ex.style === req.style && isEligible(ex, req.restrictions));
+    if (every.length > pool.length) {
+      pool.length = 0;
+      pool.push(...every);
+      spread = true;
+    }
+    if (pool.length < MIN_WORK_SLOTS) {
+      throw new EngineError('catalogue_too_small', `Only ${pool.length} ${req.style} moves are allowed for these restrictions.`);
+    }
+  }
+
   const wants = slotWants(req.style, req.focus, req.parts ?? [], slots);
   const chosen: Exercise[] = [];
   const usedFamilies = new Set<string>();
-  const available = (ex: Exercise) => !usedFamilies.has(familyOf(ex)) && !chosen.includes(ex);
+  // In a spread pool a move counts as used by id, and the round starts again once all are used.
+  const usedIds = new Set<string>();
+  const available = (ex: Exercise) => (spread ? !usedIds.has(ex.id) : !usedFamilies.has(familyOf(ex)) && !chosen.includes(ex));
 
   for (const want of wants) {
+    if (spread && !pool.some(available)) usedIds.clear();
     const strict = shuffled(pool.filter((ex) => available(ex) && matches(ex, want)), rng);
     const pick = strict[0] ?? shuffled(pool.filter(available), rng)[0];
+    if (pick) usedIds.add(pick.id);
     if (!pick) {
       throw new EngineError(
         'catalogue_too_small',
@@ -266,6 +292,19 @@ function pickWarmup(
     fams.add(familyOf(ex));
     out.push(ex);
   }
+  if (out.length < WARMUP_STEPS && req.fillShort) {
+    // Gentle cool-down moves (mobility, breathing, a rest pose) can open a session too.
+    const spare = shuffled(
+      index.all.filter((ex) => ex.phase === 'cooldown' && ex.impact !== 'high' && !ex.jumping && isEligible(ex, req.restrictions)),
+      rng,
+    );
+    for (const ex of spare) {
+      if (out.length === WARMUP_STEPS) break;
+      if (out.includes(ex) || fams.has(familyOf(ex))) continue;
+      fams.add(familyOf(ex));
+      out.push(ex);
+    }
+  }
   if (out.length < WARMUP_STEPS) {
     throw new EngineError('catalogue_too_small', 'Not enough warm-up moves under these restrictions.');
   }
@@ -283,6 +322,7 @@ export function pickCooldown(
   index: CatalogueIndex,
   restrictions: Restrictions,
   rng: Rng,
+  fillShort = false,
 ): Exercise[] {
   const weight = new Map<BodyPart, number>();
   for (const s of workSteps) {
@@ -292,6 +332,14 @@ export function pickCooldown(
     index.all.filter((ex) => ex.phase === 'cooldown' && isEligible(ex, restrictions)),
     rng,
   );
+  // Few cool-down moves left: gentle warm-up moves (no jumping) may close the session too.
+  const spare = fillShort
+    ? shuffled(
+        index.all.filter((ex) => ex.phase === 'warmup' && ex.impact !== 'high' && !ex.jumping && isEligible(ex, restrictions)),
+        rng,
+      )
+    : [];
+  const fallback = () => spare.find((ex) => !out.includes(ex) && !fams.has(familyOf(ex))) ?? null;
   const out: Exercise[] = [];
   const covered = new Set<BodyPart>();
   const fams = new Set<string>();
@@ -311,6 +359,7 @@ export function pickCooldown(
         bestScore = score;
       }
     }
+    if (!best) best = fallback();
     if (!best) break;
     out.push(best);
     fams.add(familyOf(best));
@@ -363,7 +412,7 @@ export function buildSession(req: SessionRequest, index: CatalogueIndex): Sessio
     workSteps.flatMap((s) => s.muscles),
     rng,
   );
-  const cool = pickCooldown(req.style, workSteps, index, req.restrictions, rng);
+  const cool = pickCooldown(req.style, workSteps, index, req.restrictions, rng, req.fillShort);
 
   const steps: PlanStep[] = [
     ...warm.map((ex, i) => bookendStep(ex, `warm-${i}`, 'warmup')),
@@ -400,7 +449,7 @@ export function buildSession(req: SessionRequest, index: CatalogueIndex): Sessio
 export function rebuildCooldown(session: SessionPlan, index: CatalogueIndex): SessionPlan {
   const work = session.steps.filter((s) => s.phase === 'work');
   const rng = createRng(hashString(`${session.id}:cooldown`));
-  const cool = pickCooldown(session.style, work, index, session.restrictions, rng);
+  const cool = pickCooldown(session.style, work, index, session.restrictions, rng, true);
   const steps = session.steps
     .filter((s) => s.phase !== 'cooldown')
     .concat(cool.map((ex, i) => bookendStep(ex, `cool-${i}`, 'cooldown')));

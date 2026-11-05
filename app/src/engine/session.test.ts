@@ -1,4 +1,4 @@
-import { restrictionsFor } from './catalogue';
+import { indexCatalogue, restrictionsFor } from './catalogue';
 import {
   addExercise,
   applyIntensity,
@@ -16,10 +16,10 @@ import {
   toQuietSession,
   withBudget,
 } from './session';
-import { fixtureExercise } from './testing/fixtures';
+import { fixtureCatalogue, fixtureExercise } from './testing/fixtures';
 import { index } from './testing/helpers';
-import { buildTimeline, totalS } from './timeline';
-import { EngineError, type PlanStep, type SessionPlan } from './types';
+import { buildTimeline, canonicalProblems, totalS } from './timeline';
+import { EngineError, type Exercise, type PlanStep, type SessionPlan } from './types';
 
 const none = restrictionsFor({ painAreas: [], healthFlags: [] });
 
@@ -384,5 +384,60 @@ describe('quiet mode', () => {
     const q = toQuietSession(s, index);
     expect(q.session.steps.some((x) => x.exerciseId === 'step-jack')).toBe(true);
     expect(q.session.restrictions.quiet).toBe(true);
+  });
+});
+
+describe('buildSession with fillShort (styles with few moves)', () => {
+  const warm = fixtureCatalogue.exercises.filter((e) => e.style === 'normal' && (e.phase === 'warmup' || e.phase === 'cooldown'));
+  const poses = (n: number, over: Partial<Exercise> = {}): Exercise[] =>
+    Array.from({ length: n }, (_, i) => ({
+      ...(fixtureExercise('squat') as Exercise),
+      id: `pose_${i}`,
+      name: `Pose ${i}`,
+      style: 'yoga' as const,
+      phase: 'work' as const,
+      pattern: 'flow' as const,
+      muscles: [i % 2 ? ('legs' as const) : ('core' as const)],
+      ladder: 'flow',
+      family: 'flow',
+      level: 0,
+      ...over,
+    }));
+  const idx = (n: number) => indexCatalogue({ exercises: [...warm, ...poses(n)] });
+  const req = { id: 'y1', style: 'yoga' as const, focus: 'parts' as const, parts: ['legs' as const], level: 1, restrictions: none, seed: 3 };
+
+  it('fails today when every pose shares one ladder, which is why the option exists', () => {
+    expect(() => buildSession(req, idx(4))).toThrow(EngineError);
+  });
+
+  it('fills five slots from four poses by repeating one, keeping 4 + 5 + 4 and 15:00', () => {
+    const s = buildSession({ ...req, fillShort: true }, idx(4));
+    const work = s.steps.filter((x) => x.phase === 'work').map((x) => x.exerciseId);
+    expect(work).toHaveLength(5);
+    expect(new Set(work).size).toBe(4);
+    expect(canonicalProblems(s)).toEqual([]);
+    expect(totalS(s)).toBe(900);
+  });
+
+  it('uses each pose once when there are enough', () => {
+    const s = buildSession({ ...req, fillShort: true }, idx(5));
+    expect(new Set(s.steps.filter((x) => x.phase === 'work').map((x) => x.exerciseId)).size).toBe(5);
+  });
+
+  it('says it cannot when fewer than three poses are allowed', () => {
+    expect(() => buildSession({ ...req, fillShort: true }, idx(2))).toThrow(EngineError);
+  });
+
+  it('tops up a short warm-up and cool-down with gentle moves from the other bookend', () => {
+    const only = [
+      ...warm.filter((e) => e.phase === 'warmup').slice(0, 2),
+      ...warm.filter((e) => e.phase === 'cooldown').slice(0, 3),
+      ...poses(5),
+    ];
+    const small = indexCatalogue({ exercises: only });
+    expect(() => buildSession(req, small)).toThrow(EngineError);
+    const s = buildSession({ ...req, fillShort: true }, small);
+    expect(canonicalProblems(s)).toEqual([]);
+    expect(totalS(s)).toBe(900);
   });
 });

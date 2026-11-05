@@ -12,13 +12,18 @@ import { CheckInScreen, weekStartOf } from './CheckInScreen';
 import { EditorScreen, LungeScreen, PartsScreen, PickerScreen } from './EditScreens';
 import { PlanScreen } from './PlanScreens';
 import { HomeScreen } from './HomeScreen';
-import { clock, isDirty, moveWork, useEditDraft } from './editing';
+import { clock, isDirty, moveWork, moveWorkTo, useEditDraft } from './editing';
 import { getCatalogueIndex } from './library';
 import { localDate, parseSession, workSteps } from './model';
 import { seedPlan, DAY_MS, type TestDb } from './testkit';
 
 const mockNav = { navigate: jest.fn(), replace: jest.fn(), reset: jest.fn(), goBack: jest.fn(), popTo: jest.fn(), canGoBack: jest.fn(() => true) };
 let mockRoute: { params?: Record<string, unknown> } = {};
+// No native gesture root under Jest: the detector passes its child through. The drag maths is tested in `moveWorkTo`.
+jest.mock('react-native-gesture-handler', () => ({
+  GestureDetector: ({ children }: { children: unknown }) => children,
+  usePanGesture: () => ({}),
+}));
 jest.mock('@react-navigation/native', () => {
   const React = require('react');
   return {
@@ -103,6 +108,19 @@ describe('editing model', () => {
     expect(s.steps.filter((x) => x.phase !== 'work')).toEqual(moveWork(s, ids[0]!, 1).steps.filter((x) => x.phase !== 'work'));
   });
 
+  it('moves a work step to any place, clamps, and leaves warm-up and cool-down alone', async () => {
+    await seedPlan(db);
+    const s = await todaySession();
+    const ids = workSteps(s).map((x) => x.id);
+    const last = ids.length - 1;
+    expect(workSteps(moveWorkTo(s, ids[0]!, 2)).map((x) => x.id)).toEqual([ids[1], ids[2], ids[0], ...ids.slice(3)]);
+    expect(workSteps(moveWorkTo(s, ids[last]!, 0)).map((x) => x.id)).toEqual([ids[last], ...ids.slice(0, last)]);
+    expect(workSteps(moveWorkTo(s, ids[0]!, 99)).map((x) => x.id)).toEqual([...ids.slice(1), ids[0]]);
+    expect(moveWorkTo(s, ids[1]!, 1)).toBe(s);
+    expect(moveWorkTo(s, 'nope', 0)).toBe(s);
+    expect(s.steps.filter((x) => x.phase !== 'work')).toEqual(moveWorkTo(s, ids[0]!, 2).steps.filter((x) => x.phase !== 'work'));
+  });
+
   it('weeks start on Monday', () => {
     expect(weekStartOf('2026-10-30')).toBe('2026-10-26');
     expect(weekStartOf('2026-10-26')).toBe('2026-10-26');
@@ -123,6 +141,18 @@ describe('Editor', () => {
     expect(screen.getByLabelText(/^Warm-up, matched to your moves, 2:00/)).toBeTruthy();
     expect(screen.getByLabelText(/^Cool-down, rebuilt for your moves, 2:00/)).toBeTruthy();
     expect(screen.getByLabelText('Save to my plan').props.accessibilityState.disabled).toBe(true);
+  });
+
+  it('has a drag handle on every move and keeps the up and down buttons', async () => {
+    await seedPlan(db);
+    await render(<EditorScreen />);
+    await screen.findByText('Edit today');
+    const s = await todaySession();
+    for (const m of workSteps(s)) {
+      expect(screen.getByTestId(`drag-handle-${m.id}`, { includeHiddenElements: true })).toBeTruthy();
+      expect(screen.getByLabelText(`Move ${m.name} earlier`)).toBeTruthy();
+      expect(screen.getByLabelText(`Move ${m.name} later`)).toBeTruthy();
+    }
   });
 
   it('opens the picker to add or to swap, and the parts', async () => {

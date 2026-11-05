@@ -289,6 +289,18 @@ describe('Home, training day', () => {
     await fireEvent.press(screen.getByLabelText('Build my plan'));
     expect(mockNav.navigate).toHaveBeenCalledWith('Goals');
   });
+
+  it('shows an error with Try again, not Build my plan, when the plan read fails', async () => {
+    await seed();
+    const spy = jest.spyOn(db.repos.plan, 'get').mockRejectedValueOnce(new Error('disk'));
+    await render(<HomeScreen />);
+    expect(await screen.findByText('We could not load your plan')).toBeTruthy();
+    expect(screen.queryByLabelText('Build my plan')).toBeNull();
+    await fireEvent.press(screen.getByLabelText('Try again'));
+    expect(await screen.findByText("Let's move, Priya")).toBeTruthy();
+    expect(screen.queryByText('We could not load your plan')).toBeNull();
+    spy.mockRestore();
+  });
 });
 
 describe('Home, resume', () => {

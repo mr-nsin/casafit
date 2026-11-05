@@ -28,6 +28,8 @@ export interface ProInfo {
   willRenew: boolean;
   billingIssue: boolean;
   trial: boolean;
+  /** Epoch ms the trial began (RevenueCat latestPurchaseDate). Null or absent when the store did not say. */
+  trialStartedAt?: number | null;
   priceString: string | null;
   /** Epoch ms of the last time the store confirmed this. */
   verifiedAt: number;

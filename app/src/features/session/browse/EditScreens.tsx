@@ -3,7 +3,8 @@
 // through the plan repository, so Plan, Home and Start show the change.
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Animated, Pressable, View } from 'react-native';
+import { GestureDetector, usePanGesture } from 'react-native-gesture-handler';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useRoute, type RouteProp } from '@react-navigation/native';
 
@@ -56,7 +57,7 @@ import {
 } from '../../../engine';
 import { startSession } from '../start';
 import { usePlanData, type PlanData } from './hooks';
-import { EDIT_MESSAGES, clock, isDirty, moveWork, persistSession, useEditDraft } from './editing';
+import { EDIT_MESSAGES, ROW_PITCH, clock, isDirty, moveWork, moveWorkTo, persistSession, useEditDraft } from './editing';
 import { contentFlags, exerciseName, getCatalogueIndex } from './library';
 import { DOT, WEEKDAY_LONG, cap, parsePlanDayKey, parseSession, planDayKey, stepSeconds, weekdayIndex, workSteps } from './model';
 import { Page, useBackOrHome, useBrowseNav } from './Page';
@@ -82,6 +83,7 @@ function MoveRow({
   isNew,
   onUp,
   onDown,
+  onDrop,
   onSwap,
   onRemove,
 }: {
@@ -91,6 +93,8 @@ function MoveRow({
   isNew: boolean;
   onUp: () => void;
   onDown: () => void;
+  /** Called once when a drag ends, with the number of rows the move travelled (negative is up). */
+  onDrop: (rows: number) => void;
   onSwap: () => void;
   onRemove: () => void;
 }) {
@@ -100,12 +104,57 @@ function MoveRow({
       <Icon name={icon} size={22} color="osv" />
     </Touchable>
   );
+  // Drag by the handle. The up and down buttons stay as the accessible alternative, so the handle is
+  // hidden from screen readers. The row follows the finger, then the order is saved on release.
+  const [dy] = useState(() => new Animated.Value(0));
+  const [dragging, setDragging] = useState(false);
+  const pan = usePanGesture({
+    runOnJS: true,
+    activeOffsetY: [-8, 8],
+    onActivate: () => setDragging(true),
+    onUpdate: (e) => dy.setValue(e.translationY),
+    onDeactivate: (e) => {
+      const rows = Math.round(e.translationY / ROW_PITCH);
+      dy.setValue(0);
+      setDragging(false);
+      if (rows !== 0) onDrop(rows);
+    },
+    onFinalize: () => {
+      dy.setValue(0);
+      setDragging(false);
+    },
+  });
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', minHeight: 88, borderRadius: radius.l, backgroundColor: t.c3, paddingLeft: space.xs, paddingRight: space.xs, gap: space.xs }}>
+    <Animated.View
+      testID={`move-row-${step.id}`}
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        minHeight: 88,
+        borderRadius: radius.l,
+        backgroundColor: dragging ? t.c4 : t.c3,
+        paddingLeft: space.xs,
+        paddingRight: space.xs,
+        gap: space.xs,
+        zIndex: dragging ? 1 : 0,
+        transform: [{ translateY: dy }],
+      }}
+    >
       <View>
         {small('keyboard_arrow_up', `Move ${step.name} earlier`, onUp, first)}
         {small('keyboard_arrow_down', `Move ${step.name} later`, onDown, last)}
       </View>
+      <GestureDetector gesture={pan}>
+        <View
+          testID={`drag-handle-${step.id}`}
+          accessible={false}
+          importantForAccessibility="no-hide-descendants"
+          accessibilityElementsHidden
+          style={{ width: 44, height: 56, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <Icon name="drag_handle" size={22} color="osv" />
+        </View>
+      </GestureDetector>
       <View style={{ flex: 1, paddingVertical: space.s, gap: space.xs }}>
         <Text style={{ fontWeight: '600' }}>{step.name}</Text>
         {isNew ? <Badge label={`New +${clock(SLOT_S)}`} tone="tc" /> : null}
@@ -115,7 +164,7 @@ function MoveRow({
       </Text>
       <IconButton icon="swap_horiz" label={`Swap ${step.name}`} onPress={onSwap} />
       <IconButton icon="close" label={`Remove ${step.name}`} onPress={onRemove} />
-    </View>
+    </Animated.View>
   );
 }
 
@@ -302,6 +351,7 @@ export function EditorScreen() {
               isNew={!baseIds.has(s.exerciseId)}
               onUp={() => setDraft(moveWork(session, s.id, -1))}
               onDown={() => setDraft(moveWork(session, s.id, 1))}
+              onDrop={(rows) => setDraft(moveWorkTo(session, s.id, i + rows))}
               onSwap={() => nav.navigate('Picker', { stepId: s.id })}
               onRemove={() => apply(removeExercise(session, s.id, index), `Removed ${s.name}.`)}
             />

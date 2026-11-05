@@ -7,6 +7,7 @@ import {
   createRevenueCatPurchases,
   freeProInfo,
   mapCustomerInfo,
+  trialProgress,
   proStatus,
   savePercent,
   type ProInfo,
@@ -150,6 +151,8 @@ describe('revenuecat port', () => {
   it('maps CustomerInfo flags: trial, billing issue, will not renew', () => {
     const e = (o: object) => ({ entitlements: { active: { pro: { expirationDate: null, willRenew: false, productIdentifier: 'x_month', billingIssueDetectedAt: null, periodType: 'NORMAL', ...o } } } });
     expect(mapCustomerInfo(e({ periodType: 'TRIAL' }), NOW).trial).toBe(true);
+    expect(mapCustomerInfo(e({ periodType: 'TRIAL', latestPurchaseDate: '2026-10-15T00:00:00Z' }), NOW).trialStartedAt).toBe(Date.parse('2026-10-15T00:00:00Z'));
+    expect(mapCustomerInfo(e({ periodType: 'NORMAL', latestPurchaseDate: '2026-10-15T00:00:00Z' }), NOW).trialStartedAt).toBeNull();
     expect(mapCustomerInfo(e({ billingIssueDetectedAt: '2026-10-01T00:00:00Z' }), NOW).billingIssue).toBe(true);
     expect(mapCustomerInfo(e({}), NOW)).toMatchObject({ plan: 'pro_monthly', willRenew: false, expiresAt: null });
     expect(mapCustomerInfo({ entitlements: { active: {} } }, NOW).active).toBe(false);
@@ -175,5 +178,23 @@ describe('fake port', () => {
     expect(seen).toEqual([true]);
     f.offeringsError = 'offline';
     await expect(f.getOfferings()).rejects.toMatchObject({ reason: 'offline' });
+  });
+});
+
+describe('trialProgress', () => {
+  const D = 24 * 60 * 60 * 1000;
+  const base = { active: true, plan: null, expiresAt: null, willRenew: true, billingIssue: false, trial: true, priceString: null, verifiedAt: 0 } as const;
+  it('counts days from the start, clamped to the trial length', () => {
+    expect(trialProgress({ ...base, trialStartedAt: 0, expiresAt: 7 * D }, 0)).toEqual({ day: 1, total: 7 });
+    expect(trialProgress({ ...base, trialStartedAt: 0, expiresAt: 7 * D }, 2.5 * D)).toEqual({ day: 3, total: 7 });
+    expect(trialProgress({ ...base, trialStartedAt: 0, expiresAt: 7 * D }, 30 * D)).toEqual({ day: 7, total: 7 });
+  });
+  it('uses the store dates for the length and 7 when it has no end date', () => {
+    expect(trialProgress({ ...base, trialStartedAt: 0, expiresAt: 3 * D }, D)).toEqual({ day: 2, total: 3 });
+    expect(trialProgress({ ...base, trialStartedAt: 0 }, D)).toEqual({ day: 2, total: 7 });
+  });
+  it('is null without a start date or when not a trial', () => {
+    expect(trialProgress({ ...base }, D)).toBeNull();
+    expect(trialProgress({ ...base, trial: false, trialStartedAt: 0 }, D)).toBeNull();
   });
 });

@@ -279,6 +279,8 @@ export function buildPartSession(opts: {
       level: ladderLevel(opts.experience ?? 'new'),
       restrictions,
       seed: opts.seed,
+      // Yoga has few poses, so a part session may repeat poses and borrow gentle bookend moves.
+      fillShort: opts.style !== 'normal',
       title: opts.style === 'yoga' ? `Yoga: ${info.title} 15` : `${info.title} 15`,
     },
     getCatalogueIndex(),

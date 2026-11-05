@@ -14,6 +14,8 @@ import { planClock, skippedFor, type PlanClock, type SkippedMove } from './model
 
 export interface PlanData {
   loading: boolean;
+  /** The local read failed (not the same as having no plan yet). */
+  error: boolean;
   plan: PlanRow | null;
   rows: PlanDayRow[];
   logs: SessionLog[];
@@ -27,6 +29,7 @@ export interface PlanData {
 export function usePlanData(): PlanData {
   const [state, setState] = useState<Omit<PlanData, 'reload'>>({
     loading: true,
+    error: false,
     plan: null,
     rows: [],
     logs: [],
@@ -57,10 +60,11 @@ export function usePlanData(): PlanData {
       const rows = plan ? await repos.plan.days(plan.weekNumber) : [];
       const now = getSessionDeps().clock.wall();
       if (alive.current) {
-        setState({ loading: false, plan, rows, logs, profile, clock: plan ? planClock(plan.updatedAt, now) : null, tz: deviceTzOffsetMin(now) });
+        setState({ loading: false, error: false, plan, rows, logs, profile, clock: plan ? planClock(plan.updatedAt, now) : null, tz: deviceTzOffsetMin(now) });
       }
     } catch {
-      if (alive.current) setState((s) => ({ ...s, loading: false }));
+      // Keep what we already showed; only flag the error when there is nothing to show.
+      if (alive.current) setState((s) => ({ ...s, loading: false, error: !s.plan }));
     }
   }, []);
 

@@ -14,6 +14,7 @@ import {
   InfoRow,
   ListRow,
   OutlinedButton,
+  ProgressBar,
   PaywallPlanCard,
   StatusBanner,
   Text,
@@ -29,6 +30,7 @@ import {
   packageFor,
   proStatus,
   savePercent,
+  trialProgress,
   type Offerings,
   type ProInfo,
   type ProPlan,
@@ -341,9 +343,10 @@ export function ManageProScreen() {
 
   const plan = info.plan ? `Pro · ${PLAN_LABEL[info.plan]}` : 'Pro';
   const until = info.expiresAt ? formatDate(info.expiresAt) : null;
+  const trialDay = status.state === 'trial' ? trialProgress(info, getFormCheckDeps().now()) : null;
   const detail =
     status.state === 'trial'
-      ? `Trial ends${until ? ` on ${until}` : ' soon'}, then it renews at the store price for the plan you chose.`
+      ? `${trialDay ? `Day ${trialDay.day} of ${trialDay.total}. ` : ''}Trial ends${until ? ` on ${until}` : ' soon'}, then it renews at the store price for the plan you chose.`
       : status.state === 'active_cancelled'
         ? `You cancelled. Pro stays on until ${until ?? 'the end of this period'}, then you move to the free plan.`
         : status.state === 'billing_issue'
@@ -375,6 +378,7 @@ export function ManageProScreen() {
           {plan}
         </Text>
         <Text color="otc">{detail}</Text>
+        {trialDay ? <ProgressBar value={(trialDay.day / trialDay.total) * 100} label="Trial progress" /> : null}
       </View>
 
       {offline || status.stale ? (

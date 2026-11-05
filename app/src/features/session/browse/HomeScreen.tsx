@@ -749,10 +749,31 @@ function Empty() {
   );
 }
 
+function LoadError({ onRetry, tabRoot }: { onRetry: () => void; tabRoot?: boolean }) {
+  return (
+    <Page tabRoot={tabRoot}>
+      <EmptyState icon="refresh" title="We could not load your plan" body="Your plan is still saved on this phone. Give it another go.">
+        <FilledButton label="Try again" onPress={onRetry} />
+      </EmptyState>
+    </Page>
+  );
+}
+
+function Loading({ tabRoot }: { tabRoot?: boolean }) {
+  return (
+    <Page tabRoot={tabRoot}>
+      <View style={{ paddingTop: space.xl }}>
+        <ProgressBar label="Loading your plan" />
+      </View>
+    </Page>
+  );
+}
+
 /** Workout tab root. Shows the rest-day layout when today is a rest day. */
 export function HomeScreen({ standalone }: { standalone?: boolean } = {}) {
   const data = usePlanData();
-  if (data.loading) return <Page tabRoot><View /></Page>;
+  if (data.loading) return <Loading tabRoot />;
+  if (data.error) return <LoadError tabRoot onRetry={() => void data.reload()} />;
   if (!data.plan || !data.clock) return <Empty />;
   const row = data.rows.find((r) => r.dayIndex === data.clock!.dayIndex);
   // The engine writes rest days as 'walk' or 'stretch' (the suggestion), so anything but a workout is a rest day.
@@ -763,7 +784,8 @@ export function HomeScreen({ standalone }: { standalone?: boolean } = {}) {
 /** Route `HomeRest`: the rest-day layout, reached from a rest day pill. */
 export function HomeRestScreen() {
   const data = usePlanData();
-  if (data.loading) return <Page><View /></Page>;
+  if (data.loading) return <Loading />;
+  if (data.error) return <LoadError onRetry={() => void data.reload()} />;
   if (!data.plan || !data.clock) return <Empty />;
   return <RestHome data={data} standalone />;
 }

@@ -36,6 +36,7 @@ interface RcEntitlement {
   productIdentifier: string;
   billingIssueDetectedAt: string | null;
   periodType: string;
+  latestPurchaseDate?: string | null;
 }
 export interface RcCustomerInfo {
   entitlements: { active: Record<string, RcEntitlement | undefined> };
@@ -62,6 +63,11 @@ const planOf = (pkg: { packageType?: string; identifier?: string; productId?: st
   return null;
 };
 
+const parseDate = (d: string | null | undefined): number | null => {
+  const n = d ? Date.parse(d) : NaN;
+  return Number.isFinite(n) ? n : null;
+};
+
 export function mapCustomerInfo(ci: RcCustomerInfo, now: number, prices: Record<string, string> = {}): ProInfo {
   const e = ci.entitlements.active[ENTITLEMENT_ID];
   if (!e) return { active: false, plan: null, expiresAt: null, willRenew: false, billingIssue: false, trial: false, priceString: null, verifiedAt: now };
@@ -72,6 +78,7 @@ export function mapCustomerInfo(ci: RcCustomerInfo, now: number, prices: Record<
     willRenew: !!e.willRenew,
     billingIssue: !!e.billingIssueDetectedAt,
     trial: e.periodType === 'TRIAL' || e.periodType === 'INTRO',
+    trialStartedAt: e.periodType === 'TRIAL' || e.periodType === 'INTRO' ? parseDate(e.latestPurchaseDate) : null,
     priceString: prices[e.productIdentifier] ?? null,
     verifiedAt: now,
   };

@@ -149,3 +149,5 @@ A short, dated log of design and technical decisions. Add a row at the top. Keep
 - 30 Oct 2026: Auth client is supabase-js (Auth only, PKCE, SecureStore chunk adapter) plus expo-web-browser, redirect `casafit://auth-callback`. Apple sign-in shows on iOS only (App Store rule); Android can add it later through the web flow. The sign-in form is the first step of the Verify route so people pass the age gate first.
 
 - 2 Nov 2026: Consents sync to the API as analytics, privacy_notice (terms_privacy) and health_sync (health_answers or steps); camera consent never leaves the phone. Crash recovery of `counted` form-check attempts retries consume with the same idempotency key, not a refund. Comeback rebuild lowers saved days per week by one (min 3) until the plan is edited.
+
+- 5 Nov 2026: Yoga and dance part sessions spread the pool, repeat poses if needed and borrow gentle bookend moves (`fillShort`). Trial length comes from the store's trial dates (1 to 31 days), default 7.

@@ -688,6 +688,13 @@ describe('ManagePro', () => {
     expect(screen.getByText('Cancel before 14 October 2027 and you pay nothing')).toBeTruthy();
   });
 
+  it('trial with a start date shows Day N of 7 and a progress bar', async () => {
+    const start = NOW - 2 * 86_400_000 - 3_600_000;
+    await show(pro({ trial: true, trialStartedAt: start, expiresAt: start + 7 * 86_400_000 }));
+    expect(screen.getByText(/^Day 3 of 7\. Trial ends on /)).toBeTruthy();
+    expect(screen.getByLabelText('Trial progress')).toBeTruthy();
+  });
+
   it('lapsed: says Pro ended, keeps everything, offers restore and the plans', async () => {
     await show(pro({ active: false, willRenew: false }));
     expect(screen.getByText('Pro ended')).toBeTruthy();

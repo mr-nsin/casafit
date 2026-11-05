@@ -70,6 +70,25 @@ export function moveWork(session: SessionPlan, stepId: string, delta: -1 | 1): S
   return { ...session, steps };
 }
 
+/** Moves a work move to `toIndex` among the work moves (0-based), shifting the others. Out of range is clamped. */
+export function moveWorkTo(session: SessionPlan, stepId: string, toIndex: number): SessionPlan {
+  const slots = session.steps.map((s, i) => (s.phase === 'work' ? i : -1)).filter((i) => i >= 0);
+  const work = slots.map((i) => session.steps[i] as PlanStep);
+  const at = work.findIndex((s) => s.id === stepId);
+  const to = Math.max(0, Math.min(work.length - 1, toIndex));
+  if (at < 0 || at === to) return session;
+  const [moved] = work.splice(at, 1);
+  work.splice(to, 0, moved as PlanStep);
+  const steps = session.steps.slice();
+  slots.forEach((slot, k) => {
+    steps[slot] = work[k] as PlanStep;
+  });
+  return { ...session, steps };
+}
+
+/** Height of a move row plus the gap below it, used to turn a drag distance into a row count. */
+export const ROW_PITCH = 96;
+
 /** Writes the edited session onto its plan day and marks the day as changed by the user. */
 export async function persistSession(repos: Repositories, week: number, dayIndex: number, session: SessionPlan): Promise<void> {
   const rows = await repos.plan.days(week);

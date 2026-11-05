@@ -41,3 +41,15 @@ export const freeProInfo = (now: number): ProInfo => ({
   priceString: null,
   verifiedAt: now,
 });
+
+/** The design's trial length. No product setting exists yet; RevenueCat's own dates win when we have both. */
+export const DEFAULT_TRIAL_DAYS = 7;
+
+/** "Day N of M" for a trial, or null when the store gave no start date. */
+export function trialProgress(info: ProInfo, now: number): { day: number; total: number } | null {
+  if (!info.trial || info.trialStartedAt == null) return null;
+  const fromDates = info.expiresAt ? Math.round((info.expiresAt - info.trialStartedAt) / DAY_MS) : 0;
+  const total = fromDates >= 1 && fromDates <= 31 ? fromDates : DEFAULT_TRIAL_DAYS;
+  const day = Math.min(total, Math.max(1, Math.floor((now - info.trialStartedAt) / DAY_MS) + 1));
+  return { day, total };
+}

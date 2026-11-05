@@ -6,6 +6,8 @@ import { usePreferences, defaultPreferences } from '../../../state/preferences';
 import { setRepositories } from '../../../state/storage';
 import { useAuth } from '../../../state/auth';
 import { useVerifyOutcome } from '../../onboarding/flowState';
+import { configureOnboardingDeps, getOnboardingDeps } from '../../onboarding/deps';
+import { canonicalProblems, totalS } from '../../../engine';
 import { useSessionStore } from '../store';
 import { createHarness, makePlan } from '../testkit';
 import { TRIAL_DONE, useTrialNotice } from '../trial';
@@ -314,15 +316,48 @@ describe('BodyPart', () => {
     expect(useSessionStore.getState().plan?.title).toBe('Gentle morning');
   });
 
-  it('says so kindly, and starts nothing, when the engine cannot fill a yoga session for a part', async () => {
+  it('builds a yoga session for a body part from the few yoga poses, still 2, 11 and 2 minutes', async () => {
     await seedPlan(db, { painAreas: [] });
     mockRoute = { params: { part: 'legs' } };
     await render(<BodyPartScreen />);
     await fireEvent.press(await screen.findByLabelText('Yoga'));
     await fireEvent.press(screen.getByLabelText('Start a 15-minute legs session'));
-    expect(screen.getByText('We could not build that session with your answers. Try another body part or style.')).toBeTruthy();
-    expect(mockNav.navigate).not.toHaveBeenCalled();
-    expect(useSessionStore.getState().status).toBe('idle');
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Yoga');
+    const s = useSessionStore.getState().plan!;
+    expect(s.title).toBe('Yoga: Legs 15');
+    expect(s.style).toBe('yoga');
+    const built = buildPartSession({ part: 'legs', style: 'yoga', profile: { painAreas: [], healthFlags: [] }, experience: 'new', id: 'y', seed: 1 })!;
+    expect(canonicalProblems(built)).toEqual([]);
+    expect(totalS(built)).toBe(900);
+    expect(s.steps.filter((x) => x.phase === 'work')).toHaveLength(5);
+    expect(s.steps.filter((x) => x.phase === 'work').every((x) => ['warrior_ii', 'downward_dog', 'cobra_pose', 'tree_pose', 'chair_pose'].includes(x.exerciseId))).toBe(true);
+  });
+
+  it('still builds yoga with pregnancy and heart answers, which rule out two poses', async () => {
+    await seedPlan(db, { painAreas: [] });
+    const s = buildPartSession({ part: 'core', style: 'yoga', profile: { painAreas: [], healthFlags: ['heart_bp', 'pregnancy'] }, experience: 'new', id: 'y', seed: 1 })!;
+    expect(s.steps.filter((x) => x.phase === 'work')).toHaveLength(5);
+    expect(s.steps.map((x) => x.exerciseId)).not.toContain('downward_dog');
+    expect(s.steps.map((x) => x.exerciseId)).not.toContain('cobra_pose');
+    expect(totalS(s)).toBe(900);
+  });
+
+  it('says so kindly, and starts nothing, when there are too few allowed yoga poses', async () => {
+    await seedPlan(db, { painAreas: [] });
+    const real = getOnboardingDeps().catalogue();
+    const tiny = { exercises: real.exercises.filter((e) => e.style !== 'yoga' || e.id === 'tree_pose' || e.id === 'chair_pose') };
+    configureOnboardingDeps({ catalogue: () => tiny });
+    try {
+      mockRoute = { params: { part: 'legs' } };
+      await render(<BodyPartScreen />);
+      await fireEvent.press(await screen.findByLabelText('Yoga'));
+      await fireEvent.press(screen.getByLabelText('Start a 15-minute legs session'));
+      expect(screen.getByText(/We do not have enough yoga poses that suit your answers to build this one yet\. Try Normal for this part/)).toBeTruthy();
+      expect(mockNav.navigate).not.toHaveBeenCalled();
+      expect(useSessionStore.getState().status).toBe('idle');
+    } finally {
+      configureOnboardingDeps({ catalogue: () => real });
+    }
   });
 });
 

@@ -184,7 +184,17 @@ export function BodyPartScreen() {
         <Chip label="Yoga" role="radio" selected={style === 'yoga'} onPress={() => setStyle('yoga')} />
         <Chip label="Easy first" role="checkbox" selected={easyFirst} onPress={() => setEasyFirst((v) => !v)} />
       </View>
-      {failed ? <InfoNote icon="info" tone="erc" text="We could not build that session with your answers. Try another body part or style." /> : null}
+      {failed ? (
+        <InfoNote
+          icon="info"
+          tone="erc"
+          text={
+            style === 'yoga'
+              ? 'We do not have enough yoga poses that suit your answers to build this one yet. Try Normal for this part, or a ready-made yoga plan.'
+              : 'We could not build that session with your answers. Try another body part or style.'
+          }
+        />
+      ) : null}
       {n ? (
         <View style={{ gap: space.s }}>
           {shown.map((ex) => (
