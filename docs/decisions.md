@@ -151,3 +151,5 @@ A short, dated log of design and technical decisions. Add a row at the top. Keep
 - 2 Nov 2026: Consents sync to the API as analytics, privacy_notice (terms_privacy) and health_sync (health_answers or steps); camera consent never leaves the phone. Crash recovery of `counted` form-check attempts retries consume with the same idempotency key, not a refund. Comeback rebuild lowers saved days per week by one (min 3) until the plan is edited.
 
 - 5 Nov 2026: Yoga and dance part sessions spread the pool, repeat poses if needed and borrow gentle bookend moves (`fillShort`). Trial length comes from the store's trial dates (1 to 31 days), default 7.
+
+- 7 Nov 2026: Pose source is the in-repo Nitro module `app/modules/casafit-pose` (nitrogen 0.37.1, Kotlin on MediaPipe tasks-vision 1.1.1, bundled Lite model pinned by SHA-256, Swift and podspec unbuilt). Returns 33 image plus 33 world landmarks as one Float32 buffer to a `PoseSource`; selected only when present and `EXPO_PUBLIC_CAMERA_PREVIEW=1`. RECORD_AUDIO blocked. `tech-stack.md` line 'vision-camera 4 + MediaPipe plugin' is stale.

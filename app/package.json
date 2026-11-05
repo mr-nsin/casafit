@@ -22,6 +22,7 @@
     "@react-navigation/native-stack": "7.21.0",
     "@supabase/supabase-js": "2.118.0",
     "@tanstack/react-query": "5.105.0",
+    "casafit-pose": "link:./modules/casafit-pose",
     "drizzle-orm": "0.45.4",
     "expo": "58.0.19",
     "expo-asset": "58.0.18",

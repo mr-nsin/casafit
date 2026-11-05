@@ -26,7 +26,8 @@
         "android.permission.CAMERA",
         "android.permission.ACTIVITY_RECOGNITION",
         "android.permission.POST_NOTIFICATIONS"
-      ]
+      ],
+      "blockedPermissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/brand/favicon.png"

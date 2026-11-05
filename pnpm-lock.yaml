@@ -50,6 +50,9 @@ importers:
       '@tanstack/react-query':
         specifier: 5.105.0
         version: 5.105.0(@types/react@19.3.0)(react@19.3.0)
+      casafit-pose:
+        specifier: link:./modules/casafit-pose
+        version: link:modules/casafit-pose
       drizzle-orm:
         specifier: 0.45.4
         version: 0.45.4(@op-engineering/op-sqlite@19.0.1(react-native@0.88.0(@babel/core@7.29.7)(@react-native/metro-config@0.88.0(@babel/core@7.29.7))(@types/react@19.3.0)(react@19.3.0))(react@19.3.0))(@prisma/client@5.22.0(prisma@5.22.0))(prisma@5.22.0)

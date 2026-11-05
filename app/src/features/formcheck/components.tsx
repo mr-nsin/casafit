@@ -4,6 +4,7 @@ import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
 
 import { Icon, InfoNote, StatusBanner, Text, TopBar, fixed, radius, space, useTokens, type IconName, type TopBarProps } from '../../ui';
+import { nativePoseModulePresent } from '../../services/pose';
 
 /** Safe area, optional top bar, scrolling body and an optional pinned footer. */
 export function Page({
@@ -66,6 +67,12 @@ class PreviewBoundary extends Component<{ children: ReactNode }, { failed: boole
 }
 
 function LivePreview() {
+  // With the native pose module in the build, the camera carries the frame output that feeds it.
+  if (nativePoseModulePresent()) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { PoseCamera } = require('../../services/pose/PoseCamera') as typeof import('../../services/pose/PoseCamera');
+    return <PoseCamera />;
+  }
   // Required lazily: importing vision-camera creates native objects that a build without it cannot make.
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { Camera } = require('react-native-vision-camera') as { Camera: React.ComponentType<{ style: object; device: string; isActive: boolean }> };

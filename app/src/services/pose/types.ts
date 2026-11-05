@@ -16,10 +16,20 @@ export interface Landmark {
   v: number;
 }
 
+/** One MediaPipe world landmark: metres from the hip centre, visibility 0..1. */
+export interface WorldLandmark {
+  x: number;
+  y: number;
+  z: number;
+  v: number;
+}
+
 /** 33 landmarks (MediaPipe order) at time `t` in milliseconds. `w`/`h` scale x to the frame's aspect. */
 export interface PoseFrame {
   t: number;
   lm: readonly Landmark[];
+  /** World landmarks from the native landmarker. The engine does not read them yet. */
+  world?: readonly WorldLandmark[];
   w?: number;
   h?: number;
 }

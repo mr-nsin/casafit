@@ -1,0 +1,24 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": ["casafit", "pose"],
+  "ios": {
+    "iosModuleName": "CasafitPose"
+  },
+  "android": {
+    "androidNamespace": ["casafit", "pose"],
+    "androidCxxLibName": "CasafitPose"
+  },
+  "autolinking": {
+    "CasafitPose": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridCasafitPose"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridCasafitPose"
+      }
+    }
+  },
+  "ignorePaths": ["**/node_modules"]
+}

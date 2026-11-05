@@ -1,0 +1,32 @@
+{
+  "name": "casafit-pose",
+  "version": "0.1.0",
+  "private": true,
+  "description": "On-device pose landmarks for CasaFit form checks. A Nitro module that runs MediaPipe Pose Landmarker (Lite, bundled) on a vision-camera 5 frame. No file or network API.",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
+  "files": [
+    "src",
+    "react-native.config.js",
+    "nitro.json",
+    "nitrogen",
+    "assets",
+    "pose_landmarker_lite.task.sha256",
+    "android",
+    "ios",
+    "CasafitPose.podspec"
+  ],
+  "scripts": {
+    "specs": "nitrogen",
+    "fetch-model": "node scripts/fetch-model.mjs"
+  },
+  "license": "UNLICENSED",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-nitro-modules": "*",
+    "react-native-vision-camera": "*"
+  }
+}

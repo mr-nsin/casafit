@@ -2,7 +2,7 @@
 
 **The single source of truth for what is done, what is pending and what comes next.** Read it at the start of every session and before picking up work. Update it in the same commit as the work, every time something is completed, started, blocked or decided.
 
-Last updated: 5 November 2026 (Home load error, trial day count, drag reorder, yoga part sessions) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
+Last updated: 7 November 2026 (native pose module written, Android builds) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
 
 ## How to keep this file current
 
@@ -16,7 +16,7 @@ Last updated: 5 November 2026 (Home load error, trial day count, drag reorder, y
 ## Next up
 
 0. Create the Supabase project and give the app its URL and anon key (EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY); then check email code and Google sign-in on a device. A dev client rebuild is needed first (expo-web-browser).
-1. Native `casafit-pose` Nitro module (MediaPipe Pose Landmarker, spike `docs/plans/spikes/pose.md`) so the live check reads real landmarks. Until then the live check runs on a dev-only simulated source.
+1. Device-check the `casafit-pose` module (run `pnpm install`, rebuild the dev client, set `EXPO_PUBLIC_CAMERA_PREVIEW=1`): landmarks upright on both cameras, frame rate, heat, a network capture for MediaPipe telemetry; build iOS on a Mac.
 2. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
 3. Real branding for icon and splash, then run the Maestro flows on the emulator and fix selectors.
 4. Create the Supabase project (providers, redirect URL), Railway project and RevenueCat webhook secret; Play Integrity once Google Play credentials exist.
@@ -47,6 +47,7 @@ Last updated: 5 November 2026 (Home load error, trial day count, drag reorder, y
 | Frontend leftovers | Notify permission-denied state; consents sent to `POST /v1/me/consents` (health_answers and steps map to `health_sync`; camera consent stays on the phone); pain-area edits queue `PUT /v1/me/plan` metadata; reminder text refreshes; tab bar Workout icon matches Settings; `Purchases.logIn(accountId)`; Paywall Terms and Privacy links; masked email on ManagePro; attempts stuck in `counted` after a crash are retried with their own idempotency key; Week one bar contrast and labels; Home "Make this week a bit lighter" comeback rebuild with confirm. 937 tests pass. Not yet checked on a device | 2 Nov |
 | Icon, Maestro, empty states | Placeholder app icon, adaptive and monochrome icons, splash and favicon (white house on `--p`, regenerate with `node app/tools/make-icons.mjs`; needs prebuild to show); Maestro flows in `app/.maestro` (sign-in, onboarding to Week one, session, Settings and Privacy; written, not yet run); Nutrition hidden-calories note and load error, Progress and Recap load error with retry and reload on focus, Manage Pro lapsed, cancelled, billing and trial variants, bar and heatmap contrast. 943 tests pass | 3 Nov |
 | Backlog slice | Home shows an error with Try again when the plan read fails (no more false 'Build my plan'); Manage Pro trial shows 'Day N of 7' from the store's trial start; Editor drag-to-reorder with a handle (buttons kept; gesture not yet checked on a device); yoga body-part sessions now build (spread pool, repeat poses, borrow gentle bookend moves via `fillShort`). 957 tests pass | 5 Nov |
+| Native pose module | In-repo Nitro module `app/modules/casafit-pose`: Kotlin on MediaPipe tasks-vision 1.1.1 with the bundled `pose_landmarker_lite.task` (SHA-256 pinned), Swift and podspec written but never built. `services/pose/mediapipe.ts` + `PoseCamera.tsx` feed real landmarks into the existing engine; used only when the module is present and `EXPO_PUBLIC_CAMERA_PREVIEW=1`; `RECORD_AUDIO` blocked; Jest privacy lint. Android debug APK builds (x86_64). 994 tests pass. Nothing run on a device | 7 Nov |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress

@@ -38,3 +38,8 @@ api/**/TestResults/
 *.log
 pnpm-debug.log*
 .claude/worktrees/
+
+# Native module build output
+app/modules/*/android/.cxx/
+app/modules/*/android/build/
+app/modules/*/ios/build/

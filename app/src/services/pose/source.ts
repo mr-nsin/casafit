@@ -1,6 +1,6 @@
-// Pose source port. The native Nitro module `casafit-pose` (docs/plans/spikes/pose.md section 5) is a
-// separate day-1 spike and is not built yet, so the real source reports available = false. A
-// dev-only simulated source replays a synthetic set so the whole flow runs on an emulator.
+// Pose source port. The real source is the Nitro module `casafit-pose` (mediapipe.ts, spike
+// docs/plans/spikes/pose.md); it reports available = false when the module is not in the build. A
+// dev-only simulated source replays a synthetic set so the whole flow runs on an emulator without it.
 // Nothing here writes or sends a frame or landmark.
 
 import type { FormExercise, PoseFrame } from './types';
@@ -10,6 +10,8 @@ export interface PoseSource {
   readonly available: boolean;
   /** Why it is unavailable, for logs and tests. Never shown to people. */
   readonly reason?: string;
+  /** True when landmarks only flow while a `PoseCamera` is mounted (the native source). */
+  readonly needsCamera?: boolean;
   start(onLandmarks: (frame: PoseFrame) => void): void;
   stop(): void;
 }
@@ -68,10 +70,20 @@ export function createSimulatedSource(exercise: FormExercise, opts: { speed?: nu
 
 export type PoseSourceFactory = (exercise: FormExercise) => PoseSource;
 
+/**
+ * The frame output needs a mounted camera, and the camera is still opt-in (EXPO_PUBLIC_CAMERA_PREVIEW=1)
+ * until it is confirmed on a device with RN 0.88. So the native source is chosen only when the module is
+ * in the build AND the flag is on. Otherwise a dev build keeps the simulated source and a release build
+ * reports unavailable, exactly as before.
+ */
+export const poseCameraEnabled = (): boolean => process.env.EXPO_PUBLIC_CAMERA_PREVIEW === '1';
+
 export const defaultPoseSourceFactory: PoseSourceFactory = (exercise) => {
-  // The frame-output glue to the native module is part of the casafit-pose spike. Until it is
-  // wired, a present module is still reported as not ready rather than half working.
-  if (nativePoseModulePresent()) return createUnavailableSource('native_module_not_wired');
+  if (nativePoseModulePresent() && poseCameraEnabled()) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { createMediaPipePoseSource } = require('./mediapipe') as typeof import('./mediapipe');
+    return createMediaPipePoseSource();
+  }
   if (__DEV__) return createSimulatedSource(exercise);
   return createUnavailableSource('native_module_missing');
 };
