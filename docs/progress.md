@@ -2,7 +2,7 @@
 
 **The single source of truth for what is done, what is pending and what comes next.** Read it at the start of every session and before picking up work. Update it in the same commit as the work, every time something is completed, started, blocked or decided.
 
-Last updated: 7 November 2026 (native pose module written, Android builds) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
+Last updated: 12 November 2026 (tap-every-control audit, first device pass) · `main` after the bottom-sheet fix (`9b339ab`) plus the local API, integration-test and icon fixes.
 
 ## How to keep this file current
 
@@ -15,6 +15,7 @@ Last updated: 7 November 2026 (native pose module written, Android builds) · `m
 
 ## Next up
 
+0a. Fix the broken and suspicious controls from `docs/plans/ui-audit.md` and the defects in `docs/plans/device-findings.md` (keyboard covering fields, first tap swallowed, header status bar inset, silent disabled Build button, dead Settings Account row and WeekOne chips), then finish the device walk through the remaining screens, then the UI/UX redesign.
 0. Create the Supabase project and give the app its URL and anon key (EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY); then check email code and Google sign-in on a device. A dev client rebuild is needed first (expo-web-browser).
 1. Device-check the `casafit-pose` module (run `pnpm install`, rebuild the dev client, set `EXPO_PUBLIC_CAMERA_PREVIEW=1`): landmarks upright on both cameras, frame rate, heat, a network capture for MediaPipe telemetry; build iOS on a Mac.
 2. Onboarding pass: Goals, About, Building and Week one verified on device. Still to check: Mix and Health branches, the Offline and Welcome back variants, and the open items under Pending frontend.
@@ -48,6 +49,7 @@ Last updated: 7 November 2026 (native pose module written, Android builds) · `m
 | Icon, Maestro, empty states | Placeholder app icon, adaptive and monochrome icons, splash and favicon (white house on `--p`, regenerate with `node app/tools/make-icons.mjs`; needs prebuild to show); Maestro flows in `app/.maestro` (sign-in, onboarding to Week one, session, Settings and Privacy; written, not yet run); Nutrition hidden-calories note and load error, Progress and Recap load error with retry and reload on focus, Manage Pro lapsed, cancelled, billing and trial variants, bar and heatmap contrast. 943 tests pass | 3 Nov |
 | Backlog slice | Home shows an error with Try again when the plan read fails (no more false 'Build my plan'); Manage Pro trial shows 'Day N of 7' from the store's trial start; Editor drag-to-reorder with a handle (buttons kept; gesture not yet checked on a device); yoga body-part sessions now build (spread pool, repeat poses, borrow gentle bookend moves via `fillShort`). 957 tests pass | 5 Nov |
 | Native pose module | In-repo Nitro module `app/modules/casafit-pose`: Kotlin on MediaPipe tasks-vision 1.1.1 with the bundled `pose_landmarker_lite.task` (SHA-256 pinned), Swift and podspec written but never built. `services/pose/mediapipe.ts` + `PoseCamera.tsx` feed real landmarks into the existing engine; used only when the module is present and `EXPO_PUBLIC_CAMERA_PREVIEW=1`; `RECORD_AUDIO` blocked; Jest privacy lint. Android debug APK builds (x86_64). 994 tests pass. Nothing run on a device | 7 Nov |
+| Control audit and device pass | `npm run audit` (app/src/__audit__) presses every control on 68 routes and 148 screen states: 1,519 controls, 6 broken, 6 suspicious (`docs/plans/ui-audit.md`, allowlist keeps new regressions failing). First emulator pass (Welcome, Age, Verify, Home, Nutrition) found 10 defects (`docs/plans/device-findings.md`). Nothing fixed yet | 12 Nov |
 | Housekeeping | Finished lane worktrees and stale agent worktrees removed | 29 Oct |
 
 ## In progress
