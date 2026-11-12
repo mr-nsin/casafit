@@ -1,9 +1,9 @@
 // Library (ready-made plans), BodyPart (moves for one part, and a session on the spot) and
 // Exercise (one move in detail). All read the bundled content; none needs a network.
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { useRoute, type RouteProp } from '@react-navigation/native';
+import { useFocusEffect, useRoute, type RouteProp } from '@react-navigation/native';
 
 import type { RootStackParamList } from '../../../app/types';
 import { loadContent } from '../../../content';
@@ -17,17 +17,18 @@ import {
   ChipGroup,
   EmptyState,
   ExerciseRow,
+  ExerciseVisual,
   FilledButton,
   HiddenByFlagRow,
   Icon,
-  IconBadge,
   InfoNote,
-  ListRow,
   Card,
   SessionSegmentBar,
   TonalButton,
   Text,
   Touchable,
+  curve,
+  elevation,
   radius,
   space,
   useTokens,
@@ -47,7 +48,6 @@ import {
   partInfo,
   partMoves,
   partsLabel,
-  planIcon,
   planMeta,
   isSafePlan,
   LEVEL_LABEL,
@@ -58,28 +58,71 @@ import {
   type LibraryFilter,
   type PartStyle,
 } from './library';
-import { exerciseIcon } from '../icons';
 import { cap, phaseMinutes, workSteps } from './model';
 import { Page, useBrowseNav, useBackOrHome } from './Page';
 import { getSessionDeps } from '../deps';
 
+// ---- Shared by Home, Library and Plan ----
+
+/** The move that stands for a plan in a picture: the one with the most work time, the earliest on a tie. */
+export function typicalMoveId(moves: readonly { exerciseId: string; sets: number; workS: number }[] | null | undefined): string | undefined {
+  let best: { exerciseId: string; sets: number; workS: number } | undefined;
+  for (const m of moves ?? []) if (!best || m.sets * m.workS > best.sets * best.workS) best = m;
+  return best?.exerciseId;
+}
+
+/** True while the screen has focus, so its one moving figure rests when the screen is covered. */
+export function useScreenFocused(): boolean {
+  const [focused, setFocused] = useState(false);
+  useFocusEffect(
+    useCallback(() => {
+      setFocused(true);
+      return () => setFocused(false);
+    }, []),
+  );
+  return focused;
+}
+
+/** One move of a plan: its picture, name, cue and "sets × seconds". Opens the move. */
+export function MoveRow({ exerciseId, title, subtitle, trailing, onPress }: { exerciseId: string; title: string; subtitle?: string; trailing: string; onPress: () => void }) {
+  const t = useTokens();
+  return (
+    <Touchable
+      label={subtitle ? `${title}, ${subtitle}` : title}
+      onPress={onPress}
+      minSize={72}
+      style={{ minHeight: 72, borderRadius: radius.xl, ...curve, backgroundColor: t.c3, flexDirection: 'row', alignItems: 'center', gap: space.m, padding: space.s, paddingRight: space.l }}
+    >
+      <ExerciseVisual exerciseId={exerciseId} size="row" />
+      <View style={{ flex: 1 }}>
+        <Text>{title}</Text>
+        {subtitle ? (
+          <Text variant="bodySmall" color="osv">
+            {subtitle}
+          </Text>
+        ) : null}
+      </View>
+      <Text variant="bodySmall" color="osv" tabular>
+        {trailing}
+      </Text>
+    </Touchable>
+  );
+}
+
 // ---- Library ----
 
-function PlanListRow({ icon, title, meta, tone, onPress }: { icon: string; title: string; meta: string; tone: 'sc' | 'tc' | 'pc'; onPress: () => void }) {
+function PlanListRow({ exerciseId, title, meta, onPress }: { exerciseId: string | undefined; title: string; meta: string; onPress: () => void }) {
   const t = useTokens();
-  const fg = tone === 'sc' ? 'osc' : tone === 'tc' ? 'otc' : 'opc';
   return (
     <Touchable
       label={`${title}, ${meta}`}
       onPress={onPress}
       minSize={80}
-      style={{ minHeight: 80, borderRadius: radius.xl, backgroundColor: t.c3, flexDirection: 'row', alignItems: 'center', gap: space.m, padding: space.s }}
+      style={{ minHeight: 80, borderRadius: radius.xl, ...curve, backgroundColor: t.c3, flexDirection: 'row', alignItems: 'center', gap: space.m, padding: space.s }}
     >
-      <View style={{ width: 64, height: 64, borderRadius: radius.m, backgroundColor: t[tone], alignItems: 'center', justifyContent: 'center' }}>
-        <Icon name={icon} size={32} color={fg} />
-      </View>
-      <View style={{ flex: 1 }}>
-        <Text style={{ fontWeight: '600' }}>{title}</Text>
+      <ExerciseVisual exerciseId={exerciseId} size="tile" />
+      <View style={{ flex: 1, gap: 2 }}>
+        <Text variant="title">{title}</Text>
         <Text variant="bodySmall" color="osv">
           {meta}
         </Text>
@@ -101,7 +144,6 @@ export function LibraryScreen() {
 
   const flags = contentFlags(data.profile);
   const { shown, hiddenCount } = libraryPlans(content, flags, filter);
-  const tones = { normal: 'sc', yoga: 'tc', dance: 'pc' } as const;
 
   return (
     <Page topBar={{ title: 'Ready-made plans', leading: 'back', onLeading: back }}>
@@ -117,10 +159,9 @@ export function LibraryScreen() {
           {shown.map((p) => (
             <PlanListRow
               key={p.id}
-              icon={planIcon(p)}
+              exerciseId={typicalMoveId(p.work)}
               title={planTitle(content, p)}
               meta={planMeta(p)}
-              tone={p.kind === 'micro' ? 'sc' : tones[p.style]}
               onPress={() => openReadyMade(nav, p.id, data)}
             />
           ))}
@@ -168,13 +209,13 @@ export function BodyPartScreen() {
       topBar={{ title: info.title, leading: 'back', onLeading: back }}
       footer={<FilledButton label={`Start a 15-minute ${info.title.toLowerCase()} session`} leadingIcon="play_arrow" onPress={start} />}
     >
-      <Card tone="sc" radiusSize={28} style={{ flexDirection: 'row', alignItems: 'center', gap: space.l }}>
-        <IconBadge icon="accessibility_new" size={64} tone="pc" />
+      <Card tone="pc" radiusSize={radius.xxl} style={{ flexDirection: 'row', alignItems: 'center', gap: space.l }}>
+        <ExerciseVisual exerciseId={shown[0]?.id} size="card" />
         <View style={{ flex: 1 }}>
-          <Text variant="headline" color="osc" accessibilityRole="header">
+          <Text variant="headline" color="opc" accessibilityRole="header">
             {info.title}
           </Text>
-          <Text variant="bodySmall" color="osc">
+          <Text variant="bodySmall" color="opc">
             {n} {n === 1 ? 'move' : 'moves'} for {info.blurb}.{kneeFriendly ? ' All knee-friendly.' : ''}
           </Text>
         </View>
@@ -200,6 +241,7 @@ export function BodyPartScreen() {
           {shown.map((ex) => (
             <ExerciseRow
               key={ex.id}
+              exerciseId={ex.id}
               title={exerciseName(content, ex)}
               meta={moveMeta(ex)}
               onPress={() => nav.navigate('Exercise', { exerciseId: ex.id })}
@@ -231,6 +273,7 @@ export function ExerciseScreen() {
   const route = useRoute<ExerciseRoute>();
   const data = usePlanData();
   const t = useTokens();
+  const focused = useScreenFocused();
   const content = loadContent();
   const ex = content.exercise(route.params?.exerciseId ?? '');
   const [saved, setSaved] = useState(false);
@@ -295,7 +338,7 @@ export function ExerciseScreen() {
       onPress={target ? () => nav.navigate('Exercise', { exerciseId: target.id }) : undefined}
       disabled={!target}
       minSize={72}
-      style={{ flex: 1, minHeight: 72, borderRadius: radius.l, backgroundColor: t.c3, padding: space.m, gap: space.xs }}
+      style={{ flex: 1, minHeight: 72, borderRadius: radius.xl, ...curve, backgroundColor: t.c3, padding: space.l, gap: space.xs }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.xs }}>
         <Icon name={icon} size={18} color="osv" />
@@ -303,9 +346,7 @@ export function ExerciseScreen() {
           {label}
         </Text>
       </View>
-      <Text variant="bodySmall" style={{ fontWeight: '600' }}>
-        {target ? exerciseName(content, target) : none}
-      </Text>
+      <Text>{target ? exerciseName(content, target) : none}</Text>
     </Touchable>
   );
 
@@ -323,21 +364,20 @@ export function ExerciseScreen() {
         </View>
       }
     >
-      <Card tone="tc" radiusSize={28} style={{ alignItems: 'center', gap: space.m }}>
-        <View accessible accessibilityRole="image" accessibilityLabel={content.t(ex.demo.altKey)} style={{ alignItems: 'center', gap: space.s }}>
-          <Icon name={exerciseIcon(ex)} size={72} color="otc" />
-          <Text variant="bodySmall" color="otc" style={{ textAlign: 'center' }}>
-            {content.t(ex.demo.altKey)}
-          </Text>
-        </View>
+      <View style={{ alignItems: 'center', gap: space.m }}>
+        {/* The figure carries the spoken description; the caption below repeats it for sighted readers only. */}
+        <ExerciseVisual exerciseId={ex.id} size="hero" playing={focused} loopMs={ex.demo.loopMs} label={content.t(ex.demo.altKey)} />
+        <Text variant="bodySmall" color="osv" importantForAccessibility="no" accessibilityElementsHidden style={{ textAlign: 'center' }}>
+          {content.t(ex.demo.altKey)}
+        </Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.xs }}>
-          <Icon name="repeat" size={16} color="otc" />
-          <Text variant="label" color="otc">
+          <Icon name="repeat" size={16} color="osv" />
+          <Text variant="label" color="osv">
             Demo loop
           </Text>
         </View>
-      </Card>
-      <Text variant="headline" accessibilityRole="header">
+      </View>
+      <Text variant="headline" accessibilityRole="header" style={{ marginTop: space.s }}>
         {exerciseName(content, ex)}
       </Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.s }}>
@@ -349,10 +389,10 @@ export function ExerciseScreen() {
       {trialNote ? <InfoNote icon="info" text={trialNote} /> : null}
       {blocked.length ? <InfoNote icon="block" tone="erc" text={`Hidden from your plan for your ${flagPhrase(blocked)}.`} /> : null}
       {caution.length ? <InfoNote icon="info" text={`Go gently if your ${flagPhrase(caution)} bother you. Stop if a move hurts.`} /> : null}
-      <View style={{ gap: space.s }}>
+      <View style={{ gap: space.m, marginVertical: space.s }}>
         {ex.stepKeys.map((k, i) => (
           <View key={k} style={{ flexDirection: 'row', gap: space.m, alignItems: 'flex-start' }}>
-            <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: t.pc, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ width: 28, height: 28, borderRadius: radius.round, backgroundColor: t.pc, alignItems: 'center', justifyContent: 'center' }}>
               <Text variant="labelStrong" color="opc" tabular>
                 {i + 1}
               </Text>
@@ -431,39 +471,43 @@ export function ReadyMadePlanView({ id, data, back }: { id: string; data: PlanDa
         )
       }
     >
-      <Card tone="pc" style={{ gap: space.s }}>
-        <Text variant="label" color="opc">
-          Ready-made plan
-        </Text>
-        <Text variant="display" color="opc" accessibilityRole="header">
-          {planTitle(content, plan)}
-        </Text>
+      <Card tone="pc" radiusSize={radius.xxl} style={{ gap: space.l, ...elevation.card }}>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: space.l }}>
+          <ExerciseVisual exerciseId={typicalMoveId(plan.work)} size="card" />
+          <View style={{ flex: 1, gap: space.xs }}>
+            <Text variant="label" color="opc">
+              Ready-made plan
+            </Text>
+            <Text variant="display" color="opc" accessibilityRole="header">
+              {planTitle(content, plan)}
+            </Text>
+          </View>
+        </View>
         <View style={{ flexDirection: 'row', gap: space.s, flexWrap: 'wrap' }}>
-          <Badge label={`${micro ? planMinutes(plan) : mins.total} min`} tone="sc" />
-          <Badge label="No equipment" tone="sc" />
-          <Badge label={cap(plan.style)} tone="sc" />
-          <Badge label={LEVEL_LABEL[plan.level]} tone="sc" />
+          <Badge label={`${micro ? planMinutes(plan) : mins.total} min`} tone="el" />
+          <Badge label="No equipment" tone="el" />
+          <Badge label={cap(plan.style)} tone="el" />
+          <Badge label={LEVEL_LABEL[plan.level]} tone="el" />
         </View>
       </Card>
       <Text color="osv">{content.t(plan.blurbKey)}</Text>
       {!safe ? <InfoNote icon="block" tone="erc" text={`This plan is hidden for your ${flagPhrase(flags)}.`} /> : null}
       {added ? <InfoNote icon="check_circle" tone="tc" text="Added. This is now today's session." /> : null}
       {failed ? <InfoNote icon="info" tone="erc" text="We could not add that. Try again in a moment." /> : null}
-      {session ? <SessionSegmentBar warm={mins.warm} work={mins.work} cool={mins.cool} height={32} /> : null}
-      <Text variant="title" tabular accessibilityRole="header">
+      {session ? <SessionSegmentBar warm={mins.warm} work={mins.work} cool={mins.cool} height={36} /> : null}
+      <Text variant="title" tabular accessibilityRole="header" style={{ marginTop: space.s }}>
         {moves.length} {moves.length === 1 ? 'move' : 'moves'}
       </Text>
       <View style={{ gap: space.s }}>
         {moves.map((m) => {
           const ex = content.exercise(m.exerciseId);
           return (
-            <ListRow
+            <MoveRow
               key={m.id}
-              icon="sports_gymnastics"
+              exerciseId={m.exerciseId}
               title={ex ? exerciseName(content, ex) : m.name}
               subtitle={ex ? content.t(ex.cueKey) : undefined}
               trailing={`${m.sets} × ${m.workS}s`}
-              tone="c3"
               onPress={() => nav.navigate('Exercise', { exerciseId: m.exerciseId })}
             />
           );

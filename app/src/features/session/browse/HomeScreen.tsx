@@ -12,6 +12,7 @@ import {
   Card,
   ConfirmDialog,
   EmptyState,
+  ExerciseVisual,
   FilledButton,
   FormCheckChip,
   Icon,
@@ -25,6 +26,8 @@ import {
   TextButton,
   Touchable,
   WeekStrip,
+  curve,
+  elevation,
   radius,
   space,
   useEntrance,
@@ -54,11 +57,13 @@ import {
   planDayKey,
   sessionMeta,
   weekdayIndex,
+  workSteps,
 } from './model';
 import { Page, useBackOrHome, useBrowseNav, type Nav } from './Page';
 import { openReadyMade } from './actions';
 import { comebackRebuildPending, rebuildComebackWeek } from './comeback';
 import { contentFlags, isSafePlan } from './library';
+import { typicalMoveId, useScreenFocused } from './LibraryScreens';
 import { loadContent } from '../../../content';
 import { getSessionDeps } from '../deps';
 
@@ -159,7 +164,10 @@ function strip(opts: {
 function TodayCard({ row, doneToday, resumeShown, onStart }: { row: PlanDayRow; doneToday: boolean; resumeShown: boolean; onStart: () => void }) {
   const nav = useBrowseNav();
   const enter = useEntrance({ duration: 400 });
+  const focused = useScreenFocused();
   const session = parseSession(row);
+  // The picture is the session's first work move.
+  const firstMove = workSteps(session)[0]?.exerciseId;
   const mins = phaseMinutes(session);
   const hasSession = !!session;
   const label = doneToday ? 'Done today' : resumeShown ? 'Today, or start fresh' : 'Today';
@@ -173,20 +181,25 @@ function TodayCard({ row, doneToday, resumeShown, onStart }: { row: PlanDayRow; 
     <Animated.View
       style={{ opacity: enter, transform: [{ translateY: enter.interpolate({ inputRange: [0, 1], outputRange: [14, 0] }) }] }}
     >
-      <Card tone="pc" style={{ gap: space.m }} radiusSize={radius.xl}>
-        <View accessibilityRole="header" style={{ flexDirection: 'row', alignItems: 'center', gap: space.s }}>
-          <Icon name={doneToday ? 'check_circle' : 'today'} size={20} color="opc" />
-          <Text variant="label" color="opc">
-            {label}
-          </Text>
+      <Card tone="pc" style={{ gap: space.l, ...elevation.card }} radiusSize={radius.xxl}>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: space.l }}>
+          {hasSession ? <ExerciseVisual exerciseId={firstMove} size="card" playing={focused} /> : null}
+          <View style={{ flex: 1, gap: space.xs }}>
+            <View accessibilityRole="header" style={{ flexDirection: 'row', alignItems: 'center', gap: space.s }}>
+              <Icon name={doneToday ? 'check_circle' : 'today'} size={20} color="opc" />
+              <Text variant="label" color="opc">
+                {label}
+              </Text>
+            </View>
+            <Text variant="display" color="opc" accessibilityLabel={`Today's session: ${dayTitle(row)}`}>
+              {dayTitle(row)}
+            </Text>
+          </View>
         </View>
-        <Text variant="display" color="opc" accessibilityLabel={`Today's session: ${dayTitle(row)}`}>
-          {dayTitle(row)}
-        </Text>
         <Text color="opc">{hasSession ? sessionMeta(session, row.style) : row.kind === 'walk' ? 'Easy pace, no equipment' : 'Optional, no equipment'}</Text>
         {hasSession ? (
           <>
-            <SessionSegmentBar warm={mins.warm} work={mins.work} cool={mins.cool} height={32} />
+            <SessionSegmentBar warm={mins.warm} work={mins.work} cool={mins.cool} height={36} onTonal />
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <TextButton label="Warm-up" onPress={() => nav.navigate('Parts', { part: 'warmup' })} />
               <Text variant="bodySmall" color="opc" tabular>
@@ -282,16 +295,14 @@ function MythCard() {
       label={`Myth of the week: ${title}`}
       onPress={() => nav.navigate('Myth', { mythId: myth.id })}
       minSize={64}
-      style={{ minHeight: 64, borderRadius: radius.l, backgroundColor: t.c3, padding: space.m, flexDirection: 'row', alignItems: 'center', gap: space.m }}
+      style={{ minHeight: 72, borderRadius: radius.xl, ...curve, backgroundColor: t.c3, padding: space.l, flexDirection: 'row', alignItems: 'center', gap: space.m }}
     >
-      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: t.tc, alignItems: 'center', justifyContent: 'center' }}>
-        <Icon name="lightbulb" size={22} color="otc" />
-      </View>
-      <View style={{ flex: 1 }}>
+      <Icon name="lightbulb" color="p" />
+      <View style={{ flex: 1, gap: 2 }}>
         <Text variant="label" color="osv">
           Myth of the week
         </Text>
-        <Text variant="labelStrong" numberOfLines={2}>
+        <Text variant="bodySmall" numberOfLines={2}>
           {title}
         </Text>
       </View>
@@ -300,20 +311,18 @@ function MythCard() {
   );
 }
 
-function Tile({ icon, title, meta, onPress, width }: { icon: string; title: string; meta: string; onPress: () => void; width: number }) {
+function Tile({ exerciseId, title, meta, onPress, width }: { exerciseId: string | undefined; title: string; meta: string; onPress: () => void; width: number }) {
   const t = useTokens();
   return (
     <Touchable
       label={`${title}, ${meta}`}
       onPress={onPress}
       minSize={44}
-      style={{ width, minHeight: 96, borderRadius: radius.l, backgroundColor: t.c3, padding: space.m, gap: space.s, justifyContent: 'space-between' }}
+      style={{ width, minHeight: 148, borderRadius: radius.xl, ...curve, backgroundColor: t.c3, padding: space.l, gap: space.m, justifyContent: 'space-between' }}
     >
-      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: t.tc, alignItems: 'center', justifyContent: 'center' }}>
-        <Icon name={icon} size={22} color="otc" />
-      </View>
-      <View>
-        <Text variant="labelStrong" numberOfLines={1}>
+      <ExerciseVisual exerciseId={exerciseId} size="tile" />
+      <View style={{ gap: 2 }}>
+        <Text variant="labelStrong" numberOfLines={2}>
           {title}
         </Text>
         <Text variant="label" color="osv" numberOfLines={1}>
@@ -326,7 +335,7 @@ function Tile({ icon, title, meta, onPress, width }: { icon: string; title: stri
 
 function SectionRow({ title, action, onAction }: { title: string; action?: string; onAction?: () => void }) {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: space.s }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: space.m }}>
       <Text variant="title" accessibilityRole="header">
         {title}
       </Text>
@@ -352,7 +361,8 @@ function BodyPartGrid({ focus }: { focus: string[] }) {
               flexBasis: '31.5%',
               flexGrow: 1,
               height: 64,
-              borderRadius: radius.l,
+              borderRadius: radius.xl,
+              ...curve,
               backgroundColor: on ? t.pc : t.c3,
               alignItems: 'center',
               justifyContent: 'center',
@@ -383,7 +393,7 @@ function TodaySoFar({ today, stepGoal }: { today: string; stepGoal: number }) {
             label={`${formatCount(steps.steps)} of ${formatCount(stepGoal)} steps, ${steps.briskMinutes} brisk minutes`}
             onPress={() => nav.navigate('Steps')}
             minSize={104}
-            style={{ flex: 1, minHeight: 104, borderRadius: radius.xl, backgroundColor: t.tc, padding: space.m, flexDirection: 'row', alignItems: 'center', gap: space.m }}
+            style={{ flex: 1, minHeight: 112, borderRadius: radius.xl, ...curve, backgroundColor: t.tc, padding: space.l, flexDirection: 'row', alignItems: 'center', gap: space.m }}
           >
             <ProgressRing value={steps.steps} max={stepGoal} size={56} stroke={6} tone="otc" a11yLabel={`${formatCount(steps.steps)} of ${formatCount(stepGoal)} steps`} />
             <View style={{ flex: 1 }}>
@@ -403,7 +413,7 @@ function TodaySoFar({ today, stepGoal }: { today: string; stepGoal: number }) {
             label="Count your steps"
             onPress={() => nav.navigate('Steps')}
             minSize={104}
-            style={{ flex: 1, minHeight: 104, borderRadius: radius.xl, backgroundColor: t.tc, padding: space.m, gap: space.s, justifyContent: 'center' }}
+            style={{ flex: 1, minHeight: 112, borderRadius: radius.xl, ...curve, backgroundColor: t.tc, padding: space.l, gap: space.s, justifyContent: 'center' }}
           >
             <Icon name="directions_walk" color="otc" />
             <Text variant="labelStrong" color="otc">
@@ -415,18 +425,18 @@ function TodaySoFar({ today, stepGoal }: { today: string; stepGoal: number }) {
           label={food ? `Food, ${Math.round(food.proteinG)} grams protein` : 'Food, log a meal'}
           onPress={() => nav.navigate('Main', { screen: 'Nutrition' })}
           minSize={104}
-          style={{ flex: 1, minHeight: 104, borderRadius: radius.xl, backgroundColor: t.c3, padding: space.m, justifyContent: 'space-between' }}
+          style={{ flex: 1, minHeight: 112, borderRadius: radius.xl, ...curve, backgroundColor: t.c3, padding: space.l, justifyContent: 'space-between' }}
         >
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text variant="label" color="osv">
               Food
             </Text>
-            <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: t.p, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ width: 32, height: 32, borderRadius: radius.round, backgroundColor: t.p, alignItems: 'center', justifyContent: 'center' }}>
               <Icon name="add" size={20} color="op" />
             </View>
           </View>
           {food ? (
-            <View style={{ gap: 4 }}>
+            <View style={{ gap: space.xs }}>
               {showCalories ? (
                 <Text variant="headline" tabular>
                   {formatCount(food.kcal)}
@@ -455,7 +465,7 @@ function TodaySoFar({ today, stepGoal }: { today: string; stepGoal: number }) {
         </Touchable>
       </View>
       {!showCalories ? (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: t.sc, borderRadius: radius.l, paddingLeft: space.l, minHeight: 48 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: t.sc, borderRadius: radius.l, ...curve, paddingLeft: space.l, minHeight: 48 }}>
           <Icon name="visibility_off" size={20} color="osc" />
           <Text variant="bodySmall" color="osc" style={{ flex: 1 }}>
             Calories are hidden everywhere in CasaFit. Protein still counts.
@@ -621,10 +631,10 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
         {READY_MADE.filter((p) => isSafePlan(loadContent(), p.id, contentFlags(data.profile))).map((p) => (
           <Tile
             key={p.id}
-            icon={p.icon}
+            exerciseId={typicalMoveId(loadContent().plan(p.id)?.work)}
             title={p.title}
             meta={p.meta}
-            width={148}
+            width={156}
             onPress={() => openReadyMade(nav, p.id, data)}
           />
         ))}
@@ -644,7 +654,6 @@ function TrainingHome({ data, standalone }: { data: PlanData; standalone?: boole
 // ---- Rest day ----
 
 function RestHome({ data, standalone }: { data: PlanData; standalone?: boolean }) {
-  const t = useTokens();
   const nav = useBrowseNav();
   const back = useBackOrHome();
   const clock = data.clock!;
@@ -679,17 +688,17 @@ function RestHome({ data, standalone }: { data: PlanData; standalone?: boolean }
       <Text color="osv" tabular>
         {doneThisWeek} of {planned} workouts done this week. Nicely paced.
       </Text>
-      <Card tone="c3" style={{ gap: space.s, alignItems: 'center' }}>
-        <View accessible accessibilityLabel="Rest day" style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: t.pc, alignItems: 'center', justifyContent: 'center' }}>
+      <Card tone="pc" radiusSize={radius.xxl} style={{ gap: space.s, alignItems: 'center' }}>
+        <View accessible accessibilityLabel="Rest day" style={{ minHeight: 44, justifyContent: 'center' }}>
           <Icon name="bedtime" size={36} color="opc" />
         </View>
-        <Text variant="label" color="osv">
+        <Text variant="label" color="opc">
           Today
         </Text>
-        <Text variant="headline" accessibilityRole="header">
+        <Text variant="headline" color="opc" accessibilityRole="header">
           Rest day
         </Text>
-        <Text color="osv" style={{ textAlign: 'center' }}>
+        <Text color="opc" style={{ textAlign: 'center' }}>
           Your muscles get stronger while you rest. Keep it easy today.
         </Text>
       </Card>

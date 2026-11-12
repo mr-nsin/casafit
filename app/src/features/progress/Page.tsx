@@ -10,7 +10,7 @@ export function Page({ top, children, footer }: { top?: ReactNode; children: Rea
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: t.bg }}>
       {top}
-      <ScrollView contentContainerStyle={{ padding: space.l, gap: space.l, paddingBottom: space.xxl }}>{children}</ScrollView>
+      <ScrollView contentContainerStyle={{ padding: space.l, gap: space.xl, paddingBottom: space.xxxl }}>{children}</ScrollView>
       {footer ? <View style={{ padding: space.l, gap: space.s }}>{footer}</View> : null}
     </SafeAreaView>
   );

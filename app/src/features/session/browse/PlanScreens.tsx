@@ -10,6 +10,7 @@ import {
   Badge,
   Card,
   EmptyState,
+  ExerciseVisual,
   FilledButton,
   Icon,
   IconButton,
@@ -22,6 +23,8 @@ import {
   TextButton,
   TonalButton,
   Touchable,
+  curve,
+  elevation,
   radius,
   space,
   useTokens,
@@ -47,9 +50,8 @@ import {
   weekdayIndex,
   workSteps,
 } from './model';
-import { DEFAULT_MOVE_ICON } from '../icons';
 import { Page, useBackOrHome, useBrowseNav, type Nav } from './Page';
-import { ReadyMadePlanView } from './LibraryScreens';
+import { MoveRow, ReadyMadePlanView } from './LibraryScreens';
 
 function useStartDay(nav: Nav) {
   return (row: PlanDayRow | undefined) => {
@@ -135,13 +137,13 @@ export function WeekPlanScreen() {
           return (
             <View
               key={date}
-              style={{ flexDirection: 'row', alignItems: 'center', minHeight: 68, borderRadius: radius.l, backgroundColor: isToday ? t.pc : t.c3, paddingLeft: space.l, paddingRight: space.xs, gap: space.m }}
+              style={{ flexDirection: 'row', alignItems: 'center', minHeight: 72, borderRadius: radius.xl, ...curve, backgroundColor: isToday ? t.pc : t.c3, paddingLeft: space.l, paddingRight: space.xs, gap: space.m }}
             >
               <Text variant="labelStrong" color={isToday ? 'opc' : 'osv'} style={{ width: 32 }}>
                 {day}
               </Text>
               <Touchable label={`${full}: ${title}, ${sub}`} onPress={open} minSize={68} style={{ flex: 1, justifyContent: 'center' }}>
-                <Text color={isToday ? 'opc' : 'on'} style={{ fontWeight: '600' }}>
+                <Text variant="title" color={isToday ? 'opc' : 'on'}>
                   {title}
                 </Text>
                 <Text variant="bodySmall" color={isToday ? 'opc' : 'osv'}>
@@ -189,7 +191,7 @@ export function WhyScreen() {
       <SectionLabel title="What we used" />
       <View style={{ gap: space.s }}>
         {rows.map((r) => (
-          <View key={r.key} style={{ flexDirection: 'row', alignItems: 'center', minHeight: 64, borderRadius: radius.l, backgroundColor: t.c3, paddingLeft: space.l, paddingRight: space.xs, gap: space.m }}>
+          <View key={r.key} style={{ flexDirection: 'row', alignItems: 'center', minHeight: 64, borderRadius: radius.xl, ...curve, backgroundColor: t.c3, paddingLeft: space.l, paddingRight: space.xs, gap: space.m }}>
             <Icon name={r.icon} color="osv" />
             <View style={{ flex: 1, paddingVertical: space.s }} accessible accessibilityLabel={`${r.label}: ${r.value}`}>
               <Text variant="label" color="osv">
@@ -286,37 +288,42 @@ export function PlanScreen() {
         ) : undefined
       }
     >
-      <Card tone="pc" style={{ gap: space.s }}>
-        <Text variant="label" color="opc">
-          {label}
-        </Text>
-        <Text variant="display" color="opc" accessibilityRole="header">
-          {dayTitle(row)}
-        </Text>
+      <Card tone="pc" radiusSize={radius.xxl} style={{ gap: space.l, ...elevation.card }}>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: space.l }}>
+          {/* The same picture as the Home card: the session's first work move. */}
+          {moves[0] ? <ExerciseVisual exerciseId={moves[0].exerciseId} size="card" /> : null}
+          <View style={{ flex: 1, gap: space.xs }}>
+            <Text variant="label" color="opc">
+              {label}
+            </Text>
+            <Text variant="display" color="opc" accessibilityRole="header">
+              {dayTitle(row)}
+            </Text>
+          </View>
+        </View>
         <View style={{ flexDirection: 'row', gap: space.s, flexWrap: 'wrap' }}>
-          {session ? <Badge label={`${mins.total} min`} tone="sc" /> : null}
-          <Badge label="No equipment" tone="sc" />
-          <Badge label={styleLabel(row.style ?? session?.style)} tone="sc" />
+          {session ? <Badge label={`${mins.total} min`} tone="el" /> : null}
+          <Badge label="No equipment" tone="el" />
+          <Badge label={styleLabel(row.style ?? session?.style)} tone="el" />
         </View>
       </Card>
 
       {session ? (
         <>
-          <SessionSegmentBar warm={mins.warm} work={mins.work} cool={mins.cool} height={32} />
-          <Text variant="title" tabular accessibilityRole="header">
+          <SessionSegmentBar warm={mins.warm} work={mins.work} cool={mins.cool} height={36} />
+          <Text variant="title" tabular accessibilityRole="header" style={{ marginTop: space.s }}>
             {moves.length} {moves.length === 1 ? 'move' : 'moves'}
           </Text>
           <View style={{ gap: space.s }}>
             {moves.map((m) => {
               const cue = content.exercise(m.exerciseId)?.cue;
               return (
-                <ListRow
+                <MoveRow
                   key={m.id}
-                  icon={content.exercise(m.exerciseId)?.icon ?? DEFAULT_MOVE_ICON}
+                  exerciseId={m.exerciseId}
                   title={m.name}
                   subtitle={cue ?? undefined}
                   trailing={`${m.sets} × ${m.workS}s`}
-                  tone="c3"
                   onPress={() => nav.navigate('Exercise', { exerciseId: m.exerciseId })}
                 />
               );
