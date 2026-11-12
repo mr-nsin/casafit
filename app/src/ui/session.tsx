@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { IconButton } from './buttons';
+import { ExerciseVisual } from './ExerciseVisual';
 import { SegmentedControl, ToggleRow, type Option } from './selection';
 import { Icon, Text, Touchable, type IconName } from './primitives';
 import { radius, space } from './tokens';
@@ -32,11 +33,12 @@ export function TransportRow({ paused, onPrev, onToggle, onNext }: { paused: boo
 }
 
 /** Move in a list (BodyPart, Plan, Picker, Editor). */
-export function ExerciseRow({ title, meta, trailing = 'none', blocked, onPress, onTrailing }: { title: string; meta?: string; trailing?: 'add' | 'remove' | 'none'; blocked?: boolean; onPress?: () => void; onTrailing?: () => void }) {
+export function ExerciseRow({ title, meta, trailing = 'none', blocked, onPress, onTrailing, exerciseId }: { title: string; meta?: string; trailing?: 'add' | 'remove' | 'none'; blocked?: boolean; onPress?: () => void; onTrailing?: () => void; /** Shows the move's picture at the start of the row. */ exerciseId?: string }) {
   const t = useTokens();
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', minHeight: 64, backgroundColor: t.c3, borderRadius: radius.l, paddingLeft: space.l, opacity: blocked ? 0.6 : 1 }}>
-      <Touchable label={meta ? `${title}, ${meta}` : title} onPress={onPress} minSize={64} style={{ flex: 1, justifyContent: 'center' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m, minHeight: exerciseId ? 72 : 64, backgroundColor: t.c3, borderRadius: radius.xl, borderCurve: 'continuous', paddingLeft: exerciseId ? space.s : space.l, opacity: blocked ? 0.6 : 1 }}>
+      {exerciseId ? <ExerciseVisual exerciseId={exerciseId} size="row" /> : null}
+      <Touchable label={meta ? `${title}, ${meta}` : title} onPress={onPress} minSize={64} spring={false} style={{ flex: 1, justifyContent: 'center' }}>
         <Text>{title}</Text>
         {meta ? (
           <Text variant="bodySmall" color="osv">

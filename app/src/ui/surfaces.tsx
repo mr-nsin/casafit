@@ -331,8 +331,8 @@ export function PaywallPlanCard({ title, price, caption, badge, selected, onSele
 export function Avatar({ initials, size = 72, onEdit }: { initials: string; size?: number; onEdit?: () => void }) {
   const t = useTokens();
   const body = (
-    <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: t.pc, alignItems: 'center', justifyContent: 'center' }}>
-      <Text variant="headline" color="opc">
+    <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: t.c3, borderWidth: 1, borderColor: t.olv, alignItems: 'center', justifyContent: 'center' }}>
+      <Text variant={size >= 64 ? 'headline' : 'labelStrong'} color="on">
         {initials}
       </Text>
     </View>
