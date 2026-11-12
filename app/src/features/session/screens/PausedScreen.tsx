@@ -1,11 +1,11 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../../app/types';
-import { dark, radius, space, type } from '../../../theme';
-import { Icon } from '../../../ui';
+import { ExerciseVisual, Text, curve, radius, space, useTokens } from '../../../ui';
 import { Btn, InfoNote, Screen, TopBar } from '../components';
+import { getSessionDeps } from '../deps';
 import { useSessionScreen } from '../hooks';
 import { useSessionStore } from '../store';
 import { formatClock } from '../view';
@@ -20,12 +20,28 @@ const REASON: Record<string, string> = {
   camera: 'Paused for your form check.',
 };
 
+/** Which move is waiting and how much of it is left. Nothing is counting while paused. */
+function HeldPill({ text }: { text: string }) {
+  const t = useTokens();
+  return (
+    <View
+      accessibilityRole="timer"
+      style={{ backgroundColor: t.c3, borderRadius: radius.round, ...curve, borderWidth: 1, borderColor: t.edge, paddingHorizontal: space.l, paddingVertical: space.s, marginTop: space.m }}
+    >
+      <Text variant="bodySmall" tabular>
+        {text}
+      </Text>
+    </View>
+  );
+}
+
 export function PausedScreen() {
   const nav = useNavigation<Nav>();
   const v = useSessionScreen('Paused');
   const act = useSessionStore.getState;
   const reason = v.pausedReason ? REASON[v.pausedReason] : undefined;
   const ready = v.ready;
+  const alt = v.step ? getSessionDeps().content.exercise(v.step.exerciseId)?.alt : undefined;
 
   return (
     <Screen>
@@ -37,25 +53,23 @@ export function PausedScreen() {
           nav.navigate('EndSession');
         }}
       />
-      <View style={{ alignItems: 'center', marginTop: space.xl }}>
-        <View style={{ width: 96, height: 96, borderRadius: 48, backgroundColor: dark.pc, alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name={ready ? 'play_arrow' : 'pause'} size={48} color="opc" />
-        </View>
-        <Text style={[type.display, { color: dark.on, marginTop: space.l }]} accessibilityRole="header" accessibilityLiveRegion="polite">
+      <View style={{ alignItems: 'center', marginTop: space.l }}>
+        {/* The move that is waiting, held still at its working pose. */}
+        {v.step ? <ExerciseVisual exerciseId={v.step.exerciseId} size="card" label={alt} /> : null}
+        <Text variant="display" style={{ marginTop: space.l }} accessibilityRole="header" accessibilityLiveRegion="polite">
           {ready ? 'Ready' : 'Paused'}
         </Text>
-        {v.step ? (
-          <View
-            accessibilityRole="timer"
-            style={{ backgroundColor: dark.c4, borderRadius: radius.round, paddingHorizontal: space.l, paddingVertical: space.s, marginTop: space.m }}
-          >
-            <Text style={[type.bodySmall, { color: dark.on, fontVariant: ['tabular-nums'] }]}>
-              {`${v.step.name} · ${formatClock(v.segmentRemainingMs)} left`}
-            </Text>
-          </View>
+        {v.step ? <HeldPill text={`${v.step.name} · ${formatClock(v.segmentRemainingMs)} left`} /> : null}
+        {ready ? (
+          <Text variant="bodySmall" color="osv" style={{ marginTop: space.s, textAlign: 'center' }}>
+            Get in position, then tap Start.
+          </Text>
         ) : null}
-        {ready ? <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s }]}>Get in position, then tap Start.</Text> : null}
-        {reason ? <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s }]}>{reason}</Text> : null}
+        {reason ? (
+          <Text variant="bodySmall" color="osv" style={{ marginTop: space.s, textAlign: 'center' }}>
+            {reason}
+          </Text>
+        ) : null}
       </View>
       <View style={{ marginTop: space.xl }}>
         <InfoNote>

@@ -168,10 +168,10 @@ export function SessionSegmentBar({
       </View>
       {captions ? (
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text variant="label" color={onTonal ? 'opc' : 'osv'} tabular>
+          <Text variant={onTonal ? 'bodySmall' : 'label'} color={onTonal ? 'opc' : 'osv'} tabular>
             Warm-up {warm} min
           </Text>
-          <Text variant="label" color={onTonal ? 'opc' : 'osv'} tabular>
+          <Text variant={onTonal ? 'bodySmall' : 'label'} color={onTonal ? 'opc' : 'osv'} tabular>
             Cool-down {cool} min
           </Text>
         </View>
@@ -260,11 +260,24 @@ export function WeekDots({ days }: { days: { label: string; done: boolean }[] })
 export function Heatmap({ cells, summary }: { cells: number[]; summary: string }) {
   const t = useTokens();
   const shade = [t.c3, t.pc, t.s, t.p];
+  // Cells are sized from the measured width. A percentage width with aspectRatio collapsed
+  // to hairlines on Android, so the size is set in pixels.
+  const [width, setWidth] = useState(0);
+  const gap = space.xs;
+  const size = width > 0 ? Math.floor((width - gap * 6) / 7) : 0;
   return (
-    <View accessible accessibilityRole="image" accessibilityLabel={summary} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.xs }}>
-      {cells.map((c, i) => (
-        <View key={i} style={{ width: `${100 / 7 - 1.6}%`, aspectRatio: 1, borderRadius: radius.s, backgroundColor: shade[Math.min(3, Math.max(0, c))], borderWidth: c === 1 ? 1.5 : 0, borderColor: t.s }} />
-      ))}
+    <View
+      accessible
+      accessibilityRole="image"
+      accessibilityLabel={summary}
+      onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
+      style={{ flexDirection: 'row', flexWrap: 'wrap', gap, minHeight: 8 }}
+    >
+      {size > 0
+        ? cells.map((c, i) => (
+            <View key={i} style={{ width: size, height: size, borderRadius: radius.s, backgroundColor: shade[Math.min(3, Math.max(0, c))], borderWidth: c === 1 ? 1.5 : 0, borderColor: t.s }} />
+          ))
+        : null}
     </View>
   );
 }

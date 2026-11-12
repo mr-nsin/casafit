@@ -1,12 +1,12 @@
 // Player (normal), Yoga and Dance share one stage layout: they are views of the same store.
 
 import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { ScrollView, View } from 'react-native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../../app/types';
-import { dark, space, type } from '../../../theme';
+import { Text, space } from '../../../ui';
 import { resolveFormCheckEntry } from '../../formcheck/gate';
 import { BigTimer, Btn, IconBtn, InfoNote, Notice, RadioGroup, RUNG_OPTIONS, Screen, SegmentedProgress, Stage, TimerRing, TopBar } from '../components';
 import { getSessionDeps } from '../deps';
@@ -54,6 +54,7 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
   const nav = useNavigation<Nav>();
   const v = useSessionScreen(route);
   const quiet = useSessionStore((s) => s.prefs.quiet);
+  const focused = useIsFocused();
   const copy = COPY[variant];
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -102,6 +103,9 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
   };
   const addRest = (s: 15 | 30) => setNotice(restNotice(act().addRest(s)));
 
+  // The picture moves only while the clock does: not in Ready, not paused, not behind a dialog.
+  const playing = v.status === 'active' && focused;
+
   const end = () => {
     act().requestEnd();
     nav.navigate('EndSession');
@@ -121,15 +125,15 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
           icon={info?.icon ?? exerciseIcon(variantStyle(variant))}
           description={info?.alt ?? `${step.name} demonstration`}
           pill={pill}
-          height={variant === 'yoga' ? 240 : 220}
+          exerciseId={step.exerciseId}
+          playing={playing}
         />
-        <Text style={[type.headline, { color: dark.on, fontSize: 32, lineHeight: 38 }]} accessibilityRole="header">
+        <Text variant="headline" accessibilityRole="header" style={{ textAlign: 'center' }}>
           {step.name}
         </Text>
-        {cue ? <Text style={[type.body, { color: dark.osv, marginBottom: space.m }]}>{cue}</Text> : null}
 
         {variant === 'yoga' ? (
-          <View style={{ alignItems: 'center', marginVertical: space.m }}>
+          <View style={{ alignItems: 'center', marginTop: space.m }}>
             <TimerRing
               size={160}
               remainingMs={v.segmentRemainingMs}
@@ -140,10 +144,16 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
             />
           </View>
         ) : (
-          <View style={{ marginVertical: space.m }}>
+          <View style={{ marginTop: space.xs }}>
             <BigTimer text={formatClock(v.segmentRemainingMs)} caption={sub} />
           </View>
         )}
+        {cue ? (
+          <Text color="osv" style={{ textAlign: 'center', marginTop: space.m }}>
+            {cue}
+          </Text>
+        ) : null}
+        <View style={{ height: space.l }} />
 
         <RadioGroup
           label={copy.label}
@@ -151,13 +161,15 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
           value={v.rung}
           onChange={chooseRung}
         />
-        <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s }]}>{copy.caption}</Text>
+        <Text variant="bodySmall" color="osv" style={{ marginTop: space.s }}>
+          {copy.caption}
+        </Text>
         <Notice text={notice} />
         <View style={{ height: space.m }} />
 
         {ready ? (
           <View style={{ gap: space.m }}>
-            <Text style={[type.body, { color: dark.on, textAlign: 'center' }]} accessibilityLiveRegion="polite">
+            <Text style={{ textAlign: 'center' }} accessibilityLiveRegion="polite">
               Get in position, then tap Start.
             </Text>
             <Btn label="Start" height={72} onPress={() => act().resume()} />
@@ -188,7 +200,11 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
                 <Btn label="+30s rest" kind="outline" disabled={restOff} onPress={() => addRest(30)} />
               </View>
             </View>
-            {restLine ? <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s, textAlign: 'center' }]}>{restLine}</Text> : null}
+            {restLine ? (
+              <Text variant="bodySmall" color="osv" tabular style={{ marginTop: space.s, textAlign: 'center' }}>
+                {restLine}
+              </Text>
+            ) : null}
           </View>
         ) : null}
         {variant === 'normal' && !ready && step.formCheckable ? (

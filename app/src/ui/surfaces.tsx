@@ -89,9 +89,9 @@ export function StatTile({ value, label, suffix, tone = 'c3', style }: { value: 
   const t = useTokens();
   const fg = onTone[tone];
   return (
-    <View accessible accessibilityLabel={`${value}${suffix ? ` ${suffix}` : ''}, ${label}`} style={[{ flex: 1, backgroundColor: t[tone], borderRadius: radius.xl, padding: space.l, gap: space.xs }, style]}>
+    <View accessible accessibilityLabel={`${value}${suffix ? ` ${suffix}` : ''}, ${label}`} style={[{ flex: 1, backgroundColor: t[tone], borderRadius: radius.xl, ...curve, padding: space.l, gap: space.xs }, style]}>
       <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: space.xs }}>
-        <Text variant="headline" color={fg} tabular>
+        <Text variant="headline" color={fg} tabular style={{ fontWeight: '800' }}>
           {value}
         </Text>
         {suffix ? (
@@ -166,7 +166,7 @@ export const WarningBanner = ({ text, icon = 'warning' }: { text: string; icon?:
 export function StatusCard({ title, items, tone = 'tc' }: { title: string; items: string[]; tone?: Tone }) {
   const t = useTokens();
   return (
-    <View style={{ backgroundColor: t[tone], borderRadius: radius.xxl, padding: space.xl, gap: space.m }}>
+    <View style={{ backgroundColor: t[tone], borderRadius: radius.xxl, ...curve, padding: space.xl, gap: space.m }}>
       <Text variant="title" color={onTone[tone]}>
         {title}
       </Text>

@@ -13,6 +13,7 @@ import {
   BlobBackground,
   Card,
   ChecklistItem,
+  ExerciseVisual,
   FilledButton,
   ProgressRing,
   SessionSegmentBar,
@@ -21,6 +22,8 @@ import {
   TextButton,
   TonalButton,
   WeekStrip,
+  elevation,
+  radius,
   space,
   useReducedMotion,
 } from '../../../ui';
@@ -159,14 +162,22 @@ export function WeekOneScreen() {
       ) : null}
       <Text variant="bodySmall" color="osv">Your week starts today and runs seven days.</Text>
       <WeekStrip days={days} />
-      <Card tone="pc">
-        <Text variant="title" color="opc">{session?.title ?? 'Today'}</Text>
-        <Text color="opc" tabular>{formatClock(totalS)}</Text>
+      {/* Today's session is the hero: apricot, radius 28, the only raised card on the screen. */}
+      <Card tone="pc" radiusSize={radius.xxl} style={{ gap: space.l, ...elevation.card }}>
+        <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: space.m }}>
+          <Text variant="title" color="opc" style={{ flex: 1 }}>{session?.title ?? 'Today'}</Text>
+          <Text variant="title" color="opc" tabular>{formatClock(totalS)}</Text>
+        </View>
         <SessionSegmentBar warm={2} work={11} cool={2} height={32} onTonal captions />
-        <Text variant="bodySmall" color="opc" tabular>{moves.length} moves</Text>
-        {moves.map((m, i) => (
-          <Text key={m.id} color="opc">{i + 1}. {m.name}</Text>
-        ))}
+        <View style={{ gap: space.s }}>
+          <Text variant="bodySmall" color="opc" tabular>{moves.length} moves</Text>
+          {moves.map((m, i) => (
+            <View key={m.id} style={{ flexDirection: 'row', alignItems: 'center', gap: space.m }}>
+              <ExerciseVisual exerciseId={m.exerciseId} size="tile" />
+              <Text color="opc" tabular style={{ flex: 1 }}>{i + 1}. {m.name}</Text>
+            </View>
+          ))}
+        </View>
         {skipped.length ? <Text variant="bodySmall" color="opc">{skipped.map((s) => s.name).join(', ')} skipped: {skipped[0]!.reason}</Text> : null}
       </Card>
     </Layout>

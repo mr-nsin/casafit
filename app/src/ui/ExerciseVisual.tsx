@@ -20,6 +20,8 @@ export type ExerciseVisualProps = {
   loopMs?: number;
   /** Spoken description (the exercise's alt text). Without one the picture is decorative. */
   label?: string;
+  /** Exact width and height, when a named size does not fit the layout. */
+  px?: number;
   /** Frame background. Defaults to the elevated surface. */
   tone?: ColorKey;
   style?: StyleProp<ViewStyle>;
@@ -73,10 +75,10 @@ function Figure({ j, front, accent, ink, hot, far }: { j: Joints; front: boolean
  * tokens, so it reads in light and dark. A Lottie file registered for the id in
  * `exerciseAnimations.ts` takes over when the Lottie module is in the build.
  */
-export function ExerciseVisual({ exerciseId, size = 'row', playing = false, loopMs = 2400, label, tone = 'el', style }: ExerciseVisualProps) {
+export function ExerciseVisual({ exerciseId, size = 'row', playing = false, loopMs = 2400, label, tone = 'el', px: exact, style }: ExerciseVisualProps) {
   const t = useTokens();
   const reduced = useReducedMotion();
-  const px = SIZES[size];
+  const px = exact ?? SIZES[size];
   const moves = posesFor(exerciseId);
   const lottie = exerciseId ? ANIMATIONS[exerciseId] : undefined;
   const animate = playing && !reduced && !lottie;

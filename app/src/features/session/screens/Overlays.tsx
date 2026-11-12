@@ -1,14 +1,14 @@
 // Overlay routes: EndSession (dialog), Feel (sheet) and SessionSettings (sheet).
 
-import { useEffect, useState } from 'react';
-import { BackHandler, Pressable, Switch, Text, View } from 'react-native';
+import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { BackHandler, Switch, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 import type { RootStackParamList } from '../../../app/types';
-import { dark, radius, space, type } from '../../../theme';
-import { Icon } from '../../../ui';
-import { Btn, DarkScope, InfoNote, Notice, RadioGroup, styles as base } from '../components';
+import { Text, Touchable, curve, fixed, radius, space, useTokens } from '../../../ui';
+import { Btn, DarkScope, IconBtn, InfoNote, Notice, RadioGroup } from '../components';
 import { useSessionView } from '../hooks';
 import { movesDone, useSessionStore } from '../store';
 import type { FeelValue } from '../types';
@@ -16,13 +16,13 @@ import { formatClock } from '../view';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
-function Scrim({ children, align }: { children: React.ReactNode; align: 'center' | 'bottom' }) {
+function Scrim({ children, align }: { children: ReactNode; align: 'center' | 'bottom' }) {
   return (
     <DarkScope>
       <View
         style={{
           flex: 1,
-          backgroundColor: 'rgba(0,0,0,0.6)',
+          backgroundColor: fixed.scrim,
           justifyContent: align === 'center' ? 'center' : 'flex-end',
           padding: align === 'center' ? space.xl : 0,
         }}
@@ -30,6 +30,42 @@ function Scrim({ children, align }: { children: React.ReactNode; align: 'center'
         {children}
       </View>
     </DarkScope>
+  );
+}
+
+/** The dialog card. Lives inside the scrim so it reads the dark palette. */
+function Dialog({ children }: { children: ReactNode }) {
+  const t = useTokens();
+  return (
+    <View
+      accessibilityRole="alert"
+      accessibilityViewIsModal
+      style={{ backgroundColor: t.c3, borderRadius: radius.xxl, ...curve, borderWidth: 1, borderColor: t.edge, padding: space.xxl, gap: space.m }}
+    >
+      {children}
+    </View>
+  );
+}
+
+/** A bottom sheet body: rounded top, clear of the gesture bar. */
+function Sheet({ children, gap }: { children: ReactNode; gap: number }) {
+  const t = useTokens();
+  const insets = useContext(SafeAreaInsetsContext) ?? { bottom: 0 };
+  return (
+    <View
+      accessibilityViewIsModal
+      style={{
+        backgroundColor: t.c3,
+        borderTopLeftRadius: radius.xxl,
+        borderTopRightRadius: radius.xxl,
+        ...curve,
+        padding: space.xxl,
+        paddingBottom: space.xxl + insets.bottom,
+        gap,
+      }}
+    >
+      {children}
+    </View>
   );
 }
 
@@ -62,21 +98,17 @@ export function EndSessionScreen() {
 
   return (
     <Scrim align="center">
-      <View
-        accessibilityRole="alert"
-        accessibilityViewIsModal
-        style={{ backgroundColor: dark.c3, borderRadius: radius.xl, padding: space.xxl, gap: space.m }}
-      >
-        <Text style={[type.headline, { color: dark.on }]} accessibilityRole="header">
+      <Dialog>
+        <Text variant="headline" accessibilityRole="header">
           End this session?
         </Text>
-        <Text style={[type.body, { color: dark.osv }]}>
+        <Text color="osv" tabular>
           {`You finished ${done} of ${total} moves in ${spent}. Save it and come back within 24 hours, or end it now.`}
         </Text>
         <Btn label="Keep going" onPress={() => act().keepGoing()} />
         <Btn label="Save and finish later" kind="tonal" onPress={() => void act().saveForLater()} />
         <Btn label="End without saving" kind="outline" onPress={() => void act().endWithoutSaving()} />
-      </View>
+      </Dialog>
     </Scrim>
   );
 }
@@ -86,6 +118,25 @@ const FEEL: { value: FeelValue; title: string; sub: string }[] = [
   { value: 'good', title: 'Good', sub: 'Keep it' },
   { value: 'hard', title: 'Hard', sub: 'Ease off' },
 ];
+
+function FeelOption({ title, sub, onPress }: { title: string; sub: string; onPress: () => void }) {
+  const t = useTokens();
+  return (
+    <Touchable
+      label={`${title}. ${sub}`}
+      onPress={onPress}
+      minSize={64}
+      haptic="select"
+      spring={false}
+      style={{ borderRadius: radius.xl, ...curve, backgroundColor: t.c4, paddingHorizontal: space.l, paddingVertical: space.s, justifyContent: 'center' }}
+    >
+      <Text variant="title">{title}</Text>
+      <Text variant="bodySmall" color="osv">
+        {sub}
+      </Text>
+    </Touchable>
+  );
+}
 
 export function FeelScreen() {
   const nav = useNavigation<Nav>();
@@ -104,57 +155,39 @@ export function FeelScreen() {
 
   return (
     <Scrim align="bottom">
-      <View
-        accessibilityViewIsModal
-        style={{ backgroundColor: dark.c3, borderTopLeftRadius: radius.xl, borderTopRightRadius: radius.xl, padding: space.xxl, gap: space.m }}
-      >
-        <Text style={[type.headline, { color: dark.on }]} accessibilityRole="header">
+      <Sheet gap={space.m}>
+        <Text variant="headline" accessibilityRole="header">
           How does this feel?
         </Text>
-        <Text style={[type.bodySmall, { color: dark.osv }]}>
+        <Text variant="bodySmall" color="osv">
           One tap changes your next set. Your answer also shapes next week.
         </Text>
         {FEEL.map((o) => (
-          <Pressable
-            key={o.value}
-            accessibilityRole="button"
-            accessibilityLabel={`${o.title}. ${o.sub}`}
-            onPress={() => answer(o.value)}
-            style={({ pressed }) => [
-              {
-                minHeight: 56,
-                borderRadius: radius.l,
-                backgroundColor: dark.c4,
-                paddingHorizontal: space.l,
-                justifyContent: 'center',
-                opacity: pressed ? 0.8 : 1,
-              },
-            ]}
-          >
-            <Text style={[type.title, { color: dark.on }]}>{o.title}</Text>
-            <Text style={[type.bodySmall, { color: dark.osv }]}>{o.sub}</Text>
-          </Pressable>
+          <FeelOption key={o.value} title={o.title} sub={o.sub} onPress={() => answer(o.value)} />
         ))}
         <Btn label="Skip" kind="text" onPress={() => answer(null)} />
-      </View>
+      </Sheet>
     </Scrim>
   );
 }
 
 function SettingRow({ title, sub, value, onChange }: { title: string; sub: string; value: boolean; onChange: (v: boolean) => void }) {
+  const t = useTokens();
   return (
     <View style={{ minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: space.m }}>
       <View style={{ flex: 1 }}>
-        <Text style={[type.title, { color: dark.on }]}>{title}</Text>
-        <Text style={[type.bodySmall, { color: dark.osv }]}>{sub}</Text>
+        <Text variant="title">{title}</Text>
+        <Text variant="bodySmall" color="osv">
+          {sub}
+        </Text>
       </View>
       <Switch
         accessibilityRole="switch"
         accessibilityLabel={title}
         value={value}
         onValueChange={onChange}
-        trackColor={{ true: dark.p, false: dark.sv }}
-        thumbColor={dark.on}
+        trackColor={{ true: t.p, false: t.sv }}
+        thumbColor={t.on}
       />
     </View>
   );
@@ -174,22 +207,12 @@ export function SessionSettingsScreen() {
 
   return (
     <Scrim align="bottom">
-      <View
-        accessibilityViewIsModal
-        style={{ backgroundColor: dark.c3, borderTopLeftRadius: radius.xl, borderTopRightRadius: radius.xl, padding: space.xxl, gap: space.s }}
-      >
+      <Sheet gap={space.s}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={[type.headline, { color: dark.on, flex: 1 }]} accessibilityRole="header">
+          <Text variant="headline" style={{ flex: 1 }} accessibilityRole="header">
             Sound and voice
           </Text>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Close"
-            onPress={() => nav.goBack()}
-            style={[base.iconBtn, { width: 48, height: 48 }]}
-          >
-            <Icon name="close" size={24} color="on" />
-          </Pressable>
+          <IconBtn label="Close" icon="close" onPress={() => nav.goBack()} />
         </View>
         <SettingRow title="Voice coach" sub="Cues and count-ins, screen off too" value={prefs.voice} onChange={(voice) => set({ voice })} />
         <SettingRow
@@ -204,7 +227,9 @@ export function SessionSettingsScreen() {
           value={prefs.quiet}
           onChange={(quiet) => set({ quiet })}
         />
-        <Text style={[type.title, { color: dark.on, marginTop: space.s }]}>Rest between sets</Text>
+        <Text variant="title" style={{ marginTop: space.s }}>
+          Rest between sets
+        </Text>
         <RadioGroup
           label="Rest between sets"
           value={prefs.restS === 10 ? 15 : prefs.restS}
@@ -217,7 +242,7 @@ export function SessionSettingsScreen() {
         />
         <Notice text={restNote} />
         <InfoNote>Applies from your next rest, not the one you are in. Longer rests may push today past 15 minutes.</InfoNote>
-      </View>
+      </Sheet>
     </Scrim>
   );
 }

@@ -15,14 +15,16 @@ import {
   ListRow,
   OutlinedButton,
   ProgressBar,
-  PaywallPlanCard,
   StatusBanner,
   Text,
   TextButton,
   Touchable,
+  curve,
+  elevation,
   radius,
   space,
   useTokens,
+  type IconName,
 } from '../../ui';
 import {
   PurchasesUnavailableError,
@@ -70,6 +72,7 @@ export function PaywallScreen() {
   const [plan, setPlan] = useState<ProPlan>('pro_yearly');
   const [buy, setBuy] = useState<Buy>({ kind: 'idle' });
   const [restore, setRestore] = useState<Restore>({ kind: 'idle' });
+  const t = useTokens();
 
   const [tries, setTries] = useState(0);
   useEffect(() => {
@@ -144,29 +147,35 @@ export function PaywallScreen() {
         </>
       }
     >
-      <View style={{ gap: space.s }}>
-        <Text variant="labelStrong" color="p">
-          CasaFit Pro
-        </Text>
-        <Text variant="headline" accessibilityRole="header">
+      {/* One apricot hero: what Pro is, and where the free checks stand, before any price. */}
+      <View style={{ backgroundColor: t.pc, borderRadius: radius.xxl, ...curve, ...elevation.card, padding: space.xl, gap: space.m }}>
+        <Badge label="CasaFit Pro" tone="el" />
+        <Text variant="headline" color="opc" accessibilityRole="header">
           Check your form, as often as you like
         </Text>
-      </View>
-      <View style={{ gap: space.l }}>
-        <BenefitRow icon="photo_camera" title="Unlimited form checks" body="Squat, push-up, plank and lunge. On your phone." />
-        <BenefitRow icon="lock" title="Still private" body="Pro checks never record or upload anything." />
-        <BenefitRow icon="restore" title="Restores on any phone" body="Sign in with your account and Pro is back." />
+        <View style={{ flexDirection: 'row', gap: space.s, alignItems: 'flex-start' }}>
+          <Icon name="info" size={20} color="opc" />
+          <Text variant="bodySmall" color="opc" tabular style={{ flex: 1 }}>
+            {usedLine}
+          </Text>
+        </View>
       </View>
 
-      <View accessibilityRole="radiogroup" accessibilityLabel="Plans" style={{ gap: space.s }}>
+      <View style={{ backgroundColor: t.c3, borderRadius: radius.xl, ...curve, paddingHorizontal: space.l, paddingVertical: space.xs }}>
+        <Benefit icon="photo_camera" title="Unlimited form checks" body="Squat, push-up, plank and lunge. On your phone." first />
+        <Benefit icon="lock" title="Still private" body="Pro checks never record or upload anything." />
+        <Benefit icon="restore" title="Restores on any phone" body="Sign in with your account and Pro is back." />
+      </View>
+
+      <View accessibilityRole="radiogroup" accessibilityLabel="Plans" style={{ gap: space.m }}>
         {load.kind === 'loading' ? (
-          <View accessible accessibilityLabel="Loading plans" accessibilityLiveRegion="polite" style={{ gap: space.s }}>
+          <View accessible accessibilityLabel="Loading plans" accessibilityLiveRegion="polite" style={{ gap: space.m }}>
             <SkeletonCard />
             <SkeletonCard />
           </View>
         ) : null}
         {offerings && yearly ? (
-          <PaywallPlanCard
+          <PlanOption
             title="Yearly"
             price={yearly.priceString}
             caption={pct ? `Save ${pct}%` : undefined}
@@ -175,7 +184,7 @@ export function PaywallScreen() {
             onSelect={() => setPlan('pro_yearly')}
           />
         ) : null}
-        {offerings && monthly ? <PaywallPlanCard title="Monthly" price={monthly.priceString} selected={chosen?.plan === 'pro_monthly'} onSelect={() => setPlan('pro_monthly')} /> : null}
+        {offerings && monthly ? <PlanOption title="Monthly" price={monthly.priceString} selected={chosen?.plan === 'pro_monthly'} onSelect={() => setPlan('pro_monthly')} /> : null}
       </View>
 
       {load.kind === 'unavailable' ? (
@@ -195,7 +204,6 @@ export function PaywallScreen() {
       {restore.kind === 'none' ? <StatusBanner variant="plain">No purchase found for this store account.</StatusBanner> : null}
       {restore.kind === 'error' ? <StatusBanner variant="error">We could not reach the store. Try again in a moment.</StatusBanner> : null}
 
-      <InfoRow icon="info" text={usedLine} />
       <Text variant="label" color="osv">
         {"Renews automatically until you cancel it in your store's subscription settings."}
       </Text>
@@ -249,7 +257,81 @@ export function DisclosureLinks() {
 
 function SkeletonCard() {
   const t = useTokens();
-  return <View style={{ minHeight: 72, borderRadius: radius.xl, backgroundColor: t.c3 }} />;
+  return <View style={{ minHeight: 76, borderRadius: radius.xl, ...curve, backgroundColor: t.c3 }} />;
+}
+
+/** One line of the Paywall's benefit list: a terracotta icon, the benefit, and one plain sentence. */
+function Benefit({ icon, title, body, first }: { icon: IconName; title: string; body: string; first?: boolean }) {
+  const t = useTokens();
+  return (
+    <View style={{ flexDirection: 'row', gap: space.m, alignItems: 'flex-start', paddingVertical: space.m, borderTopWidth: first ? 0 : 1, borderTopColor: t.olv }}>
+      <Icon name={icon} color="p" />
+      <View style={{ flex: 1, gap: 2 }}>
+        <Text variant="title">{title}</Text>
+        <Text variant="bodySmall" color="osv">
+          {body}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+/**
+ * A plan on the Paywall, as a radio card. Both states are solid surfaces, so the card never
+ * depends on a hairline; the chosen one adds a terracotta outline and a check.
+ */
+function PlanOption({ title, price, caption, badge, selected, onSelect }: { title: string; price: string; caption?: string; badge?: string; selected: boolean; onSelect: () => void }) {
+  const t = useTokens();
+  return (
+    <Touchable
+      role="radio"
+      label={`${title}, ${price}${caption ? `, ${caption}` : ''}`}
+      selected={selected}
+      onPress={onSelect}
+      style={{
+        minHeight: 76,
+        borderRadius: radius.xl,
+        ...curve,
+        // The outline is always 2 px wide so choosing a plan does not shift the layout.
+        borderWidth: 2,
+        borderColor: selected ? t.p : t.c3,
+        backgroundColor: selected ? t.el : t.c3,
+        padding: space.l,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: space.m,
+      }}
+    >
+      <View
+        style={{
+          width: 24,
+          height: 24,
+          borderRadius: radius.round,
+          backgroundColor: selected ? t.p : 'transparent',
+          borderWidth: selected ? 0 : 2,
+          borderColor: t.ol,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {selected ? <Icon name="check" size={16} color="op" /> : null}
+      </View>
+      <View style={{ flex: 1, gap: 2 }}>
+        <Text variant="title">{title}</Text>
+        {caption ? (
+          <Text variant="bodySmall" color="osv" tabular>
+            {caption}
+          </Text>
+        ) : null}
+      </View>
+      <View style={{ alignItems: 'flex-end', gap: space.xs }}>
+        <Text variant="title" tabular>
+          {price}
+        </Text>
+        {badge ? <Badge label={badge} /> : null}
+      </View>
+    </Touchable>
+  );
 }
 
 // --- ManagePro ----------------------------------------------------------------------------
