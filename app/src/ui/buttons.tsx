@@ -1,7 +1,8 @@
 import React from 'react';
 import { ActivityIndicator, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Icon, Text, Touchable, type IconName } from './primitives';
-import { radius, space, type ColorKey } from './tokens';
+import type { Haptic } from './haptics';
+import { curve, radius, space, type ColorKey } from './tokens';
 import { useTokens } from './useTokens';
 
 export type ButtonProps = {
@@ -11,7 +12,7 @@ export type ButtonProps = {
   trailingIcon?: IconName;
   disabled?: boolean;
   loading?: boolean;
-  /** 48, 52 or 56 (default 56 per specs). */
+  /** 48, 52 or 56. 56 is the primary size and is drawn 54 high as a full pill. */
   height?: 48 | 52 | 56;
   tone?: 'primary' | 'tertiary';
   style?: StyleProp<ViewStyle>;
@@ -26,12 +27,15 @@ function Base({ kind, ...p }: ButtonProps & { kind: Kind }) {
   const { label, onPress, leadingIcon, trailingIcon, disabled, loading, height = 56, tone = 'primary', style } = p;
   const palette: Record<Kind, { bg: string; fg: ColorKey; border?: string }> = {
     filled: tone === 'tertiary' ? { bg: t.t, fg: 'ot' } : { bg: t.p, fg: 'op' },
-    tonal: { bg: t.sc, fg: 'osc' },
+    // Secondary buttons sit on the elevated surface with a hairline, so they read on peach and apricot cards.
+    tonal: { bg: t.el, fg: 'on', border: t.olv },
     outlined: { bg: 'transparent', fg: 'p', border: t.ol },
     text: { bg: 'transparent', fg: 'p' },
     destructive: { bg: t.er, fg: 'op' },
   };
   const c = palette[kind];
+  const h = height === 56 ? 54 : height;
+  const buzz: Haptic = kind === 'filled' || kind === 'destructive' ? 'tap' : 'none';
   return (
     <Touchable
       label={label}
@@ -40,11 +44,13 @@ function Base({ kind, ...p }: ButtonProps & { kind: Kind }) {
       onPress={loading ? undefined : onPress}
       disabled={disabled || loading}
       accessibilityState={{ busy: !!loading }}
-      minSize={kind === 'text' ? 48 : height}
+      haptic={buzz}
+      minSize={kind === 'text' ? 48 : h}
       style={[
         {
-          height: kind === 'text' ? undefined : height,
-          borderRadius: height === 56 ? radius.xxl : radius.l,
+          height: kind === 'text' ? undefined : h,
+          borderRadius: radius.round,
+          ...curve,
           backgroundColor: c.bg,
           borderWidth: c.border ? 1 : 0,
           borderColor: c.border,
@@ -98,8 +104,8 @@ export function IconButton({
   testID?: string;
 }) {
   const t = useTokens();
-  const bg = tone === 'filled' ? t.p : tone === 'tonal' ? t.sc : 'transparent';
-  const fg: ColorKey = tone === 'filled' ? 'op' : tone === 'tonal' ? 'osc' : 'on';
+  const bg = tone === 'filled' ? t.p : tone === 'tonal' ? t.el : 'transparent';
+  const fg: ColorKey = tone === 'filled' ? 'op' : 'on';
   return (
     <Touchable
       label={label}
@@ -107,7 +113,8 @@ export function IconButton({
       disabled={disabled}
       testID={testID}
       minSize={size}
-      style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}
+      haptic={tone === 'filled' ? 'tap' : 'none'}
+      style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: bg, borderWidth: tone === 'tonal' ? 1 : 0, borderColor: t.olv, alignItems: 'center', justifyContent: 'center' }}
     >
       <Icon name={icon} size={size >= 96 ? 48 : 24} color={fg} />
     </Touchable>
@@ -123,7 +130,7 @@ export function Fab({ label, icon, onPress }: { label: string; icon: IconName; o
       minSize={56}
       style={{
         height: 56,
-        borderRadius: radius.l,
+        borderRadius: radius.round,
         backgroundColor: t.pc,
         paddingHorizontal: space.xl,
         flexDirection: 'row',

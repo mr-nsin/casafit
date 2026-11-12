@@ -69,7 +69,7 @@ export function ConsentRow({ icon, purpose, subtitle, value, onChange }: { icon?
 export function FormCheckChip({ remaining, onPress }: { remaining: number; onPress: () => void }) {
   const t = useTokens();
   return (
-    <Touchable label={`Form check, ${remaining} free left`} onPress={onPress} style={{ height: 44, borderRadius: radius.m, backgroundColor: t.tc, paddingHorizontal: space.l, flexDirection: 'row', alignItems: 'center', gap: space.s }}>
+    <Touchable label={`Form check, ${remaining} free left`} onPress={onPress} style={{ height: 44, borderRadius: radius.round, backgroundColor: t.tc, paddingHorizontal: space.l, flexDirection: 'row', alignItems: 'center', gap: space.s }}>
       <Icon name="photo_camera" size={18} color="otc" />
       <Text variant="labelStrong" color="otc" tabular>
         {remaining} free

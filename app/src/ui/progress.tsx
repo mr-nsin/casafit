@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Animated, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { Icon, Text, Touchable, type IconName } from './primitives';
-import { radius, space, type ColorKey } from './tokens';
+import { curve, radius, space, type ColorKey } from './tokens';
 import { useMotion } from './useMotion';
 import { useTokens } from './useTokens';
 
@@ -139,8 +139,10 @@ export function SessionSegmentBar({
   const parts: { label: string; min: number; bg: string; fg: ColorKey }[] = [
     { label: 'Warm-up', min: warm, bg: t.tc, fg: 'otc' },
     { label: 'Work', min: work, bg: t.p, fg: 'op' },
-    onTonal ? { label: 'Cool-down', min: cool, bg: t.s, fg: 'os' } : { label: 'Cool-down', min: cool, bg: t.sc, fg: 'osc' },
+    // The cool-down tone is nearly the same as an apricot card, so there it takes the secondary colour.
+    onTonal ? { label: 'Cool-down', min: cool, bg: t.s, fg: 'os' } : { label: 'Cool-down', min: cool, bg: t.cd, fg: 'on' },
   ];
+  const h = Math.max(36, height);
   return (
     <View
       accessible
@@ -148,25 +150,16 @@ export function SessionSegmentBar({
       accessibilityLabel={`${warm} minutes warm-up, ${work} minutes work, ${cool} minutes cool-down`}
       style={{ gap: space.xs }}
     >
-      <View style={{ flexDirection: 'row', gap: 4, height }}>
+      {/* One pill track; the 2 px gaps show the canvas through, so each segment reads as a part. */}
+      <View style={{ flexDirection: 'row', gap: 2, height: h, borderRadius: radius.round, overflow: 'hidden', backgroundColor: t.bg }}>
         {parts.map((p) => (
-          <View
-            key={p.label}
-            style={{
-              flex: p.min,
-              backgroundColor: p.bg,
-              borderRadius: radius.m,
-              alignItems: 'center',
-              justifyContent: 'center',
-              ...(onTonal ? { borderWidth: 1, borderColor: t.opc } : null),
-            }}
-          >
+          <View key={p.label} style={{ flex: p.min, backgroundColor: p.bg, alignItems: 'center', justifyContent: 'center' }}>
             {showLabels && p.min >= 4 ? (
               <Text variant="label" color={p.fg} tabular>
                 {p.label} {p.min} min
               </Text>
-            ) : onTonal || captions ? (
-              <Text variant="label" color={p.fg} tabular>
+            ) : showLabels ? (
+              <Text variant="labelStrong" color={p.fg} tabular>
                 {p.min}
               </Text>
             ) : null}
@@ -281,17 +274,20 @@ export type DayKind = 'today' | 'planned' | 'active-rest' | 'rest' | 'done' | 'y
 export function DayPill({ day, kind, icon, caption, height = 88, onPress, a11yLabel }: { day: string; kind: DayKind; icon?: IconName; caption?: string; height?: number; onPress?: () => void; /** Spoken label; defaults to day, caption and "today". */ a11yLabel?: string }) {
   const t = useTokens();
   const isToday = kind === 'today';
-  const bg = isToday ? t.p : kind === 'rest' ? 'transparent' : t.c3;
-  const fg: ColorKey = isToday ? 'op' : 'on';
+  // Today is terracotta, upcoming days solid peach, rest and done days canvas with a hairline.
+  // No dashed borders: the icon and caption say what kind of day it is.
+  const quiet = kind === 'rest' || kind === 'active-rest' || kind === 'done';
+  const bg = isToday ? t.p : quiet ? t.bg : t.c3;
+  const fg: ColorKey = isToday ? 'op' : quiet ? 'osv' : 'on';
   const desc = `${day}${caption ? `, ${caption}` : ''}${isToday ? ', today' : ''}`;
   const style = {
     flex: 1,
     height,
-    borderRadius: radius.l,
+    borderRadius: radius.pill,
+    ...curve,
     backgroundColor: bg,
-    borderWidth: kind === 'active-rest' || kind === 'rest' ? 1 : 0,
-    borderStyle: kind === 'active-rest' ? ('dashed' as const) : ('solid' as const),
-    borderColor: t.ol,
+    borderWidth: quiet ? 1 : 0,
+    borderColor: t.olv,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     gap: space.xs,
@@ -319,7 +315,7 @@ export function DayPill({ day, kind, icon, caption, height = 88, onPress, a11yLa
     );
   }
   return (
-    <Touchable label={a11yLabel ?? desc} onPress={onPress} style={style}>
+    <Touchable label={a11yLabel ?? desc} onPress={onPress} haptic="select" style={style}>
       {body}
     </Touchable>
   );

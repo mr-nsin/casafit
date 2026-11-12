@@ -97,7 +97,7 @@ export const tabLabels: Record<TabRouteName, string> = {
   Progress: 'Progress',
 };
 
-/** MaterialIcons glyph names (stopgap; W0-ui replaces the tab bar with Material Symbols Rounded). */
+/** Icon names for the tabs, hyphenated; TabNavigator converts them for the kit's Icon. */
 export const tabIcons: Record<TabRouteName, 'sports-gymnastics' | 'restaurant' | 'bar-chart'> = {
   Workout: 'sports-gymnastics',
   Nutrition: 'restaurant',

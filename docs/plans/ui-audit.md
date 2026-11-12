@@ -13,10 +13,10 @@ Limits: Jest cannot see layout, so hit areas are only checked where a size is wr
 ## Summary
 
 - Routes covered: 68 (149 screen states)
-- Controls found: 1571; pressed: 1525
+- Controls found: 1572; pressed: 1526
 - Findings (distinct screen, control and issue): 24
-- By severity (control results): ok 1537, suspicious 34
-- By outcome: navigated 961, opened-overlay 13, state-changed 467, disabled 35, called-dep 41, nothing 1, noop-expected 42, skipped-hidden 11
+- By severity (control results): ok 1538, suspicious 34
+- By outcome: navigated 961, opened-overlay 13, state-changed 468, disabled 35, called-dep 41, nothing 1, noop-expected 42, skipped-hidden 11
 - Findings by issue: disabled-no-hint 22, no-exit 1, nothing-happens 1
 
 ## Broken (0)
@@ -110,7 +110,7 @@ None.
 | ManagePro | active, renews; trial; cancelled; billing issue; lapsed | 20 | 20 | 0 | 0 | 0 |
 | ProWelcome | after purchase; after restore | 4 | 4 | 0 | 0 | 0 |
 | Nutrition | no profile; profile and plan; calories hidden; load error | 10 | 7 | 0 | 1 | 0 |
-| NutriProfile | new; existing profile | 64 | 63 | 0 | 1 | 0 |
+| NutriProfile | new; existing profile | 65 | 64 | 0 | 1 | 0 |
 | NutriPlan | with plan; no profile | 16 | 16 | 0 | 0 | 0 |
 | FoodSearch | lunch; no slot | 106 | 106 | 0 | 0 | 0 |
 | Meal | dal for lunch; no food chosen | 23 | 23 | 0 | 0 | 0 |
@@ -176,5 +176,5 @@ Jest cannot judge these. Check each on the emulator or a phone.
 
 ## Known issues (allowlist)
 
-6 entries in `app/src/__audit__/allowlist.json`. Remove an entry when its control is fixed; the audit prints entries that no longer match.
+2 entries in `app/src/__audit__/allowlist.json`. Remove an entry when its control is fixed; the audit prints entries that no longer match.
 

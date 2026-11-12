@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { IconButton } from './buttons';
 import { Icon, Text, Touchable, type IconName } from './primitives';
-import { space } from './tokens';
+import { elevation, space } from './tokens';
 import { useTokens } from './useTokens';
 
 export type TopBarProps = {
@@ -87,7 +87,7 @@ export function BottomNav({ current, onSelect }: { current: TabKey | null; onSel
   return (
     <View
       accessibilityRole="tablist"
-      style={{ height: 80, backgroundColor: t.c2, flexDirection: 'row', paddingTop: space.m }}
+      style={{ height: 80, backgroundColor: t.el, borderTopWidth: 1, borderTopColor: t.olv, flexDirection: 'row', paddingTop: space.m, ...elevation.bar }}
     >
       {TABS.map((tab) => {
         const sel = tab.key === current;
@@ -106,12 +106,12 @@ export function BottomNav({ current, onSelect }: { current: TabKey | null; onSel
                 width: 64,
                 height: 32,
                 borderRadius: 16,
-                backgroundColor: sel ? t.sc : 'transparent',
+                backgroundColor: sel ? t.pc : 'transparent',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Icon name={tab.icon} color={sel ? 'osc' : 'osv'} />
+              <Icon name={tab.icon} color={sel ? 'p' : 'osv'} />
             </View>
             <Text variant={sel ? 'labelStrong' : 'label'} color={sel ? 'on' : 'osv'}>
               {tab.label}

@@ -19,6 +19,7 @@ import { defaultPreferences, usePreferences } from '../../state/preferences';
 import { setRepositories } from '../../state/storage';
 import { seedPlan } from '../session/browse/testkit';
 import { settingsRoutes } from '.';
+import { ICONS } from '../../ui/iconMap';
 import { configureSettingsDeps } from './deps';
 import { DeleteAccountScreen } from './DeleteAccountScreen';
 import { EditProfileScreen } from './EditProfileScreen';
@@ -69,8 +70,6 @@ jest.mock('../../ui/useMotion', () => {
     }),
   };
 });
-
-const glyphs: Record<string, number> = require('@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/MaterialIcons.json');
 
 let db: Awaited<ReturnType<typeof createTestDb>>;
 let notif: FakeNotificationService;
@@ -706,10 +705,10 @@ describe('registration and icons', () => {
     for (const Screen of [SettingsScreen, NotifyScreen, LanguageScreen, PrivacyScreen, ProfileScreen, EditProfileScreen, HelpScreen, DeleteAccountScreen]) {
       const { unmount } = await render(<Screen />);
       await settle();
-      for (const el of screen.queryAllByText(/^MaterialIcons:/)) names.add(String(el.props.children).replace('MaterialIcons:', ''));
+      for (const el of screen.queryAllByTestId(/^icon:/)) names.add(String(el.props.testID).replace('icon:', ''));
       unmount();
     }
     expect(names.size).toBeGreaterThan(20);
-    for (const n of names) expect({ n, ok: n !== 'fitness-center' && n in glyphs }).toEqual({ n, ok: true });
+    for (const n of names) expect({ n, ok: n !== 'fitness_center' && n in ICONS }).toEqual({ n, ok: true });
   });
 });

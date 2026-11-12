@@ -16,11 +16,39 @@ describe('tokens', () => {
   it('light and dark define the same roles', () => {
     expect(Object.keys(dark).sort()).toEqual(Object.keys(light).sort());
   });
-  it('matches the m3 CSS variables for key roles', () => {
-    expect(light.p).toBe('#9C4400');
+  it('holds the brand palette on the existing role keys', () => {
+    expect(light.bg).toBe('#FDFBF7'); // canvas
+    expect(light.c3).toBe('#F6E6DC'); // surfacePeach
+    expect(light.pc).toBe('#FADBC8'); // surfaceApricot
+    expect(light.el).toBe('#FFFDFB'); // surfaceElevated
+    expect(light.p).toBe('#9E4700'); // brandTerracotta
+    expect(light.pp).toBe('#7D3800'); // brandTerracottaPressed
+    expect(light.tc).toBe('#E4EC8A'); // accentChartreuse
+    expect(light.on).toBe('#2C221E'); // inkPrimary
+    expect(light.osv).toBe('#6E5D54'); // inkSecondary
+    expect(light.olv).toBe('#EAD8CC'); // borderSubtle
     expect(dark.p).toBe('#FFB68E');
-    expect(light.bg).toBe('#FFF8F5');
     expect(dark.bg).toBe('#1A120D');
+  });
+  it('keeps every text pairing at 4.5:1 or better, in light and dark', () => {
+    const lum = (hex: string) => {
+      const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+      return 0.2126 * c[0]! + 0.7152 * c[1]! + 0.0722 * c[2]!;
+    };
+    const ratio = (a: string, b: string) => {
+      const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+      return (hi! + 0.05) / (lo! + 0.05);
+    };
+    // [text, surface]
+    const pairs = [
+      ['on', 'bg'], ['on', 'c3'], ['on', 'pc'], ['on', 'el'], ['on', 'cd'],
+      ['osv', 'bg'], ['osv', 'c3'], ['osv', 'pc'],
+      ['p', 'bg'], ['p', 'c3'], ['p', 'pc'], ['p', 'el'],
+      ['op', 'p'], ['opc', 'pc'], ['osc', 'sc'], ['otc', 'tc'], ['os', 's'], ['eoc', 'erc'],
+    ] as const;
+    for (const t of [light, dark]) {
+      for (const [fg, bg] of pairs) expect({ fg, bg, ok: ratio(t[fg], t[bg]) >= 4.5 }).toEqual({ fg, bg, ok: true });
+    }
   });
   it('never defines text under 12 px', () => {
     for (const v of Object.values(type)) expect(v.fontSize).toBeGreaterThanOrEqual(MIN_FONT);
@@ -57,11 +85,12 @@ describe('UIProvider and useTokens', () => {
 });
 
 describe('Text', () => {
-  it('clamps below-minimum sizes via variants and uses Roboto Flex', async () => {
+  it('clamps below-minimum sizes via variants and uses Plus Jakarta Sans', async () => {
     await render(<Text testID="t">Hello</Text>);
     const style = [screen.getByTestId('t').props.style].flat(5).filter(Boolean);
     const merged = Object.assign({}, ...style);
-    expect(merged.fontFamily).toBe('RobotoFlex_400Regular');
+    expect(merged.fontFamily).toBe('PlusJakartaSans_500Medium');
+    expect(merged.fontWeight).toBeUndefined();
     expect(merged.fontSize).toBeGreaterThanOrEqual(12);
   });
 });

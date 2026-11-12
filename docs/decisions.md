@@ -2,6 +2,13 @@
 
 A short, dated log of design and technical decisions. Add a row at the top. Keep each entry to a few lines; link to the full discussion if there is one.
 
+## 2026-11-12 · App redesign: warm, tactile, illustrated
+- **Context:** the app works but looks generic and shows every exercise as an icon. The owner approved the brief in `plans/ui-redesign-master-prompt.md`.
+- **Decision:** (1) the new look replaces the Material 3 look in the app: Fraunces for headings, Plus Jakarta Sans for UI and numbers, Lucide icons at stroke 1.75, and the palette in the brief mapped onto the existing token keys in `app/src/ui/tokens.ts`; (2) two waves, the eight most-seen screens first, then the rest; (3) the dark theme is kept; (4) `project/m3-*.dc.html` become reference only and are not redrawn; (5) exercise animation starts with a three-move Lottie spike and falls back to two-pose illustrations.
+- **Kept:** 12 px minimum text, 44 px targets, focus rings, sentence case, no dumbbell, reduced motion, never shame, hideable calories, no hex outside `tokens.ts`, dark camera screens.
+- **Not done:** `@gorhom/bottom-sheet` is not adopted; the app's own `BottomSheet` stays to avoid a second native-gesture dependency on screens that were just fixed.
+- **See:** `plans/ui-redesign-master-prompt.md`, `CLAUDE.md` design rules.
+
 ## 2026-10-26 · ASP.NET Core on .NET 10 LTS for the backend
 - **Context:** the architecture report (`reports/CasaFit backend architecture options.md`) mapped NestJS to ASP.NET Core one-to-one and found the architecture, hosting and data choices unchanged. The product owner chose .NET.
 - **Decision:** ASP.NET Core Web API on .NET 10 LTS (C# 14). EF Core 10 + Npgsql replaces Prisma, Hangfire (PostgreSQL storage) replaces BullMQ, FluentValidation replaces class-validator, built-in JWT bearer auth and rate limiting replace the Nest guards and throttler, xUnit + `WebApplicationFactory` + Testcontainers replace Jest and Supertest. The mobile client stays React Native + TypeScript.

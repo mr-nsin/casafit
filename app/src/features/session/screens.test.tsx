@@ -50,18 +50,18 @@ describe('Player controls', () => {
     for (const [label, icon] of [
       ['End session', 'close'],
       ['Edit session', 'tune'],
-      ['Previous move', 'skip-previous'],
+      ['Previous move', 'skip_previous'],
       ['Pause', 'pause'],
-      ['Next move', 'skip-next'],
+      ['Next move', 'skip_next'],
     ] as const) {
       const btn = screen.getByLabelText(label);
       expect(btn).toBeTruthy();
-      expect(screen.getByText(`MaterialIcons:${icon}`)).toBeTruthy();
+      expect(screen.getAllByTestId(`icon:${icon}`).length).toBeGreaterThan(0);
     }
     expect(screen.queryByText('X')).toBeNull();
     expect(screen.queryByText('II')).toBeNull();
     // The selected intensity shows a check icon instead of a "v".
-    expect(screen.getByText('MaterialIcons:check')).toBeTruthy();
+    expect(screen.getAllByTestId('icon:check').length).toBeGreaterThan(0);
     expect(screen.queryByText(/^v /)).toBeNull();
   });
 });
