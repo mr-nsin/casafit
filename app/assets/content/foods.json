@@ -9691,6 +9691,19 @@
           "default": 1
         },
         {
+          "unit": "piece",
+          "labelKey": "unit.piece",
+          "gramsOrMl": 1.2,
+          "gramsPerUnit": 1.2,
+          "steps": [
+            5,
+            10,
+            15,
+            20
+          ],
+          "default": 5
+        },
+        {
           "unit": "g",
           "labelKey": "unit.g",
           "gramsOrMl": 1,
@@ -9743,6 +9756,19 @@
           "default": 1
         },
         {
+          "unit": "piece",
+          "labelKey": "unit.piece",
+          "gramsOrMl": 1.5,
+          "gramsPerUnit": 1.5,
+          "steps": [
+            5,
+            10,
+            15,
+            20
+          ],
+          "default": 5
+        },
+        {
           "unit": "g",
           "labelKey": "unit.g",
           "gramsOrMl": 1,
@@ -9793,6 +9819,19 @@
             4
           ],
           "default": 1
+        },
+        {
+          "unit": "piece",
+          "labelKey": "unit.piece",
+          "gramsOrMl": 2.5,
+          "gramsPerUnit": 2.5,
+          "steps": [
+            2,
+            4,
+            6,
+            8
+          ],
+          "default": 4
         },
         {
           "unit": "g",

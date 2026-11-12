@@ -24,7 +24,7 @@ import {
 import { usePreferences } from '../../../state/preferences';
 import type { FoodUnitName } from '../../../content/types';
 import { getNutritionDeps, todayKey } from '../deps';
-import { Kcal, joinParts, useShowCalories } from '../guard';
+import { Kcal, joinParts, useShowCalories, useTopInset } from '../guard';
 import { copyYesterday, logFood, useNav, useNutritionData } from '../hooks';
 import { SLOTS, SLOT_LABEL, slotForHour, entryLine, entryNutrients, proteinCopy, STATUS_WORD, totals } from '../logic';
 import { proteinStatus } from '../../../engine';
@@ -34,6 +34,7 @@ import { FoodEmptyView } from './FoodEmptyScreen';
 export function NutritionScreen() {
   const nav = useNav();
   const t = useTokens();
+  const topInset = useTopInset();
   const show = useShowCalories();
   const setShow = usePreferences((s) => s.setShowCalories);
   const data = useNutritionData();
@@ -47,14 +48,14 @@ export function NutritionScreen() {
 
   if (!data.loaded && data.error) {
     return (
-      <View style={{ flex: 1, backgroundColor: t.bg, padding: space.l }}>
+      <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: topInset, padding: space.l }}>
         <EmptyState icon="info" title="We could not load your food log" body="Your entries are safe on this phone. Try again in a moment.">
           <FilledButton label="Try again" leadingIcon="refresh" onPress={() => void data.reload()} />
         </EmptyState>
       </View>
     );
   }
-  if (!data.loaded) return <View style={{ flex: 1, backgroundColor: t.bg }} />;
+  if (!data.loaded) return <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: topInset }} />;
 
   if (data.today.length === 0) {
     return (
@@ -77,7 +78,7 @@ export function NutritionScreen() {
   const status = proteinStatus(tot.proteinG, targetP);
 
   return (
-    <View style={{ flex: 1, backgroundColor: t.bg }}>
+    <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: topInset }}>
       <TopBar
         leading="none"
         title={day}

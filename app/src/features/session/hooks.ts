@@ -36,10 +36,11 @@ export function stageRouteFor(style: SessionView['style']): 'Player' | 'Yoga' | 
  * Which base screen should be showing. null = no automatic move (idle, or an overlay is up).
  * Yoga and dance have no separate rest screen: they stay on their stage.
  */
-export function routeForView(v: Pick<SessionView, 'status' | 'kind' | 'style'>): SessionRouteName | 'Main' | null {
+export function routeForView(v: Pick<SessionView, 'status' | 'kind' | 'style'> & { ready?: boolean }): SessionRouteName | 'Main' | null {
   switch (v.status) {
     case 'paused':
-      return 'Paused';
+      // Ready: the stage itself shows the first move with a Start button.
+      return v.ready ? stageRouteFor(v.style) : 'Paused';
     case 'complete':
       return 'Complete';
     case 'ended':
@@ -80,7 +81,8 @@ export function useSessionRouting(current: SessionRouteName): void {
   });
   const style = useSessionStore((s) => s.plan?.style ?? 'normal');
   const trial = useSessionStore((s) => s.trial);
-  const target = routeForView({ status, kind, style });
+  const ready = useSessionStore((s) => s.pausedReason === 'ready');
+  const target = routeForView({ status, kind, style, ready });
   useEffect(() => {
     // A 30-second trial never goes to Complete or Home: it goes back to the Exercise screen it came from.
     if (trial && (status === 'complete' || status === 'ended')) {

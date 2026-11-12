@@ -1,6 +1,7 @@
 // Pure rules for the onboarding screens. No React, no storage: easy to test.
 
 import type { OnboardingDraft } from '../../db/repositories';
+import { parseHeightCm, parseWeightKg } from '../../ui/measureMath';
 import type { BodyPart, Experience, HealthFlag, PainArea, Sex, Style } from '../../engine';
 
 export const MIN_AGE = 18;
@@ -11,9 +12,9 @@ export function ageFrom(birthYear: number, thisYear: number): number {
 export const isAdult = (birthYear: number | null, thisYear: number): boolean =>
   birthYear !== null && ageFrom(birthYear, thisYear) >= MIN_AGE;
 
-/** Years offered on Age: from last year back 100 years, so an under-18 answer is possible. */
+/** Adults only: the newest year offered is the current year minus 18. */
 export function birthYearOptions(thisYear: number): number[] {
-  return Array.from({ length: 100 }, (_, i) => thisYear - 1 - i);
+  return Array.from({ length: 83 }, (_, i) => thisYear - 18 - i);
 }
 
 export function canContinueAge(d: Pick<OnboardingDraft, 'birthYear' | 'confirmed18'>, thisYear: number): boolean {
@@ -43,9 +44,10 @@ export function canContinueGoals(d: Pick<OnboardingDraft, 'goal' | 'bodyParts' |
   return true;
 }
 
-export const SEX_OPTIONS: { value: Sex; label: string }[] = [
-  { value: 'woman', label: 'Woman' },
-  { value: 'man', label: 'Man' },
+/** Stored values stay man, woman and other; the labels are Male, Female and Other. */
+export const GENDER_OPTIONS: { value: Sex; label: string }[] = [
+  { value: 'man', label: 'Male' },
+  { value: 'woman', label: 'Female' },
   { value: 'other', label: 'Other' },
 ];
 export const EXPERIENCE_OPTIONS: { value: Experience; label: string }[] = [
@@ -69,20 +71,8 @@ export const HEALTH_OPTIONS: { value: HealthFlag | 'none'; label: string }[] = [
 ];
 
 /** Height and weight are optional. Empty is fine; a filled value must be in range. */
-export function parseHeight(raw: string): { value: number | null; error?: string } {
-  const t = raw.trim();
-  if (!t) return { value: null };
-  const n = Number(t);
-  if (!Number.isFinite(n) || n < 80 || n > 260) return { value: null, error: 'Enter a height between 80 and 260 cm, or skip.' };
-  return { value: Math.round(n) };
-}
-export function parseWeight(raw: string): { value: number | null; error?: string } {
-  const t = raw.trim();
-  if (!t) return { value: null };
-  const n = Number(t);
-  if (!Number.isFinite(n) || n < 20 || n > 300) return { value: null, error: 'Enter a weight between 20 and 300 kg, or skip.' };
-  return { value: Math.round(n * 10) / 10 };
-}
+export const parseHeight = (raw: string): { value: number | null; error?: string } => parseHeightCm(raw);
+export const parseWeight = (raw: string): { value: number | null; error?: string } => parseWeightKg(raw);
 
 /** Even split of the training days across the chosen styles. First styles get the extra days. */
 export function defaultMix(styles: readonly Style[], days: number): Partial<Record<Style, number>> {

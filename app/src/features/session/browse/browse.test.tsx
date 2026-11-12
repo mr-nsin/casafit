@@ -11,7 +11,7 @@ import { useVerifyOutcome } from '../../onboarding/flowState';
 import { configureSessionDeps } from '../deps';
 import { sessionRoutes, loadResumableSession } from '../index';
 import { useSessionStore } from '../store';
-import { createHarness, makePlan } from '../testkit';
+import { begin, createHarness, makePlan } from '../testkit';
 import { HomeRestScreen, HomeScreen } from './HomeScreen';
 import { PlanScreen, WeekPlanScreen, WhyScreen } from './PlanScreens';
 import { loadContent } from '../../../content';
@@ -189,7 +189,7 @@ describe('Home, training day', () => {
     await fireEvent.press(await screen.findByLabelText('Start'));
     expect(mockNav.navigate).toHaveBeenCalledWith('Player');
     const s = useSessionStore.getState();
-    expect(s.status).toBe('active');
+    expect(s.status).toBe('paused'); // Ready: the clock waits for Start
     expect(s.plan?.title).toBe('Push 15');
     expect(s.planDay).toBe(0);
   });
@@ -305,7 +305,7 @@ describe('Home, training day', () => {
 
 describe('Home, resume', () => {
   async function pauseOne() {
-    harness.store.getState().start(makePlan({ title: 'Push 15' }), { planWeek: 1, planDay: 0 });
+    begin(harness.store, makePlan({ title: 'Push 15' }), { planWeek: 1, planDay: 0 });
     harness.advance(200_000);
     harness.store.getState().pause('user');
     await harness.store.getState().requestEnd();
@@ -347,7 +347,7 @@ describe('Home, resume', () => {
 
 describe('Home, finished but not saved', () => {
   async function finishOne() {
-    harness.store.getState().start(makePlan({ title: 'Push 15' }), { planWeek: 1, planDay: 0 });
+    begin(harness.store, makePlan({ title: 'Push 15' }), { planWeek: 1, planDay: 0 });
     harness.advance(900_000);
     expect(harness.store.getState().status).toBe('complete');
     harness.store.getState().reset(); // the app was closed before Complete was left
@@ -573,7 +573,7 @@ describe('WeekPlan', () => {
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Mix');
     await fireEvent.press(screen.getByLabelText('Start today'));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Player');
-    expect(useSessionStore.getState().status).toBe('active');
+    expect(useSessionStore.getState().status).toBe('paused'); // Ready: the clock waits for Start
   });
 
   it('turns Start today off on a rest day and goes back', async () => {
@@ -715,7 +715,7 @@ describe('Plan', () => {
     await screen.findByText("Today's plan");
     await fireEvent.press(screen.getByLabelText('Start session'));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Player');
-    expect(useSessionStore.getState().status).toBe('active');
+    expect(useSessionStore.getState().status).toBe('paused'); // Ready: the clock waits for Start
     await fireEvent.press(screen.getByLabelText('Edit'));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Editor', { planDayId: '1-0', from: 'plan' });
     await fireEvent.press(screen.getByLabelText('Why this plan'));

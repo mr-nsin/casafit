@@ -2,11 +2,12 @@
 // Player, Rest, Paused, EndSession, Feel and SessionSettings open dark). These are local
 // until the ui lane's shared components are merged; swap them then.
 
-import { useState, type ReactNode } from 'react';
-import { StatusBar } from 'react-native';
+import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { AccessibilityInfo, Platform, StatusBar } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Pressable, StyleSheet, Text, View, type PressableProps, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 import { dark, radius, space, type } from '../../theme';
 import { Icon, UIProvider } from '../../ui';
@@ -59,9 +60,11 @@ export function DarkScope({ children }: { children: ReactNode }) {
 }
 
 export function Screen({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
+  // Edge to edge: keep the header (and its Close button) below the status bar, and the footer above the gesture bar.
+  const insets = useContext(SafeAreaInsetsContext) ?? { top: 0, bottom: 0 };
   return (
     <DarkScope>
-      <View style={[styles.screen, style]}>{children}</View>
+      <View style={[styles.screen, { paddingTop: styles.screen.paddingTop + insets.top, paddingBottom: styles.screen.paddingBottom + insets.bottom }, style]}>{children}</View>
     </DarkScope>
   );
 }
@@ -73,8 +76,11 @@ export function IconBtn({
   size = 48,
   tone = 'plain',
   disabled,
+  hint,
 }: {
   label: string;
+  /** Why the button is off, read out by screen readers. */
+  hint?: string;
   /** Material icon name from the UI kit, for example close or skip_next. */
   icon: string;
   onPress: () => void;
@@ -88,6 +94,7 @@ export function IconBtn({
     <FocusPressable
       accessibilityRole="button"
       accessibilityLabel={label}
+      accessibilityHint={hint}
       accessibilityState={{ disabled: !!disabled }}
       disabled={disabled}
       onPress={onPress}
@@ -297,7 +304,13 @@ export function RadioGroup<T extends string | number>({
             onPress={() => onChange(o.value)}
             style={({ focused }) => [
               styles.radio,
-              { backgroundColor: selected ? tk.pc : tk.c3, opacity: o.disabled ? 0.4 : 1 },
+              {
+                backgroundColor: selected ? tk.pc : tk.c3,
+                // A clear outline on the chosen option, so the selected state is obvious at a glance.
+                borderWidth: 2,
+                borderColor: selected ? tk.p : 'transparent',
+                opacity: o.disabled ? 0.4 : 1,
+              },
               focused && styles.focus,
             ]}
           >
@@ -316,6 +329,29 @@ export function InfoNote({ children }: { children: ReactNode }) {
   return (
     <View style={styles.note}>
       <Text style={[type.bodySmall, { color: tk.osv }]}>{children}</Text>
+    </View>
+  );
+}
+
+/**
+ * A short status line for the result of a tap that is otherwise quiet (Easier, +30s rest).
+ * Always mounted so screen readers announce each change; iOS gets an explicit announcement.
+ */
+export function Notice({ text }: { text: string | null }) {
+  useEffect(() => {
+    if (text && Platform.OS === 'ios') AccessibilityInfo.announceForAccessibility(text);
+  }, [text]);
+  return (
+    <View
+      accessibilityLiveRegion="polite"
+      style={text ? { backgroundColor: tk.c3, borderRadius: radius.m, paddingHorizontal: space.l, paddingVertical: space.s, marginTop: space.s, flexDirection: 'row', gap: space.s, alignItems: 'center' } : { height: 0 }}
+    >
+      {text ? <Icon name="info" size={18} color="osv" /> : null}
+      {text ? (
+        <Text testID="session-notice" style={[type.bodySmall, { color: tk.on, flex: 1 }]}>
+          {text}
+        </Text>
+      ) : null}
     </View>
   );
 }

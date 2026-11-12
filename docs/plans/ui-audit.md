@@ -1,6 +1,6 @@
 # UI audit: tap every control
 
-Generated 2026-11-11 by `npm run audit` (`app/src/__audit__`). Machine-readable copy: `app/audit-report.json`. Known issues live in `app/src/__audit__/allowlist.json`; a finding that is not listed there fails the audit test.
+Generated 2026-11-12 by `npm run audit` (`app/src/__audit__`). Machine-readable copy: `app/audit-report.json`. Known issues live in `app/src/__audit__/allowlist.json`; a finding that is not listed there fails the audit test.
 
 ## How it works
 
@@ -12,36 +12,25 @@ Limits: Jest cannot see layout, so hit areas are only checked where a size is wr
 
 ## Summary
 
-- Routes covered: 68 (148 screen states)
-- Controls found: 1519; pressed: 1476
-- Findings (distinct screen, control and issue): 39
-- By severity (control results): ok 1465, suspicious 36, broken 9, ok-but-unlabelled 9
-- By outcome: navigated 955, opened-overlay 13, state-changed 432, disabled 32, called-dep 41, nothing 4, no-handler 9, noop-expected 31, skipped-hidden 2
-- Findings by issue: keyboard-swallows-first-tap 4, no-handler 2, disabled-no-hint 21, no-exit 2, nothing-happens 4, no-accessible-label 6
+- Routes covered: 68 (149 screen states)
+- Controls found: 1571; pressed: 1525
+- Findings (distinct screen, control and issue): 24
+- By severity (control results): ok 1537, suspicious 34
+- By outcome: navigated 961, opened-overlay 13, state-changed 467, disabled 35, called-dep 41, nothing 1, noop-expected 42, skipped-hidden 11
+- Findings by issue: disabled-no-hint 22, no-exit 1, nothing-happens 1
 
-## Broken (6)
+## Broken (0)
 
-| Screen | Control | Issue | Seen in | Detail | Likely cause |
-|---|---|---|---|---|---|
-| EditProfile | (ScrollView with 8 controls and a text field) | keyboard-swallows-first-tap | edit | ScrollView has no keyboardShouldPersistTaps="handled". With the keyboard open, the first tap on a control inside it only closes the keyboard. Confirm on a devic | `src/features/settings/Page.tsx:36` |
-| FoodSearch | (ScrollView with 40 controls, text field outside it) | keyboard-swallows-first-tap | lunch; no slot | ScrollView has no keyboardShouldPersistTaps="handled". With the keyboard open, the first tap on a control inside it only closes the keyboard. Confirm on a devic | `src/features/nutrition/screens/FoodSearchScreen.tsx:54` |
-| Help | (ScrollView with 8 controls and a text field) | keyboard-swallows-first-tap | closed; privacy open | ScrollView has no keyboardShouldPersistTaps="handled". With the keyboard open, the first tap on a control inside it only closes the keyboard. Confirm on a devic | `src/features/settings/Page.tsx:36` |
-| Picker | (ScrollView with 7 controls, text field outside it) | keyboard-swallows-first-tap | add; swap | ScrollView has no keyboardShouldPersistTaps="handled". With the keyboard open, the first tap on a control inside it only closes the keyboard. Confirm on a devic | `src/features/session/browse/EditScreens.tsx:482` |
-| Settings | Account, Signed in with Google as p***@gmail.com | no-handler | free user; Pro user | Looks pressable (role or touch responder) but no onPress, onLongPress, onPressIn or onPressOut reaches it. | `src/features/settings/SettingsScreen.tsx:114` |
-| WeekOne | Thu, Today, today | no-handler | after build | Looks pressable (role or touch responder) but no onPress, onLongPress, onPressIn or onPressOut reaches it. | `src/features/onboarding/screens/Finish.tsx:161` |
+None.
 
-## Suspicious (6)
+## Suspicious (2)
 
 | Screen | Control | Issue | Seen in | Detail | Likely cause |
 |---|---|---|---|---|---|
 | Offline | (whole screen: no way out) | no-exit | offline | No control on this screen (or in what it opens) navigates anywhere. The user can only leave with the system back gesture, if the screen allows it. | unknown |
-| Player | Previous move | nothing-happens | warm-up (real plan) | Pressed with a handler present, but no navigation, store, screen, dependency or overlay change followed. | `src/features/session/screens/StageScreen.tsx:135` |
-| ReverseTimer | (whole screen: no way out) | no-exit | no bout | No control on this screen (or in what it opens) navigates anywhere. The user can only leave with the system back gesture, if the screen allows it. | unknown |
-| ReverseTimer | Close | nothing-happens | no bout | Pressed with a handler present, but no navigation, store, screen, dependency or overlay change followed. | `src/features/steps/ReverseScreens.tsx:167` |
-| ReverseTimer | Stop bout | nothing-happens | no bout | Pressed with a handler present, but no navigation, store, screen, dependency or overlay change followed. | `src/features/steps/ReverseScreens.tsx:168` |
-| Verify | Continue with email > One-time code, 0 of 6 digits entered | nothing-happens | email prefilled | Pressed with a handler present, but no navigation, store, screen, dependency or overlay change followed. | `src/features/onboarding/screens/Verify.tsx:277` |
+| Verify | Continue with email > One-time code, 0 of 6 digits entered | nothing-happens | email prefilled | Pressed with a handler present, but no navigation, store, screen, dependency or overlay change followed. | `src/features/onboarding/screens/Verify.tsx:279` |
 
-## Disabled with no explanation (review: usually correct for that state) (21)
+## Disabled with no explanation (review: usually correct for that state) (22)
 
 | Screen | Control | Issue | Seen in | Detail | Likely cause |
 |---|---|---|---|---|---|
@@ -61,22 +50,16 @@ Limits: Jest cannot see layout, so hit areas are only checked where a size is wr
 | NutriProfile | Build my food plan | disabled-no-hint | new | Disabled with no hint saying why (may be correct for this state). | unknown |
 | Nutrition | Same as yesterday | disabled-no-hint | no profile; profile and plan; calories hidden | Disabled with no hint saying why (may be correct for this state). | unknown |
 | Reverse | Start a bout | disabled-no-hint | ready | Disabled with no hint saying why (may be correct for this state). | unknown |
+| ReverseTimer | Stop bout | disabled-no-hint | no bout | Disabled with no hint saying why (may be correct for this state). | unknown |
 | Verify | Continue with email | disabled-no-hint | email step | Disabled with no hint saying why (may be correct for this state). | unknown |
 | Verify | Continue with email > Verify and continue | disabled-no-hint | email prefilled | Disabled with no hint saying why (may be correct for this state). | unknown |
 | WeekPlan | Next week | disabled-no-hint | this week; rest day today | Disabled with no hint saying why (may be correct for this state). | unknown |
 | WeekPlan | Previous week | disabled-no-hint | this week; rest day today | Disabled with no hint saying why (may be correct for this state). | unknown |
 | WeekPlan | Start today | disabled-no-hint | rest day today | Disabled with no hint saying why (may be correct for this state). | unknown |
 
-## Works but has no accessible name (6)
+## Works but has no accessible name (0)
 
-| Screen | Control | Issue | Seen in | Detail | Likely cause |
-|---|---|---|---|---|---|
-| Notify | (no label switch/switch, near "recapYour week in one card, inside this ") | no-accessible-label | permission granted; permission denied; not asked |  | unknown |
-| Privacy | (no label switch/switch, near "answersPain areas and health flags, to k") | no-accessible-label | consents |  | unknown |
-| Privacy | (no label switch/switch, near "countFrom your phone's sensor or Health ") | no-accessible-label | consents |  | unknown |
-| Privacy | (no label switch/switch, near "for form checksOnly while a check runs. ") | no-accessible-label | consents |  | unknown |
-| Privacy | (no label switch/switch, near "improvementAnonymous usage counts. No he") | no-accessible-label | consents |  | unknown |
-| Settings | (no label switch/switch, near "caloriesShow protein only") | no-accessible-label | free user; Pro user |  | unknown |
+None.
 
 ## Coverage by screen
 
@@ -89,12 +72,12 @@ Limits: Jest cannot see layout, so hit areas are only checked where a size is wr
 | Offline | offline | 3 | 3 | 0 | 1 | 0 |
 | WelcomeBack | returning user | 1 | 1 | 0 | 0 | 0 |
 | Goals | empty; body part goal | 25 | 24 | 0 | 1 | 0 |
-| About | filled; empty | 60 | 60 | 0 | 0 | 0 |
+| About | filled; empty | 74 | 74 | 0 | 0 | 0 |
 | Mix | three styles | 8 | 5 | 0 | 3 | 0 |
 | Health | none ticked; flag ticked | 8 | 8 | 0 | 0 | 0 |
 | Building | building | 1 | 1 | 0 | 0 | 0 |
-| WeekOne | after build | 9 | 2 | 1 | 0 | 0 |
-| Workout | training day; training day, Pro; training day, steps and food logged; calories hidden; rest day, walk; rest day, stretch; resume card; finished but not saved; comeback after 9 days; no plan; plan load error | 276 | 276 | 0 | 0 | 0 |
+| WeekOne | after build | 2 | 2 | 0 | 0 | 0 |
+| Workout | training day; training day, Pro; training day, steps and food logged; calories hidden; rest day, walk; rest day, stretch; resume card; finished but not saved; comeback after 9 days; no plan; plan load error | 274 | 274 | 0 | 0 | 0 |
 | HomeRest | rest layout | 13 | 13 | 0 | 0 | 0 |
 | WeekPlan | this week; rest day today; no plan | 40 | 35 | 0 | 3 | 0 |
 | Why | answers; no pain areas | 15 | 15 | 0 | 0 | 0 |
@@ -102,12 +85,12 @@ Limits: Jest cannot see layout, so hit areas are only checked where a size is wr
 | Library | all plans; knee pain | 38 | 38 | 0 | 0 | 0 |
 | BodyPart | core; arms with wrist pain | 35 | 35 | 0 | 0 | 0 |
 | Editor | today; from plan; add a move; no session on day | 89 | 81 | 0 | 4 | 0 |
-| Picker | add; swap | 78 | 76 | 1 | 0 | 0 |
+| Picker | add; swap | 78 | 76 | 0 | 0 | 0 |
 | Parts | cool-down; warm-up; work | 18 | 18 | 0 | 0 | 0 |
 | Lunge | default; with excluded move | 6 | 6 | 0 | 0 | 0 |
 | Exercise | squat; plank (hold); Pro user; unknown move | 22 | 21 | 0 | 1 | 0 |
 | CheckIn | weekly check-in; no sessions | 24 | 24 | 0 | 0 | 0 |
-| Player | warm-up (real plan); work set; form-checkable move; form-checkable move, Pro; no session | 43 | 43 | 0 | 1 | 0 |
+| Player | warm-up (real plan); ready to start; work set; form-checkable move; form-checkable move, Pro; no session | 55 | 53 | 0 | 0 | 0 |
 | Yoga | work pose | 8 | 8 | 0 | 0 | 0 |
 | Dance | work move | 7 | 7 | 0 | 0 | 0 |
 | Rest | between sets | 4 | 4 | 0 | 0 | 0 |
@@ -127,28 +110,28 @@ Limits: Jest cannot see layout, so hit areas are only checked where a size is wr
 | ManagePro | active, renews; trial; cancelled; billing issue; lapsed | 20 | 20 | 0 | 0 | 0 |
 | ProWelcome | after purchase; after restore | 4 | 4 | 0 | 0 | 0 |
 | Nutrition | no profile; profile and plan; calories hidden; load error | 10 | 7 | 0 | 1 | 0 |
-| NutriProfile | new; existing profile | 36 | 35 | 0 | 1 | 0 |
+| NutriProfile | new; existing profile | 64 | 63 | 0 | 1 | 0 |
 | NutriPlan | with plan; no profile | 16 | 16 | 0 | 0 | 0 |
-| FoodSearch | lunch; no slot | 106 | 106 | 1 | 0 | 0 |
+| FoodSearch | lunch; no slot | 106 | 106 | 0 | 0 | 0 |
 | Meal | dal for lunch; no food chosen | 23 | 23 | 0 | 0 | 0 |
 | FoodEmpty | nothing logged | 6 | 5 | 0 | 1 | 0 |
 | Steps | granted; needs primer; denied; unavailable | 21 | 21 | 0 | 0 | 0 |
 | StepsPermission | primer | 3 | 3 | 0 | 0 | 0 |
 | Reverse | ready; blocked by a health flag | 6 | 5 | 0 | 1 | 0 |
-| ReverseTimer | bout running; no bout | 4 | 4 | 0 | 3 | 0 |
+| ReverseTimer | bout running; no bout | 4 | 3 | 0 | 1 | 0 |
 | Progress | with history; empty; load error | 2 | 2 | 0 | 0 | 0 |
 | ProgressEmpty | nothing yet | 1 | 1 | 0 | 0 | 0 |
 | Recap | with history; empty | 4 | 4 | 0 | 0 | 0 |
 | Learn | myths | 21 | 21 | 0 | 0 | 0 |
 | Myth | first myth; unknown id | 5 | 5 | 0 | 0 | 0 |
 | Concepts | first concept; no id | 22 | 22 | 0 | 0 | 0 |
-| Settings | free user; Pro user | 52 | 50 | 1 | 0 | 1 |
-| Notify | permission granted; permission denied; not asked | 53 | 52 | 0 | 1 | 1 |
+| Settings | free user; Pro user | 52 | 50 | 0 | 0 | 0 |
+| Notify | permission granted; permission denied; not asked | 53 | 49 | 0 | 1 | 0 |
 | Language | languages | 7 | 7 | 0 | 0 | 0 |
-| Privacy | consents | 13 | 13 | 0 | 0 | 4 |
+| Privacy | consents | 13 | 9 | 0 | 0 | 0 |
 | Profile | signed in; no name | 24 | 24 | 0 | 0 | 0 |
-| EditProfile | edit | 14 | 14 | 1 | 0 | 0 |
-| Help | closed; privacy open | 20 | 20 | 1 | 0 | 0 |
+| EditProfile | edit | 21 | 21 | 0 | 0 | 0 |
+| Help | closed; privacy open | 20 | 20 | 0 | 0 | 0 |
 | DeleteAccount | confirm; offline | 9 | 9 | 0 | 0 | 0 |
 
 ## Needs device (hand to the Maestro pass)
@@ -193,5 +176,5 @@ Jest cannot judge these. Check each on the emulator or a phone.
 
 ## Known issues (allowlist)
 
-12 entries in `app/src/__audit__/allowlist.json`. Remove an entry when its control is fixed; the audit prints entries that no longer match.
+6 entries in `app/src/__audit__/allowlist.json`. Remove an entry when its control is fixed; the audit prints entries that no longer match.
 

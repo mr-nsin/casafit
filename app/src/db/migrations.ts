@@ -116,6 +116,24 @@ export const MIGRATIONS: { id: number; name: string; sql: string[] }[] = [
       `CREATE INDEX idx_offline_queue_due ON offline_queue (status, next_attempt_at, seq)`,
     ],
   },
+  {
+    id: 2,
+    name: 'meals_per_day_1_to_5',
+    sql: [
+      `CREATE TABLE nutrition_profile_new (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        diet TEXT NOT NULL CHECK (diet IN ('veg','egg','nonveg','jain')),
+        allergies TEXT NOT NULL DEFAULT '[]', allergy_other TEXT,
+        goal TEXT NOT NULL CHECK (goal IN ('maintain','lose_gently','gain')),
+        meals_per_day INTEGER NOT NULL CHECK (meals_per_day BETWEEN 1 AND 5),
+        target_kcal INTEGER NOT NULL, target_protein_g INTEGER NOT NULL,
+        computed_at INTEGER NOT NULL, inputs_hash TEXT NOT NULL)`,
+      `INSERT INTO nutrition_profile_new SELECT id, diet, allergies, allergy_other, goal, meals_per_day,
+        target_kcal, target_protein_g, computed_at, inputs_hash FROM nutrition_profile`,
+      `DROP TABLE nutrition_profile`,
+      `ALTER TABLE nutrition_profile_new RENAME TO nutrition_profile`,
+    ],
+  },
 ];
 
 export async function runMigrations(d: SqlDriver): Promise<number> {

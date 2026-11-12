@@ -93,7 +93,7 @@ export function ChipGroup<V extends string>({
   ));
   const container = { flexDirection: 'row', flexWrap: scrollable ? 'nowrap' : 'wrap', gap: space.s } as const;
   return scrollable ? (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} accessibilityLabel={label} contentContainerStyle={container}>
+    <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false} accessibilityLabel={label} contentContainerStyle={container}>
       {chips}
     </ScrollView>
   ) : (
@@ -195,7 +195,7 @@ export function Tabs<V extends string>({
     );
   });
   return scrollable ? (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} accessibilityRole="tablist">
+    <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false} accessibilityRole="tablist">
       {content}
     </ScrollView>
   ) : (
@@ -330,6 +330,9 @@ export function ToggleRow({
         onValueChange={onChange}
         disabled={disabled}
         accessible={false}
+        accessibilityLabel={a11yLabel ?? title}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
         trackColor={{ true: t.p, false: t.sv }}
         thumbColor={value ? t.op : t.ol}
       />

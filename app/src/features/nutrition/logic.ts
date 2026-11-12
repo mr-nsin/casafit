@@ -72,6 +72,34 @@ export const fractionLabel = (n: number): string => {
   return whole === 0 ? f : `${whole} ${f}`;
 };
 
+/** Nouns that already say what one piece is (a glass, a slice). Other counted foods read "pieces". */
+const CONTAINER_NOUNS = new Set(['glass', 'cup', 'slice', 'packet', 'small packet', 'serving', 'scoop', 'bar', 'square', 'cube', 'cob']);
+
+/** "piece" or "pieces", or the food's own container word ("glass", "slice") when it has one. */
+export function pieceWord(content: Content, food: FoodItem, qty: number): string {
+  const u = food.units.find((x) => x.unit === 'piece');
+  if (!u) return qty === 1 ? 'piece' : 'pieces';
+  const noun = content.t(u.labelKey, { count: 1 });
+  if (CONTAINER_NOUNS.has(noun)) return content.t(u.labelKey, { count: qty });
+  return qty === 1 ? 'piece' : 'pieces';
+}
+
+/** A quantity in words people use: "5 pieces", "1 glass", "1 1/2 katori". */
+export function portionText(content: Content, food: FoodItem, unit: FoodUnitName, qty: number): string {
+  if (unit !== 'piece' || !food.units.some((x) => x.unit === 'piece')) return content.unitLabel(food, unit, qty);
+  return `${fractionLabel(qty)} ${pieceWord(content, food, qty)}`;
+}
+
+/** Foods sold or eaten one at a time offer a piece count first (almonds, not chamach of almonds). */
+export function defaultUnitOf(food: FoodItem): FoodUnitName {
+  const first = food.units[0]!;
+  if (first.unit === 'chamach' && food.units.some((x) => x.unit === 'piece')) return 'piece';
+  return first.unit;
+}
+
+/** A piece count can be any whole number, not only the quick steps. */
+export const MAX_PIECES = 40;
+
 export function snapshotFor(content: Content, food: FoodItem, unit: FoodUnitName, portions: number): FoodEntry['snapshot'] {
   const n = content.nutrients(food, unit, portions);
   return { kcal: Math.round(n.kcal), proteinG: Math.round(n.proteinG * 10) / 10, packVersion: food.packVersion };
@@ -82,11 +110,11 @@ export function entryLine(content: Content, e: Pick<FoodEntry, 'foodId' | 'unit'
   if (!food) return 'Food';
   let qty: string;
   try {
-    qty = content.unitLabel(food, e.unit as FoodUnitName, e.portions);
+    qty = portionText(content, food, e.unit as FoodUnitName, e.portions);
   } catch {
     qty = String(e.portions);
   }
-  return `${content.t(food.nameKey)} - ${qty}`;
+  return `${content.t(food.nameKey)}, ${qty}`;
 }
 
 // ---- Targets ----
@@ -133,6 +161,8 @@ export const profileHash = (p: Pick<NutritionProfile, 'diet' | 'allergies' | 'go
   [p.diet, [...p.allergies].sort().join('+'), p.goal, p.mealsPerDay, p.targetKcal].join('|');
 
 export function slotsFor(meals: number): Meal[] {
+  if (meals <= 1) return ['lunch'];
+  if (meals === 2) return ['lunch', 'dinner'];
   return meals <= 3 ? ['breakfast', 'lunch', 'dinner'] : meals === 4 ? ['breakfast', 'lunch', 'snack', 'dinner'] : ['breakfast', 'lunch', 'snack', 'dinner', 'snack'];
 }
 
@@ -146,9 +176,18 @@ export function candidates(content: Content, p: Pick<NutritionProfile, 'diet' | 
 const half = (n: number) => Math.min(3, Math.max(0.5, Math.round(n * 2) / 2));
 
 function itemFor(content: Content, food: FoodItem, kcalTarget: number): PlanItem {
-  const u = food.units[0]!;
-  const per = Math.max(1, content.nutrients(food, u.unit, 1).kcal);
-  return { foodId: food.id, unit: u.unit, portions: half(kcalTarget / per) };
+  const unit = defaultUnitOf(food);
+  const u = food.units.find((x) => x.unit === unit)!;
+  const per = Math.max(0.1, content.nutrients(food, u.unit, 1).kcal);
+  const raw = kcalTarget / per;
+  if (u.unit === 'piece') {
+    // Whole pieces, in the same jumps as the picker (5 almonds, 2 biscuits, 1 roti).
+    const g = u.steps.length > 1 ? Math.max(1, u.steps[1]! - u.steps[0]!) : 1;
+    const lo = u.steps[0]!;
+    const hi = u.steps[Math.min(u.steps.length - 1, 1)]!; // a plan never asks for more than the second quick step (10 almonds)
+    return { foodId: food.id, unit: u.unit, portions: Math.min(hi, Math.max(lo, Math.round(raw / g) * g)) };
+  }
+  return { foodId: food.id, unit: u.unit, portions: half(raw) };
 }
 
 /** One week of sample days. Deterministic: the same profile always gives the same plan. */

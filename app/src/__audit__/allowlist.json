@@ -1,47 +1,7 @@
 [
   {
-    "key": "EditProfile | (ScrollView with 8 controls and a text field) | keyboard-swallows-first-tap",
-    "note": "Likely cause of 'the first tap does nothing' while the keyboard is open (React Native closes the keyboard and does not pass the tap on). Fix: keyboardShouldPersistTaps=\"handled\" on this ScrollView. Not yet confirmed on a device."
-  },
-  {
-    "key": "FoodSearch | (ScrollView with 40 controls, text field outside it) | keyboard-swallows-first-tap",
-    "note": "Likely cause of 'the first tap does nothing' while the keyboard is open (React Native closes the keyboard and does not pass the tap on). Fix: keyboardShouldPersistTaps=\"handled\" on this ScrollView. Not yet confirmed on a device."
-  },
-  {
-    "key": "Help | (ScrollView with 8 controls and a text field) | keyboard-swallows-first-tap",
-    "note": "Likely cause of 'the first tap does nothing' while the keyboard is open (React Native closes the keyboard and does not pass the tap on). Fix: keyboardShouldPersistTaps=\"handled\" on this ScrollView. Not yet confirmed on a device."
-  },
-  {
-    "key": "Picker | (ScrollView with 7 controls, text field outside it) | keyboard-swallows-first-tap",
-    "note": "Likely cause of 'the first tap does nothing' while the keyboard is open (React Native closes the keyboard and does not pass the tap on). Fix: keyboardShouldPersistTaps=\"handled\" on this ScrollView. Not yet confirmed on a device."
-  },
-  {
-    "key": "Settings | Account, Signed in with Google as p***@gmail.com | no-handler",
-    "note": "Info row built as a ListRow with no onPress: a screen reader calls it a button, and a tap does nothing. Make it a plain row or give it a target."
-  },
-  {
-    "key": "WeekOne | <weekday> day chip | no-handler",
-    "note": "The week strip is a read-only preview here, but each day is announced as a button and does nothing. Render the days without the button role, or give them a target."
-  },
-  {
     "key": "Offline | (whole screen: no way out) | no-exit",
     "note": "By design: Offline only offers Try again and stays while there is no internet. Check on a device that system back leaves it."
-  },
-  {
-    "key": "Player | Previous move | nothing-happens",
-    "note": "On the first move Previous changes nothing and the button is not disabled. Disable it there or restart the move."
-  },
-  {
-    "key": "ReverseTimer | (whole screen: no way out) | no-exit",
-    "note": "No bout running: nothing on the screen leaves it, and the swipe-back gesture is off."
-  },
-  {
-    "key": "ReverseTimer | Close | nothing-happens",
-    "note": "Reached with no running bout (only after an app restore; the normal flow cannot): Close does nothing and the swipe-back gesture is off, so the user is stuck. Should leave the screen when there is no bout."
-  },
-  {
-    "key": "ReverseTimer | Stop bout | nothing-happens",
-    "note": "Same state as Close: no bout running, so the button does nothing."
   },
   {
     "key": "Verify | Continue with email > One-time code, 0 of 6 digits entered | nothing-happens",

@@ -168,7 +168,7 @@ export interface NutritionProfile {
   allergies: string[];
   allergyOther: string | null;
   goal: 'maintain' | 'lose_gently' | 'gain';
-  mealsPerDay: 3 | 4 | 5;
+  mealsPerDay: 1 | 2 | 3 | 4 | 5;
   targetKcal: number;
   targetProteinG: number;
   computedAt: number;

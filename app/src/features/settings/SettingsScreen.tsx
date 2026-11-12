@@ -115,7 +115,7 @@ export function SettingsScreen() {
           icon="account_circle"
           title="Account"
           subtitle={account ? describeSignIn(account.provider, account.emailMasked) : 'Signed in'}
-          trailing={null}
+          onPress={() => nav.navigate('Profile')}
         />
         <ListRow icon="verified_user" title="Privacy and data" subtitle="Permissions, notice" onPress={() => nav.navigate('Privacy')} />
         <ListRow

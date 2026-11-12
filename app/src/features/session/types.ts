@@ -72,7 +72,8 @@ export function setKey(stepId: string, set: number): string {
   return `${stepId}#${set}`;
 }
 
-export type PauseReason = 'user' | 'call' | 'background' | 'headset' | 'audio_focus' | 'camera';
+/** 'ready' = the session is open but the clock has not started: the user taps Start. */
+export type PauseReason = 'ready' | 'user' | 'call' | 'background' | 'headset' | 'audio_focus' | 'camera';
 
 export interface SessionPrefs {
   voice: boolean;

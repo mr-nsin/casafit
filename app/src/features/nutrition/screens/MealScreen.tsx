@@ -5,15 +5,16 @@ import { Card, FilledButton, SectionLabel, Text, TopBar, space, useTokens } from
 import type { FoodUnitName } from '../../../content/types';
 import { FoodRow, PortionPicker } from '../components';
 import { getNutritionDeps } from '../deps';
-import { joinParts, useShowCalories } from '../guard';
+import { joinParts, useShowCalories, useTopInset } from '../guard';
 import { logFood, useNav } from '../hooks';
-import { SLOT_LABEL, asSlot, fractionLabel } from '../logic';
+import { MAX_PIECES, SLOT_LABEL, asSlot, defaultUnitOf, portionText } from '../logic';
 import type { RootScreenProps } from '../../../app/types';
 
 /** m3-meal ("Add to lunch"): choose the portion of one food and log it. `mealId` is the catalogue food id. */
 export function MealScreen({ route }: Partial<RootScreenProps<'Meal'>>) {
   const nav = useNav();
   const t = useTokens();
+  const topInset = useTopInset();
   const show = useShowCalories();
   const d = getNutritionDeps();
   const content = d.content();
@@ -26,7 +27,7 @@ export function MealScreen({ route }: Partial<RootScreenProps<'Meal'>>) {
 
   if (!food) {
     return (
-      <View style={{ flex: 1, backgroundColor: t.bg }}>
+      <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: topInset }}>
         <TopBar title="Add food" onLeading={() => nav.goBack()} />
         <View style={{ padding: space.xl, gap: space.l }}>
           <Text color="osv">Pick a food to add first.</Text>
@@ -36,9 +37,13 @@ export function MealScreen({ route }: Partial<RootScreenProps<'Meal'>>) {
     );
   }
 
-  const u = unit && food.units.some((x) => x.unit === unit) ? unit : food.units[0]!.unit;
+  const u = unit && food.units.some((x) => x.unit === unit) ? unit : defaultUnitOf(food);
   const unitDef = food.units.find((x) => x.unit === u)!;
-  const qty = portions != null && unitDef.steps.includes(portions) ? portions : unitDef.default;
+  const countable = u === 'piece';
+  const qty =
+    portions != null && (unitDef.steps.includes(portions) || (countable && Number.isInteger(portions) && portions >= 1 && portions <= MAX_PIECES))
+      ? portions
+      : unitDef.default;
   const n = content.nutrients(food, u, qty);
   const label = SLOT_LABEL[slot].toLowerCase();
   const others = content.foods.filter((f) => f.id !== food.id && f.section === food.section && f.kind === food.kind).slice(0, 2);
@@ -54,14 +59,14 @@ export function MealScreen({ route }: Partial<RootScreenProps<'Meal'>>) {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: t.bg }}>
+    <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: topInset }}>
       <TopBar title={`Add to ${label}`} onLeading={() => nav.goBack()} />
       <ScrollView contentContainerStyle={{ padding: space.l, gap: space.xl, paddingBottom: 120 }}>
         <Card tone="c3">
           <View style={{ padding: space.l, gap: space.xs }}>
             <Text variant="title">{content.t(food.nameKey)}</Text>
             <Text color="osv" tabular>
-              {joinParts([`Per ${content.unitLabel(food, u, 1)}`, `${Math.round(content.nutrients(food, u, 1).proteinG)} g protein`])}
+              {joinParts([`Per ${portionText(content, food, u, 1)}`, `${Math.round(content.nutrients(food, u, 1).proteinG)} g protein`])}
             </Text>
           </View>
         </Card>
@@ -79,7 +84,7 @@ export function MealScreen({ route }: Partial<RootScreenProps<'Meal'>>) {
         ) : null}
       </ScrollView>
       <View style={{ position: 'absolute', left: space.l, right: space.l, bottom: space.l }}>
-        <FilledButton label={`Add to ${label}`} loading={busy} onPress={() => void add()} accessibilityHint={`${fractionLabel(qty)} ${u}`} />
+        <FilledButton label={`Add to ${label}`} loading={busy} onPress={() => void add()} accessibilityHint={portionText(content, food, u, qty)} />
       </View>
     </View>
   );

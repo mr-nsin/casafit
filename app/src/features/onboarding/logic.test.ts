@@ -14,7 +14,8 @@ describe('logic', () => {
     expect(canContinueAge({ birthYear: 2000, confirmed18: true }, 2026)).toBe(true);
     expect(canContinueAge({ birthYear: 2010, confirmed18: true }, 2026)).toBe(false);
     expect(canContinueAge({ birthYear: 2000, confirmed18: false }, 2026)).toBe(false);
-    expect(birthYearOptions(2026)[0]).toBe(2025);
+    expect(birthYearOptions(2026)[0]).toBe(2008);
+    expect(Math.max(...birthYearOptions(2026))).toBe(2008);
   });
   it('step order (D4)', () => {
     expect(nextAfterAbout({ styles: ['normal'], healthFlags: [] })).toBe('Building');

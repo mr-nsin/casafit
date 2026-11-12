@@ -193,7 +193,9 @@ export function VerifyScreen({ route }: Props) {
     <Layout
       topBar={{ leading: 'back', onLeading: email ? backToEmail : back }}
       footer={
-        !auth.configured ? undefined : email ? (
+        !auth.configured ? (
+          <FilledButton label="Go back" leadingIcon="arrow_back" onPress={back} />
+        ) : email ? (
           <FilledButton
             label="Verify and continue"
             loading={verifying}

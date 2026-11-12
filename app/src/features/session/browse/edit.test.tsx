@@ -235,7 +235,7 @@ describe('Editor', () => {
     await fireEvent.press(screen.getByLabelText('Just today'));
     expect(mockNav.replace).toHaveBeenCalledWith('Player');
     const st = useSessionStore.getState();
-    expect(st.status).toBe('active');
+    expect(st.status).toBe('paused'); // Ready: the clock waits for Start
     expect(workSteps(st.plan as never)).toHaveLength(4);
     expect(st.planDay).toBe(0);
     expect(workSteps(await todaySession())).toHaveLength(5);

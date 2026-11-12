@@ -47,6 +47,11 @@ describe('Splash', () => {
 });
 
 describe('Welcome', () => {
+  it('is a full page with the logo and just the word CasaFit', async () => {
+    await render(<WelcomeScreen />);
+    expect(screen.getByText('CasaFit')).toBeTruthy();
+    expect(screen.queryByText('15 minutes')).toBeNull();
+  });
   it('starts onboarding at Age and logs in at Verify', async () => {
     await render(<WelcomeScreen />);
     await press('Get my 15-minute plan');
@@ -57,6 +62,13 @@ describe('Welcome', () => {
 });
 
 describe('Age', () => {
+  it('offers only adult birth years', async () => {
+    await render(<AgeScreen />);
+    await press('Year of birth, not set');
+    const newest = new Date().getFullYear() - 18;
+    expect(screen.getByLabelText(String(newest))).toBeTruthy();
+    expect(screen.queryByLabelText(String(newest + 1))).toBeNull();
+  });
   it('blocks Continue until an adult year is picked and 18+ is confirmed', async () => {
     await render(<AgeScreen />);
     expect(screen.getByLabelText('Continue').props.accessibilityState.disabled).toBe(true);
@@ -164,11 +176,41 @@ describe('About', () => {
   });
   it('lets height and weight be skipped, and flags out-of-range values', async () => {
     await render(<AboutScreen />);
+    await fireEvent.changeText(screen.getByTestId('about-height-ft'), '1');
+    expect(screen.getByText(/between 2 ft 8 in and 8 ft 6 in/)).toBeTruthy();
+    expect(screen.getByLabelText('Build my plan').props.accessibilityState.disabled).toBe(true);
+    await fireEvent.changeText(screen.getByTestId('about-height-ft'), '');
+    expect(screen.getByLabelText('Build my plan').props.accessibilityState.disabled).toBe(false);
+    await fireEvent.press(screen.getByRole('radio', { name: 'cm' }));
     await fireEvent.changeText(screen.getByTestId('about-height'), '20');
-    expect(screen.getByText(/between 80 and 260/)).toBeTruthy();
+    expect(screen.getByText(/between 80 and 260 cm/)).toBeTruthy();
     expect(screen.getByLabelText('Build my plan').props.accessibilityState.disabled).toBe(true);
     await fireEvent.changeText(screen.getByTestId('about-height'), '');
     expect(screen.getByLabelText('Build my plan').props.accessibilityState.disabled).toBe(false);
+  });
+  it('takes height in feet and inches (the default) and saves centimetres', async () => {
+    await render(<AboutScreen />);
+    await fireEvent.changeText(screen.getByTestId('about-height-ft'), '5');
+    await fireEvent.changeText(screen.getByTestId('about-height-in'), '7');
+    await waitFor(() => expect(draft().heightCm).toBe(170));
+    await fireEvent.press(screen.getByRole('radio', { name: 'cm' }));
+    expect(screen.getByTestId('about-height').props.value).toBe('170');
+  });
+  it('takes weight in pounds and saves kilograms', async () => {
+    await render(<AboutScreen />);
+    await fireEvent.press(screen.getByRole('radio', { name: 'lb' }));
+    await fireEvent.changeText(screen.getByTestId('about-weight'), '150');
+    await waitFor(() => expect(draft().weightKg).toBe(68));
+  });
+  it('says Gender, with Male, Female and Other, and keeps the stored values', async () => {
+    await render(<AboutScreen />);
+    expect(screen.queryByText('Sex')).toBeNull();
+    expect(screen.getAllByText('Gender').length).toBeGreaterThan(0);
+    await press('Male');
+    await waitFor(() => expect(draft().sex).toBe('man'));
+    await press('Female');
+    await waitFor(() => expect(draft().sex).toBe('woman'));
+    expect(screen.getByRole('radio', { name: 'Other' })).toBeTruthy();
   });
   it('keeps None exclusive in pain and shows the knee note', async () => {
     await render(<AboutScreen />);
@@ -181,7 +223,8 @@ describe('About', () => {
   it('shows saved answers when coming back (Back keeps every answer)', async () => {
     await useOnboarding.getState().update({ heightCm: 165, daysPerWeek: 5 });
     await render(<AboutScreen />);
-    expect(screen.getByTestId('about-height').props.value).toBe('165');
+    expect(screen.getByTestId('about-height-ft').props.value).toBe('5');
+    expect(screen.getByTestId('about-height-in').props.value).toBe('5');
     expect(screen.getByLabelText('Days a week').props.accessibilityValue.now).toBe(5);
   });
 });
@@ -283,6 +326,8 @@ describe('Building and WeekOne', () => {
     // 27 Oct 2026 is a Tuesday: the strip starts on Tue and ends on Mon.
     expect(screen.getByLabelText('Tue, Today, today')).toBeTruthy();
     expect(screen.getByLabelText(/^Mon/)).toBeTruthy();
+    // The chips are labels, not buttons.
+    expect(screen.queryByRole('button', { name: /^Mon/ })).toBeNull();
     await press("Start today's session");
     expect(startToday).toHaveBeenCalled();
     expect(mockNav.reset).toHaveBeenCalledWith({ index: 1, routes: [{ name: 'Main' }, { name: 'Player' }] });

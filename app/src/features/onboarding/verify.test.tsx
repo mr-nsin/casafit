@@ -251,4 +251,11 @@ describe('Sign in: not set up', () => {
     expect(screen.queryByLabelText('Continue with email')).toBeNull();
     expect(screen.queryByLabelText('Continue with Google')).toBeNull();
   });
+  it('is not a dead end: a visible Go back button leaves', async () => {
+    setAuth(createUnconfiguredAuth());
+    mockNav.canGoBack.mockReturnValue(true);
+    await render(<VerifyScreen />);
+    await fireEvent.press(screen.getByLabelText('Go back'));
+    expect(mockNav.goBack).toHaveBeenCalled();
+  });
 });

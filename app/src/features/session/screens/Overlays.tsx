@@ -1,6 +1,6 @@
 // Overlay routes: EndSession (dialog), Feel (sheet) and SessionSettings (sheet).
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BackHandler, Pressable, Switch, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -8,7 +8,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../../app/types';
 import { dark, radius, space, type } from '../../../theme';
 import { Icon } from '../../../ui';
-import { Btn, DarkScope, InfoNote, RadioGroup, styles as base } from '../components';
+import { Btn, DarkScope, InfoNote, Notice, RadioGroup, styles as base } from '../components';
 import { useSessionView } from '../hooks';
 import { movesDone, useSessionStore } from '../store';
 import type { FeelValue } from '../types';
@@ -164,6 +164,13 @@ export function SessionSettingsScreen() {
   const nav = useNavigation<Nav>();
   const prefs = useSessionStore((s) => s.prefs);
   const set = useSessionStore.getState().setPrefs;
+  const [restNote, setRestNote] = useState<string | null>(null);
+  const chooseRest = (restS: 15 | 20 | 30) => {
+    set({ restS });
+    const s = useSessionStore.getState();
+    const live = s.plan && (s.status === 'active' || s.status === 'paused' || s.status === 'confirm_end');
+    setRestNote(live ? `Rest between sets is now ${restS} s, from your next rest.` : `Rest between sets is ${restS} s.`);
+  };
 
   return (
     <Scrim align="bottom">
@@ -206,9 +213,10 @@ export function SessionSettingsScreen() {
             { value: 20, label: '20 s' },
             { value: 30, label: '30 s' },
           ]}
-          onChange={(restS) => set({ restS })}
+          onChange={chooseRest}
         />
-        <InfoNote>Longer rests may push today past 15 minutes. We show the new total before you start.</InfoNote>
+        <Notice text={restNote} />
+        <InfoNote>Applies from your next rest, not the one you are in. Longer rests may push today past 15 minutes.</InfoNote>
       </View>
     </Scrim>
   );

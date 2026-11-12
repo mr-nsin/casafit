@@ -8,8 +8,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../app/types';
 import type { PainArea, Sex } from '../../db/repositories';
-import { Avatar, ChipGroup, FilledButton, InfoNote, SectionLabel, Text, TextField, space } from '../../ui';
-import { SEX_OPTIONS, parseHeight, parseWeight } from '../onboarding/logic';
+import { Avatar, ChipGroup, FilledButton, HeightInput, InfoNote, SectionLabel, Text, TextField, WeightInput, space } from '../../ui';
+import { GENDER_OPTIONS } from '../onboarding/logic';
 import { Page } from './Page';
 import { useBusy, useProfileData } from './hooks';
 import { getRepositories } from '../../state/storage';
@@ -26,11 +26,13 @@ export function EditProfileScreen() {
   const { profile, loading, save } = useProfileData();
   const [name, setName] = useState('');
   const [born, setBorn] = useState('');
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
+  const [heightCm, setHeightCm] = useState<number | null>(null);
+  const [weightKg, setWeightKg] = useState<number | null>(null);
   const [sex, setSex] = useState<Sex | null>(null);
   const [pain, setPain] = useState<PainArea[]>([]);
-  const [errors, setErrors] = useState<{ born?: string; height?: string; weight?: string }>({});
+  const [errors, setErrors] = useState<{ born?: string }>({});
+  const [hError, setHError] = useState<string | undefined>();
+  const [wError, setWError] = useState<string | undefined>();
   const [busy, run] = useBusy();
   const [filled, setFilled] = useState(false);
 
@@ -42,8 +44,8 @@ export function EditProfileScreen() {
     if (profile) {
       setName(profile.name ?? '');
       setBorn(profile.birthYear ? String(profile.birthYear) : '');
-      setHeight(profile.heightCm ? String(profile.heightCm) : '');
-      setWeight(profile.weightKg ? String(profile.weightKg) : '');
+      setHeightCm(profile.heightCm ?? null);
+      setWeightKg(profile.weightKg ?? null);
       setSex(profile.sex);
       setPain(profile.painAreas);
     }
@@ -55,17 +57,14 @@ export function EditProfileScreen() {
   const submit = () =>
     run(async () => {
       const b = parseBirthYear(born);
-      const h = parseHeight(height);
-      const w = parseWeight(weight);
-      const next = { born: b.error, height: h.error, weight: w.error };
-      setErrors(next);
-      if (next.born || next.height || next.weight) return;
+      setErrors({ born: b.error });
+      if (b.error || hError || wError) return;
       const painChanged = !sameSet(profile?.painAreas ?? [], pain);
       await save({
         name: name.trim() || null,
         birthYear: b.value,
-        heightCm: h.value,
-        weightKg: w.value,
+        heightCm,
+        weightKg,
         sex,
         painAreas: pain,
       });
@@ -93,14 +92,32 @@ export function EditProfileScreen() {
 
       <TextField label="Name" value={name} onChange={setName} maxLength={40} autoComplete="name" />
       <TextField label="Born" value={born} onChange={setBorn} keyboardType="number-pad" maxLength={4} placeholder="Year, like 1998" optional error={errors.born} />
-      <TextField label="Height · cm" value={height} onChange={setHeight} keyboardType="number-pad" maxLength={3} optional error={errors.height} />
-      <TextField label="Weight · kg" value={weight} onChange={setWeight} keyboardType="decimal-pad" maxLength={5} optional error={errors.weight} />
+      <HeightInput
+        key={`h-${filled}`}
+        valueCm={heightCm}
+        optional
+        testID="edit-height"
+        onChange={(cm, err) => {
+          setHeightCm(cm);
+          setHError(err);
+        }}
+      />
+      <WeightInput
+        key={`w-${filled}`}
+        valueKg={weightKg}
+        optional
+        testID="edit-weight"
+        onChange={(kg, err) => {
+          setWeightKg(kg);
+          setWError(err);
+        }}
+      />
 
       <View style={{ gap: space.s }}>
-        <SectionLabel title="Sex" hint="Used only for step and calorie estimates. You can skip it." />
+        <SectionLabel title="Gender" hint="Used only for step and calorie estimates. You can skip it." />
         <ChipGroup
-          label="Sex"
-          options={SEX_OPTIONS}
+          label="Gender"
+          options={GENDER_OPTIONS}
           selected={sex && sex !== 'skip' ? [sex] : []}
           onChange={([v]) => setSex(v ?? null)}
         />

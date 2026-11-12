@@ -19,3 +19,21 @@ Debug build with the pose module, placeholder icon, and all work to 7 Nov. Dev t
 
 ## Not yet checked on device
 Progress, Steps, Learn, Profile and Settings, Library, Plan, Editor and drag, Player, Rest, Complete, Pro screens, camera and live check, Offline and error states. See `ui-audit.md` for the controls the Jest audit flagged as broken or suspicious.
+
+## Second pass, 12 Nov (after the tester fixes)
+
+Checked on the emulator: About (ft/in, kg/lb, Male/Female/Other, keyboard no longer covers fields, first tap on Build my plan works), Week one (labelled bar, plain day tiles), Ready then Start, Harder and +30s rest feedback, Close, Keep going, food plan form, food search in pieces, portion picker.
+
+Fixed in this pass:
+- **Player family header sat under the status bar.** The Close X was drawn under the clock and only its lower half was tappable, so a tap on the visible X did nothing. `Screen` in `features/session/components.tsx` now adds the top and bottom insets. This was the main cause of "buttons not working".
+- **Food plan blamed height and weight when the year of birth was missing.** The form now asks for the year of birth when the profile has none, and the button says what is missing.
+- **Back from the food plan went back to the questionnaire.** Save now replaces the form with the plan.
+- **Plans asked for 20 almonds.** Plan builds are capped at the second quick step (10).
+
+Still open:
+- The Start button moves down when a notice appears under Easier/Harder.
+- On Add to snack and Same as yesterday the button label is clipped ("Add to", "Same as"). Cause not found; check the font load and Text layout.
+- Home opens slightly scrolled under the status bar after a reload.
+- The floating Expo dev button covers the top-right icon in debug builds only.
+- Not yet walked: Progress, Steps, Learn, Settings, Library, Rest, Complete, Pro screens, camera.
+

@@ -5,6 +5,7 @@ import { SearchField, SectionLabel, Tabs, Text, TopBar, space, useTokens } from 
 import type { FoodKind } from '../../../content/types';
 import { FoodRow } from '../components';
 import { getNutritionDeps } from '../deps';
+import { useTopInset } from '../guard';
 import { useNav } from '../hooks';
 import { asSlot } from '../logic';
 import type { RootScreenProps } from '../../../app/types';
@@ -19,6 +20,7 @@ const KINDS: { value: FoodKind; label: string }[] = [
 export function FoodSearchScreen({ route }: Partial<RootScreenProps<'FoodSearch'>>) {
   const nav = useNav();
   const t = useTokens();
+  const topInset = useTopInset();
   const d = getNutritionDeps();
   const content = d.content();
   const slot = asSlot(route?.params?.slot, d.now().getHours());
@@ -45,13 +47,13 @@ export function FoodSearchScreen({ route }: Partial<RootScreenProps<'FoodSearch'
   const open = (id: string) => nav.navigate('Meal', { mealId: id, slot });
 
   return (
-    <View style={{ flex: 1, backgroundColor: t.bg }}>
+    <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: topInset }}>
       <TopBar title="Find a food" onLeading={() => nav.goBack()} />
       <View style={{ paddingHorizontal: space.l, gap: space.m }}>
         <SearchField value={q} onChange={setQ} placeholder="Search foods" label="Search foods" />
         <Tabs items={KINDS} selected={kind} onSelect={setKind} />
       </View>
-      <ScrollView contentContainerStyle={{ padding: space.l, paddingBottom: space.xxxl }}>
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: space.l, paddingBottom: space.xxxl }}>
         {q === '' && recentFoods.length > 0 ? (
           <>
             <SectionLabel title="Recent" />

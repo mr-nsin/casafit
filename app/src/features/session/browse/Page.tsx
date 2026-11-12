@@ -30,7 +30,7 @@ export function Page({
   return (
     <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: insets.top + space.s }}>
       {topBar ? <TopBar {...topBar} /> : null}
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{ paddingHorizontal: space.l, paddingBottom: space.xxl, gap: space.l, flexGrow: 1 }}>
           {header}
           {children}

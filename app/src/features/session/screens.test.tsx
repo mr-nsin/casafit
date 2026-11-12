@@ -7,7 +7,7 @@ import { EndSessionScreen, FeelScreen, SessionSettingsScreen } from './screens/O
 import { PausedScreen } from './screens/PausedScreen';
 import { RestScreen } from './screens/RestScreen';
 import { DanceScreen, PlayerScreen, YogaScreen } from './screens/Stages';
-import { createHarness, makePlan } from './testkit';
+import { begin, createHarness, makePlan } from './testkit';
 import { effOf } from './view';
 import { startTrial } from './start';
 import { TRIAL_DONE, TRIAL_STOPPED, useTrialNotice } from './trial';
@@ -27,7 +27,7 @@ function setup(style: 'normal' | 'yoga' | 'dance' = 'normal') {
   configureSessionDeps({
     content: { exercise: (id) => ({ id, cue: `Cue for ${id}`, bpm: 112, breath: { inS: 4, outS: 6 } }) },
   });
-  h.store.getState().start(makePlan({ style }));
+  begin(h.store, makePlan({ style }));
   return h;
 }
 
@@ -279,6 +279,7 @@ describe('Single-move trial', () => {
     const h = createHarness();
     startTrial(ex);
     await render(<PlayerScreen />);
+    await fireEvent.press(screen.getByLabelText('Start'));
     await elapse(h, 31_000);
     expect(mockNav.goBack).toHaveBeenCalledTimes(1);
     expect(mockNav.replace).not.toHaveBeenCalled();
@@ -293,6 +294,7 @@ describe('Single-move trial', () => {
     const h = createHarness();
     startTrial(ex);
     await render(<PlayerScreen />);
+    await fireEvent.press(screen.getByLabelText('Start'));
     await elapse(h, 10_000);
     await act(async () => {
       h.store.getState().requestEnd();
@@ -346,5 +348,109 @@ describe('Desk', () => {
     expect(h.micro).toEqual([{ activeS: 45 }]);
     expect(h.logs).toHaveLength(0);
     expect(h.store.getState().status).toBe('idle');
+  });
+});
+
+describe('Ready state', () => {
+  it('shows the first move, a big Start and no running clock; Start begins the session', async () => {
+    const h = createHarness();
+    h.store.getState().start(makePlan());
+    await render(<PlayerScreen />);
+    expect(screen.getByText('Get in position, then tap Start.')).toBeTruthy();
+    expect(screen.queryByLabelText('Pause')).toBeNull();
+    expect(screen.queryByLabelText('+15s rest')).toBeNull();
+    await elapse(h, 30_000);
+    expect(h.store.getState().status).toBe('paused');
+    await fireEvent.press(screen.getByLabelText('Start'));
+    expect(h.store.getState().status).toBe('active');
+    expect(screen.getByLabelText('Pause')).toBeTruthy();
+  });
+
+  it('is the same on the yoga stage', async () => {
+    createHarness().store.getState().start(makePlan({ style: 'yoga' }));
+    await render(<YogaScreen />);
+    expect(screen.getByLabelText('Start')).toBeTruthy();
+  });
+
+  it('is the same on the dance stage', async () => {
+    createHarness().store.getState().start(makePlan({ style: 'dance' }));
+    await render(<DanceScreen />);
+    expect(screen.getByLabelText('Start')).toBeTruthy();
+  });
+
+  it('routes Ready to the stage, not the Paused screen', () => {
+    expect(routeForView({ status: 'paused', kind: null, style: 'normal', ready: true })).toBe('Player');
+    expect(routeForView({ status: 'paused', kind: null, style: 'yoga', ready: true })).toBe('Yoga');
+    expect(routeForView({ status: 'paused', kind: null, style: 'normal' })).toBe('Paused');
+  });
+
+  it('the Paused screen reads Start, not Resume, when Ready', async () => {
+    const h = createHarness();
+    h.store.getState().start(makePlan());
+    await render(<PausedScreen />);
+    expect(screen.queryByLabelText('Resume')).toBeNull();
+    await fireEvent.press(screen.getByLabelText('Start'));
+    expect(h.store.getState().status).toBe('active');
+  });
+});
+
+describe('Player feedback', () => {
+  it('Harder says what changes and from when, and marks the choice', async () => {
+    const h = setup();
+    await elapse(h, 120_000 + 12_000 + 5_000);
+    await render(<PlayerScreen />);
+    await fireEvent.press(screen.getByLabelText('Harder'));
+    expect(screen.getByTestId('session-notice').props.children).toBe('Harder from the next set: Move 0, 45 s of work.');
+    expect(screen.getByLabelText('Harder').props.accessibilityState).toMatchObject({ selected: true });
+    expect(screen.getByLabelText('As planned').props.accessibilityState).toMatchObject({ selected: false });
+  });
+
+  it('says next move when the current move is on its last set', async () => {
+    const h = setup();
+    const seg = effOf(h.store.getState()).find((e) => e.seg.stepIndex === 4 && e.seg.kind === 'work' && e.seg.set === 2)!;
+    await elapse(h, seg.startMs + 2000);
+    await render(<PlayerScreen />);
+    await fireEvent.press(screen.getByLabelText('Easier'));
+    expect(screen.getByTestId('session-notice').props.children).toBe('Easier from the next move: Move 1, 30 s of work.');
+  });
+
+  it('+30s rest says what it added, and turns off with a reason at the cap', async () => {
+    const h = setup();
+    await elapse(h, 120_000 + 12_000 + 5_000);
+    await render(<PlayerScreen />);
+    await fireEvent.press(screen.getByLabelText('+30s rest'));
+    expect(screen.getByTestId('session-notice').props.children).toBe('Added to your next rest, after Move 0: +30s, now 50s.');
+    expect(screen.getByText(/Extra rest so far: \+30s on your next rest, after Move 0/)).toBeTruthy();
+    await fireEvent.press(screen.getByLabelText('+30s rest'));
+    await fireEvent.press(screen.getByLabelText('+30s rest'));
+    expect(screen.getByLabelText('+30s rest').props.accessibilityState).toMatchObject({ disabled: true });
+    expect(screen.getByLabelText('+15s rest').props.accessibilityState).toMatchObject({ disabled: true });
+    expect(screen.getByText(/most extra time \(90 s\)/)).toBeTruthy();
+  });
+
+  it('Previous move is off on the first move and works later', async () => {
+    const h = setup();
+    await elapse(h, 100);
+    await render(<PlayerScreen />);
+    expect(screen.getByLabelText('Previous move').props.accessibilityState).toMatchObject({ disabled: true });
+    await elapse(h, 130_000);
+    expect(screen.getByLabelText('Previous move').props.accessibilityState).toMatchObject({ disabled: false });
+  });
+
+  it('Rest screen +30s tells what happened', async () => {
+    const h = setup();
+    await elapse(h, 120_000 + 12_000 + 40_000 + 5_000);
+    await render(<RestScreen />);
+    await fireEvent.press(screen.getByLabelText('+30s'));
+    expect(screen.getByTestId('session-notice').props.children).toBe('Rest extended: +30s, now 50s.');
+  });
+
+  it('Rest between sets says it applies from the next rest', async () => {
+    const h = setup();
+    await elapse(h, 120_000 + 12_000 + 5_000);
+    await render(<SessionSettingsScreen />);
+    await fireEvent.press(screen.getByLabelText('30 s'));
+    expect(screen.getByTestId('session-notice').props.children).toBe('Rest between sets is now 30 s, from your next rest.');
+    expect(h.store.getState().restPref).toMatchObject({ restS: 30 });
   });
 });

@@ -170,6 +170,13 @@ describe('Settings', () => {
     expect(screen.getByText(/^CasaFit \d/)).toBeTruthy();
   });
 
+  it('the Account row opens Profile, and the switches have names', async () => {
+    await render(<SettingsScreen />);
+    await tap(/^Account/);
+    expect(mockNav.navigate).toHaveBeenLastCalledWith('Profile');
+    expect(screen.getByRole('switch', { name: 'Hide calories' })).toBeTruthy();
+  });
+
   it('hide calories writes the setting and it survives a reload', async () => {
     await render(<SettingsScreen />);
     const sw = screen.getByRole('switch', { name: 'Hide calories' });
@@ -455,9 +462,10 @@ describe('EditProfile', () => {
     await waitFor(() => expect(screen.getByLabelText('Name').props.value).toBe('Priya'));
     await fireEvent.changeText(screen.getByLabelText('Name'), 'Priya Sharma');
     await fireEvent.changeText(screen.getByLabelText('Born'), '1998');
-    await fireEvent.changeText(screen.getByLabelText('Height · cm'), '162');
-    await fireEvent.changeText(screen.getByLabelText('Weight · kg'), '58.5');
-    await tap('Woman');
+    await fireEvent.press(screen.getByRole('radio', { name: 'cm' }));
+    await fireEvent.changeText(screen.getByLabelText('Height, cm'), '162');
+    await fireEvent.changeText(screen.getByLabelText('Weight, kg'), '58.5');
+    await tap('Female');
     await fireEvent.press(screen.getByRole('checkbox', { name: 'Back' }));
     await fireEvent.press(screen.getByText('Save changes'));
     await waitFor(() => expect(mockNav.goBack).toHaveBeenCalled());
@@ -481,9 +489,9 @@ describe('EditProfile', () => {
     await render(<EditProfileScreen />);
     await waitFor(() => expect(screen.getByLabelText('Name').props.value).toBe('Priya'));
     await fireEvent.changeText(screen.getByLabelText('Name'), 'Changed');
-    await fireEvent.changeText(screen.getByLabelText('Height · cm'), '20');
-    await fireEvent.press(screen.getByText('Save changes'));
+    await fireEvent.changeText(screen.getByLabelText('Feet'), '1');
     expect(await screen.findByText(/Enter a height between/)).toBeTruthy();
+    await fireEvent.press(screen.getByText('Save changes'));
     expect(mockNav.goBack).not.toHaveBeenCalled();
     expect((await db.repos.profile.get())?.name).toBe('Priya');
   });

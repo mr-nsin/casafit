@@ -153,3 +153,7 @@ A short, dated log of design and technical decisions. Add a row at the top. Keep
 - 5 Nov 2026: Yoga and dance part sessions spread the pool, repeat poses if needed and borrow gentle bookend moves (`fillShort`). Trial length comes from the store's trial dates (1 to 31 days), default 7.
 
 - 7 Nov 2026: Pose source is the in-repo Nitro module `app/modules/casafit-pose` (nitrogen 0.37.1, Kotlin on MediaPipe tasks-vision 1.1.1, bundled Lite model pinned by SHA-256, Swift and podspec unbuilt). Returns 33 image plus 33 world landmarks as one Float32 buffer to a `PoseSource`; selected only when present and `EXPO_PUBLIC_CAMERA_PREVIEW=1`. RECORD_AUDIO blocked. `tech-stack.md` line 'vision-camera 4 + MediaPipe plugin' is stale.
+- 12 Nov 2026: Sessions open in a Ready state (paused, reason ready) and the clock starts only on Start; ready time is never counted or snapshotted. The Rest between sets setting rewrites later rests in the session.
+- 12 Nov 2026: Migration 2 `meals_per_day_1_to_5` widens meals a day to 1 to 5 (1 = lunch, 2 = lunch and dinner).
+- 12 Nov 2026: Countable foods show pieces ('Almonds, 5 pieces'); nuts got a piece unit. Raisins and peanuts do not (content rule needs at least 1 g per unit).
+- 12 Nov 2026: Shared HeightInput (ft/in default, or cm) and WeightInput (kg or lb) store cm and kg. The UI says Gender (Male, Female, Other); stored values stay man, woman, other.

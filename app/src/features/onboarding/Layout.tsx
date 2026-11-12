@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -33,7 +33,7 @@ export function Layout({
     <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: insets.top + space.s }}>
       {background}
       {topBar ? <TopBar {...topBar} /> : null}
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
         {scroll ? (
           <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
             {body}

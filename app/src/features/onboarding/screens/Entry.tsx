@@ -1,7 +1,7 @@
 // Splash, Welcome, Age.
 
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 
 import { useAuth } from '../../../state/auth';
 import { useOnboarding } from '../../../state/onboardingDraft';
@@ -15,10 +15,10 @@ import {
   ProgressBar,
   RadioList,
   SelectField,
-  SessionSegmentBar,
   StatusBanner,
   Text,
   TextButton,
+  radius,
   space,
   useReducedMotion,
   useTokens,
@@ -62,6 +62,9 @@ export function SplashScreen() {
   );
 }
 
+// The placeholder house mark (white on the primary colour). Replace with real branding later.
+const LOGO = require('../../../../assets/brand/icon.png');
+
 export function WelcomeScreen() {
   const nav = useOnboardingNav();
   const ended = useAuth((s) => s.sessionEnded);
@@ -85,13 +88,15 @@ export function WelcomeScreen() {
         </>
       }
     >
-      <View style={{ flex: 1, justifyContent: 'center', gap: space.l }}>
-        <Text variant="display" accessibilityLabel="15 minutes">
-          15 minutes
+      <View accessible accessibilityLabel="CasaFit" style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: space.xl }}>
+        <Image
+          source={LOGO}
+          accessibilityIgnoresInvertColors
+          style={{ width: 144, height: 144, borderRadius: radius.xxl }}
+        />
+        <Text variant="display" style={{ textAlign: 'center' }}>
+          CasaFit
         </Text>
-        <Text variant="headline">A whole workout, at home, with nothing but you.</Text>
-        <Text color="osv">Every session starts with a matched warm-up and ends with a cool-down.</Text>
-        <SessionSegmentBar warm={2} work={11} cool={2} />
       </View>
     </Layout>
   );

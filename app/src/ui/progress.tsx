@@ -284,24 +284,21 @@ export function DayPill({ day, kind, icon, caption, height = 88, onPress, a11yLa
   const bg = isToday ? t.p : kind === 'rest' ? 'transparent' : t.c3;
   const fg: ColorKey = isToday ? 'op' : 'on';
   const desc = `${day}${caption ? `, ${caption}` : ''}${isToday ? ', today' : ''}`;
-  return (
-    <Touchable
-      label={a11yLabel ?? desc}
-      onPress={onPress}
-      style={{
-        flex: 1,
-        height,
-        borderRadius: radius.l,
-        backgroundColor: bg,
-        borderWidth: kind === 'active-rest' || kind === 'rest' ? 1 : 0,
-        borderStyle: kind === 'active-rest' ? 'dashed' : 'solid',
-        borderColor: t.ol,
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: space.xs,
-        opacity: 1,
-      }}
-    >
+  const style = {
+    flex: 1,
+    height,
+    borderRadius: radius.l,
+    backgroundColor: bg,
+    borderWidth: kind === 'active-rest' || kind === 'rest' ? 1 : 0,
+    borderStyle: kind === 'active-rest' ? ('dashed' as const) : ('solid' as const),
+    borderColor: t.ol,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    gap: space.xs,
+    opacity: 1,
+  };
+  const body = (
+    <>
       <Text variant="label" color={fg}>
         {day}
       </Text>
@@ -311,6 +308,19 @@ export function DayPill({ day, kind, icon, caption, height = 88, onPress, a11yLa
           {caption}
         </Text>
       ) : null}
+    </>
+  );
+  // No action: a plain labelled tile, not announced as a button.
+  if (!onPress) {
+    return (
+      <View accessible accessibilityLabel={a11yLabel ?? desc} style={style}>
+        {body}
+      </View>
+    );
+  }
+  return (
+    <Touchable label={a11yLabel ?? desc} onPress={onPress} style={style}>
+      {body}
     </Touchable>
   );
 }

@@ -1196,6 +1196,8 @@
     "unit.g_other": "g",
     "unit.katori_one": "katori",
     "unit.katori_other": "katori",
+    "unit.piece_one": "piece",
+    "unit.piece_other": "pieces",
     "unit.katori.hint": "A small steel bowl, about 150 ml"
   }
 }

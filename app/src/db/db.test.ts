@@ -161,6 +161,17 @@ describe('profile, plan, nutrition, misc', () => {
     expect((await repos.nutrition.getProfile())?.allergies).toEqual(['dairy']);
   });
 
+  it('nutrition profile allows 1 to 5 meals a day and rejects 0 and 6', async () => {
+    const base = { diet: 'veg' as const, allergies: [], allergyOther: null, goal: 'maintain' as const, targetKcal: 1800,
+      targetProteinG: 60, computedAt: 1, inputsHash: 'x' };
+    for (const n of [1, 2, 3, 4, 5] as const) {
+      await repos.nutrition.saveProfile({ ...base, mealsPerDay: n });
+      expect((await repos.nutrition.getProfile())?.mealsPerDay).toBe(n);
+    }
+    await expect(repos.nutrition.saveProfile({ ...base, mealsPerDay: 6 as never })).rejects.toThrow();
+    await expect(repos.nutrition.saveProfile({ ...base, mealsPerDay: 0 as never })).rejects.toThrow();
+  });
+
   it('form check attempts keep one key per attempt', async () => {
     const a = { id: 'a1', idempotencyKey: 'k1', exercise: 'squat', state: 'armed' as const, startedAt: 1,
       spentAt: null, wouldHaveBeenCharged: false };

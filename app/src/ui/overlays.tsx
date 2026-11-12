@@ -49,7 +49,7 @@ function SheetBody({ title, children }: { title: string; children?: React.ReactN
       <Text variant="headline" accessibilityRole="header">
         {title}
       </Text>
-      <ScrollView style={{ maxHeight: height * 0.6 }} showsVerticalScrollIndicator={false}>{children}</ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled" style={{ maxHeight: height * 0.6 }} showsVerticalScrollIndicator={false}>{children}</ScrollView>
     </Animated.View>
   );
 }

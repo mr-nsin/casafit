@@ -97,8 +97,10 @@ async function draftFor(w: World) {
 }
 
 /** Starts the canonical 15-minute session (4 warm-up, 5 work, 4 cool-down) and moves the clock. */
-function begin(w: World, opts: { advanceMs?: number; style?: 'normal' | 'yoga' | 'dance' } = {}) {
+function begin(w: World, opts: { advanceMs?: number; style?: 'normal' | 'yoga' | 'dance'; ready?: boolean } = {}) {
   w.harness.store.getState().start(makePlan({ style: opts.style ?? 'normal' }), { planWeek: 1, planDay: 0 });
+  // start() opens the Ready state; tapping Start (resume) begins the clock.
+  if (!opts.ready) w.harness.store.getState().resume();
   if (opts.advanceMs) w.harness.advance(opts.advanceMs);
 }
 const WORK_1 = 120_000 + 12_000 + 5_000; // first work set
@@ -225,6 +227,7 @@ export const scenarios: Scenario[] = [
       void useSessionStore;
     },
   }),
+  sc('Player', 'ready to start', { setup: (w) => begin(w, { ready: true }) }),
   sc('Player', 'work set', { setup: (w) => begin(w, { advanceMs: WORK_1 }) }),
   sc('Player', 'form-checkable move', { setup: (w) => begin(w, { advanceMs: CHECKABLE }) }),
   sc('Player', 'form-checkable move, Pro', { world: { pro: {} }, setup: (w) => begin(w, { advanceMs: CHECKABLE }) }),

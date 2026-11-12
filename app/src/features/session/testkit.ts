@@ -99,6 +99,12 @@ export function makePlan(overrides: Partial<SessionPlan> = {}, workMoves = 5): S
   return { id: 'plan-1', title: 'Core and glutes 15', style: 'normal', budgetS: 900, steps, ...overrides };
 }
 
+/** Starts a session and taps Start, so the clock runs. `start()` alone opens the Ready state. */
+export function begin(store: typeof useSessionStore, plan: SessionPlan, opts?: Parameters<ReturnType<typeof useSessionStore.getState>['start']>[1]) {
+  store.getState().start(plan, opts);
+  store.getState().resume();
+}
+
 export function createHarness(opts: { start?: number } = {}) {
   const clock = createFakeClock(opts.start);
   const cues: Cue[] = [];

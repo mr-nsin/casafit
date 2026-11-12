@@ -40,6 +40,30 @@ export const FEEL_MIN_SESSION_S = 8 * 60;
 /** Unfinished sessions shorter than this are not logged (server clamps duration_s to 60..3600). */
 export const MIN_LOGGED_S = 60;
 
+/** The rest a +15s / +30s press would change: the one running now, or the next one. */
+export interface RestTarget {
+  index: number;
+  where: 'current' | 'next';
+  /** Extra ms already added to this rest. */
+  extraMs: number;
+  /** Whole length of this rest now, in ms. */
+  restMs: number;
+  /** The move this rest follows. */
+  after: string;
+  atMax: boolean;
+}
+
+export type AddRestResult =
+  | { ok: true; where: 'current' | 'next'; addedMs: number; extraMs: number; restMs: number; after: string; capped: boolean }
+  | { ok: false; reason: 'none' | 'max' | 'inactive' };
+
+/** Rests change to the 'Rest between sets' setting from this segment on. */
+export interface RestPref {
+  restS: number;
+  /** Segments with an index above this one change. */
+  after: number;
+}
+
 export type SessionStatus = 'idle' | 'active' | 'paused' | 'confirm_end' | 'ended' | 'complete';
 
 export interface SessionState {
@@ -80,6 +104,52 @@ export interface SessionState {
   restoredAt: number;
   /** Single-move mode ("Try 30 seconds"): one move, never logged, never snapshotted. */
   trial: boolean;
+  /** Set when the user picks a rest length in Sound and voice. Null = rests as planned. */
+  restPref: RestPref | null;
+}
+
+/** True when the session is open on the Ready screen: first move shown, clock not running. */
+export function isReady(s: Pick<SessionState, 'status' | 'pausedReason'>): boolean {
+  return s.status === 'paused' && s.pausedReason === 'ready';
+}
+
+/** Applies the rest setting to the rests that come after segment `after`. Pure. */
+export function applyRestPref(timeline: Timeline, pref: RestPref | null): Timeline {
+  if (!pref) return timeline;
+  let t = 0;
+  let warmupS = 0;
+  let workS = 0;
+  let cooldownS = 0;
+  const segments = timeline.segments.map((seg) => {
+    const durationS = seg.kind === 'rest' && seg.phase === 'work' && seg.index > pref.after ? pref.restS : seg.durationS;
+    const next = { ...seg, startS: t, durationS, endS: t + durationS };
+    t += durationS;
+    if (seg.phase === 'warmup') warmupS += durationS;
+    else if (seg.phase === 'work') workS += durationS;
+    else cooldownS += durationS;
+    return next;
+  });
+  return { segments, totalS: t, warmupS, workS, cooldownS };
+}
+
+/** Which rest would +15s / +30s change right now? Null when no rest is left. */
+export function restTarget(s: SessionState, now: number): RestTarget | null {
+  if (!s.plan || !s.timeline) return null;
+  const eff = effOf(s);
+  const pos = positionAt(s, now);
+  const loc = locate(eff, pos);
+  if (!loc) return null;
+  const target = loc.seg.kind === 'rest' ? loc : nextRestFrom(eff, pos);
+  if (!target) return null;
+  const extraMs = s.extras[target.seg.index] ?? 0;
+  return {
+    index: target.seg.index,
+    where: loc.seg.kind === 'rest' ? 'current' : 'next',
+    extraMs,
+    restMs: target.endMs - target.startMs,
+    after: s.plan.steps[target.seg.stepIndex]?.name ?? '',
+    atMax: extraMs >= MAX_EXTRA_REST_MS,
+  };
 }
 
 /** True when nothing is left to play: the session is complete, or the position is at the end. */
@@ -106,7 +176,7 @@ export interface SessionActions {
   skipMove(): void;
   skipRest(): void;
   previous(): void;
-  addRest(seconds: 15 | 30): void;
+  addRest(seconds: 15 | 30): AddRestResult;
   setRung(rung: Rung): void;
   requestEnd(): void;
   keepGoing(): void;
@@ -159,6 +229,7 @@ const initial = (): SessionState => ({
   logged: false,
   restoredAt: 0,
   trial: false,
+  restPref: null,
 });
 
 // ---- Snapshot (de)serialisation ----
@@ -178,6 +249,7 @@ interface SnapshotBody {
   formChecks: number;
   prefs: SessionPrefs;
   complete: boolean;
+  restPref?: RestPref | null;
 }
 
 export function serialiseState(s: SessionState, now: number): string {
@@ -196,6 +268,7 @@ export function serialiseState(s: SessionState, now: number): string {
     formChecks: s.formChecks,
     prefs: s.prefs,
     complete: s.status === 'complete',
+    restPref: s.restPref,
   };
   return JSON.stringify(body);
 }
@@ -271,6 +344,8 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
       const s = get();
       // A 30-second trial never leaves a snapshot behind, so Home never offers to resume it.
       if (!s.plan || s.trial || s.status === 'idle' || s.status === 'ended') return Promise.resolve();
+      // Never saved while it is still on the Ready screen: nothing has been done yet.
+      if (isReady(s)) return Promise.resolve();
       const d = deps();
       const mono = d.clock.now();
       if (!force && mono - s.lastSnapshotMono < SNAPSHOT_EVERY_MS) return Promise.resolve();
@@ -293,8 +368,8 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
       return { positionMs: positionAt(s, now), activeMs: s.activeMs + (now - s.anchorMono) };
     };
 
-    const rebuild = (plan: SessionPlan, rungBySet: Record<string, Rung>): Timeline =>
-      deps().buildTimeline(plan, { rungBySet });
+    const rebuild = (plan: SessionPlan, rungBySet: Record<string, Rung>, restPref: RestPref | null = get().restPref): Timeline =>
+      applyRestPref(deps().buildTimeline(plan, { rungBySet }), restPref);
 
     const jumpTo = (ms: number) => {
       const d = deps();
@@ -319,15 +394,17 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
       start(plan, opts = {}) {
         const d = deps();
         const now = d.clock.now();
-        const timeline = rebuild(plan, {});
+        const timeline = rebuild(plan, {}, null);
+        // The screen stays on while the user gets in position, but the clock does not run.
         d.keepAwake.activate();
         set({
           ...initial(),
-          status: 'active',
+          status: 'paused',
+          pausedReason: 'ready',
           plan,
           timeline,
           anchorMono: now,
-          lastTickMono: now,
+          lastTickMono: 0,
           startedAt: d.clock.wall(),
           planWeek: opts.planWeek ?? 1,
           planDay: opts.planDay ?? 0,
@@ -335,8 +412,6 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
           resumeBy: d.clock.wall() + RESUME_WINDOW_MS,
           trial: !!opts.trial,
         });
-        get().tick();
-        void persist(true);
       },
 
       tick() {
@@ -432,8 +507,18 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
           void get().endWithoutSaving();
           return;
         }
+        const wasReady = s.pausedReason === 'ready';
         d.keepAwake.activate();
-        set({ status: 'active', anchorMono: d.clock.now(), lastTickMono: d.clock.now(), pausedReason: null });
+        set({
+          status: 'active',
+          anchorMono: d.clock.now(),
+          lastTickMono: d.clock.now(),
+          pausedReason: null,
+          // The clock starts here: the session's start time is the tap on Start.
+          ...(wasReady ? { startedAt: d.clock.wall(), resumeBy: d.clock.wall() + RESUME_WINDOW_MS } : {}),
+        });
+        // First tap on Start: play the first cue now, as the old immediate start did.
+        if (wasReady) get().tick();
         void persist(true);
       },
 
@@ -496,23 +581,28 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
 
       addRest(seconds) {
         const s = get();
-        if (!s.plan || (s.status !== 'active' && s.status !== 'paused')) return;
+        if (!s.plan || (s.status !== 'active' && s.status !== 'paused')) return { ok: false, reason: 'inactive' };
         const d = deps();
-        const eff = effOf(s);
-        const pos = positionAt(s, d.clock.now());
-        const loc = locate(eff, pos);
-        if (!loc) return;
         // Current rest if resting, else the next rest (A6).
-        const target = loc.seg.kind === 'rest' ? loc : nextRestFrom(eff, pos);
-        if (!target) return;
-        const idx = target.seg.index;
-        const cur = s.extras[idx] ?? 0;
+        const t = restTarget(s, d.clock.now());
+        if (!t) return { ok: false, reason: 'none' };
+        const cur = s.extras[t.index] ?? 0;
         const next = Math.min(MAX_EXTRA_REST_MS, cur + seconds * 1000);
-        if (next === cur) return;
+        if (next === cur) return { ok: false, reason: 'max' };
         // Keep the running position: re-anchor before the segment table changes.
         const frozen = freeze(d.clock.now());
-        set({ ...frozen, anchorMono: d.clock.now(), extras: { ...s.extras, [idx]: next } });
+        set({ ...frozen, anchorMono: d.clock.now(), extras: { ...s.extras, [t.index]: next } });
         void persist(true);
+        const added = next - cur;
+        return {
+          ok: true,
+          where: t.where,
+          addedMs: added,
+          extraMs: next,
+          restMs: t.restMs + added,
+          after: t.after,
+          capped: next >= MAX_EXTRA_REST_MS && added < seconds * 1000,
+        };
       },
 
       setRung(rung) {
@@ -561,6 +651,7 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
           d.keepAwake.activate();
           set({ status: 'active', anchorMono: d.clock.now(), resumeTo: null });
         } else {
+          if (s.pausedReason === 'ready') d.keepAwake.activate();
           set({ status: 'paused', resumeTo: null });
         }
       },
@@ -611,8 +702,17 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
       },
 
       setPrefs(patch) {
-        const prefs = { ...get().prefs, ...patch };
+        const before = get();
+        const prefs = { ...before.prefs, ...patch };
         set({ prefs });
+        // A new rest length applies to every rest after the one in progress.
+        const live = before.status === 'active' || before.status === 'paused' || before.status === 'confirm_end';
+        if (patch.restS !== undefined && patch.restS !== before.prefs.restS && live && before.plan && before.timeline) {
+          const loc = locate(effOf(before), positionAt(before, deps().clock.now()));
+          const restPref: RestPref = { restS: prefs.restS, after: loc ? loc.seg.index : before.timeline.segments.length };
+          set({ restPref, timeline: rebuild(before.plan, before.rungBySet, restPref) });
+          void persist(true);
+        }
         void deps().prefs.save(prefs);
       },
 
@@ -660,7 +760,8 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
           plan: body.plan,
           rungBySet: body.rungBySet,
           extras: body.extras,
-          timeline: rebuild(body.plan, body.rungBySet),
+          restPref: body.restPref ?? null,
+          timeline: rebuild(body.plan, body.rungBySet, body.restPref ?? null),
           positionMs: body.positionMs,
           activeMs: body.activeMs,
           rung: body.rung,
@@ -699,7 +800,8 @@ export function createSessionStore(): UseBoundStore<StoreApi<SessionStore>> {
             plan: body.plan,
             rungBySet: body.rungBySet,
             extras: body.extras,
-            timeline: deps().buildTimeline(body.plan, { rungBySet: body.rungBySet }),
+            restPref: body.restPref ?? null,
+            timeline: applyRestPref(deps().buildTimeline(body.plan, { rungBySet: body.rungBySet }), body.restPref ?? null),
             positionMs: body.positionMs,
             activeMs: body.activeMs,
             skipped: body.skipped,

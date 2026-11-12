@@ -1,5 +1,6 @@
 // Player (normal), Yoga and Dance share one stage layout: they are views of the same store.
 
+import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -7,11 +8,12 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../../app/types';
 import { dark, space, type } from '../../../theme';
 import { resolveFormCheckEntry } from '../../formcheck/gate';
-import { BigTimer, Btn, IconBtn, InfoNote, RadioGroup, RUNG_OPTIONS, Screen, SegmentedProgress, Stage, TimerRing, TopBar } from '../components';
+import { BigTimer, Btn, IconBtn, InfoNote, Notice, RadioGroup, RUNG_OPTIONS, Screen, SegmentedProgress, Stage, TimerRing, TopBar } from '../components';
 import { getSessionDeps } from '../deps';
 import { useSessionScreen, type SessionRouteName } from '../hooks';
 import { exerciseIcon } from '../icons';
-import { useSessionStore } from '../store';
+import { restNotice, rungNotice } from '../feedback';
+import { MAX_EXTRA_REST_MS, restTarget, useSessionStore } from '../store';
 import type { Rung } from '../types';
 import { formatClock } from '../view';
 
@@ -53,6 +55,7 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
   const v = useSessionScreen(route);
   const quiet = useSessionStore((s) => s.prefs.quiet);
   const copy = COPY[variant];
+  const [notice, setNotice] = useState<string | null>(null);
 
   const act = useSessionStore.getState;
   const step = v.step;
@@ -68,6 +71,7 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
   const info = getSessionDeps().content.exercise(step.exerciseId);
   const cue = info?.cue ?? '';
   const total = v.segmentTotalMs;
+  const ready = v.ready;
   const kindWord = v.kind === 'transition' ? 'Get ready' : v.kind === 'rest' ? 'Rest' : step.mode === 'hold' ? 'Hold' : 'Work';
   const pill =
     variant === 'dance' && info?.bpm
@@ -75,10 +79,28 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
       : v.kind === 'transition'
         ? 'Up next'
         : `Set ${v.set} of ${v.sets}${v.side ? ` · ${v.side === 'R' ? 'Right' : 'Left'} side` : ''}`;
-  const sub = `${kindWord} · ${formatClock(v.sessionRemainingMs)} left`;
+  const sub = ready ? `Ready · ${formatClock(v.sessionRemainingMs)} in total` : `${kindWord} · ${formatClock(v.sessionRemainingMs)} left`;
   const options = variant === 'dance' && quiet ? copy.options.map((o) => (o.value === 1 ? { ...o, disabled: true } : o)) : copy.options;
   const unitProgress = `${copy.unit} ${v.moveNumber} of ${v.moveCount}`;
   const header = v.phase === 'work' ? unitProgress : v.moveLabel;
+  const unitWord = copy.unit.toLowerCase();
+  const atFirstMove = v.stepIndex === 0 && v.elapsedMs < 1000;
+  const rt = restTarget(useSessionStore.getState(), getSessionDeps().clock.now());
+  const restOff = !rt || rt.atMax;
+  const restLine = !rt
+    ? 'No rest left in this session.'
+    : rt.atMax
+      ? `That rest already has the most extra time (${MAX_EXTRA_REST_MS / 1000} s).`
+      : rt.extraMs > 0
+        ? `Extra rest so far: +${rt.extraMs / 1000}s ${rt.where === 'current' ? 'on this rest' : `on your next rest, after ${rt.after}`}`
+        : null;
+
+  const chooseRung = (r: Rung) => {
+    act().setRung(r);
+    const label = copy.options.find((o) => o.value === r)?.label ?? '';
+    setNotice(rungNotice(useSessionStore.getState(), getSessionDeps().clock.now(), label, unitWord));
+  };
+  const addRest = (s: 15 | 30) => setNotice(restNotice(act().addRest(s)));
 
   const end = () => {
     act().requestEnd();
@@ -127,27 +149,49 @@ export function StageScreen({ variant, route }: { variant: Variant; route: Sessi
           label={copy.label}
           options={options}
           value={v.rung}
-          onChange={(r) => act().setRung(r)}
+          onChange={chooseRung}
         />
-        <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s, marginBottom: space.m }]}>{copy.caption}</Text>
+        <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s }]}>{copy.caption}</Text>
+        <Notice text={notice} />
+        <View style={{ height: space.m }} />
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.xl }}>
-          <IconBtn label="Previous move" icon="skip_previous" tone="tonal" size={56} onPress={() => act().previous()} />
-          <IconBtn label="Pause" icon="pause" tone="filled" size={variant === 'normal' ? 96 : 80} onPress={() => act().pause('user')} />
-          <IconBtn label="Next move" icon="skip_next" tone="tonal" size={56} onPress={() => act().skipMove()} />
-        </View>
+        {ready ? (
+          <View style={{ gap: space.m }}>
+            <Text style={[type.body, { color: dark.on, textAlign: 'center' }]} accessibilityLiveRegion="polite">
+              Get in position, then tap Start.
+            </Text>
+            <Btn label="Start" height={72} onPress={() => act().resume()} />
+          </View>
+        ) : (
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.xl }}>
+            <IconBtn
+              label="Previous move"
+              icon="skip_previous"
+              tone="tonal"
+              size={56}
+              disabled={atFirstMove}
+              hint={atFirstMove ? 'You are at the start of the first move' : undefined}
+              onPress={() => act().previous()}
+            />
+            <IconBtn label="Pause" icon="pause" tone="filled" size={variant === 'normal' ? 96 : 80} onPress={() => act().pause('user')} />
+            <IconBtn label="Next move" icon="skip_next" tone="tonal" size={56} onPress={() => act().skipMove()} />
+          </View>
+        )}
 
-        {variant === 'normal' ? (
-          <View style={{ flexDirection: 'row', gap: space.s, marginTop: space.l }}>
-            <View style={{ flex: 1 }}>
-              <Btn label="+15s rest" kind="outline" onPress={() => act().addRest(15)} />
+        {variant === 'normal' && !ready ? (
+          <View style={{ marginTop: space.l }}>
+            <View style={{ flexDirection: 'row', gap: space.s }}>
+              <View style={{ flex: 1 }}>
+                <Btn label="+15s rest" kind="outline" disabled={restOff} onPress={() => addRest(15)} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Btn label="+30s rest" kind="outline" disabled={restOff} onPress={() => addRest(30)} />
+              </View>
             </View>
-            <View style={{ flex: 1 }}>
-              <Btn label="+30s rest" kind="outline" onPress={() => act().addRest(30)} />
-            </View>
+            {restLine ? <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s, textAlign: 'center' }]}>{restLine}</Text> : null}
           </View>
         ) : null}
-        {variant === 'normal' && step.formCheckable ? (
+        {variant === 'normal' && !ready && step.formCheckable ? (
           <View style={{ marginTop: space.s }}>
             <Btn
               label="Check form"

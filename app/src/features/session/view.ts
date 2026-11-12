@@ -48,6 +48,8 @@ export interface SessionView {
   upNext: UpNext | null;
   rung: Rung;
   pausedReason: SessionState['pausedReason'];
+  /** Open on the Ready screen: the first move is shown and the clock is not running. */
+  ready: boolean;
 }
 
 export function positionAt(s: SessionState, now: number): number {
@@ -156,6 +158,7 @@ export function deriveView(s: SessionState, now: number): SessionView {
     upNext,
     rung: s.rung,
     pausedReason: s.pausedReason,
+    ready: s.status === 'paused' && s.pausedReason === 'ready',
   };
 }
 

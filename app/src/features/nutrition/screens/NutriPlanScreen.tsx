@@ -4,7 +4,7 @@ import { ScrollView, View } from 'react-native';
 import { Card, FilledButton, IconButton, Tabs, Text, TopBar, space, useTokens } from '../../../ui';
 import type { NutritionProfile } from '../../../db/repositories';
 import { getNutritionDeps } from '../deps';
-import { Kcal, joinParts, useShowCalories } from '../guard';
+import { Kcal, joinParts, useShowCalories, useTopInset } from '../guard';
 import { useNav } from '../hooks';
 import { SLOT_LABEL, SLOT_TIME, buildMealPlan, entryLine, profileHash, slotTotals, swapItems, type PlanDays } from '../logic';
 import { splitMeals } from '../../../engine';
@@ -16,6 +16,7 @@ const GOAL_LINE: Record<NutritionProfile['goal'], string> = { maintain: 'Every d
 export function NutriPlanScreen() {
   const nav = useNav();
   const t = useTokens();
+  const topInset = useTopInset();
   const show = useShowCalories();
   const d = getNutritionDeps();
   const content = d.content();
@@ -40,7 +41,7 @@ export function NutriPlanScreen() {
 
   if (!profile || !days) {
     return (
-      <View style={{ flex: 1, backgroundColor: t.bg }}>
+      <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: topInset }}>
         <TopBar title="Your food plan" onLeading={() => nav.goBack()} />
         {profile === null ? (
           <View style={{ padding: space.xl, gap: space.l }}>
@@ -63,7 +64,7 @@ export function NutriPlanScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: t.bg }}>
+    <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: topInset }}>
       <TopBar title="Your food plan" onLeading={() => nav.goBack()} trailing={[{ icon: 'tune', label: 'Change my answers', onPress: () => nav.navigate('NutriProfile') }]} />
       <ScrollView contentContainerStyle={{ padding: space.l, gap: space.l, paddingBottom: space.xxxl }}>
         <Card tone="pc">
@@ -85,7 +86,7 @@ export function NutriPlanScreen() {
 
         {days[idx]!.map((s, si) => {
           const tt = slotTotals(content, s);
-          const text = s.items.map((i) => entryLine(content, i)).join(', ') || 'Nothing suggested';
+          const text = s.items.map((i) => entryLine(content, i)).join(' + ') || 'Nothing suggested';
           return (
             <Card key={`${s.slot}-${si}`} tone="c3">
               <View style={{ padding: space.l, flexDirection: 'row', alignItems: 'center', gap: space.m }}>

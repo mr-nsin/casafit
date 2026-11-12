@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../../app/types';
 import { dark, radius, space, type } from '../../../theme';
-import { Btn, Screen, TimerRing, TopBar } from '../components';
+import { Btn, Notice, Screen, TimerRing, TopBar } from '../components';
+import { getSessionDeps } from '../deps';
+import { restNotice } from '../feedback';
 import { useSessionScreen } from '../hooks';
-import { useSessionStore } from '../store';
+import { MAX_EXTRA_REST_MS, restTarget, useSessionStore } from '../store';
 import { formatClock } from '../view';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
@@ -16,6 +18,7 @@ export function RestScreen() {
   const nav = useNavigation<Nav>();
   const v = useSessionScreen('Rest');
   const feelPending = useSessionStore((s) => s.feelPending);
+  const [notice, setNotice] = useState<string | null>(null);
 
   // After the middle move, offer the Feel sheet once. The timer keeps running under it.
   useEffect(() => {
@@ -28,6 +31,9 @@ export function RestScreen() {
   const act = useSessionStore.getState;
   const secs = Math.ceil(v.segmentRemainingMs / 1000);
   const next = v.upNext;
+  const rt = restTarget(useSessionStore.getState(), getSessionDeps().clock.now());
+  const restOff = !rt || rt.atMax;
+  const addRest = (s: 15 | 30) => setNotice(restNotice(act().addRest(s)));
   const done = v.set >= v.sets ? `Move ${v.moveNumber} of ${v.moveCount} done` : `Set ${v.set} of ${v.sets} done`;
 
   return (
@@ -53,12 +59,20 @@ export function RestScreen() {
       </View>
       <View style={{ flexDirection: 'row', gap: space.s, justifyContent: 'center' }}>
         <View style={{ flex: 1 }}>
-          <Btn label="+15s" kind="outline" onPress={() => act().addRest(15)} />
+          <Btn label="+15s" kind="outline" disabled={restOff} onPress={() => addRest(15)} />
         </View>
         <View style={{ flex: 1 }}>
-          <Btn label="+30s" kind="outline" onPress={() => act().addRest(30)} />
+          <Btn label="+30s" kind="outline" disabled={restOff} onPress={() => addRest(30)} />
         </View>
       </View>
+      <Notice text={notice} />
+      {rt && rt.atMax ? (
+        <Text style={[type.bodySmall, { color: dark.osv, textAlign: 'center', marginTop: space.s }]}>
+          {`This rest already has the most extra time (${MAX_EXTRA_REST_MS / 1000} s).`}
+        </Text>
+      ) : rt && rt.extraMs > 0 ? (
+        <Text style={[type.bodySmall, { color: dark.osv, textAlign: 'center', marginTop: space.s }]}>{`Extra rest so far: +${rt.extraMs / 1000}s`}</Text>
+      ) : null}
       {next ? (
         <View style={{ backgroundColor: dark.c3, borderRadius: radius.l, padding: space.l, marginTop: space.xl }}>
           <Text style={[type.label, { color: dark.osv }]}>Up next</Text>

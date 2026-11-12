@@ -9,7 +9,7 @@ import { useVerifyOutcome } from '../../onboarding/flowState';
 import { configureOnboardingDeps, getOnboardingDeps } from '../../onboarding/deps';
 import { canonicalProblems, totalS } from '../../../engine';
 import { useSessionStore } from '../store';
-import { createHarness, makePlan } from '../testkit';
+import { begin, createHarness, makePlan } from '../testkit';
 import { TRIAL_DONE, useTrialNotice } from '../trial';
 import { HomeScreen } from './HomeScreen';
 import { PlanScreen } from './PlanScreens';
@@ -173,7 +173,7 @@ describe('Library', () => {
     await render(<LibraryScreen />);
     await fireEvent.press(await screen.findByLabelText(/^Yoga flow 15/));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Yoga');
-    expect(useSessionStore.getState().status).toBe('active');
+    expect(useSessionStore.getState().status).toBe('paused'); // Ready: the clock waits for Start
     expect(useSessionStore.getState().plan?.style).toBe('yoga');
     useSessionStore.getState().reset();
     await fireEvent.press(screen.getByLabelText(/^Dance cardio 15/));
@@ -300,7 +300,7 @@ describe('BodyPart', () => {
     await fireEvent.press(await screen.findByLabelText('Start a 15-minute core session'));
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Player');
     const s = useSessionStore.getState();
-    expect(s.status).toBe('active');
+    expect(s.status).toBe('paused'); // Ready: the clock waits for Start
     expect(s.plan?.title).toBe('Core 15');
     expect(s.plan?.steps.filter((x) => x.phase === 'work')).toHaveLength(5);
     // No knee-loading moves slip in.
@@ -395,7 +395,7 @@ describe('Exercise', () => {
     expect(mockNav.navigate).toHaveBeenLastCalledWith('Player');
     const st = useSessionStore.getState();
     expect(st.trial).toBe(true);
-    expect(st.status).toBe('active');
+    expect(st.status).toBe('paused'); // Ready: the clock waits for Start
     expect(st.timeline!.totalS).toBe(30);
     expect(st.plan!.steps.map((x) => x.exerciseId)).toEqual(['glute_bridge']);
     expect(harness.getSnapshot()).toBeNull();
@@ -409,7 +409,7 @@ describe('Exercise', () => {
     await first.unmount();
 
     mockRoute = { params: { exerciseId: 'glute_bridge' } };
-    useSessionStore.getState().start(makePlan({ title: 'Push 15' }));
+    begin(useSessionStore, makePlan({ title: 'Push 15' }));
     useSessionStore.getState().pause('user');
     await render(<ExerciseScreen />);
     await fireEvent.press(await screen.findByLabelText('Try 30 seconds'));

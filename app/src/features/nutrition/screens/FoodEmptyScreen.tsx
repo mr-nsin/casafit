@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BottomNav, FilledButton, HeroIllustration, Icon, OutlinedButton, Text, Touchable, space, useTokens } from '../../../ui';
 import { getNutritionDeps } from '../deps';
+import { useTopInset } from '../guard';
 import { copyYesterday, useNav, useNutritionData } from '../hooks';
 import { SLOT_LABEL, slotForHour, slotTotals, type PlanDays } from '../logic';
 
@@ -35,13 +36,14 @@ export function FoodEmptyView({
 }) {
   const nav = useNav();
   const t = useTokens();
+  const topInset = useTopInset();
   const now = getNutritionDeps().now();
   const slot = slotForHour(now.getHours());
   const time = now.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true });
   const day = now.toLocaleDateString('en-IN', { weekday: 'long' });
   const hint = hasProfile ? suggestion(plan, now) : null;
   return (
-    <View style={{ flex: 1, backgroundColor: t.bg, padding: space.xl, gap: space.l }}>
+    <View style={{ flex: 1, backgroundColor: t.bg, padding: space.xl, paddingTop: topInset + space.m, gap: space.l }}>
       <Text variant="bodySmall" color="osv">{`${day}, ${time}`}</Text>
       <Text variant="headline" accessibilityRole="header">
         Nutrition

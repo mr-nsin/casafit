@@ -25,6 +25,7 @@ export function PausedScreen() {
   const v = useSessionScreen('Paused');
   const act = useSessionStore.getState;
   const reason = v.pausedReason ? REASON[v.pausedReason] : undefined;
+  const ready = v.ready;
 
   return (
     <Screen>
@@ -38,10 +39,10 @@ export function PausedScreen() {
       />
       <View style={{ alignItems: 'center', marginTop: space.xl }}>
         <View style={{ width: 96, height: 96, borderRadius: 48, backgroundColor: dark.pc, alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="pause" size={48} color="opc" />
+          <Icon name={ready ? 'play_arrow' : 'pause'} size={48} color="opc" />
         </View>
         <Text style={[type.display, { color: dark.on, marginTop: space.l }]} accessibilityRole="header" accessibilityLiveRegion="polite">
-          Paused
+          {ready ? 'Ready' : 'Paused'}
         </Text>
         {v.step ? (
           <View
@@ -53,17 +54,20 @@ export function PausedScreen() {
             </Text>
           </View>
         ) : null}
+        {ready ? <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s }]}>Get in position, then tap Start.</Text> : null}
         {reason ? <Text style={[type.bodySmall, { color: dark.osv, marginTop: space.s }]}>{reason}</Text> : null}
       </View>
       <View style={{ marginTop: space.xl }}>
-        <InfoNote>You can pick this session up again for the next 24 hours. Your time so far is saved.</InfoNote>
+        <InfoNote>
+          {ready ? 'The clock starts when you tap Start.' : 'You can pick this session up again for the next 24 hours. Your time so far is saved.'}
+        </InfoNote>
       </View>
       <View style={{ marginTop: space.m }}>
         <Btn label="Sound and voice" kind="text" onPress={() => nav.navigate('SessionSettings')} />
       </View>
       <View style={{ flex: 1 }} />
       <View style={{ gap: space.s }}>
-        <Btn label="Resume" height={56} onPress={() => act().resume()} />
+        <Btn label={ready ? 'Start' : 'Resume'} height={56} onPress={() => act().resume()} />
         <Btn label="Skip move" kind="tonal" onPress={() => act().skipMove()} />
         <Btn
           label="End session"

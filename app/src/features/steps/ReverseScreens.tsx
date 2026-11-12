@@ -142,11 +142,17 @@ export function ReverseTimerScreen() {
   }, [bout.status]);
 
   const finish = useCallback(async () => {
+    // Nothing running (for example the bout already ended): Close and Stop both just leave.
+    if (useBout.getState().status === 'idle') {
+      nav.replace('Steps');
+      return;
+    }
     await useBout.getState().stop('user');
     useBout.getState().reset(); // idle sends us back to Steps
-  }, []);
+  }, [nav]);
 
   const done = bout.status === 'finished';
+  const idle = bout.status === 'idle';
   useEffect(() => {
     if (done && bout.stoppedBy !== 'user') {
       // Auto-stopped (bout length or the 15-minute day). Show the result for a moment, then leave.
@@ -165,7 +171,16 @@ export function ReverseTimerScreen() {
   return (
     <Page
       top={<TopBar leading="close" onLeading={() => void finish()} title="Reverse walk" centerTitle />}
-      footer={<FilledButton label="Stop bout" leadingIcon="stop" onPress={() => void finish()} disabled={done} />}
+      footer={
+        <View style={{ gap: space.xs }}>
+          <FilledButton label="Stop bout" leadingIcon="stop" onPress={() => void finish()} disabled={done || idle} />
+          {idle ? (
+            <Text variant="label" color="osv" style={{ textAlign: 'center' }} accessibilityLiveRegion="polite">
+              No bout is running. Use the close button to go back to Steps.
+            </Text>
+          ) : null}
+        </View>
+      }
     >
       <View style={{ alignItems: 'center' }}>
         <TimerRing

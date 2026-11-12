@@ -1,7 +1,7 @@
 import { locate, totalMs } from './locate';
 import { MAX_TICK_GAP_MS, isFinished, movesDone, RESUME_WINDOW_MS } from './store';
 import { startTrial, trialPlan } from './start';
-import { createHarness, makePlan } from './testkit';
+import { begin, createHarness, makePlan } from './testkit';
 import { deriveView, effOf, formatClock } from './view';
 import { getSessionDeps } from './deps';
 
@@ -10,7 +10,7 @@ const plan = () => makePlan();
 describe('session timeline', () => {
   it('is exactly 15:00 and the clock drives position', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     const s = h.store.getState();
     expect(s.timeline!.totalS).toBe(900);
     expect(totalMs(effOf(s))).toBe(900_000);
@@ -24,7 +24,7 @@ describe('session timeline', () => {
 
   it('keeps position when ticks arrive late but within the gap limit', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.clock.advance(MAX_TICK_GAP_MS - 1000);
     h.store.getState().tick();
     expect(h.store.getState().status).toBe('active');
@@ -33,7 +33,7 @@ describe('session timeline', () => {
 
   it('walks transition, work, rest through a move', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(120_000);
     let v = deriveView(h.store.getState(), h.clock.now());
     expect(v.kind).toBe('transition');
@@ -48,7 +48,7 @@ describe('session timeline', () => {
 
   it('completes at 15:00 and writes nothing until finalised', async () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(900_000);
     expect(h.store.getState().status).toBe('complete');
     expect(h.keepAwake.active).toBe(false);
@@ -65,7 +65,7 @@ describe('session timeline', () => {
 describe('pause and resume', () => {
   it('freezes time while paused and restores the same position', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(150_000);
     const before = deriveView(h.store.getState(), h.clock.now());
     h.store.getState().pause('call');
@@ -83,7 +83,7 @@ describe('pause and resume', () => {
 
   it('ignores wall-clock jumps while running', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.clock.jumpWall(5 * 3600_000);
     h.advance(10_000);
     expect(deriveView(h.store.getState(), h.clock.now()).elapsedMs).toBe(10_000);
@@ -91,7 +91,7 @@ describe('pause and resume', () => {
 
   it('saves a snapshot on pause and restores it as paused', async () => {
     const h = createHarness();
-    h.store.getState().start(plan(), { planWeek: 2, planDay: 3 });
+    begin(h.store, plan(), { planWeek: 2, planDay: 3 });
     h.advance(200_000);
     h.store.getState().pause('user');
     const snap = h.getSnapshot()!;
@@ -108,7 +108,7 @@ describe('pause and resume', () => {
 
   it('does not restore after 24 h and logs the session as unfinished', async () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(300_000);
     h.store.getState().pause('user');
     h.store.getState().reset();
@@ -124,7 +124,7 @@ describe('pause and resume', () => {
 describe('early end', () => {
   it('Keep going resumes an active session where it was', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(50_000);
     h.store.getState().requestEnd();
     expect(h.store.getState().status).toBe('confirm_end');
@@ -136,7 +136,7 @@ describe('early end', () => {
 
   it('Save and finish later keeps a snapshot and writes no log yet', async () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(400_000);
     h.store.getState().requestEnd();
     await h.store.getState().saveForLater();
@@ -147,7 +147,7 @@ describe('early end', () => {
 
   it('End without saving clears the snapshot and logs an unfinished session over 60 s', async () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(400_000);
     h.store.getState().requestEnd();
     await h.store.getState().endWithoutSaving();
@@ -157,7 +157,7 @@ describe('early end', () => {
 
   it('does not log a session under 60 s', async () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(20_000);
     h.store.getState().requestEnd();
     await h.store.getState().endWithoutSaving();
@@ -168,7 +168,7 @@ describe('early end', () => {
 describe('controls', () => {
   it('+15s rest during rest extends it; during work extends the next rest; caps at 90 s', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(120_000 + 12_000 + 10_000); // 10 s into move 1 work
     h.store.getState().addRest(30);
     const eff = effOf(h.store.getState());
@@ -185,7 +185,7 @@ describe('controls', () => {
 
   it('skip rest jumps to the end of the rest', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(120_000 + 12_000 + 40_000 + 5_000); // 5 s into rest
     expect(deriveView(h.store.getState(), h.clock.now()).kind).toBe('rest');
     h.store.getState().skipRest();
@@ -195,7 +195,7 @@ describe('controls', () => {
 
   it('skip move goes to the closing rest, then the next move; skipped moves are not counted', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(120_000 + 12_000 + 5_000);
     h.store.getState().skipMove();
     let v = deriveView(h.store.getState(), h.clock.now());
@@ -209,7 +209,7 @@ describe('controls', () => {
 
   it('previous restarts the current move after 3 s, otherwise goes back one', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(120_000 + 12_000 + 132_000 + 20_000); // inside move 2 (index 5)
     h.store.getState().previous();
     expect(deriveView(h.store.getState(), h.clock.now()).stepIndex).toBe(5);
@@ -220,7 +220,7 @@ describe('controls', () => {
 
   it('rung change applies from the next set and keeps the total at 15:00', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(120_000 + 12_000 + 10_000); // move 1, set 1 work
     h.store.getState().setRung(1);
     const s = h.store.getState();
@@ -237,7 +237,7 @@ describe('controls', () => {
 
   it('Feel answers change the next set and are recorded', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(120_000 + 12_000 + 10_000);
     h.store.getState().answerFeel('hard');
     expect(h.store.getState().rung).toBe(-1);
@@ -250,7 +250,7 @@ describe('controls', () => {
 describe('feel prompt', () => {
   it('is raised once, in the rest after the middle move', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     // middle move is index 6 (third work move). Its closing rest starts at:
     const eff = effOf(h.store.getState());
     const rest = eff.filter((e) => e.seg.stepIndex === 6 && e.seg.kind === 'rest' && e.seg.set === 2)[0]!;
@@ -264,12 +264,12 @@ describe('feel prompt', () => {
 
   it('is skipped for sessions under 8 minutes', () => {
     const h = createHarness();
-    h.store.getState().start(makePlan({}, 3));
+    begin(h.store, makePlan({}, 3));
     expect(h.store.getState().timeline!.totalS).toBe(120 + 3 * 132 + 120);
     // 636 s total is over 8 min, so shorten the check with a micro plan instead
     const short = makePlan({}, 3);
     short.steps = short.steps.filter((s) => s.phase === 'work');
-    h.store.getState().start(short);
+    begin(h.store, short);
     const rest = effOf(h.store.getState()).filter((e) => e.seg.stepIndex === 1 && e.seg.kind === 'rest' && e.seg.set === 2)[0]!;
     h.advance(rest.startMs + 1000);
     expect(h.store.getState().feelPending).toBe(false);
@@ -279,7 +279,7 @@ describe('feel prompt', () => {
 describe('cues', () => {
   it('speaks step start, 10 s, 3-2-1, rest and up next, once each', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     expect(h.cues[0]).toMatchObject({ kind: 'step_start', name: 'Warm 0' });
     h.advance(20_000);
     expect(h.cues.map((c) => c.kind)).toContain('ten_seconds');
@@ -295,7 +295,7 @@ describe('cues', () => {
 
   it('announces the side switch and up next after the last set', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     // move 2 (index 5) has sides each. Go to its set 2.
     const eff = effOf(h.store.getState());
     const left = eff.find((e) => e.seg.stepIndex === 5 && e.seg.kind === 'work' && e.seg.set === 2)!;
@@ -308,7 +308,7 @@ describe('cues', () => {
 
   it('only the latest start cue plays after a long gap', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(25_000);
     const before = h.cues.length;
     // One late tick (9 s, inside the gap limit) that skips over a whole segment boundary.
@@ -322,7 +322,7 @@ describe('cues', () => {
 describe('keep awake and services', () => {
   it('holds keep-awake while active and releases on pause and end', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     expect(h.keepAwake.active).toBe(true);
     h.store.getState().pause();
     expect(h.keepAwake.active).toBe(false);
@@ -334,7 +334,7 @@ describe('keep awake and services', () => {
 
   it('timeline located by the engine-shaped data is consistent', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     const eff = effOf(h.store.getState());
     expect(locate(eff, 0)?.seg.index).toBe(0);
     expect(locate(eff, 899_999)?.seg.index).toBe(eff.length - 1);
@@ -346,7 +346,7 @@ describe('keep awake and services', () => {
 describe('active time', () => {
   it('does not count time while the app was not running (frozen process, emulator restore)', () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(60_000);
     // The process is frozen for 11 minutes; the first tick afterwards sees the jump.
     h.clock.advance(11 * 60_000);
@@ -360,7 +360,7 @@ describe('active time', () => {
 
   it('counts only active time across a snapshot and a restore much later', async () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(90_000);
     h.store.getState().pause('user');
     h.store.getState().reset();
@@ -380,7 +380,7 @@ describe('active time', () => {
 
   it('restores an active snapshot (process killed) with only the time saved before the kill', async () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(20_000);
     h.store.getState().reset();
     h.clock.advance(11 * 60_000);
@@ -392,7 +392,7 @@ describe('active time', () => {
 describe('finished but never saved', () => {
   it('a restored complete session is finished; saving logs it once on the day it finished and clears the snapshot', async () => {
     const h = createHarness();
-    h.store.getState().start(plan(), { planWeek: 1, planDay: 2 });
+    begin(h.store, plan(), { planWeek: 1, planDay: 2 });
     h.advance(900_000);
     expect(h.store.getState().status).toBe('complete');
     const finishedAt = h.clock.wall();
@@ -410,7 +410,7 @@ describe('finished but never saved', () => {
 
   it('a paused snapshot with no time left counts as finished and saves as complete', async () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(899_000);
     h.store.getState().pause('user');
     h.store.setState({ positionMs: 900_000 });
@@ -426,14 +426,14 @@ describe('finished but never saved', () => {
 
   it('discarding clears the snapshot and logs nothing; a session with time left is not finished', async () => {
     const h = createHarness();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(900_000);
     h.store.getState().reset();
     await h.store.getState().restoreFromSnapshot();
     await h.store.getState().discardFinished();
     expect(h.logs).toHaveLength(0);
     expect(h.getSnapshot()).toBeNull();
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     h.advance(100_000);
     h.store.getState().pause('user');
     expect(isFinished(h.store.getState())).toBe(false);
@@ -452,6 +452,8 @@ describe('single-move trial', () => {
     expect(startTrial(ex)).toBe('Player');
     expect(h.store.getState().timeline!.totalS).toBe(30);
     expect(h.store.getState().trial).toBe(true);
+    expect(h.store.getState().status).toBe('paused'); // Ready first, like every session
+    h.store.getState().resume();
     h.advance(10_000);
     h.store.getState().pause('user');
     expect(h.getSnapshot()).toBeNull();
@@ -466,12 +468,116 @@ describe('single-move trial', () => {
   it('ending a trial logs nothing, and a normal session after it is a normal session', async () => {
     const h = createHarness();
     startTrial(ex);
+    h.store.getState().resume();
     h.advance(20_000);
     await h.store.getState().endWithoutSaving();
     expect(h.logs).toHaveLength(0);
-    h.store.getState().start(plan());
+    begin(h.store, plan());
     expect(h.store.getState().trial).toBe(false);
     expect(h.store.getState().timeline!.totalS).toBe(900);
     expect(h.getSnapshot()).not.toBeNull();
+  });
+});
+
+describe('Ready gate', () => {
+  it('start() opens Ready: first move shown, clock not running, nothing counted', () => {
+    const h = createHarness();
+    h.store.getState().start(plan());
+    const s = h.store.getState();
+    expect([s.status, s.pausedReason]).toEqual(['paused', 'ready']);
+    expect(deriveView(s, h.clock.now()).ready).toBe(true);
+    h.advance(60_000);
+    h.store.getState().tick();
+    const v = deriveView(h.store.getState(), h.clock.now());
+    expect(v.elapsedMs).toBe(0);
+    expect(v.sessionRemainingMs).toBe(900_000);
+    expect(h.store.getState().activeMs).toBe(0);
+    expect(h.cues).toHaveLength(0); // the first cue waits for Start
+  });
+
+  it('Start (resume) begins the clock and plays the first cue; the wait is not counted', () => {
+    const h = createHarness();
+    h.store.getState().start(plan());
+    h.advance(120_000);
+    h.store.getState().resume();
+    expect(h.store.getState().status).toBe('active');
+    expect(h.store.getState().pausedReason).toBeNull();
+    expect(h.cues.length).toBeGreaterThan(0);
+    h.advance(30_000);
+    const s = h.store.getState();
+    expect(deriveView(s, h.clock.now()).elapsedMs).toBe(30_000);
+    expect(s.activeMs + (h.clock.now() - s.anchorMono)).toBe(30_000);
+  });
+
+  it('is not saved while Ready, so Home never offers to resume an unstarted session', async () => {
+    const h = createHarness();
+    h.store.getState().start(plan());
+    await Promise.resolve();
+    expect(h.getSnapshot()).toBeNull();
+    h.store.getState().resume();
+    await Promise.resolve();
+    expect(h.getSnapshot()).not.toBeNull();
+  });
+
+  it('is not finished, keeps the screen awake, and ending it logs nothing', async () => {
+    const h = createHarness();
+    h.store.getState().start(plan());
+    expect(isFinished(h.store.getState())).toBe(false);
+    expect(h.keepAwake.active).toBe(true);
+    h.advance(300_000);
+    h.store.getState().requestEnd();
+    h.store.getState().keepGoing();
+    expect(h.store.getState().pausedReason).toBe('ready');
+    h.store.getState().requestEnd();
+    await h.store.getState().endWithoutSaving();
+    expect(h.logs).toHaveLength(0);
+  });
+
+  it('the 30-second trial uses the same gate', () => {
+    const h = createHarness();
+    startTrial({ id: 'squat', name: 'Squat', style: 'normal', mode: 'timed' });
+    expect(h.store.getState().pausedReason).toBe('ready');
+    h.advance(45_000);
+    expect(h.store.getState().status).toBe('paused');
+    h.store.getState().resume();
+    h.advance(31_000);
+    expect(h.store.getState().status).toBe('complete');
+  });
+});
+
+describe('Rest between sets setting', () => {
+  it('changes every rest after the one in progress', () => {
+    const h = createHarness();
+    begin(h.store, plan());
+    h.advance(120_000 + 12_000 + 5_000); // in move 0, set 1
+    h.store.getState().setPrefs({ restS: 30 });
+    const rests = effOf(h.store.getState()).filter((e) => e.seg.kind === 'rest' && e.seg.phase === 'work');
+    expect(rests.every((e) => e.endMs - e.startMs === 30_000)).toBe(true);
+    expect(h.store.getState().timeline!.totalS).toBe(1000);
+    expect(deriveView(h.store.getState(), h.clock.now()).elapsedMs).toBe(137_000);
+  });
+
+  it('leaves the rest already running as it was', () => {
+    const h = createHarness();
+    begin(h.store, plan());
+    h.advance(120_000 + 12_000 + 40_000 + 5_000); // 5 s into the first rest
+    h.store.getState().setPrefs({ restS: 15 });
+    const rests = effOf(h.store.getState()).filter((e) => e.seg.kind === 'rest' && e.seg.phase === 'work');
+    expect(rests[0]!.endMs - rests[0]!.startMs).toBe(20_000);
+    expect(rests[1]!.endMs - rests[1]!.startMs).toBe(15_000);
+  });
+});
+
+describe('addRest result', () => {
+  it('reports what changed and refuses once the cap is reached', () => {
+    const h = createHarness();
+    begin(h.store, plan());
+    h.advance(120_000 + 12_000 + 5_000);
+    const r = h.store.getState().addRest(30);
+    expect(r).toMatchObject({ ok: true, where: 'next', addedMs: 30_000, restMs: 50_000, after: 'Move 0' });
+    h.store.getState().addRest(30);
+    const last = h.store.getState().addRest(30);
+    expect(last).toMatchObject({ ok: true, capped: false, extraMs: 90_000 });
+    expect(h.store.getState().addRest(15)).toEqual({ ok: false, reason: 'max' });
   });
 });

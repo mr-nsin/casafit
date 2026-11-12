@@ -11,10 +11,14 @@ import { logFood } from './hooks';
 import {
   SLOTS,
   buildMealPlan,
+  defaultUnitOf,
+  entryLine,
   fractionLabel,
+  portionText,
   portionSteps,
   profileHash,
   slotForHour,
+  slotsFor,
   slotTotals,
   targetsFor,
   totals,
@@ -27,7 +31,7 @@ import { NutriPlanScreen } from './screens/NutriPlanScreen';
 import { NutriProfileScreen } from './screens/NutriProfileScreen';
 import { NutritionScreen } from './screens/NutritionScreen';
 
-const mockNav = { navigate: jest.fn(), goBack: jest.fn() };
+const mockNav = { navigate: jest.fn(), goBack: jest.fn(), replace: jest.fn() };
 jest.mock('@react-navigation/native', () => ({ useNavigation: () => mockNav }));
 
 const content = loadContent();
@@ -265,6 +269,58 @@ describe('MealScreen', () => {
   });
 });
 
+describe('portions in pieces', () => {
+  const almonds = content.food('almonds_chamach')!;
+  const appam = content.food('appam_piece')!;
+  const jamun = content.food('gulab_jamun_piece')!;
+  const kcalIn = () => Number(String(screen.getByText(/You will log/).props.children).match(/(\d+) kcal/)?.[1]);
+
+  it('reads naturally: pieces, not chamach or appams', () => {
+    expect(portionText(content, almonds, 'piece', 5)).toBe('5 pieces');
+    expect(portionText(content, appam, 'piece', 3)).toBe('3 pieces');
+    expect(portionText(content, jamun, 'piece', 1)).toBe('1 piece');
+    expect(portionText(content, content.food('whole_milk_piece')!, 'piece', 2)).toBe('2 glasses');
+    expect(entryLine(content, { foodId: almonds.id, unit: 'piece', portions: 5 })).toBe('Almonds, 5 pieces');
+    expect(entryLine(content, { foodId: appam.id, unit: 'piece', portions: 3 })).toBe('Appam, 3 pieces');
+  });
+
+  it('counts nuts in pieces by default', () => {
+    expect(defaultUnitOf(almonds)).toBe('piece');
+    expect(defaultUnitOf(content.food('ghee_chamach')!)).toBe('chamach');
+    expect(content.nutrients(almonds, 'piece', 5).kcal).toBeGreaterThan(30);
+  });
+
+  it('lets you count any number of pieces, updates the calories and logs the count', async () => {
+    await wrap(<MealScreen route={{ params: { mealId: jamun.id, slot: 'dinner' } } as never} />);
+    const one = kcalIn();
+    for (let i = 0; i < 4; i += 1) await fireEvent.press(screen.getByLabelText('Increase pieces you eat'));
+    expect(kcalIn()).toBeGreaterThan(one * 4);
+    await fireEvent.press(screen.getByLabelText('Add to dinner'));
+    await waitFor(async () => expect((await repos.food.forDay(todayKey()))[0]).toMatchObject({ foodId: jamun.id, unit: 'piece', portions: 5 }));
+  });
+
+  it('shows almonds as 5 pieces in the list, with no calories when hidden', async () => {
+    usePreferences.setState({ showCalories: false });
+    await wrap(<FoodSearchScreen />);
+    fireEvent.changeText(screen.getByLabelText('Search foods'), 'almond');
+    expect(await screen.findByLabelText(/^Almonds, 5 pieces/)).toBeTruthy();
+    expect(hasKcal()).toBe(false);
+  });
+});
+
+describe('meal slots for 1 to 5 meals', () => {
+  it('one meal is lunch, two are lunch and dinner, and plans fill each slot', () => {
+    expect(slotsFor(1)).toEqual(['lunch']);
+    expect(slotsFor(2)).toEqual(['lunch', 'dinner']);
+    for (const n of [1, 2, 3, 4, 5] as const) {
+      const days = buildMealPlan(content, profile({ mealsPerDay: n }));
+      expect(days).toHaveLength(7);
+      expect(days[0]).toHaveLength(slotsFor(n).length);
+      expect(days[0]!.every((x) => x.items.length > 0)).toBe(true);
+    }
+  });
+});
+
 describe('NutriProfileScreen', () => {
   const seedMe = (over = {}) => repos.profile.save({ birthYear: 1990, sex: 'woman', heightCm: 160, weightKg: 60, ...over });
 
@@ -277,7 +333,7 @@ describe('NutriProfileScreen', () => {
     await fireEvent.press(screen.getByLabelText('Keep steady'));
     await fireEvent.press(screen.getByLabelText('Peanuts'));
     await fireEvent.press(screen.getByLabelText('Build my food plan'));
-    await waitFor(() => expect(mockNav.navigate).toHaveBeenCalledWith('NutriPlan'));
+    await waitFor(() => expect(mockNav.replace).toHaveBeenCalledWith('NutriPlan'));
     const p = await repos.nutrition.getProfile();
     expect(p).toMatchObject({ diet: 'veg', goal: 'maintain', mealsPerDay: 4, allergies: ['peanut'] });
     expect(p!.targetKcal).toBeGreaterThanOrEqual(1200);
@@ -302,12 +358,69 @@ describe('NutriProfileScreen', () => {
     expect(await repos.nutrition.getProfile()).toBeNull();
   });
 
-  it('asks for height and weight when they are missing', async () => {
+  it('says why the button is off: first a goal, then the measures; never silent', async () => {
     await seedMe({ heightCm: null, weightKg: null });
     await wrap(<NutriProfileScreen />);
-    await fireEvent.press(await screen.findByLabelText('Keep steady'));
+    await screen.findByLabelText('Build my food plan');
+    expect(screen.getByText('Pick a goal')).toBeTruthy();
+    await fireEvent.press(screen.getByLabelText('Keep steady'));
+    expect(screen.getByText('Add your height and weight')).toBeTruthy();
+    expect(screen.getByLabelText('Build my food plan').props.accessibilityState.disabled).toBe(true);
+    // Enter 5 ft 3 in and 58 kg: the reason goes and the button turns on.
+    await fireEvent.changeText(screen.getByTestId('food-height-ft'), '5');
+    await fireEvent.changeText(screen.getByTestId('food-height-in'), '3');
+    await fireEvent.changeText(screen.getByTestId('food-weight'), '58');
+    expect(screen.queryByText('Add your height and weight')).toBeNull();
+    expect(screen.getByLabelText('Build my food plan').props.accessibilityState.disabled).toBe(false);
     await fireEvent.press(screen.getByLabelText('Build my food plan'));
-    await screen.findByText(/Add your height and weight/);
+    await waitFor(() => expect(mockNav.replace).toHaveBeenCalledWith('NutriPlan'));
+    expect(await repos.profile.get()).toMatchObject({ heightCm: 160, weightKg: 58 });
+  });
+
+  it('shows the height, weight and gender saved in onboarding without asking again', async () => {
+    await seedMe({ heightCm: 170, weightKg: 65, sex: 'man' });
+    await wrap(<NutriProfileScreen />);
+    await screen.findByLabelText('Build my food plan');
+    expect(screen.getByTestId('food-height-ft').props.value).toBe('5');
+    expect(screen.getByTestId('food-height-in').props.value).toBe('7');
+    expect(screen.getByTestId('food-weight').props.value).toBe('65');
+    expect(screen.getByLabelText('Male').props.accessibilityState.selected).toBe(true);
+    expect(screen.queryByText('Add your height and weight')).toBeNull();
+  });
+
+  it('shows an inline error for an impossible height and keeps the button off', async () => {
+    await seedMe();
+    await wrap(<NutriProfileScreen />);
+    await fireEvent.press(await screen.findByLabelText('Keep steady'));
+    await fireEvent.changeText(screen.getByTestId('food-height-ft'), '1');
+    await fireEvent.changeText(screen.getByTestId('food-height-in'), '0');
+    expect(screen.getByText(/Enter a height between 2 ft 8 in and 8 ft 6 in/)).toBeTruthy();
+    expect(screen.getByLabelText('Build my food plan').props.accessibilityState.disabled).toBe(true);
+  });
+
+  it('offers 1 to 5 meals a day and saves one meal', async () => {
+    await seedMe();
+    await wrap(<NutriProfileScreen />);
+    await fireEvent.press(await screen.findByLabelText('Keep steady'));
+    for (const n of ['1', '2', '3', '4', '5']) expect(screen.getByRole('radio', { name: n })).toBeTruthy();
+    await fireEvent.press(screen.getByRole('radio', { name: '1' }));
+    await fireEvent.press(screen.getByLabelText('Build my food plan'));
+    await waitFor(() => expect(mockNav.replace).toHaveBeenCalledWith('NutriPlan'));
+    expect((await repos.nutrition.getProfile())?.mealsPerDay).toBe(1);
+  });
+
+  it('asks for the year of birth when the profile has none, instead of blaming height and weight', async () => {
+    await seedMe({ birthYear: null });
+    await repos.plan.save({ goal: 'stay_fit', bodyParts: [], styles: ['normal'], mix: {}, daysPerWeek: 4, experience: 'new', variant: 'standard', weekNumber: 1, engineVersion: '1' });
+    await wrap(<NutriProfileScreen />);
+    await fireEvent.press(await screen.findByLabelText('Keep steady'));
+    expect(screen.getByTestId('food-year')).toBeTruthy();
+    expect(screen.getByLabelText('Build my food plan').props.accessibilityState.disabled).toBe(true);
+    expect(screen.getByText(/Add your year of birth/)).toBeTruthy();
+    await fireEvent.changeText(screen.getByTestId('food-year'), '1990');
+    await fireEvent.press(screen.getByLabelText('Build my food plan'));
+    await waitFor(() => expect(mockNav.replace).toHaveBeenCalledWith('NutriPlan'));
+    expect((await repos.profile.get())?.birthYear).toBe(1990);
   });
 
   it('is pre-filled in edit mode with a Save button', async () => {
@@ -325,9 +438,9 @@ describe('NutriPlanScreen', () => {
     await wrap(<NutriPlanScreen />);
     await screen.findByText('Every day, for steady weight');
     expect(screen.getByText('70 g protein')).toBeTruthy();
-    const before = screen.getAllByText(/ - /).map((n) => n.props.children).join();
+    const before = screen.getAllByText(/, /).map((n) => n.props.children).join();
     await fireEvent.press(screen.getByLabelText('Swap breakfast'));
-    expect(screen.getAllByText(/ - /).map((n) => n.props.children).join()).not.toBe(before);
+    expect(screen.getAllByText(/, /).map((n) => n.props.children).join()).not.toBe(before);
     await fireEvent.press(screen.getByLabelText('Tue'));
     await fireEvent.press(screen.getByLabelText('Use this plan'));
     await waitFor(() => expect(mockNav.navigate).toHaveBeenCalledWith('Main', { screen: 'Nutrition' }));

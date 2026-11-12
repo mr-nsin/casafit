@@ -17,13 +17,14 @@ import {
   ProgressBar,
   SectionLabel,
   SegmentedControl,
+  HeightInput,
+  WeightInput,
   SliderField,
   Stepper,
   StatusBanner,
   StatusCard,
   Text,
   TextButton,
-  TextField,
   space,
   radius,
   useTokens,
@@ -36,7 +37,7 @@ import {
   HEALTH_OPTIONS,
   MAX_BODY_PARTS,
   PAIN_OPTIONS,
-  SEX_OPTIONS,
+  GENDER_OPTIONS,
   STYLE_OPTIONS,
   canContinueGoals,
   defaultMix,
@@ -44,8 +45,6 @@ import {
   mixTotal,
   nextAfterAbout,
   nextAfterMix,
-  parseHeight,
-  parseWeight,
 } from '../logic';
 
 export function GoalsScreen() {
@@ -112,10 +111,8 @@ export function AboutScreen() {
   const nav = useOnboardingNav();
   const back = useBack('Goals');
   const { draft, update } = useOnboarding();
-  const [height, setHeight] = useState(draft.heightCm ? String(draft.heightCm) : '');
-  const [weight, setWeight] = useState(draft.weightKg ? String(draft.weightKg) : '');
-  const h = parseHeight(height);
-  const w = parseWeight(weight);
+  const [hError, setHError] = useState<string | undefined>();
+  const [wError, setWError] = useState<string | undefined>();
   const next = nextAfterAbout(draft);
   const pain = draft.painAreas.length ? draft.painAreas : (['none'] as const);
   const flags = draft.healthFlags.length ? draft.healthFlags : (['none'] as const);
@@ -127,46 +124,35 @@ export function AboutScreen() {
         <FilledButton
           label={next === 'Building' ? 'Build my plan' : 'Continue'}
           leadingIcon={next === 'Building' ? 'auto_awesome' : undefined}
-          disabled={!!h.error || !!w.error}
-          onPress={async () => {
-            await update({ heightCm: h.value, weightKg: w.value });
-            nav.navigate(next);
-          }}
+          disabled={!!hError || !!wError}
+          onPress={() => nav.navigate(next)}
         />
       }
     >
       <ProgressBar value={100} label="Step 2 of 2" />
       <Text variant="headline">About you</Text>
-      <TextField
-        label="Height, cm"
-        value={height}
-        onChange={(v) => {
-          setHeight(v);
-          const p = parseHeight(v);
-          if (!p.error) void update({ heightCm: p.value });
-        }}
-        keyboardType="number-pad"
+      <HeightInput
+        valueCm={draft.heightCm}
         optional
-        error={h.error}
         helper="Optional. Skip it if you like."
         testID="about-height"
-      />
-      <TextField
-        label="Weight, kg"
-        value={weight}
-        onChange={(v) => {
-          setWeight(v);
-          const p = parseWeight(v);
-          if (!p.error) void update({ weightKg: p.value });
+        onChange={(cm, err) => {
+          setHError(err);
+          if (!err) void update({ heightCm: cm });
         }}
-        keyboardType="decimal-pad"
+      />
+      <WeightInput
+        valueKg={draft.weightKg}
         optional
-        error={w.error}
         helper="Optional. Skip it if you like."
         testID="about-weight"
+        onChange={(kg, err) => {
+          setWError(err);
+          if (!err) void update({ weightKg: kg });
+        }}
       />
-      <SectionLabel title="Sex" />
-      <SegmentedControl label="Sex" options={SEX_OPTIONS} value={(draft.sex ?? '') as never} onChange={(v) => void update({ sex: v })} />
+      <SectionLabel title="Gender" />
+      <SegmentedControl label="Gender" options={GENDER_OPTIONS} value={(draft.sex ?? '') as never} onChange={(v) => void update({ sex: v })} />
       <SectionLabel title="Training experience" />
       <SegmentedControl
         label="Training experience"

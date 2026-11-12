@@ -210,12 +210,18 @@ describe('Reverse walk', () => {
   });
 
   it('is blocked after the 15 minutes are used', async () => {
-    const now = Date.now();
-    await db.repos.steps.startBout({ id: 'x', startedAt: now - 3_600_000 });
-    await db.repos.steps.endBout('x', now - 3_600_000 + 900_000, 100, 'user');
-    await render(<ReverseScreen />);
-    await settle();
-    expect(screen.getByText("You've done today's reverse walk")).toBeTruthy();
+    // Fixed local noon, so the bout an hour earlier is always the same local day.
+    const now = new Date(2026, 5, 15, 12, 0, 0).getTime();
+    const spy = jest.spyOn(Date, 'now').mockReturnValue(now);
+    try {
+      await db.repos.steps.startBout({ id: 'x', startedAt: now - 3_600_000 });
+      await db.repos.steps.endBout('x', now - 3_600_000 + 900_000, 100, 'user');
+      await render(<ReverseScreen />);
+      await settle();
+      expect(screen.getByText("You've done today's reverse walk")).toBeTruthy();
+    } finally {
+      spy.mockRestore();
+    }
   });
 });
 
@@ -287,6 +293,16 @@ describe('Reverse timer', () => {
 
   it('with nothing running it goes back to Steps', async () => {
     await render(<ReverseTimerScreen />);
+    expect(mockNav.replace).toHaveBeenCalledWith('Steps');
+  });
+
+  it('with nothing running Stop is disabled with a reason and Close leaves', async () => {
+    await render(<ReverseTimerScreen />);
+    mockNav.replace.mockClear();
+    const stop = screen.getByRole('button', { name: 'Stop bout' });
+    expect(stop.props.accessibilityState?.disabled ?? stop.props['aria-disabled']).toBeTruthy();
+    expect(screen.getByText(/No bout is running/)).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: /close/i }));
     expect(mockNav.replace).toHaveBeenCalledWith('Steps');
   });
 });
