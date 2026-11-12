@@ -4,8 +4,7 @@ const fs = require('fs') as { readdirSync(d: string, o: { withFileTypes: true })
 const path = require('path') as { join(...p: string[]): string; relative(a: string, b: string): string };
 declare const __dirname: string;
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const glyphs: Record<string, number> = require('@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/MaterialIcons.json');
+import { ICONS } from './iconMap';
 
 function walk(dir: string, out: string[] = []): string[] {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -20,17 +19,22 @@ function walk(dir: string, out: string[] = []): string[] {
 const PATTERN = /\b(?:icon|leadingIcon|trailingIcon|iconName)(?:=|:\s*)\s*\{?\s*['"]([a-z0-9_]+)['"]/g;
 
 describe('icon names', () => {
-  it('every literal icon name in the app is a real MaterialIcons glyph', () => {
+  it('every literal icon name in the app is in the icon map', () => {
     const bad: string[] = [];
     for (const file of walk(path.join(__dirname, '..'))) {
       const src = fs.readFileSync(file, 'utf8');
       for (const m of src.matchAll(PATTERN)) {
         const name = m[1]!;
-        if (name === 'fitness_center' || !(name.replace(/_/g, '-') in glyphs)) {
+        if (name === 'fitness_center' || !(name in ICONS)) {
           bad.push(`${path.relative(path.join(__dirname, '..'), file)}: ${name}`);
         }
       }
     }
     expect(bad).toEqual([]);
+  });
+
+  it('has no dumbbell and maps every name to a component', () => {
+    expect('fitness_center' in ICONS).toBe(false);
+    for (const [name, glyph] of Object.entries(ICONS)) expect({ name, ok: !!glyph }).toEqual({ name, ok: true });
   });
 });

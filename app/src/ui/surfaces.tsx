@@ -1,15 +1,18 @@
 import React from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { Icon, Text, Touchable, type IconName } from './primitives';
-import { radius, space, type ColorKey } from './tokens';
+import { curve, radius, space, type ColorKey } from './tokens';
 import { useTokens } from './useTokens';
 
-type Tone = 'pc' | 'sc' | 'tc' | 'c3' | 'c4' | 'erc';
-const onTone: Record<Tone, ColorKey> = { pc: 'opc', sc: 'osc', tc: 'otc', c3: 'on', c4: 'on', erc: 'eoc' };
+type Tone = 'pc' | 'sc' | 'tc' | 'c3' | 'c4' | 'erc' | 'el';
+const onTone: Record<Tone, ColorKey> = { pc: 'opc', sc: 'osc', tc: 'otc', c3: 'on', c4: 'on', erc: 'eoc', el: 'on' };
 
 export function Card({ tone = 'c3', children, style, radiusSize = radius.xl }: { tone?: Tone; children: React.ReactNode; style?: StyleProp<ViewStyle>; radiusSize?: number }) {
   const t = useTokens();
-  return <View style={[{ backgroundColor: t[tone], borderRadius: radiusSize, padding: space.l }, style]}>{children}</View>;
+  // A hero card (radius 28) gets 20 px padding, a standard card (22) gets 16.
+  const pad = radiusSize >= radius.xxl ? space.xl : space.l;
+  const edge = tone === 'el' ? { borderWidth: 1, borderColor: t.olv } : null;
+  return <View style={[{ backgroundColor: t[tone], borderRadius: radiusSize, ...curve, padding: pad }, edge, style]}>{children}</View>;
 }
 
 export function SectionHeader({ title }: { title: string }) {
@@ -191,7 +194,7 @@ export function IconBadge({ icon, size = 96, shape = 'circle', tone = 'pc' }: { 
 export function Badge({ label, tone = 'tc' }: { label: string; tone?: Tone }) {
   const t = useTokens();
   return (
-    <View style={{ alignSelf: 'flex-start', backgroundColor: t[tone], borderRadius: radius.s, paddingHorizontal: space.m, paddingVertical: space.xs }}>
+    <View style={{ alignSelf: 'flex-start', backgroundColor: t[tone], borderRadius: radius.round, paddingHorizontal: space.m, paddingVertical: space.xs }}>
       <Text variant="labelStrong" color={onTone[tone]}>
         {label}
       </Text>

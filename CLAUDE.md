@@ -27,6 +27,18 @@ A 15-minute home workout app with food and step tracking. This repo holds the pr
 - Copy: plain, active verbs. Calories can be hidden by the user. Never shame.
 - Product rules from the PRD: a 15-minute session is 2 min warm-up, 11 min work, 2 min cool-down. Free accounts get 2 form checks for life. Camera analysis stays on the phone.
 
+## Design rules for the app (`app/`), from 12 November 2026
+
+The app no longer follows the Material 3 look above; `project/m3-*.dc.html` are reference for flows and content only. The brief is `docs/plans/ui-redesign-master-prompt.md`.
+
+- Colour: only through `useTokens()`. Hex lives in `app/src/ui/tokens.ts` and nowhere else. Warm cream, peach and terracotta; no cold grey, pure white or pure black surfaces.
+- Type: Fraunces for headings, Plus Jakarta Sans for UI and all numbers (tabular), Noto Sans Devanagari for Hindi. Use the `Text` variants; never set a font family or weight in a screen.
+- Icons: Lucide through the kit's `Icon`, stroke 1.75. Selected state is a tint and a pill, not a filled icon. No dumbbell.
+- Press: the kit's `Touchable` only (spring and haptics built in). No `TouchableOpacity`.
+- Exercises and workouts always show an `ExerciseVisual`.
+- Unchanged: 12 px minimum, 44 px targets, focus rings, sentence case, one motion moment per screen, reduced motion, plain copy, hideable calories, never shame, the 2/11/2 session shape, dark camera screens.
+- Gates, from `app/`: `npm run lint`, `npm test`, `npm run audit`.
+
 ## Check before merging
 
 ```

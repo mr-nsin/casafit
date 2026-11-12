@@ -1,9 +1,8 @@
 import { loadContent } from '../../content';
+import { ICONS } from '../../ui/iconMap';
 import { DEFAULT_MOVE_ICON, exerciseIcon } from './icons';
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const glyphs: Record<string, number> = require('@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/MaterialIcons.json');
-const valid = (name: string) => name !== 'fitness_center' && name.replace(/_/g, '-') in glyphs;
+const valid = (name: string) => name !== 'fitness_center' && name in ICONS;
 
 describe('exerciseIcon', () => {
   it('resolves every exercise in the content pack to a real icon', () => {

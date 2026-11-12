@@ -13,4 +13,7 @@ export * from './progress';
 export * from './surfaces';
 export * from './overlays';
 export * from './illustration';
+export * from './ExerciseVisual';
+export * from './exercisePoses';
+export * from './haptics';
 export * from './session';

@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@casafit/shared": "workspace:*",
+    "@expo-google-fonts/fraunces": "0.4.1",
     "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+    "@expo-google-fonts/plus-jakarta-sans": "0.4.2",
     "@expo-google-fonts/roboto-flex": "0.4.1",
     "@expo/vector-icons": "15.0.2",
     "@op-engineering/op-sqlite": "19.0.1",
@@ -44,6 +46,8 @@
     "expo-system-ui": "58.0.6",
     "expo-web-browser": "58.0.7",
     "i18next": "26.5.11",
+    "lottie-react-native": "7.5.0",
+    "lucide-react-native": "1.72.0",
     "react": "19.3.0",
     "react-i18next": "17.1.9",
     "react-native": "0.88.0",
